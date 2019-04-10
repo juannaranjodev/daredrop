@@ -11,6 +11,7 @@ import createProject from 'root/src/server/api/actions/createProject'
 import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
+import pledgeProject from 'root/src/server/api/actions/pledgeProject'
 
 describe('getActiveProjects', () => {
 	test('Successfully get active projects', async () => {
@@ -36,6 +37,18 @@ describe('getActiveProjects', () => {
 				projectArr,
 			),
 		)
+		const pledgeAmount = 20
+
+		await Promise.all(
+			map(project => pledgeProject({
+				payload: {
+					projectId: project.id,
+					pledgeAmount,
+					stripeCardId: 'mockStripeCardId',
+				},
+				userId: mockUserId,
+			}), projectArr),
+		)
 		// So this kinda sucks, but there is no way to ConsistenRead on a GSI.
 		// This test will fail because of a race condition occasionally. Should
 		// figure out a better solution to this at some point...maybe a retry?
@@ -43,10 +56,10 @@ describe('getActiveProjects', () => {
 		const event = {
 			endpointId: GET_ACTIVE_PROJECTS,
 			payload: { currentPage: 1 },
+			// authentication: mockUserId,
 		}
 		const res = await apiFn(event, contextMock)
 
-		console.log(res)
 		expect(res.body.items.length).toEqual(8)
 		expect(res.body.items[0].sk).toEqual(projectArr[0].sk)
 		expect(res.body.items[1].sk).toEqual(projectArr[1].sk)
