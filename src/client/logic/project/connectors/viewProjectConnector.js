@@ -19,7 +19,7 @@ import canEditProjectDetailsSelector from 'root/src/client/logic/project/selecto
 import isAuthenticatedSelector from 'root/src/client/logic/auth/selectors/isAuthenticated'
 import pledgersSelector from 'root/src/client/logic/project/selectors/pledgersSelector'
 import createdSelector from 'root/src/client/logic/project/selectors/createdSelector'
-
+import daysToGoSelector from 'root/src/client/logic/project/selectors/daysToGoSelector'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import addToFavorites from 'root/src/client/logic/project/thunks/addToFavorites'
 import removeToFavorites from 'root/src/client/logic/project/thunks/removeToFavorites'
@@ -32,6 +32,7 @@ export default reduxConnector(
 		['projectTitle', projectTitleSelector],
 		['pledgeAmount', pledgeAmountSelector],
 		['created', createdSelector],
+		['daysToGo', daysToGoSelector],
 		['myPledge', myPledgeSelector],
 		['favoritesAmount', favoritesAmountSelector],
 		['myFavorites', myFavoritesSelector],
