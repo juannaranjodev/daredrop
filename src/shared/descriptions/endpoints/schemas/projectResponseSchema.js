@@ -17,6 +17,7 @@ export default {
 		approved: { type: 'string' },
 		created: { type: 'string' },
 		approvedVideoUrl: { type: 'string' },
+		Pledged: { type: 'boolean' },
 		status: {
 			type: 'string',
 			enum: [projectApprovedKey, projectRejectedKey, projectPendingKey],

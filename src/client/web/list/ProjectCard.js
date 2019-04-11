@@ -229,13 +229,24 @@ const styles = {
 		bodyCard: {
 			position: 'relative',
 		},
+	pledgedMark: {
+		fontSize: 12,
+		color: '#800080',
+		backgroundColor: 'white',
+		textAlign: 'center',
+		border: '1px solid #800080',
+		borderRadius: 5,
+		position: 'absolute',
+		width: 278,
+		marginTop: -21,
+		marginLeft: -15,
 	},
 }
 
 export const ListItemUnconnected = memo(({
 	recordId, pushRoute, projectTitle, projectDescription, classes,
 	projectGameImage, projectAssigneesImages, projectShareUrl, projectGames, isAuthenticated,
-	projectAssigneesName, approvedVideoUrl,
+	projectAssigneesName, approvedVideoUrl, projectPledged
 }) => {
 	const [hover, setHover] = useState(false)
 	const [over, setOver] = useState(false)
@@ -273,6 +284,14 @@ export const ListItemUnconnected = memo(({
 							({ [classes.noOverlay]: approvedVideoUrl }),
 						)}
 					>
+						{
+							projectPledged && (
+								<div className={classes.pledgedMark}>
+								Pledged
+								</div>
+							)
+						}
+
 						<div
 							className={classNames(classes.headerText, 'flex')}
 							onClick={goToViewProjectHandler(recordId, pushRoute)}
