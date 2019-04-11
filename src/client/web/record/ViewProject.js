@@ -168,7 +168,7 @@ export const ViewProjectModule = memo(({
 	projectId, projectDescription, projectTitle, pledgeAmount, assignees,
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
-	myPledge, status, canRejectActiveProject, pledgers, created,
+	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -227,7 +227,7 @@ export const ViewProjectModule = memo(({
 								</div>
 								<div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
 									<SubHeader>Days to go</SubHeader>
-									<div className={classNames(classes.text)}>{created}</div>
+									<div className={classNames(classes.text)}>{daysToGo}</div>
 								</div>
 							</div>
 							<div className={classNames(classes.sidebarItem, classes.streamerTitle)}>
