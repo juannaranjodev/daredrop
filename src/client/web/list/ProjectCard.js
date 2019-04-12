@@ -1,5 +1,5 @@
-import React, { memo, useState } from 'react'
-
+import React, { memo, useState, Fragment } from 'react'
+import { isNil } from 'ramda'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import projectListItemConnector from 'root/src/client/logic/project/connectors/projectListItemConnector'
 import goToViewProjectHandler from 'root/src/client/logic/project/handlers/goToViewProjectHandler'
@@ -10,7 +10,7 @@ import ShareMenu from 'root/src/client/web/base/ShareMenu'
 import Body from 'root/src/client/web/typography/Body'
 import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
 import classNames from 'classnames'
-import { ternary } from 'root/src/shared/util/ramdaPlus'
+import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
 
 const styles = {
 	cardRoot: {
@@ -139,6 +139,7 @@ const styles = {
 		padding: '0 auto',
 		height: 100,
 		marginBottom: 7,
+		position: 'relative',
 		marginTop: 7,
 	},
 	button: {
@@ -163,14 +164,35 @@ const styles = {
 		justifyContent: 'start !important',
 		marginLeft: 18,
 	},
+	hoveredName: {
+		fontSize: 14,
+		background: '#800080',
+		fontWeight: 'bold',
+		borderRadius: 5,
+		padding: 10,
+		width: 'auto',
+	},
+	hoveredNameContainer: {
+		width: '100%',
+		position: 'absolute',
+		display: 'flex',
+		justifyContent: 'center',
+		top: 0,
+	},
+	bodyCard: {
+		position: 'relative',
+	},
 }
 
 export const ListItemUnconnected = memo(({
 	recordId, pushRoute, projectTitle, projectDescription, classes,
 	projectGameImage, projectAssigneesImages, projectShareUrl, projectGames, isAuthenticated,
+	projectAssigneesName,
 }) => {
 	const [hover, setHover] = useState(false)
 	const [over, setOver] = useState(false)
+	const [nameHover, setNameHover] = useState(undefined)
+	const [nameOver, setNameOver] = useState(undefined)
 
 	return (
 		<section
@@ -210,6 +232,7 @@ export const ListItemUnconnected = memo(({
 				</div>
 				<div
 					onClick={goToViewProjectHandler(recordId, pushRoute)}
+					className={classes.bodyCard}
 				>
 					<div className={classNames(
 						'layout-row layout-align-center',
@@ -222,10 +245,26 @@ export const ListItemUnconnected = memo(({
 								key={i}
 								className={classes.assigneeImg}
 								src={imgSrc}
+								onMouseEnter={() => setNameHover(i)}
+								onMouseLeave={() => { setTimeout(() => { setNameHover(undefined) }, 1000) }}
 								alt={`Assignee${i}`}
 							/>
 						))}
 					</div>
+					{
+						orNull(
+							(!isNil(nameHover) || !isNil(nameOver)),
+							<div
+								className={classes.hoveredNameContainer}
+								onMouseEnter={() => setNameOver(nameHover)}
+								onMouseLeave={() => { setTimeout(() => { setNameOver(undefined) }, 1000) }}
+							>
+								<div className={classes.hoveredName}>
+									{projectAssigneesName[nameOver] || projectAssigneesName[nameHover]}
+								</div>
+							</div>,
+						)
+					}
 					<div
 						className={classNames(
 							'layout-column layout-align-space-around',
