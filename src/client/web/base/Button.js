@@ -21,9 +21,10 @@ const styles = {
 			backgroundColor: secondaryColor,
 		},
 		width: '100%',
-		height: 48.1,
+		height: 36.1,
+		borderRadius: 20,
 		textTransform: 'none',
-		fontSize: 20
+		fontSize: 20,
 	},
 	smallButton: {
 		width: '20%',
