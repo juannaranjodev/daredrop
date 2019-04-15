@@ -23,10 +23,7 @@ import withModuleContext from 'root/src/client/util/withModuleContext'
 import goToSignInHandler from 'root/src/client/logic/project/handlers/goToSignInHandler'
 import goToPledgeProjectHandler from 'root/src/client/logic/project/handlers/goToPledgeProjectHandler'
 
-import goToAddFavoritesHandler from 'root/src/client/logic/project/handlers/goToAddFavoritesHandler'
-import goToRemoveFavoritesHandler from 'root/src/client/logic/project/handlers/goToRemoveFavoritesHandler'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-
 
 const styles = {
 	title: {
@@ -295,7 +292,7 @@ export const ViewProjectModule = memo(({
 											onClick={
 												ternary(
 													isAuthenticated,
-													goToAddFavoritesHandler(addToFavorites),
+													addToFavorites,
 													goToSignInHandler(pushRoute),
 												)}
 										>
@@ -310,7 +307,7 @@ export const ViewProjectModule = memo(({
 											onClick={
 												ternary(
 													isAuthenticated,
-													goToRemoveFavoritesHandler(removeToFavorites),
+													removeToFavorites,
 													goToSignInHandler(pushRoute),
 												)}
 										>
