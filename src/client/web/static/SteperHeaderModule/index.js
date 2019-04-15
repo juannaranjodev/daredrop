@@ -33,6 +33,7 @@ const styles = {
 		marginBottom: 60,
 	},
 	stepComponent: {
+		marginLeft: -8,
 		display: 'flex',
 		justifyContent: 'space-between',
 		width: '70%',
@@ -48,7 +49,7 @@ const styles = {
 	item: {
 		display: 'flex',
 		flexDirection: 'column',
-		width: 'auto',
+		width: 160,
 		'& > img': {
 			display: 'block',
 			margin: '0 auto',
@@ -56,14 +57,25 @@ const styles = {
 	},
 	itemText: {
 		marginTop: 20,
+		fontSize: 12,
+		fontWeight: 'bold',
 		textAlign: 'center',
+	},
+	player: {
+		height: 60,
+	},
+	bubbles: {
+		height: 60,
+	},
+	megaphone: {
+		height: 60,
 	},
 }
 
 const SubBanner = ({ classes }) => (
 	<div className={classes.container}>
 		<div className={classes.stepComponent}>
-			<div className={classes.item}>
+			<div className={classNames(classes.item, classes.megaphoneItem)}>
 				<img src={Megaphone} className={classes.megaphone} alt="megaphone" />
 				<div className={classNames(classes.itemText, classes.dareAStreamer)}>
 					DARE A STREAMER
