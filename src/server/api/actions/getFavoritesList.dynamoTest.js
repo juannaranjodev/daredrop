@@ -9,28 +9,25 @@ import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload
 import createProject from 'root/src/server/api/actions/createProject'
 
 import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
-import auditProject from 'root/src/server/api/actions/auditProject'
+import addToFavorites from 'root/src/server/api/actions/addToFavorites'
 
-describe('getActiveProjects', () => {
-	test('Successfully get active projects', async () => {
-		await wait(20000)
+describe('getListOfFavorites', () => {
+	test('Successfully get list of favorites', async () => {
 		const projectArr = await Promise.all(
 			map(
 				() => createProject({
 					userId: 'user-differentuserid',
 					payload: createProjectPayload(),
 				}),
-				range(1, 10),
+				range(1, 5),
 			),
 		)
 		await Promise.all(
 			map(
-				project => auditProject({
+				project => addToFavorites({
 					userId: mockUserId,
 					payload: {
 						projectId: project.id,
-						audit: projectApprovedKey,
 					},
 				}),
 				projectArr,
@@ -43,13 +40,12 @@ describe('getActiveProjects', () => {
 		const event = {
 			endpointId: GET_FAVORITES_LIST,
 			payload: { currentPage: 1 },
+			authentication: mockUserId,
 		}
 		const res = await apiFn(event, contextMock)
 
-		console.log(res)
-		expect(res.body.items.length).toEqual(8)
+		expect(res.body.items.length).toEqual(4)
 		expect(res.body.items[0].sk).toEqual(projectArr[0].sk)
 		expect(res.body.items[1].sk).toEqual(projectArr[1].sk)
-		expect(res.body.allPage).toEqual(2)
 	})
 })

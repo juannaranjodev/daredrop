@@ -13,6 +13,7 @@ import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import Title from 'root/src/client/web/typography/Title'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
 import Button from 'root/src/client/web/base/Button'
+import LoadingButton from 'root/src/client/web/base/LoadingButton'
 import TextField from '@material-ui/core/TextField'
 
 import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionButton'
@@ -169,6 +170,7 @@ export const ViewProjectModule = memo(({
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
+	let favoritesLoading = false
 
 	useEffect(() => {
 		setTitle(projectTitle)
@@ -289,12 +291,15 @@ export const ViewProjectModule = memo(({
 									<div className={classes.sidebarItem}>
 										<Button
 											buttonType="noBackgroundButton"
-											onClick={
+											disabled={favoritesLoading}
+											onClick={() => {
+												favoritesLoading = true
 												ternary(
 													isAuthenticated,
 													addToFavorites,
 													goToSignInHandler(pushRoute),
-												)}
+												)()
+											}}
 										>
 											<FavoriteBorderIcon className={classes.leftIcon} />
 											Add to Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
@@ -304,12 +309,15 @@ export const ViewProjectModule = memo(({
 									<div className={classes.sidebarItem}>
 										<Button
 											buttonType="noBackgroundButton"
-											onClick={
+											disabled={favoritesLoading}
+											onClick={() => {
+												favoritesLoading = true
 												ternary(
 													isAuthenticated,
 													removeToFavorites,
 													goToSignInHandler(pushRoute),
-												)}
+												)()
+											}}
 										>
 											Added to your Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
 										</Button>
