@@ -25,6 +25,8 @@ import addToFavorites from 'root/src/client/logic/project/thunks/addToFavorites'
 import removeToFavorites from 'root/src/client/logic/project/thunks/removeToFavorites'
 import updateProject from 'root/src/client/logic/project/thunks/updateProject'
 
+import favoritesButtonClick from 'root/src/client/logic/project/actions/favoritesButtonClick'
+
 export default reduxConnector(
 	[
 		['projectId', recordIdSelector],
@@ -45,11 +47,13 @@ export default reduxConnector(
 		['canRejectActiveProject', canRejectActiveProjectSelector],
 		['isAuthenticated', isAuthenticatedSelector],
 		['canEditProjectDetails', canEditProjectDetailsSelector],
+		['favoritesProcessing', favoritesProcessingSelector],
 	],
 	[
 		['pushRoute', pushRoute],
 		['updateProject', updateProject],
 		['addToFavorites', addToFavorites],
 		['removeToFavorites', removeToFavorites],
+		['favoritesButtonClick', favoritesButtonClick]
 	],
 )

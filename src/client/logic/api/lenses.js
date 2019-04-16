@@ -81,6 +81,7 @@ const apiStoreSchema = {
 						},
 					},
 				},
+				favoritesProcessing: { type: 'boolean' },
 				externals: {
 					type: 'object',
 					patternProperties: {
