@@ -171,7 +171,8 @@ export const ViewProjectModule = memo(({
 	projectId, projectDescription, projectTitle, pledgeAmount, assignees,
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
-	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, userData = {},
+	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo,
+	userData = {},
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
