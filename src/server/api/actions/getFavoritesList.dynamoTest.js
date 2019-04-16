@@ -10,9 +10,12 @@ import createProject from 'root/src/server/api/actions/createProject'
 
 import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import addToFavorites from 'root/src/server/api/actions/addToFavorites'
+import auditProject from 'root/src/server/api/actions/auditProject'
+import { projectApprovedKey } from 'root/src/server/api/lenses'
 
 describe('getListOfFavorites', () => {
 	test('Successfully get list of favorites', async () => {
+		// create projects
 		const projectArr = await Promise.all(
 			map(
 				() => createProject({
@@ -22,6 +25,20 @@ describe('getListOfFavorites', () => {
 				range(1, 5),
 			),
 		)
+		// approve all the projects
+		await Promise.all(
+			map(
+				project => auditProject({
+					userId: mockUserId,
+					payload: {
+						projectId: project.id,
+						audit: projectApprovedKey,
+					},
+				}),
+				projectArr,
+			),
+		)
+		// add to favorites
 		await Promise.all(
 			map(
 				project => addToFavorites({
