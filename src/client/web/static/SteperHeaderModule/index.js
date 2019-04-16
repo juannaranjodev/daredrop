@@ -30,7 +30,8 @@ const styles = {
 	container: {
 		display: 'flex',
 		justifyContent: 'center',
-		marginBottom: 60,
+		marginBottom: 64,
+		marginTop: 24,
 	},
 	stepComponent: {
 		marginLeft: -8,
