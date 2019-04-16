@@ -66,6 +66,9 @@ const styles = {
 	},
 	player: {
 		height: 60,
+		'@media (max-width: 600px) ': {
+			height: 55,
+		},
 	},
 	bubbles: {
 		height: 60,
@@ -80,6 +83,9 @@ const styles = {
 		height: 140,
 		alignItems: 'center',
 		boxShadow: '0 3px 26px 0 rgba(0, 0, 0, 0.16)',
+		'@media (max-width: 960px) ': {
+			width: '90%',
+		},
 	},
 }
 
