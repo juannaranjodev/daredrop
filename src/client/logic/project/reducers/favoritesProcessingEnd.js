@@ -1,12 +1,12 @@
-import { FAVORITES_BUTTON_CLICK } from 'root/src/client/logic/project/actionIds'
+import { FAVORITES_PROCESSING_END } from 'root/src/client/logic/project/actionIds'
 import { apiStoreLenses } from 'root/src/client/logic/api/lenses'
 
 const { setFavoritesProcessing } = apiStoreLenses
 
 export default {
-	[FAVORITES_BUTTON_CLICK]: (state) => {
+	[FAVORITES_PROCESSING_END]: (state) => {
 		return setFavoritesProcessing(
-			true,
+			false,
 			state,
 		)
 	},

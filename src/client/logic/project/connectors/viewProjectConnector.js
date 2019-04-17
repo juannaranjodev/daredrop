@@ -17,6 +17,7 @@ import canRejectActiveProjectSelector from 'root/src/client/logic/project/select
 import canPledgeProjectSelector from 'root/src/client/logic/project/selectors/canPledgeProjectSelector'
 import getUserDataSelector from 'root/src/client/logic/api/selectors/getUserDataSelector'
 import isAuthenticatedSelector from 'root/src/client/logic/auth/selectors/isAuthenticated'
+import favoritesProcessingSelector from 'root/src/client/logic/project/selectors/favoritesProcessingSelector'
 
 import canEditProjectDetailsSelector from 'root/src/client/logic/project/selectors/canEditProjectDetailsSelector'
 import pledgersSelector from 'root/src/client/logic/project/selectors/pledgersSelector'
@@ -26,8 +27,6 @@ import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import addToFavorites from 'root/src/client/logic/project/thunks/addToFavorites'
 import removeToFavorites from 'root/src/client/logic/project/thunks/removeToFavorites'
 import updateProject from 'root/src/client/logic/project/thunks/updateProject'
-
-import favoritesButtonClick from 'root/src/client/logic/project/actions/favoritesButtonClick'
 
 export default reduxConnector(
 	[
@@ -59,6 +58,5 @@ export default reduxConnector(
 		['updateProject', updateProject],
 		['addToFavorites', addToFavorites],
 		['removeToFavorites', removeToFavorites],
-		['favoritesButtonClick', favoritesButtonClick]
 	],
 )
