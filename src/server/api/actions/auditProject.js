@@ -7,6 +7,7 @@ import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoInde
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import dareApprovedMail from 'root/src/server/email/templates/dareApproved'
 import { dareApprovedTitle } from 'root/src/server/email/util/emailTitles'
+import { projectApprovedKey } from 'root/src/server/api/lenses'
 
 import { AUDIT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
@@ -69,7 +70,7 @@ export default async ({ userId, payload }) => {
 	try {
 		const email = await getUserEmail(userId)
 
-		if (equals(viewAudit(payload), 'approved')) {
+		if (equals(viewAudit(payload), projectApprovedKey)) {
 			const emailData = {
 				title: dareApprovedTitle,
 				dareTitle: prop('title', newProject),
