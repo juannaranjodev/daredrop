@@ -15,6 +15,7 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import projectStatusKeySelector from 'root/src/server/api/actionUtil/projectStatusKeySelector'
+import { projectApprovedKey } from 'root/src/server/api/lenses'
 
 import moment from 'moment'
 
@@ -36,9 +37,9 @@ export default async ({ userId, payload }) => {
 	let auditedProject = projectToPledge
 
 	// if current audit action is 'approve', create or update approved date of project. (key: 'approved')
-	if (equals(viewAudit(payload), 'approved')) {
+	if (equals(viewAudit(payload), projectApprovedKey)) {
 		const currentDateTime = moment().format()
-		auditedProject = set(lensProp('approved'), currentDateTime, projectToPledge)
+		auditedProject = set(lensProp(projectApprovedKey), currentDateTime, projectToPledge)
 	}
 
 	const auditedProjectToPledge = {
@@ -79,7 +80,7 @@ export default async ({ userId, payload }) => {
 	try {
 		const email = await getUserEmail(userId)
 
-		if (equals(viewAudit(payload), 'approved')) {
+		if (equals(viewAudit(payload), projectApprovedKey)) {
 			const emailData = {
 				title: dareApprovedTitle,
 				dareTitle: prop('title', newProject),
