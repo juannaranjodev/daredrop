@@ -85,8 +85,39 @@ const apiStoreSchema = {
 				externals: {
 					type: 'object',
 					patternProperties: {
-						[variableSchemaKey]: { // recordTypes-recordId
+						[variableSchemaKey]: {
+							type: 'object',
+							properties: {
+
+							},
+						},
+					},
+				},
+				externalErrors: {
+					type: 'object',
+					patternProperties: {
+						[variableSchemaKey]: {
 							// type: 'string', this is really a string
+							type: 'object',
+							properties: {},
+						},
+					},
+				},
+				userData: {
+					type: 'object',
+					patternProperties: {
+						[variableSchemaKey]: {
+							type: 'object',
+							properties: {
+
+							},
+						},
+					},
+				},
+				pageContent: {
+					type: 'object',
+					patternProperties: {
+						[variableSchemaKey]: {
 							type: 'object',
 							properties: {},
 						},
@@ -109,6 +140,7 @@ export const generalApiModuleDescriptionSchema = {
 				endpointId: { type: 'string' },
 				recordType: { type: 'string' },
 				externalType: { type: 'string' },
+				userDataType: { type: 'string' },
 				recordPayloadMap: { type: 'array' },
 				externalPayloadMap: { type: 'array' },
 				listPayload: { type: 'object' },

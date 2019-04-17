@@ -32,6 +32,7 @@ import bannerFooterDareAccepted from 'root/src/shared/descriptions/modules/banne
 import bannerFooterDareRejectConfirmation from 'root/src/shared/descriptions/modules/bannerFooterDareRejectConfirmation'
 import bannerFooterDareSuccessCreate from 'root/src/shared/descriptions/modules/bannerFooterDareSuccessCreate'
 import twitchOAuth from 'root/src/shared/descriptions/modules/twitchOAuth'
+import twitchOAuthFailure from 'root/src/shared/descriptions/modules/twitchOAuthFailure'
 import changePasswordAuth from 'root/src/shared/descriptions/modules/changePasswordAuth'
 import changePasswordForm from 'root/src/shared/descriptions/modules/changePasswordForm'
 import changePasswordSuccess from 'root/src/shared/descriptions/modules/changePasswordSuccess'
@@ -77,6 +78,7 @@ const allModules = {
 	...accountSettings,
 	...accountSettingsBannerHeader,
 	...twitchOAuth,
+	...twitchOAuthFailure,
 	...changePasswordAuth,
 	...changePasswordForm,
 	...changePasswordSuccess,

@@ -6,7 +6,7 @@ import {
 	RESET_PASSWORD_ROUTE_ID,
 	SIGN_OUT,
 	TWITCH_OAUTH_ROUTE_ID,
-	TWITCH_OAUTH_ROUTE,
+	TWITCH_OAUTH_FAILURE_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
 
 import {
@@ -16,6 +16,7 @@ import {
 	FORGOT_PASSWORD_FORM_MODULE_ID,
 	RESET_PASSWORD_FORM_MODULE_ID,
 	TWITCH_OAUTH_MODULE_ID,
+	TWITCH_OAUTH_FAILURE_MODULE_ID,
 } from 'root/src/shared/descriptions/modules/moduleIds'
 
 import { unAuthValue } from 'root/src/client/logic/route/lenses'
@@ -53,7 +54,8 @@ export default {
 		url: '/twitch-oauth',
 		modules: [TWITCH_OAUTH_MODULE_ID],
 	},
-	[TWITCH_OAUTH_ROUTE]: {
-		url: 'https://id.twitch.tv/oauth2/authorize?client_id=jl2c2hlcyimcmg466n0jscmlmpcb8j&response_type=token&redirect_uri=http://localhost:8585',
+	[TWITCH_OAUTH_FAILURE_ROUTE_ID]: {
+		url: '/twitch-oauth-fail',
+		modules: [TWITCH_OAUTH_FAILURE_MODULE_ID],
 	},
 }
