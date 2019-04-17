@@ -194,6 +194,10 @@ export const ListItemUnconnected = memo(({
 	const [nameHover, setNameHover] = useState(undefined)
 	const [nameOver, setNameOver] = useState(undefined)
 
+	const onMouseLeave = func => () => {
+		setTimeout(() => { func(undefined) }, 1000)
+	}
+
 	return (
 		<section
 			className={classNames(classes.cardRoot, (over || hover) && classes.hover)}
@@ -246,7 +250,7 @@ export const ListItemUnconnected = memo(({
 								className={classes.assigneeImg}
 								src={imgSrc}
 								onMouseEnter={() => setNameHover(i)}
-								onMouseLeave={() => { setTimeout(() => { setNameHover(undefined) }, 1000) }}
+								onMouseLeave={onMouseLeave(setNameHover)}
 								alt={`Assignee${i}`}
 							/>
 						))}
@@ -257,7 +261,7 @@ export const ListItemUnconnected = memo(({
 							<div
 								className={classes.hoveredNameContainer}
 								onMouseEnter={() => setNameOver(nameHover)}
-								onMouseLeave={() => { setTimeout(() => { setNameOver(undefined) }, 1000) }}
+								onMouseLeave={onMouseLeave(setNameOver)}
 							>
 								<div className={classes.hoveredName}>
 									{projectAssigneesName[nameOver] || projectAssigneesName[nameHover]}
