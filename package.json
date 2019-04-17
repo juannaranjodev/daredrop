@@ -4,9 +4,7 @@
   "main": "/",
   "license": "MIT",
   "husky": {
-    "hooks": {
-      "pre-push": "yarn test"
-    }
+    "hooks": {}
   },
   "scripts": {
     "test": "./node_modules/.bin/jest",
@@ -49,6 +47,7 @@
     "circular-dependency-plugin": "^5.0.2",
     "classnames": "^2.2.6",
     "commander": "^2.17.1",
+    "copy-to-clipboard": "^3.1.0",
     "downshift": "^3.1.8",
     "eslint": "^5.7.0",
     "eslint-config-airbnb": "^17.1.0",
