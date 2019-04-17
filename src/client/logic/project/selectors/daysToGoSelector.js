@@ -3,6 +3,7 @@ import getRecordSelector from 'root/src/client/logic/api/selectors/getRecordSele
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
+import { projectApprovedKey } from 'root/src/server/api/lenses'
 import moment from 'moment'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
@@ -18,7 +19,7 @@ export default (state, props) => {
 		getRecordSelector(state, props),
 	)
 
-	if (equals(status, 'approved')) {
+	if (equals(status, projectApprovedKey)) {
 		if (isNil(approved)) {
 			return '-'
 		} else {
