@@ -3,8 +3,9 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ShareIcon from '@material-ui/icons/Share'
-
+import clipboard from 'root/src/client/assets/icons/clipboard.png'
 import { withStyles } from '@material-ui/core/styles'
+import AddToClipboardButton from 'root/src/client/web/base/AddToClipboardButton'
 
 import {
 	TwitterShareButton, FacebookShareButton, RedditShareButton, VKShareButton,
@@ -43,6 +44,14 @@ const ShareMenuItems = ({ url }) => [
 				<span>Share on VK</span>
 			</div>
 		</VKShareButton>
+	</MenuItem>,
+	<MenuItem key="clipboard">
+		<AddToClipboardButton url={url}>
+			<div className="layout-row layout-align-start-center">
+				<img src={clipboard} width="32px" alt="add_to_clipboard" />{'\u00A0'}
+				<span>Copy to clipboard</span>
+			</div>
+		</AddToClipboardButton>
 	</MenuItem>,
 ]
 
