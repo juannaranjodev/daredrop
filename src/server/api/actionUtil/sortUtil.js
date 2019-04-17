@@ -1,4 +1,4 @@
-import { ascend, descend, prop, path } from 'ramda'
+import { ascend, descend, prop } from 'ramda'
 
-export const ascendingCreated = ascend(path(['items', 'created']))
+export const ascendingCreated = ascend(prop('created'))
 export const descendingCreated = descend(prop('created'))
