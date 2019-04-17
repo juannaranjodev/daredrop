@@ -329,11 +329,16 @@ export const ViewProjectModule = memo(({
 									title="Accept or reject Dare"
 									subtitle="Connect with Twitch"
 									withIcon
-									onClick={() => {
-										storageSet('redirectAssignee', assignees[0].username)
-										storageSet('redirectUri', window.location.pathname)
-									}}
-									href={twitchOauthUrl}
+									onClick={
+										ternary(isAuthenticated,
+											() => {
+												storageSet('redirectAssignee', assignees[0].username)
+												storageSet('redirectUri', window.location.pathname)
+											},
+											goToSignInHandler(pushRoute))
+									}
+									href={orNull(isAuthenticated,
+										twitchOauthUrl)}
 								/>)}
 							{
 								isNil(myFavorites) || myFavorites == 0
