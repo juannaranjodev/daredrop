@@ -27,7 +27,7 @@ const Streamer = ({ classes }) => (
 			</p>
 		</Card>
 		<Card title="Reward" icon={HeartIcon}>
-			<p>We will verify the proof and you’ll get paid!</p>
+			<p>We will verify the proof, take a 10% cut, then pay you the rest!</p>
 		</Card>
 		<Card title="Get Started" icon={SmileIcon}>
 			<p>Create a dare for yourself or another streamer.</p>

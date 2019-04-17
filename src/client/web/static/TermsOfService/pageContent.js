@@ -298,7 +298,7 @@ const pageContent = classes => [
 	{
 		title: '7. Our Fees',
 		paragraph: (<span>
-			Fees are only charged on successfully funded Dares. We charge 5%, in addition to any fees 
+			Fees are only charged on successfully funded Dares. We charge 10%, in addition to any fees 
 			from our payments partners.
 		</span>),
 		text: (
