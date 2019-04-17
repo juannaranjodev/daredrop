@@ -13,6 +13,7 @@ import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import Title from 'root/src/client/web/typography/Title'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
 import Button from 'root/src/client/web/base/Button'
+import LoadingButton from 'root/src/client/web/base/LoadingButton'
 import { TwitchButton } from 'root/src/client/web/base/CustomButton'
 
 import { twitchOauthUrl } from 'root/src/shared/constants/twitch'
@@ -30,7 +31,6 @@ import goToPledgeProjectHandler from 'root/src/client/logic/project/handlers/goT
 import goToClaimProjectHandler from 'root/src/client/logic/project/handlers/goToClaimProjectHandler'
 
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-
 
 const styles = {
 	title: {
@@ -172,7 +172,8 @@ export const ViewProjectModule = memo(({
 	projectId, projectDescription, projectTitle, pledgeAmount, assignees,
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
-	myPledge, status, canRejectActiveProject, pledgers, created, userData = {},
+	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
+	userData = {},
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -231,7 +232,7 @@ export const ViewProjectModule = memo(({
 								</div>
 								<div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
 									<SubHeader>Days to go</SubHeader>
-									<div className={classNames(classes.text)}>{created}</div>
+									<div className={classNames(classes.text)}>{daysToGo}</div>
 								</div>
 							</div>
 							<div className={classNames(classes.sidebarItem, classes.streamerTitle)}>
@@ -311,32 +312,36 @@ export const ViewProjectModule = memo(({
 							{
 								isNil(myFavorites) || myFavorites == 0 ?
 									<div className={classes.sidebarItem}>
-										<Button
+										<LoadingButton
 											buttonType="noBackgroundButton"
+											loading={favoritesProcessing}
 											onClick={
 												ternary(
 													isAuthenticated,
 													addToFavorites,
 													goToSignInHandler(pushRoute),
-												)}
+												)
+											}
 										>
 											<FavoriteBorderIcon className={classes.leftIcon} />
 											Add to Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
-										</Button>
+										</LoadingButton>
 									</div>
 									:
 									<div className={classes.sidebarItem}>
-										<Button
+										<LoadingButton
 											buttonType="noBackgroundButton"
+											loading={favoritesProcessing}
 											onClick={
 												ternary(
 													isAuthenticated,
 													removeToFavorites,
 													goToSignInHandler(pushRoute),
-												)}
+												)
+											}
 										>
 											Added to your Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
-										</Button>
+										</LoadingButton>
 									</div>
 							}
 						</div>
