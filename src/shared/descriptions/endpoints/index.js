@@ -22,6 +22,7 @@ import getActiveProjects from 'root/src/shared/descriptions/endpoints/getActiveP
 import getPendingProjects from 'root/src/shared/descriptions/endpoints/getPendingProjects'
 import getFavoritesList from 'root/src/shared/descriptions/endpoints/getFavoritesList'
 import getMyProjects from 'root/src/shared/descriptions/endpoints/getMyProjects'
+import getPendingVideos from 'root/src/shared/descriptions/endpoints/getPendingVideos'
 
 import addToFavorites from 'root/src/shared/descriptions/endpoints/addToFavorites'
 import removeToFavorites from 'root/src/shared/descriptions/endpoints/removeToFavorites'
@@ -47,6 +48,7 @@ const allEndpoints = {
 	...addToFavorites,
 	...removeToFavorites,
 	...getMyProjects,
+	...getPendingVideos,
 }
 
 export default map(

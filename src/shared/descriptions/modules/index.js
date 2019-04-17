@@ -42,6 +42,7 @@ import steperHeaderModule from 'root/src/shared/descriptions/modules/steperHeade
 import titleHeaderMarketplace from 'root/src/shared/descriptions/modules/titleHeaderMarketplace'
 import deliverDareSuccessPage from 'root/src/shared/descriptions/modules/deliverDareSuccessPage'
 import myProjectsList from 'root/src/shared/descriptions/modules/myProjectsList'
+import pendingVideosList from 'root/src/shared/descriptions/modules/pendingVideosList'
 
 
 const allModules = {
@@ -88,6 +89,7 @@ const allModules = {
 	...titleHeaderMarketplace,
 	...deliverDareSuccessPage,
 	...myProjectsList,
+	...pendingVideosList,
 }
 
 export default allModules

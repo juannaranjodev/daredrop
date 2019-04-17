@@ -1,11 +1,11 @@
 import {
-	GET_PROJECT, CREATE_PROJECT, PLEDGE_PROJECT, GET_PLEDGED_PROJECTS, 
+	GET_PROJECT, CREATE_PROJECT, PLEDGE_PROJECT, GET_PLEDGED_PROJECTS,
 	GET_OAUTH_TOKENS, ADD_OAUTH_TOKEN, CLEAR_PARTIAL_FORM_KEYS,
 	AUDIT_PROJECT, GET_ACTIVE_PROJECTS, GET_PENDING_PROJECTS,
-	GET_PAYMENT_METHODS, ADD_PAYMENT_METHOD, DELETE_PAYMENT_METHOD, 
+	GET_PAYMENT_METHODS, ADD_PAYMENT_METHOD, DELETE_PAYMENT_METHOD,
 	UPDATE_PROJECT, SAVE_PARTIAL_DARE_FORM, SET_DEFAULT_PAYMENT_METHOD,
 	GET_FAVORITES_LIST, ADD_TO_FAVORITES, REMOVE_TO_FAVORITES,
-	GET_MY_PROJECTS,
+	GET_MY_PROJECTS, GET_PENDING_VIDEOS,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -28,6 +28,7 @@ import updateProject from 'root/src/server/api/actions/updateProject'
 import addToFavorites from 'root/src/server/api/actions/addToFavorites'
 import removeToFavorites from 'root/src/server/api/actions/removeToFavorites'
 import getMyProjects from 'root/src/server/api/actions/getMyProjects'
+import getPendingVideos from 'root/src/server/api/actions/getPendingVideos'
 
 export default {
 	[CREATE_PROJECT]: createProject,
@@ -45,6 +46,7 @@ export default {
 
 	[GET_ACTIVE_PROJECTS]: getActiveProjects,
 	[GET_PENDING_PROJECTS]: getPendingProjects,
+	[GET_PENDING_VIDEOS]: getPendingVideos,
 
 	[GET_OAUTH_TOKENS]: getOAuthTokens,
 	[ADD_OAUTH_TOKEN]: addOAuthToken,
