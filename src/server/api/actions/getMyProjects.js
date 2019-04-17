@@ -1,4 +1,4 @@
-import { uniqBy, prop } from 'ramda'
+import { uniqBy, prop, sort } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
@@ -6,6 +6,7 @@ import myProjectsSerializer from 'root/src/server/api/serializers/myProjectsSeri
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
+import { descendingCreated } from 'root/src/server/api/actionUtil/sortUtil'
 
 const PageItemLedngth = 8
 
@@ -47,10 +48,12 @@ export default async ({ userId, payload }) => {
 		currentPage * PageItemLedngth,
 	)
 
+	const sortedProjects = sort(descendingCreated, projects)
+
 	return {
 		allPage,
 		currentPage: payload.currentPage,
 		interval: PageItemLedngth,
-		items: [...myProjectsSerializer(projects)],
+		items: [...myProjectsSerializer(sortedProjects)],
 	}
 }
