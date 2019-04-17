@@ -28,7 +28,7 @@ import withModuleContext from 'root/src/client/util/withModuleContext'
 import goToSignInHandler from 'root/src/client/logic/project/handlers/goToSignInHandler'
 import goToPledgeProjectHandler from 'root/src/client/logic/project/handlers/goToPledgeProjectHandler'
 
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
 
 const styles = {
@@ -291,7 +291,7 @@ export const ViewProjectModule = memo(({
 										storageSet('redirectAssignee', assignees[0].username)
 										storageSet('redirectUri', window.location.pathname)
 									}}
-									href={twitchOauthUrl}
+									href={twitchOauthUrl()}
 								/>)}
 							{
 								orNull(
@@ -305,8 +305,8 @@ export const ViewProjectModule = memo(({
 								)
 							}
 							{
-								isNil(myFavorites) || myFavorites == 0 ?
-									<div className={classes.sidebarItem}>
+								isNil(myFavorites) || myFavorites == 0
+									? <div className={classes.sidebarItem}>
 										<Button
 											buttonType="noBackgroundButton"
 											onClick={
@@ -320,8 +320,7 @@ export const ViewProjectModule = memo(({
 											Add to Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
 										</Button>
 									</div>
-									:
-									<div className={classes.sidebarItem}>
+									:									<div className={classes.sidebarItem}>
 										<Button
 											buttonType="noBackgroundButton"
 											onClick={

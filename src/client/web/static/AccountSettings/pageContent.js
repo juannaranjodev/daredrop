@@ -18,7 +18,7 @@ export default {
 		},
 		{
 			text: 'Oauth Channel',
-			href: twitchOauthUrl,
+			href: twitchOauthUrl(),
 		},
 	],
 }
