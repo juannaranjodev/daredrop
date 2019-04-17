@@ -6,13 +6,15 @@ import listResults from 'root/src/server/api/actionUtil/listResults'
 import favoritesSerializer from 'root/src/server/api/serializers/favoritesSerializer'
 import moment from 'moment'
 
-export default async (payload) => {
+const PageItemLedngth = 8
+
+export default async ({ userId, payload }) => {
     const userProjectIdParams = {
         TableName: TABLE_NAME,
         IndexName: GSI1_INDEX_NAME,
         KeyConditionExpression: `${GSI1_PARTITION_KEY} = :pk`,
         ExpressionAttributeValues: {
-            ':pk': `favorites|${payload.userId}`,
+            ':pk': `favorites|${userId}`,
         },
     }
 
@@ -54,34 +56,31 @@ export default async (payload) => {
 
     const mapIndexed = addIndex(map)
     const availableIndexArray = mapIndexed((val, idx) => val ? idx : 99999, availableArray)
-
     const resultArray = map(index => index == 99999 ? null : nth(index, favoritesProjects), availableIndexArray)
 
     const availableFavoritesList = resultArray.filter(function (x) {
-        return (x !== null)
+        return (x !== null);
     })
 
-    const PageItemLength = 8
+    const allPage = availableFavoritesList.length % PageItemLedngth > 0
+        ? Math.round(availableFavoritesList.length / PageItemLedngth) + 1
+        : Math.round(availableFavoritesList.length / PageItemLedngth)
 
-    const allPage = availableFavoritesList.length % PageItemLength > 0
-        ? Math.round(availableFavoritesList.length / PageItemLength) + 1
-        : Math.round(availableFavoritesList.length / PageItemLength)
-
-    let { currentPage } = payload.payload
+    let { currentPage } = payload
     if (currentPage === undefined) {
         currentPage = 1
     }
     const projects = availableFavoritesList.slice(
-        (currentPage - 1) * PageItemLength,
-        currentPage * PageItemLength,
+        (currentPage - 1) * PageItemLedngth,
+        currentPage * PageItemLedngth,
     )
 
     return {
         allPage,
         currentPage: payload.currentPage,
-        interval: PageItemLength,
+        interval: PageItemLedngth,
         ...listResults({
-            dynamoResults: { Items: map(project => [project], projects) },
+            dynamoResults: { Items: projects },
             serializer: favoritesSerializer,
         }),
     }
