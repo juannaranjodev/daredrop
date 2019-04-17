@@ -38,8 +38,7 @@ export default {
 		url: '/claim-project/:recordId',
 		// authentication: authValue,
 		modules: [
-			CLAIM_PROJECT_FORM_MODULE_ID,
-			CLAIM_PROJECT_MODULE_ID,
+			VIEW_PROJECT_MODULE_ID,
 		],
 	},
 	[PENDING_PROJECTS_ROUTE_ID]: {

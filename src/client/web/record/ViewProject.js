@@ -342,6 +342,25 @@ export const ViewProjectModule = memo(({
 										twitchOauthUrl)}
 								/>)}
 							{
+								orNull(isOneOfAssignes,
+									<ButtonSubtitle
+										title="Deliver Dare Video"
+										subtitle="Upload to complete the Dare"
+										onClick={goToDeliveryFormHandler(pushRoute)}
+									/>)
+							}
+							{
+								orNull(
+									canRejectProject,
+									<div className={classes.sidebarItem}>
+										<RecordClickActionButton
+											recordClickActionId={REJECT_PROJECT}
+											recordId={projectId}
+										/>
+									</div>,
+								)
+							}
+							{
 								isNil(myFavorites) || myFavorites == 0
 									? (
 										<div className={classes.sidebarItem}>
