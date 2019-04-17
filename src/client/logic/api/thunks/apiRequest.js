@@ -110,13 +110,13 @@ export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 }
 
 export const fetchUserData = async (dispatch, state, endpointId, payload) => {
-	const currentRouteId = compose(prop('routeId'), matchPath, getPathFromUrl)()
-	if (TWITCH_OAUTH_ROUTE_ID) return
+	// const currentRouteId = compose(prop('routeId'), matchPath, getPathFromUrl)()
+	// if (currentRouteId === TWITCH_OAUTH_ROUTE_ID) return
 	const recordType = recordTypeSelector(endpointId)
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	if (lambdaRes.body.length > 0) {
 		forEach((res) => {
-			const recordStoreKey = createRecordStoreKey(endpointId, (`${res.pk}-${res.sk.split('|')[0]}`))
+			const recordStoreKey = createRecordStoreKey(endpointId, (`${res.pk}-${res.sk}`))
 			dispatch(apiFetchUserDataSuccess(recordStoreKey, recordType, res))
 		}, lambdaRes.body)
 	} else {

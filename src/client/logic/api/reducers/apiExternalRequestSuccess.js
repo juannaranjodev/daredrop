@@ -12,7 +12,9 @@ export const apiExternalRequestSuccess = (
 ) => {
 	const externalStoreId = createExternalStoreKey(recordType, lambda.body)
 	return compose(
-		setUserDataChild(externalStoreId, { ...lambda.body, isNotListed }),
+		setUserDataChild('isNotListed', isNotListed),
+		setUserDataChild('displayName', lambda.body.displayName),
+		setUserDataChild(externalStoreId, { ...lambda.body }),
 	)(state)
 }
 
