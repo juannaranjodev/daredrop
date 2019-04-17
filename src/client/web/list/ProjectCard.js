@@ -9,6 +9,9 @@ import Button from 'root/src/client/web/base/Button'
 import ShareMenu from 'root/src/client/web/base/ShareMenu'
 import Body from 'root/src/client/web/typography/Body'
 import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
+import {
+	primaryColor,
+} from 'root/src/client/web/commonStyles'
 import classNames from 'classnames'
 import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
 
@@ -231,10 +234,10 @@ const styles = {
 		},
 	pledgedMark: {
 		fontSize: 12,
-		color: '#800080',
+		color: primaryColor,
 		backgroundColor: 'white',
 		textAlign: 'center',
-		border: '1px solid #800080',
+		border: `1px solid ${primaryColor}`,
 		borderRadius: 5,
 		position: 'absolute',
 		width: 278,
