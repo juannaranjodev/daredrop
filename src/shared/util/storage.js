@@ -12,3 +12,7 @@ export const storageSet = (key, value) => Result.try(
 export const storageClear = () => Result.try(
 	() => localStorage.clear(),
 ).mapError(reportError)
+
+export const storageClearItem = key => Result.try(
+	() => localStorage.removeItem(key),
+).mapError(reportError)
