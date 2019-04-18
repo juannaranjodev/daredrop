@@ -16,6 +16,7 @@ import {
 	FAVORITES_PROJECTS_LIST_MODULE_ID, STEPER_HEADER_MODULE_ID,
 	DELIVER_DARE_SUCCESS_MODULE_ID, MY_PROJECTS_LIST_MODULE_ID,
 	TITLE_HEADER_MARKETPLACE_MODULE_ID, REJECT_PROJECT_MODAL_MODULE_ID,
+	DELIVERY_DARE_FORM_MODULE_ID,
 } from 'root/src/shared/descriptions/modules/moduleIds'
 
 import { authValue } from 'root/src/client/logic/route/lenses'
@@ -92,7 +93,9 @@ export default {
 		],
 	},
 	[DELIVERY_DARE_FORM_ROUTE_ID]: {
-		url: '/delivery-dare',
-		modules: [],
+		url: '/delivery-dare/:recordId',
+		modules: [
+			DELIVERY_DARE_FORM_MODULE_ID,
+		],
 	},
 }

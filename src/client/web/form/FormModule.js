@@ -25,7 +25,7 @@ import classNames from 'classnames'
 const styles = {
 	space: {
 		marginTop: 25,
-		marginBottom: 25,
+		marginBottom: 48,
 	},
 	noMarginTop: {
 		marginTop: 0,
@@ -34,6 +34,7 @@ const styles = {
 		marginBottom: 0,
 	},
 	paymentTitle: {
+		marginTop: 25,
 		fontSize: 32,
 	},
 	formContainer: {
@@ -65,6 +66,9 @@ const styles = {
 			textTransform: 'none',
 		},
 	},
+	formTitle: {
+		fontSize: 32,
+	},
 }
 
 export const FormModuleUnconnected = memo(({
@@ -85,7 +89,7 @@ export const FormModuleUnconnected = memo(({
 							'layout-row layout-align-center',
 						)}
 					>
-						<Header additionalClass={classNames({ [classes.paymentTitle]: (formType === universalForm) })}>{formTitle}</Header>
+						<Header additionalClass={classNames({ [classes.paymentTitle]: (formType === universalForm) }, classes.formTitle)}>{formTitle}</Header>
 					</div>,
 				)}
 				{orNull(
