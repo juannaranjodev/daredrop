@@ -14,7 +14,7 @@ export const apiExternalRequestSuccess = (
 	return compose(
 		setUserDataChild('isNotListed', isNotListed),
 		setUserDataChild('displayName', lambda.body.displayName),
-		setUserDataChild(externalStoreId, { ...lambda.body }),
+		setUserDataChild(externalStoreId, lambda.body),
 	)(state)
 }
 
