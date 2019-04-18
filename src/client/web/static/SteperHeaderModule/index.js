@@ -47,6 +47,7 @@ const styles = {
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
+		marginBottom: '35px',
 	},
 	item: {
 		display: 'flex',
