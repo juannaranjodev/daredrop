@@ -89,17 +89,18 @@ export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 			if (redirectUri && isAssignee) {
 				const { routeId, routeParams } = matchPath(redirectUri)
 				dispatch(pushRoute(routeId, routeParams))
-				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes))
+				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes, false))
 			} else if (redirectUri && !isAssignee) {
 				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes, true))
 			} else {
-				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes))
+				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes, false))
 			}
 			storageClearItem('redirectUri')
 			storageClearItem('redirectAssignee')
 		}
 		return externalRes
 	} catch (error) {
+		console.log(error)
 		dispatch(pushRoute(TWITCH_OAUTH_FAILURE_ROUTE_ID))
 		dispatch(apiExternalRequestError(error))
 		return error
