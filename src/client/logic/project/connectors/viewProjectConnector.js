@@ -21,6 +21,7 @@ import projectDescriptionSelector from 'root/src/client/logic/project/selectors/
 import projectGameImageSquareSelector from 'root/src/client/logic/project/selectors/projectGameImageSquareSelector'
 import projectTitleSelector from 'root/src/client/logic/project/selectors/projectTitleSelector'
 import statusSelector from 'root/src/client/logic/project/selectors/statusSelector'
+import approvedVideoUrlSelector from 'root/src/client/logic/project/selectors/approvedVideoUrlSelector'
 
 import isAuthenticatedSelector from 'root/src/client/logic/auth/selectors/isAuthenticated'
 
@@ -32,31 +33,32 @@ import updateProject from 'root/src/client/logic/project/thunks/updateProject'
 export default reduxConnector(
 	[
 		['assignees', projectAssigneesSelector],
-    ['canApproveProject', canApproveProjectSelector],
-    ['canEditProjectDetails', canEditProjectDetailsSelector],
+		['canApproveProject', canApproveProjectSelector],
+		['canEditProjectDetails', canEditProjectDetailsSelector],
 		['canPledgeProject', canPledgeProjectSelector],
-    ['canRejectActiveProject', canRejectActiveProjectSelector],
-    ['canRejectProject', canRejectProjectSelector],
-    ['created', createdSelector],
+		['canRejectActiveProject', canRejectActiveProjectSelector],
+		['canRejectProject', canRejectProjectSelector],
+		['created', createdSelector],
 		['daysToGo', daysToGoSelector],
-    ['favoritesAmount', favoritesAmountSelector],
-    ['favoritesProcessing', favoritesProcessingSelector],
-    ['gameImage', projectGameImageSquareSelector],
-    ['isAuthenticated', isAuthenticatedSelector],
-    ['myFavorites', myFavoritesSelector],
-    ['myPledge', myPledgeSelector],
-    ['pledgeAmount', pledgeAmountSelector],
-    ['pledgers', pledgersSelector],
-    ['projectId', recordIdSelector],
+		['favoritesAmount', favoritesAmountSelector],
+		['favoritesProcessing', favoritesProcessingSelector],
+		['gameImage', projectGameImageSquareSelector],
+		['isAuthenticated', isAuthenticatedSelector],
+		['myFavorites', myFavoritesSelector],
+		['myPledge', myPledgeSelector],
+		['pledgeAmount', pledgeAmountSelector],
+		['pledgers', pledgersSelector],
+		['projectId', recordIdSelector],
 		['projectDescription', projectDescriptionSelector],
 		['projectTitle', projectTitleSelector],
 		['status', statusSelector],
-    ['userData', getUserDataSelector],
+		['userData', getUserDataSelector],
+		['approvedVideoUrl', approvedVideoUrlSelector],
 	],
 	[
 		['addToFavorites', addToFavorites],
-    ['pushRoute', pushRoute],
+		['pushRoute', pushRoute],
 		['removeToFavorites', removeToFavorites],
-    ['updateProject', updateProject],
+		['updateProject', updateProject],
 	],
 )
