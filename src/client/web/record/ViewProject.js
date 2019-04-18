@@ -13,6 +13,7 @@ import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import Title from 'root/src/client/web/typography/Title'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
 import Button from 'root/src/client/web/base/Button'
+import LoadingButton from 'root/src/client/web/base/LoadingButton'
 import { TwitchButton } from 'root/src/client/web/base/CustomButton'
 
 import { twitchOauthUrl } from 'root/src/shared/constants/twitch'
@@ -27,9 +28,9 @@ import viewProjectConnector from 'root/src/client/logic/project/connectors/viewP
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import goToSignInHandler from 'root/src/client/logic/project/handlers/goToSignInHandler'
 import goToPledgeProjectHandler from 'root/src/client/logic/project/handlers/goToPledgeProjectHandler'
+import goToClaimProjectHandler from 'root/src/client/logic/project/handlers/goToClaimProjectHandler'
 
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-
 
 const styles = {
 	title: {
@@ -171,7 +172,7 @@ export const ViewProjectModule = memo(({
 	projectId, projectDescription, projectTitle, pledgeAmount, assignees,
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
-	myPledge, status, canRejectActiveProject, pledgers, created,
+	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
 	userData = {},
 }) => {
 	const [title, setTitle] = useState(projectTitle)
@@ -231,7 +232,7 @@ export const ViewProjectModule = memo(({
 								</div>
 								<div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
 									<SubHeader>Days to go</SubHeader>
-									<div className={classNames(classes.text)}>{created}</div>
+									<div className={classNames(classes.text)}>{daysToGo}</div>
 								</div>
 							</div>
 							<div className={classNames(classes.sidebarItem, classes.streamerTitle)}>
@@ -255,19 +256,31 @@ export const ViewProjectModule = memo(({
 										recordId={projectId}
 									/>
 								</div>,
-							)
+							)}
+							{
+								orNull(
+									canRejectProject,
+									<div className={classes.sidebarItem}>
+										<RecordClickActionButton
+											recordClickActionId={REJECT_PROJECT}
+											recordId={projectId}
+										/>
+									</div>,
+								)
 							}
-							<div className={classes.sidebarItem}>
-								<Button
-									onClick={ternary(
-										isAuthenticated,
-										goToPledgeProjectHandler(projectId, pushRoute),
-										goToSignInHandler(pushRoute),
-									)}
-								>
-									Pledge
-								</Button>
-							</div>
+							{
+								<div className={classes.sidebarItem}>
+									<Button
+										onClick={ternary(
+											isAuthenticated,
+											goToPledgeProjectHandler(projectId, pushRoute),
+											goToSignInHandler(pushRoute),
+										)}
+									>
+										Pledge
+									</Button>
+								</div>
+							}
 							{
 								orNull(
 									canRejectActiveProject,
@@ -282,6 +295,9 @@ export const ViewProjectModule = memo(({
 							{ternary(isOneOfAssigneesSelector(assignees, userData),
 								<TwitchButton
 									title="Accept or reject Dare"
+									onClick={goToClaimProjectHandler(
+										projectId, pushRoute,
+									)}
 								/>,
 								<TwitchButton
 									title="Accept or reject Dare"
@@ -294,45 +310,38 @@ export const ViewProjectModule = memo(({
 									href={twitchOauthUrl}
 								/>)}
 							{
-								orNull(
-									canRejectProject,
-									<div className={classes.sidebarItem}>
-										<RecordClickActionButton
-											recordClickActionId={REJECT_PROJECT}
-											recordId={projectId}
-										/>
-									</div>,
-								)
-							}
-							{
 								isNil(myFavorites) || myFavorites == 0 ?
 									<div className={classes.sidebarItem}>
-										<Button
+										<LoadingButton
 											buttonType="noBackgroundButton"
+											loading={favoritesProcessing}
 											onClick={
 												ternary(
 													isAuthenticated,
 													addToFavorites,
 													goToSignInHandler(pushRoute),
-												)}
+												)
+											}
 										>
 											<FavoriteBorderIcon className={classes.leftIcon} />
 											Add to Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
-										</Button>
+										</LoadingButton>
 									</div>
 									:
 									<div className={classes.sidebarItem}>
-										<Button
+										<LoadingButton
 											buttonType="noBackgroundButton"
+											loading={favoritesProcessing}
 											onClick={
 												ternary(
 													isAuthenticated,
 													removeToFavorites,
 													goToSignInHandler(pushRoute),
-												)}
+												)
+											}
 										>
 											Added to your Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
-										</Button>
+										</LoadingButton>
 									</div>
 							}
 						</div>

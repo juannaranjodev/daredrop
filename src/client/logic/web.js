@@ -33,6 +33,10 @@ import initApiRecordRequest from 'root/src/client/logic/api/reducers/initApiReco
 import generalRecordModification from 'root/src/client/logic/api/reducers/generalRecordModification'
 import currentListPayload from 'root/src/client/logic/api/reducers/currentListPayload'
 
+// project
+import favoritesProcessingStart from 'root/src/client/logic/project/reducers/favoritesProcessingStart'
+import favoritesProcessingEnd from 'root/src/client/logic/project/reducers/favoritesProcessingEnd'
+
 import apiRecordClickActionRequestError from 'root/src/client/logic/api/reducers/apiRecordClickActionRequestError'
 import apiRecordClickActionRequestSuccess from 'root/src/client/logic/api/reducers/apiRecordClickActionRequestSuccess'
 import initApiRecordClickActionRequest from 'root/src/client/logic/api/reducers/initApiRecordClickActionRequest'
@@ -40,14 +44,15 @@ import deletePaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/de
 import setDefaultPaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/setDefaultPaymentMethodOnSuccess'
 import addPaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/addPaymentMethodOnSuccess'
 
-import apiExternalRequestSuccess from 'root/src/client/logic/api/reducers/apiExternalRequestSuccess'
-import apiExternalRequestError from 'root/src/client/logic/api/reducers/apiExternalRequestError'
-
-import apiFetchUserDataSuccess from 'root/src/client/logic/api/reducers/apiFetchUserDataSuccess'
 // list
 import setFirstPage from 'root/src/client/logic/list/reducers/setFirstPage'
 import currentPage from 'root/src/client/logic/list/reducers/currentPage'
 import hasMore from 'root/src/client/logic/list/reducers/hasMore'
+
+import apiExternalRequestSuccess from 'root/src/client/logic/api/reducers/apiExternalRequestSuccess'
+import apiExternalRequestError from 'root/src/client/logic/api/reducers/apiExternalRequestError'
+
+import apiFetchUserDataSuccess from 'root/src/client/logic/api/reducers/apiFetchUserDataSuccess'
 
 // listeners
 import popStateListener from 'root/src/client/logic/route/listeners/popStateListener'
@@ -80,8 +85,11 @@ const store = createStore(
 		...initApiRecordClickActionRequest,
 		...generalRecordModification,
 		...apiExternalRequestSuccess,
-		...apiExternalRequestError,
 		...apiFetchUserDataSuccess,
+		...partialFormDbSaveSuccess,
+		...clearPartialFormKeys,
+		...deletePaymentMethodOnSuccess,
+		...apiExternalRequestError,
 		...addPaymentMethodOnSuccess,
 		...deletePaymentMethodOnSuccess,
 		...setDefaultPaymentMethodOnSuccess,
@@ -92,6 +100,8 @@ const store = createStore(
 		...currentPage,
 		...hasMore,
 		...setFirstPage,
+		...favoritesProcessingStart,
+		...favoritesProcessingEnd,
 	}, // reducer object
 	// [], // sagas
 	[
