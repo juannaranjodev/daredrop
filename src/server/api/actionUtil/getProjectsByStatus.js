@@ -1,10 +1,10 @@
-import { map, range, reduce } from 'ramda'
+import { map, range, reduce, filter } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
-
 import listResults from 'root/src/server/api/actionUtil/listResults'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import moment from 'moment'
 
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
@@ -33,16 +33,23 @@ export default async (status, payload) => {
 		shardedProjects,
 	)
 
+	// Filter expired projects
+	const filterExpired = dare => {
+		const diff = moment().diff(dare.approved, 'days')
+		return diff <= 30
+	}
+	const filteredProjects = filter(filterExpired, combinedProjects)
 
-	const allPage = combinedProjects.length % PageItemLedngth > 0
-		? Math.round(combinedProjects.length / PageItemLedngth) + 1
-		: Math.round(combinedProjects.length / PageItemLedngth)
+
+	const allPage = filteredProjects.length % PageItemLedngth > 0
+		? Math.round(filteredProjects.length / PageItemLedngth) + 1
+		: Math.round(filteredProjects.length / PageItemLedngth)
 
 	let { currentPage } = payload.payload
 	if (currentPage === undefined) {
 		currentPage = 1
 	}
-	const projects = combinedProjects.slice(
+	const projects = filteredProjects.slice(
 		(currentPage - 1) * PageItemLedngth,
 		currentPage * PageItemLedngth,
 	)
