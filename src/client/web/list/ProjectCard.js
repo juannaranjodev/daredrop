@@ -1,4 +1,4 @@
-import React, { memo, useState, Fragment } from 'react'
+import React, { memo, useState } from 'react'
 import { isNil } from 'ramda'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import projectListItemConnector from 'root/src/client/logic/project/connectors/projectListItemConnector'
@@ -12,6 +12,9 @@ import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
 import classNames from 'classnames'
 import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlayCircle } from '@fortawesome/free-regular-svg-icons'
+
 const styles = {
 	cardRoot: {
 		margin: [[0, 10, 20]],
@@ -24,6 +27,8 @@ const styles = {
 		boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.2)',
 		cursor: 'pointer',
 		transition: '0.1s',
+		position: 'relative',
+
 	},
 	hover: {
 		boxShadow: '0 1px 26px 0 rgba(0,0,0,1)',
@@ -51,6 +56,7 @@ const styles = {
 		overflow: 'hidden',
 		textOverflow: 'ellipsis',
 		transition: '0s',
+		zIndex: 201,
 	},
 	headerTextH3: {
 		fontSize: '20px',
@@ -61,6 +67,7 @@ const styles = {
 		lineHeight: '1.2',
 		letterSpacing: '0.3px',
 		transition: '0s',
+		zIndex: 201,
 	},
 	cardFooter: {
 		height: 147,
@@ -71,6 +78,7 @@ const styles = {
 	cardGameTitle: {
 		marginBottom: 10,
 		transition: '0s',
+		zIndex: 201,
 	},
 	description: {
 		height: 40,
@@ -81,6 +89,14 @@ const styles = {
 		textOverflow: 'ellipsis',
 		marginBottom: 60,
 		transition: '0s',
+		zIndex: 201,
+	},
+	playIcon: {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		zIndex: 202,
 	},
 	assigneeImg: {
 		width: 100,
@@ -136,7 +152,7 @@ const styles = {
 		display: 'flex',
 		flexWrap: 'wrap',
 		alignItems: 'center',
-		padding: '0 auto',
+		padding: '7 auto',
 		height: 100,
 		marginBottom: 7,
 		position: 'relative',
@@ -146,6 +162,7 @@ const styles = {
 		width: '93px',
 		height: '36px',
 		borderRadius: '20px',
+		zIndex: 201,
 		'& span': {
 			fontWeight: 'bold',
 			textTransform: 'none',
@@ -182,12 +199,43 @@ const styles = {
 	bodyCard: {
 		position: 'relative',
 	},
+	videoOverlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		bottom: 0,
+		right: 0,
+		zIndex: 200,
+		backgroundColor: 'rgba(0, 0, 0, 0.74)',
+		overflow: 'hidden',
+	},
+	noOverlay: {
+		backgroundColor: 'rgba(0, 0, 0, 0)',
+		hoveredName: {
+			fontSize: 14,
+			background: '#800080',
+			fontWeight: 'bold',
+			borderRadius: 5,
+			padding: 10,
+			width: 'auto',
+		},
+		hoveredNameContainer: {
+			width: '100%',
+			position: 'absolute',
+			display: 'flex',
+			justifyContent: 'center',
+			top: 0,
+		},
+		bodyCard: {
+			position: 'relative',
+		},
+	},
 }
 
 export const ListItemUnconnected = memo(({
 	recordId, pushRoute, projectTitle, projectDescription, classes,
 	projectGameImage, projectAssigneesImages, projectShareUrl, projectGames, isAuthenticated,
-	projectAssigneesName,
+	projectAssigneesName, approvedVideoUrl,
 }) => {
 	const [hover, setHover] = useState(false)
 	const [over, setOver] = useState(false)
@@ -198,6 +246,7 @@ export const ListItemUnconnected = memo(({
 		setTimeout(() => { func(undefined) }, 1000)
 	}
 
+
 	return (
 		<section
 			className={classNames(classes.cardRoot, (over || hover) && classes.hover)}
@@ -205,6 +254,10 @@ export const ListItemUnconnected = memo(({
 			onMouseLeave={() => setOver(false)}
 			onMouseOver={() => setOver(true)}
 		>
+			{orNull(approvedVideoUrl, <div
+				className={classes.videoOverlay}
+				onClick={goToViewProjectHandler(recordId, pushRoute)}
+			/>)}
 			<div
 				className={classNames(
 					'flex layout-column',
@@ -217,6 +270,7 @@ export const ListItemUnconnected = memo(({
 						className={classNames(
 							classes.cardHeader,
 							'layout-row layout-align-start-center',
+							({ [classes.noOverlay]: approvedVideoUrl }),
 						)}
 					>
 						<div
@@ -244,6 +298,13 @@ export const ListItemUnconnected = memo(({
 						projectAssigneesImages.length > 5 && classes.projectUnsetJustify,
 					)}
 					>
+						{orNull(approvedVideoUrl,
+							<FontAwesomeIcon
+								className={classes.playIcon}
+								icon={faPlayCircle}
+								size="5x"
+								color="#ffffff"
+							/>)}
 						{projectAssigneesImages.map((imgSrc, i) => (
 							<img
 								key={i}
@@ -273,6 +334,7 @@ export const ListItemUnconnected = memo(({
 						className={classNames(
 							'layout-column layout-align-space-around',
 							classes.cardFooter,
+							({ [classes.noOverlay]: approvedVideoUrl }),
 						)}
 					>
 						<div className={classes.cardGameTitle}>
