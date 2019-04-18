@@ -15,6 +15,8 @@ export default {
 		myPledge: { type: 'integer' },
 		myFavorites: { type: 'integer' },
 		approved: { type: 'string' },
+		created: { type: 'string' },
+		approvedVideoUrl: { type: 'string' },
 		status: {
 			type: 'string',
 			enum: [projectApprovedKey, projectRejectedKey, projectPendingKey],
@@ -38,7 +40,6 @@ export default {
 				additionalProperties: false,
 			},
 		},
-		created: { type: 'string' },
 		games: {
 			type: 'array',
 			items: {
