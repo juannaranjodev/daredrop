@@ -10,6 +10,7 @@ import projectGamesSelector from 'root/src/client/logic/project/selectors/projec
 import isAuthenticated from 'root/src/client/logic/auth/selectors/isAuthenticated'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import projectAssigneNameSelector from 'root/src/client/logic/project/selectors/projectAssigneNameSelector'
+import approvedVideoUrlSelector from 'root/src/client/logic/project/selectors/approvedVideoUrlSelector'
 
 export default reduxConnector(
 	[
@@ -22,6 +23,7 @@ export default reduxConnector(
 		['projectShareUrl', projectShareUrlSelector],
 		['projectGames', projectGamesSelector],
 		['isAuthenticated', isAuthenticated],
+		['approvedVideoUrl', approvedVideoUrlSelector],
 	],
 	[['pushRoute', pushRoute]],
 )
