@@ -1,4 +1,4 @@
-import { head, replace, equals, prop, compose, map } from 'ramda'
+import { head, replace, equals, prop, compose, map, set, lensProp } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -16,6 +16,9 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import projectStatusKeySelector from 'root/src/server/api/actionUtil/projectStatusKeySelector'
+import { projectApprovedKey } from 'root/src/server/api/lenses'
+
+import moment from 'moment'
 
 const payloadLenses = getPayloadLenses(AUDIT_PROJECT)
 const { viewAudit } = payloadLenses
@@ -32,12 +35,20 @@ export default async ({ userId, payload }) => {
 		throw generalError('Project doesn\'t exist')
 	}
 
+	let auditedProject = projectToPledge
+
+	// if current audit action is 'approve', create or update approved date of project. (key: 'approved')
+	if (equals(viewAudit(payload), projectApprovedKey)) {
+		const currentDateTime = moment().format()
+		auditedProject = set(lensProp(projectApprovedKey), currentDateTime, projectToPledge)
+	}
+
 	const auditedProjectToPledge = {
-		...projectToPledge,
+		...auditedProject,
 		[SORT_KEY]: replace(
-			projectStatusKeySelector(prop('sk', projectToPledge)),
+			projectStatusKeySelector(prop('sk', auditedProject)),
 			viewAudit(payload),
-			projectToPledge[SORT_KEY],
+			auditedProject[SORT_KEY],
 		),
 	}
 
@@ -47,8 +58,8 @@ export default async ({ userId, payload }) => {
 				{
 					DeleteRequest: {
 						Key: {
-							[PARTITION_KEY]: projectToPledge[PARTITION_KEY],
-							[SORT_KEY]: projectToPledge[SORT_KEY],
+							[PARTITION_KEY]: auditedProject[PARTITION_KEY],
+							[SORT_KEY]: auditedProject[SORT_KEY],
 						},
 					},
 				},
