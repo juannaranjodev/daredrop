@@ -189,7 +189,7 @@ export const ViewProjectModule = memo(({
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
-	userData = {}, approvedVideoUrl, isOneOfAssignes,
+	userData = {}, approvedVideoUrl, isOneOfAssignees,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -319,7 +319,7 @@ export const ViewProjectModule = memo(({
 									</div>,
 								)
 							}
-							{ternary(isOneOfAssignes,
+							{ternary(isOneOfAssignees,
 								<TwitchButton
 									title="Accept or reject Dare"
 									onClick={goToClaimProjectHandler(
@@ -342,7 +342,7 @@ export const ViewProjectModule = memo(({
 										twitchOauthUrl)}
 								/>)}
 							{
-								orNull(isOneOfAssignes,
+								orNull(isOneOfAssignees,
 									<ButtonSubtitle
 										title="Deliver Dare Video"
 										subtitle="Upload to complete the Dare"
