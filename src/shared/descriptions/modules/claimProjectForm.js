@@ -4,9 +4,9 @@ import {
 	CLAIM_PROJECT_FORM_MODULE_ID,
 } from 'root/src/shared/descriptions/modules/moduleIds'
 
-import { ACCEPT_PROJECT, REJECT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import claimProjectSchemaSelector from 'root/src/shared/util/claimProjectSchemaSelector'
- 
+
 export default {
 	[CLAIM_PROJECT_FORM_MODULE_ID]: {
 		moduleType: 'form',
@@ -42,21 +42,10 @@ export default {
 				label: 'Accept',
 				endpointId: ACCEPT_PROJECT,
 			},
+		],
+		handlers: [
 			{
 				label: 'Reject',
-				endpointId: REJECT_PROJECT,
-				schema: compose(
-					dissocPath(['properties', 'projectId']),
-					dissocPath(['properties', 'assigneeId']),
-					dissocPath(['additionalProperties']),
-					set(
-						lensProp('required'),
-						without(
-							['projectId', 'assigneeId'],
-							view(lensProp('required'), claimProjectSchemaSelector(REJECT_PROJECT)),
-						),
-					),
-				)(claimProjectSchemaSelector(REJECT_PROJECT)),
 			},
 		],
 	},
