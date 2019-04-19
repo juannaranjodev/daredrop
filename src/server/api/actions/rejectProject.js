@@ -4,7 +4,7 @@ import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 import { REJECT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
-import { generalError } from 'root/src/server/api/errors'
+import { customError } from 'root/src/server/api/errors'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { projectStreamerRejectedKey } from 'root/src/server/api/lenses'
@@ -13,6 +13,11 @@ import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 const payloadLenses = getPayloadLenses(REJECT_PROJECT)
 const { viewProjectId, viewAssigneeId, viewMessage } = payloadLenses
+
+// const payload = {
+// 	assigneeId: 'assignee|twitch|246426163',
+// 	projectId: 'project-1a2833e0-6149-11e9-b5ff-b726b53f4d13',
+// }
 
 export default async ({ payload }) => {
 	const projectId = viewProjectId(payload)
@@ -23,9 +28,11 @@ export default async ({ payload }) => {
 	] = await dynamoQueryProjectAssignee(
 		projectId, assigneeId,
 	)
+	return payload
+
 	const projectToReject = head(project)
 	if (!projectToReject) {
-		throw generalError('Project or assignee doesn\'t exist')
+		return customError(404, { error: 'Project or assignee doesn\'t exist' })
 	}
 
 	if (projectToReject.amountRequested) {
