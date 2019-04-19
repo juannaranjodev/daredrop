@@ -14,12 +14,12 @@ import getTimestamp from 'root/src/shared/util/getTimestamp'
 const payloadLenses = getPayloadLenses(REJECT_PROJECT)
 const { viewProjectId, viewAssigneeId, viewMessage } = payloadLenses
 
-// const payload = {
-// 	assigneeId: 'assignee|twitch|246426163',
-// 	projectId: 'project-1a2833e0-6149-11e9-b5ff-b726b53f4d13',
-// }
+const payload = {
+	assigneeId: 'twitch|246426163',
+	projectId: 'project-1a2833e0-6149-11e9-b5ff-b726b53f4d13',
+}
 
-export default async ({ payload }) => {
+export default (async (/* { payload } */) => {
 	const projectId = viewProjectId(payload)
 	const assigneeId = viewAssigneeId(payload)
 	const message = viewMessage(payload)
@@ -28,7 +28,6 @@ export default async ({ payload }) => {
 	] = await dynamoQueryProjectAssignee(
 		projectId, assigneeId,
 	)
-	return payload
 
 	const projectToReject = head(project)
 	if (!projectToReject) {
@@ -61,9 +60,11 @@ export default async ({ payload }) => {
 		...projectToReject,
 	])
 
+	console.log(projectToReject)
+
 	return {
 		...projectToReturn,
 		status: projectStreamerRejectedKey,
 		message,
 	}
-}
+})()
