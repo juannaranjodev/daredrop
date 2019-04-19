@@ -5,6 +5,7 @@ import classNames from 'classnames'
 
 import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
 import TitleFormText from 'root/src/client/web/typography/TitleFormText'
+import SubFieldTopCaption from 'root/src/client/web/typography/SubFieldTopCaption'
 
 import { withStyles } from '@material-ui/core/styles'
 
@@ -14,6 +15,9 @@ const styles = {
 	},
 	subFieldText: {
 		marginTop: 8,
+	},
+	subFieldTopText: {
+		margin: '8px 0',
 	},
 	inline: {
 		display: 'inline',
@@ -26,6 +30,7 @@ const styles = {
 const Fields = memo(
 	({
 		subFieldText,
+		subFieldTopText,
 		labelFieldText,
 		classes,
 		children,
@@ -36,6 +41,12 @@ const Fields = memo(
 				labelFieldText,
 				<div className={classes.labelFieldText}>
 					<TitleFormText>{labelFieldText}</TitleFormText>
+				</div>,
+			)}
+			{orNull(
+				subFieldTopText,
+				<div className={classes.subFieldTopText}>
+					<SubFieldTopCaption>{subFieldTopText}</SubFieldTopCaption>
 				</div>,
 			)}
 			{children}
