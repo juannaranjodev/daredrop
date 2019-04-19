@@ -42,6 +42,7 @@ import steperHeaderModule from 'root/src/shared/descriptions/modules/steperHeade
 import titleHeaderMarketplace from 'root/src/shared/descriptions/modules/titleHeaderMarketplace'
 import claimProject from 'root/src/shared/descriptions/modules/claimProject'
 import claimProjectForm from 'root/src/shared/descriptions/modules/claimProjectForm'
+import rejectProjectModal from 'root/src/shared/descriptions/modules/rejectProjectModal'
 import deliverDareSuccessPage from 'root/src/shared/descriptions/modules/deliverDareSuccessPage'
 import myProjectsList from 'root/src/shared/descriptions/modules/myProjectsList'
 
@@ -90,6 +91,7 @@ const allModules = {
 	...titleHeaderMarketplace,
 	...claimProject,
 	...claimProjectForm,
+	...rejectProjectModal,
 	...deliverDareSuccessPage,
 	...myProjectsList,
 }
