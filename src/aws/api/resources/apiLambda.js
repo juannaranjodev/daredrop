@@ -23,9 +23,9 @@ export default {
 			// FunctionName: String,
 			Role: getAtt(API_LAMBDA_EXECUTION_ROLE, 'Arn'),
 			// Handler: 'index.default',
-			MemorySize: 256,
+			MemorySize: 512,
 			Runtime: 'nodejs8.10',
-			Timeout: 10,
+			Timeout: 4,
 		},
 	},
 }
