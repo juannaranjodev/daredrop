@@ -37,18 +37,7 @@ describe('getActiveProjects', () => {
 				projectArr,
 			),
 		)
-		const pledgeAmount = 20
 
-		await Promise.all(
-			map(project => pledgeProject({
-				payload: {
-					projectId: project.id,
-					pledgeAmount,
-					stripeCardId: 'mockStripeCardId',
-				},
-				userId: mockUserId,
-			}), projectArr),
-		)
 		// So this kinda sucks, but there is no way to ConsistenRead on a GSI.
 		// This test will fail because of a race condition occasionally. Should
 		// figure out a better solution to this at some point...maybe a retry?

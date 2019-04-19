@@ -232,24 +232,24 @@ const styles = {
 		bodyCard: {
 			position: 'relative',
 		},
-	pledgedMark: {
-		fontSize: 12,
-		color: primaryColor,
-		backgroundColor: 'white',
-		textAlign: 'center',
-		border: `1px solid ${primaryColor}`,
-		borderRadius: 5,
-		position: 'absolute',
-		width: 278,
-		marginTop: -21,
-		marginLeft: -15,
+		pledgedMark: {
+			fontSize: 12,
+			color: primaryColor,
+			backgroundColor: 'white',
+			textAlign: 'center',
+			border: `1px solid ${primaryColor}`,
+			borderRadius: 5,
+			position: 'absolute',
+			width: 278,
+			marginTop: -21,
+			marginLeft: -15,
+		},
 	},
 }
-
 export const ListItemUnconnected = memo(({
 	recordId, pushRoute, projectTitle, projectDescription, classes,
 	projectGameImage, projectAssigneesImages, projectShareUrl, projectGames, isAuthenticated,
-	projectAssigneesName, approvedVideoUrl, projectPledged
+	projectAssigneesName, approvedVideoUrl, projectPledged,
 }) => {
 	const [hover, setHover] = useState(false)
 	const [over, setOver] = useState(false)
