@@ -58,6 +58,10 @@ import apiFetchUserDataSuccess from 'root/src/client/logic/api/reducers/apiFetch
 import popStateListener from 'root/src/client/logic/route/listeners/popStateListener'
 import windowSizeListener from 'root/src/client/logic/app/listeners/windowSizeListener'
 
+// modal
+import displayModal from 'root/src/client/logic/modal/reducers/displayModal'
+
+
 const store = createStore(
 	{
 		...authDetermined,
@@ -102,6 +106,7 @@ const store = createStore(
 		...setFirstPage,
 		...favoritesProcessingStart,
 		...favoritesProcessingEnd,
+		...displayModal,
 	}, // reducer object
 	// [], // sagas
 	[
