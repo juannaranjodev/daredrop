@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
 
 import {
-	gtXsMediaQuery, gtSmMediaQuery, gtMdMediaQuery, smMediaQuery,
+	gtXsMediaQuery, gtSmMediaQuery, smMediaQuery,
 } from 'root/src/client/web/commonStyles'
 
 import Assignee from 'root/src/client/web/record/Assignee'
@@ -12,6 +12,7 @@ import Assignee from 'root/src/client/web/record/Assignee'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import Title from 'root/src/client/web/typography/Title'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
+import ButtonSubtitle from 'root/src/client/web/base/CustomButton/buttonWithSubtitle'
 import Button from 'root/src/client/web/base/Button'
 import LoadingButton from 'root/src/client/web/base/LoadingButton'
 import { TwitchButton } from 'root/src/client/web/base/CustomButton'
@@ -21,7 +22,7 @@ import TextField from '@material-ui/core/TextField'
 
 import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionButton'
 import { storageSet } from 'root/src/shared/util/storage'
-import isOneOfAssigneesSelector from 'root/src/client/logic/project/selectors/isOneOfAssigneesSelector'
+import goToDeliveryFormHandler from 'root/src/client/logic/project/handlers/goToDeliveryFormHandler'
 import { APPROVE_PROJECT, REJECT_PROJECT, REJECT_ACTIVE_PROJECT } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 
 import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
@@ -188,7 +189,7 @@ export const ViewProjectModule = memo(({
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
-	userData = {}, approvedVideoUrl,
+	userData = {}, approvedVideoUrl, isOneOfAssignees,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -318,7 +319,7 @@ export const ViewProjectModule = memo(({
 									</div>,
 								)
 							}
-							{ternary(isOneOfAssigneesSelector(assignees, userData),
+							{ternary(isOneOfAssignees,
 								<TwitchButton
 									title="Accept or reject Dare"
 									onClick={goToClaimProjectHandler(
@@ -340,6 +341,25 @@ export const ViewProjectModule = memo(({
 									href={orNull(isAuthenticated,
 										twitchOauthUrl)}
 								/>)}
+							{
+								orNull(isOneOfAssignees,
+									<ButtonSubtitle
+										title="Deliver Dare Video"
+										subtitle="Upload to complete the Dare"
+										onClick={goToDeliveryFormHandler(pushRoute)}
+									/>)
+							}
+							{
+								orNull(
+									canRejectProject,
+									<div className={classes.sidebarItem}>
+										<RecordClickActionButton
+											recordClickActionId={REJECT_PROJECT}
+											recordId={projectId}
+										/>
+									</div>,
+								)
+							}
 							{
 								isNil(myFavorites) || myFavorites == 0
 									? (
