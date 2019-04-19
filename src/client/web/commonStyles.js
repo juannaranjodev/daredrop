@@ -29,6 +29,8 @@ export const navLinkStyle = {
 	padding: [[0, 24]],
 }
 
+export const primaryColorBorder = '1px solid #800080'
+
 
 export const xsMediaQuery = '@media (max-width: 599px)'
 export const gtXsMediaQuery = '@media (min-width: 600px)'

@@ -5,8 +5,8 @@ import recordIdSelector from 'root/src/client/logic/api/selectors/recordIdSelect
 
 import canApproveProjectSelector from 'root/src/client/logic/project/selectors/canApproveProjectSelector'
 import canEditProjectDetailsSelector from 'root/src/client/logic/project/selectors/canEditProjectDetailsSelector'
-import canRejectProjectSelector from 'root/src/client/logic/project/selectors/canRejectProjectSelector'
 import canRejectActiveProjectSelector from 'root/src/client/logic/project/selectors/canRejectActiveProjectSelector'
+import canRejectProjectSelector from 'root/src/client/logic/project/selectors/canRejectProjectSelector'
 import canPledgeProjectSelector from 'root/src/client/logic/project/selectors/canPledgeProjectSelector'
 import createdSelector from 'root/src/client/logic/project/selectors/createdSelector'
 import daysToGoSelector from 'root/src/client/logic/project/selectors/daysToGoSelector'
@@ -22,6 +22,7 @@ import projectGameImageSquareSelector from 'root/src/client/logic/project/select
 import projectTitleSelector from 'root/src/client/logic/project/selectors/projectTitleSelector'
 import statusSelector from 'root/src/client/logic/project/selectors/statusSelector'
 import approvedVideoUrlSelector from 'root/src/client/logic/project/selectors/approvedVideoUrlSelector'
+import isOneOfAssignesSelector from 'root/src/client/logic/project/selectors/isOneOfAssigneesSelector'
 
 import isAuthenticatedSelector from 'root/src/client/logic/auth/selectors/isAuthenticated'
 
@@ -54,6 +55,7 @@ export default reduxConnector(
 		['status', statusSelector],
 		['userData', getUserDataSelector],
 		['approvedVideoUrl', approvedVideoUrlSelector],
+		['isOneOfAssignees', isOneOfAssignesSelector],
 	],
 	[
 		['addToFavorites', addToFavorites],
