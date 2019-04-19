@@ -25,6 +25,6 @@ export default message => async (dispatch, getState) => {
 			projectId,
 			assigneeId,
 		}
-		return dispatch(apiRequest(REJECT_PROJECT, apiPayload))
 	}
+	return dispatch(apiRequest(REJECT_PROJECT, apiPayload))
 }

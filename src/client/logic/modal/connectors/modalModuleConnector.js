@@ -10,7 +10,7 @@ import displayModal from 'root/src/client/logic/modal/thunks/displayModal'
 import rejectProject from 'root/src/client/logic/project/thunks/rejectProject'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 
- export default reduxConnector(
+export default reduxConnector(
 	[
 		['modalType', modalTypeSelector],
 		['modalTitle', modalTitleSelector],
