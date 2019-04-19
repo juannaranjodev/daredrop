@@ -4,7 +4,7 @@ import {
 	PLEDGE_PROJECT_ROUTE_ID, MY_PROJECTS_ROUTE_ID,
 	PLEDGE_SUCCESS_PAGE_ROUTE_ID, CLAIM_PROJECT_ROUTE_ID,
 	FAVORITES_PROJECTS_ROUTE_ID, DELIVER_DARE_SUCCESS_ROUTE_ID,
-	DELIVERY_DARE_FORM_ROURE_ID,
+	DELIVERY_DARE_FORM_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
 
 import {
@@ -89,7 +89,7 @@ export default {
 			DELIVER_DARE_SUCCESS_MODULE_ID,
 		],
 	},
-	[DELIVERY_DARE_FORM_ROURE_ID]: {
+	[DELIVERY_DARE_FORM_ROUTE_ID]: {
 		url: '/delivery-dare',
 		modules: [],
 	},
