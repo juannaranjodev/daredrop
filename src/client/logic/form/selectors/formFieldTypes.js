@@ -13,6 +13,7 @@ export default (state, props) => compose(
 			labelFieldText,
 			extraButton,
 			inputMaxLength,
+			subFieldTopText,
 		}, fieldIndex) => [
 			[fieldId],
 			[...(has('formIndex', props) ? ['forms', props.formIndex] : []), 'fields', fieldIndex],
@@ -22,6 +23,7 @@ export default (state, props) => compose(
 			labelFieldText,
 			extraButton,
 			inputMaxLength,
+			subFieldTopText,
 		],
 	),
 	(moduleId) => {
