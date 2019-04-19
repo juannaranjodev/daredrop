@@ -12,11 +12,12 @@ import { projectStreamerRejectedKey } from 'root/src/server/api/lenses'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 const payloadLenses = getPayloadLenses(REJECT_PROJECT)
-const { viewProjectId, viewAssigneeId } = payloadLenses
+const { viewProjectId, viewAssigneeId, viewMessage } = payloadLenses
 
 export default async ({ payload }) => {
 	const projectId = viewProjectId(payload)
 	const assigneeId = viewAssigneeId(payload)
+	const message = viewMessage(payload)
 	const [
 		project,
 	] = await dynamoQueryProjectAssignee(
@@ -39,6 +40,7 @@ export default async ({ payload }) => {
 						Item: {
 							...projectToReject,
 							accepted: projectStreamerRejectedKey,
+							message,
 							created: getTimestamp(),
 						},
 					},
@@ -55,5 +57,6 @@ export default async ({ payload }) => {
 	return {
 		...projectToReturn,
 		status: projectStreamerRejectedKey,
+		message,
 	}
 }

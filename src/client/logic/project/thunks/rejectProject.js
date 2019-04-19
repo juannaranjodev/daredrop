@@ -6,16 +6,25 @@ import { apiStoreLenses } from 'root/src/client/logic/api/lenses'
 
 const { viewUserDataChild, viewUserData } = apiStoreLenses
 
-export default formData => async (dispatch, getState) => {
+export default message => async (dispatch, getState) => {
 	const state = getState()
 	const tokenId = head(Object.keys(viewUserData(state)))
 	const projectId = currentRouteParamsRecordId(state)
 	// TUTAJ SK
 	const userData = viewUserDataChild(tokenId, state)
 	const assigneeId = userData.sk
-	const apiPayload = {
-		projectId,
-		assigneeId,
+	let apiPayload
+	if (message) {
+		apiPayload = {
+			projectId,
+			assigneeId,
+			message,
+		}
+	} else {
+		apiPayload = {
+			projectId,
+			assigneeId,
+		}
+		return dispatch(apiRequest(REJECT_PROJECT, apiPayload))
 	}
-	return dispatch(apiRequest(REJECT_PROJECT, apiPayload))
 }

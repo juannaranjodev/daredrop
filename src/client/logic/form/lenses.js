@@ -154,6 +154,16 @@ export const formModuleSchema = {
 						routeId: { type: 'string' },
 					},
 				},
+				handlers: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							action: { type: 'function' },
+							label: { type: 'string' },
+						},
+					},
+				},
 			},
 		},
 	},
