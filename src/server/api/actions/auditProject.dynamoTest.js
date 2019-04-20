@@ -2,8 +2,6 @@ import { apiFn } from 'root/src/server/api'
 
 import { AUDIT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
-import wait from 'root/src/testUtil/wait'
-
 import createProject from 'root/src/server/api/actions/createProject'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
@@ -32,7 +30,6 @@ describe('auditProject', () => {
 				audit: projectApprovedKey,
 			},
 		}
-		await wait(1000)
 		const res = await apiFn(event)
 		res.body.userId = mockUserId
 

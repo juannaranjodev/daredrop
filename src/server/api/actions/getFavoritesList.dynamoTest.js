@@ -13,16 +13,9 @@ import addToFavorites from 'root/src/server/api/actions/addToFavorites'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 
-//This never actually tested the list of favorites
-
-test('Successfully get active projects', async () => {
-	const res = true
-	expect(res).toBe(true)
-})
-
-/*
-describe('getActiveProjects', () => {
-	test('Successfully get active projects', async () => {
+describe('getListOfFavorites', () => {
+	test('Successfully get list of favorites', async () => {
+		// create projects
 		const projectArr = await Promise.all(
 			map(
 				() => createProject({
@@ -73,4 +66,3 @@ describe('getActiveProjects', () => {
 		expect(res.body.items[1].sk).toEqual(projectArr[1].sk)
 	})
 })
-*/
