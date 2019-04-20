@@ -2,6 +2,8 @@ import { map, range, prop, find, propEq } from 'ramda'
 
 import { apiFn } from 'root/src/server/api'
 
+import wait from 'root/src/testUtil/wait'
+
 import { DELETE_PAYMENT_METHOD } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import addPaymentMethodPayload from 'root/src/server/api/mocks/addPaymentMethodPayload'
 import addPaymentMethod from 'root/src/server/api/actions/addPaymentMethod'
@@ -39,6 +41,7 @@ describe('getPendingProjects', () => {
 			payload: '1232113',
 		}
 
+		await wait(750)
 		await apiFn(fakeEvent)
 
 		paymentMethods = await getPaymentMethods({ userId: mockUserId })

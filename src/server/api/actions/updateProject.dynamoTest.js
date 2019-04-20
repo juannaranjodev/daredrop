@@ -1,11 +1,12 @@
 import { apiFn } from 'root/src/server/api'
 
-import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
+import { UPDATE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
+
+import wait from 'root/src/testUtil/wait'
 
 import createProject from 'root/src/server/api/actions/createProject'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
-import { UPDATE_PROJECT } from '../../../shared/descriptions/endpoints/endpointIds'
 
 
 describe('Update project', () => {
@@ -27,6 +28,7 @@ describe('Update project', () => {
 			},
 			authentication: mockUserId,
 		}
+		await wait(750)
 		const res = await apiFn(event)
 
 		expect(res).toEqual({
