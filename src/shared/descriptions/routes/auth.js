@@ -55,7 +55,7 @@ export default {
 		modules: [TWITCH_OAUTH_MODULE_ID],
 	},
 	[TWITCH_OAUTH_FAILURE_ROUTE_ID]: {
-		url: '/twitch-oauth-fail',
+		url: '/twitch-oauth-failure',
 		modules: [TWITCH_OAUTH_FAILURE_MODULE_ID],
 	},
 }

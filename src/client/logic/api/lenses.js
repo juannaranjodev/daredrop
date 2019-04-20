@@ -81,6 +81,7 @@ const apiStoreSchema = {
 						},
 					},
 				},
+				favoritesProcessing: { type: 'boolean' },
 				externals: {
 					type: 'object',
 					patternProperties: {
@@ -89,16 +90,6 @@ const apiStoreSchema = {
 							properties: {
 
 							},
-						},
-					},
-				},
-				externalErrors: {
-					type: 'object',
-					patternProperties: {
-						[variableSchemaKey]: {
-							// type: 'string', this is really a string
-							type: 'object',
-							properties: {},
 						},
 					},
 				},

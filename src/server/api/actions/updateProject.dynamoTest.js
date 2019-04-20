@@ -7,13 +7,13 @@ import wait from 'root/src/testUtil/wait'
 import createProject from 'root/src/server/api/actions/createProject'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
-
+import { projectApprovedKey } from 'root/src/server/api/lenses'
 
 describe('Update project', () => {
 	test('Updates newly created project if you are an admin', async () => {
 		const newProject = await createProject({
 			userId: mockUserId,
-			payload: { ...createProjectPayload(), status: 'approved' },
+			payload: { ...createProjectPayload(), status: projectApprovedKey },
 		})
 		const description = 'This is a new description'
 		const title = 'This is the new title'
@@ -44,7 +44,7 @@ describe('Update project', () => {
 	// test('Doesn\'t update created project if you are NOT and admin', async () => {
 	// 	const newProject = await createProject({
 	// 		userId: mockUserId,
-	// 		payload: { ...createProjectPayload(), status: 'approved' },
+	// 		payload: { ...createProjectPayload(), status: projectApprovedKey },
 	// 	})
 	// 	const description = 'This is a new description'
 	// 	const event = {

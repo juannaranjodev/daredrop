@@ -5,6 +5,7 @@ export const CLEAR_ALL_FORMS = 'actionId/CLEAR_ALL_FORMS'
 export const CHANGE_INPUT = 'actionId/CHANGE_INPUT'
 export const SET_FORM_ERRORS = 'actionId/SET_FORM_ERRORS'
 export const CLEAR_FORM_ERRORS = 'actionId/CLEAR_FORM_ERRORS'
+export const HANDLE_FORM = 'actionId/HANDLE_FORM'
 
 export const ADD_SUB_FORM = 'actionId/ADD_SUB_FORM'
 export const REMOVE_SUB_FORM = 'actionId/REMOVE_SUB_FORM'

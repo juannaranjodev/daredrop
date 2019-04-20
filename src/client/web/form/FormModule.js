@@ -8,11 +8,11 @@ import Fields from 'root/src/client/web/form/Fields'
 import Submits from 'root/src/client/web/form/Submits'
 import Header from 'root/src/client/web/typography/Header'
 import Body from 'root/src/client/web/typography/Body'
-import Button from 'root/src/client/web/base/Button'
 import Link from 'root/src/client/web/base/Link'
 import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
 import FormTitle from 'root/src/client/web/typography/FormTitle'
 import formModuleConnector from 'root/src/client/logic/form/connectors/formModuleConnector'
+import Handlers from 'root/src/client/web/form/Handlers'
 
 import backToPrevHandler from 'root/src/client/logic/form/handlers/backToPrevHandler'
 import goToViewProjectHandler from 'root/src/client/logic/project/handlers/goToViewProjectHandler'
@@ -70,7 +70,7 @@ const styles = {
 export const FormModuleUnconnected = memo(({
 	formFieldTypes, formTitle, formSubmits, moduleId, moduleKey, submitForm,
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
-	classes, subTitle, formType, backButton,
+	classes, subTitle, formType, backButton, formHandlers, handleAction,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
@@ -144,6 +144,12 @@ export const FormModuleUnconnected = memo(({
 							formType={formType}
 							setWasSubmitted={setWasSubmitted}
 						/>
+						{orNull(formHandlers, <Handlers
+							moduleKey={moduleKey}
+							formHandlers={formHandlers}
+							handlerFn={handleAction}
+							formType={formType}
+						/>)}
 					</div>
 					{orNull(
 						postSubmitText,
