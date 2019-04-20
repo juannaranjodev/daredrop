@@ -24,7 +24,7 @@ describe('getPendingProjects', () => {
 		// So this kinda sucks, but there is no way to ConsistenRead on a GSI.
 		// This test will fail because of a race condition occasionally. Should
 		// figure out a better solution to this at some point...maybe a retry?
-		await wait(1000)
+		await wait(750)
 		const event = {
 			endpointId: GET_PENDING_PROJECTS,
 			payload: { currentPage: 1 },
