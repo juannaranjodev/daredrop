@@ -32,12 +32,12 @@ const styles = {
 		textTransform: 'none',
 		cursor: 'pointer',
 		color: 'white',
-		border: 'none',
 		backgroundColor: primaryColor,
 		'&:hover': {
 			backgroundColor: secondaryColor,
 		},
 		height: 48.1,
+		border: 'none',
 	},
 	link: {
 		textDecoration: 'none',

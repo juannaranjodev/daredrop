@@ -29,7 +29,7 @@ const styles = {
 	},
 }
 
-const GetUserTwitch = memo(({ userData: { displayName, isNotListed }, pageContent, classes }) => (
+const GetUserTwitch = memo(({ pageContent, classes, userData: { displayName, isNotListed } }) => (
 	<div>
 		{orNull(displayName,
 			<section className={classes.section}>
