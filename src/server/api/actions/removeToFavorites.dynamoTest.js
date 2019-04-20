@@ -2,6 +2,8 @@ import { apiFn } from 'root/src/server/api'
 
 import { REMOVE_TO_FAVORITES } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
+import wait from 'root/src/testUtil/wait'
+
 import createProject from 'root/src/server/api/actions/createProject'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
@@ -25,9 +27,8 @@ describe('removeToFavorites', () => {
 			},
 			authentication: mockUserId,
 		}
+		await wait(750)
 		const res = await apiFn(event)
-
-		console.log(res)
 
 		expect(res).toEqual({
 			statusCode: 200,
