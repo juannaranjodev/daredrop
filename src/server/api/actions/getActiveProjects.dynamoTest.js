@@ -12,7 +12,6 @@ import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
 
-//need to find a way to test pagination that doesn't hit the db too hard
 describe('getActiveProjects', () => {
 	test('Successfully get active projects', async () => {
 		await wait(20000)
@@ -22,7 +21,7 @@ describe('getActiveProjects', () => {
 					userId: 'user-differentuserid',
 					payload: createProjectPayload(),
 				}),
-				range(1, 5),
+				range(1, 10),
 			),
 		)
 		await Promise.all(
@@ -48,7 +47,7 @@ describe('getActiveProjects', () => {
 		const res = await apiFn(event, contextMock)
 
 		console.log(res)
-		expect(res.body.items.length).toEqual(4)
+		expect(res.body.items.length).toEqual(8)
 		expect(res.body.items[0].sk).toEqual(projectArr[0].sk)
 		expect(res.body.items[1].sk).toEqual(projectArr[1].sk)
 		expect(res.body.allPage).toEqual(2)

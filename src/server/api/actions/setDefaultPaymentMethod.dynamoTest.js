@@ -2,8 +2,6 @@ import { map, range, prop, find, propEq, last, split } from 'ramda'
 
 import { apiFn } from 'root/src/server/api'
 
-import wait from 'root/src/testUtil/wait'
-
 import { SET_DEFAULT_PAYMENT_METHOD } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import addPaymentMethodPayload from 'root/src/server/api/mocks/addPaymentMethodPayload'
 import addPaymentMethod from 'root/src/server/api/actions/addPaymentMethod'
@@ -34,7 +32,6 @@ describe('getPendingProjects', () => {
 			payload: prop('id', paymentMethod2),
 		}
 
-		await wait(750)
 		const res1 = await apiFn(firstEvent)
 		const res2 = await apiFn(secondEvent)
 

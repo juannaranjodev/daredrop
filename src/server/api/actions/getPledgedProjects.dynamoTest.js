@@ -2,8 +2,6 @@ import { apiFn } from 'root/src/server/api'
 
 import { GET_PLEDGED_PROJECTS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
-import wait from 'root/src/testUtil/wait'
-
 import createProject from 'root/src/server/api/actions/createProject'
 import pledgeProject from 'root/src/server/api/actions/pledgeProject'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
@@ -32,7 +30,6 @@ describe('getPledgedProjects', () => {
 			payload: {},
 			authentication: mockUserId,
 		}
-		await wait(750)
 		const res = await apiFn(event)
 		expect(res).toEqual({
 			statusCode: 200,

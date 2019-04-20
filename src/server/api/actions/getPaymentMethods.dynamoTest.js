@@ -25,7 +25,6 @@ describe('getPendingProjects', () => {
 			endpointId: GET_PAYMENT_METHODS,
 			authentication: mockUserId,
 		}
-		await wait(750)
 		const res = await apiFn(event)
 		expect(res.body.items.length).toEqual(2)
 	})
