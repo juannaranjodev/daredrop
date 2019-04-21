@@ -1,4 +1,4 @@
-import { head, prop, view } from 'ramda'
+import { head, prop, length, split, findIndex, propEq, and, assocPath, equals } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -8,19 +8,17 @@ import { customError } from 'root/src/server/api/errors'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import { projectStreamerRejectedKey } from 'root/src/server/api/lenses'
+import { projectStreamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
+import getNumberOfPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getNumberOfPendingOrAcceptedAssignees'
+import auditProject from 'root/src/server/api/actions/auditProject'
 
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 const payloadLenses = getPayloadLenses(REJECT_PROJECT)
 const { viewProjectId, viewAssigneeId, viewMessage } = payloadLenses
 
-const payload = {
-	assigneeId: 'twitch|246426163',
-	projectId: 'project-1a2833e0-6149-11e9-b5ff-b726b53f4d13',
-}
 
-export default (async (/* { payload } */) => {
+export default async ({ payload }) => {
 	const projectId = viewProjectId(payload)
 	const assigneeId = viewAssigneeId(payload)
 	const message = viewMessage(payload)
@@ -28,15 +26,21 @@ export default (async (/* { payload } */) => {
 	const [projectAssignee] = await dynamoQueryProjectAssignee(projectId, assigneeId)
 
 	const [project] = head(await dynamoQueryProject(null, projectId))
-	// console.log(prop('assignees', project))
-	const projectToReject = head(projectAssignee)
-	// console.log(projectToReject)
-	if (!projectToReject) {
+	const [platform, platformId] = split('|', assigneeId)
+	const projectAssignees = prop('assignees', project)
+	const assigneeIndex = findIndex(and(propEq('platform', platform), propEq('platformId', platformId)))(projectAssignees)
+	const projectToReject = assocPath(['assignees', assigneeIndex, 'accepted'], projectStreamerRejectedKey, project)
+
+	const assigneesLeft = getNumberOfPendingOrAcceptedAssignees(projectToReject)
+
+	const assigneeToReject = head(projectAssignee)
+
+	if (!assigneeToReject) {
 		return customError(404, { error: 'Project or assignee doesn\'t exist' })
 	}
 
-	if (projectToReject.amountRequested) {
-		delete projectToReject.amountRequested
+	if (assigneeToReject.amountRequested) {
+		delete assigneeToReject.amountRequested
 	}
 
 	const rejectionParams = {
@@ -45,10 +49,17 @@ export default (async (/* { payload } */) => {
 				{
 					PutRequest: {
 						Item: {
-							...projectToReject,
+							...assigneeToReject,
 							accepted: projectStreamerRejectedKey,
 							message,
 							created: getTimestamp(),
+						},
+					},
+				},
+				{
+					PutRequest: {
+						Item: {
+							...projectToReject,
 						},
 					},
 				},
@@ -57,8 +68,19 @@ export default (async (/* { payload } */) => {
 	}
 
 	await documentClient.batchWrite(rejectionParams).promise()
+
+	if (equals(length(assigneesLeft), 0)) {
+		const payload = {
+			payload: {
+				projectId,
+				audit: projectAllStreamersRejectedKey,
+			},
+		}
+		await auditProject(payload)
+	}
+
 	const projectToReturn = projectSerializer([
-		projectToReject,
+		assigneeToReject,
 	])
 
 	return {
@@ -66,4 +88,4 @@ export default (async (/* { payload } */) => {
 		status: projectStreamerRejectedKey,
 		message,
 	}
-})()
+}

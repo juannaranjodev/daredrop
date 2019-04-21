@@ -28,7 +28,6 @@ export default async ({ userId, payload }) => {
 	const serializedProject = await assigneeSerializer({
 		project: payload, payloadLenses,
 	})
-	return serializedProject
 	const projectId = `project-${uuid()}`
 
 	const projectCommon = projectDenormalizeFields(serializedProject)
