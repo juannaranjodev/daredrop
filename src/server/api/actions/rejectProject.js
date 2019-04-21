@@ -9,7 +9,7 @@ import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQue
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { projectStreamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
-import getNumberOfPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getNumberOfPendingOrAcceptedAssignees'
+import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getNumberOfPendingOrAcceptedAssignees'
 import auditProject from 'root/src/server/api/actions/auditProject'
 
 import getTimestamp from 'root/src/shared/util/getTimestamp'
@@ -31,7 +31,7 @@ export default async ({ payload }) => {
 	const assigneeIndex = findIndex(and(propEq('platform', platform), propEq('platformId', platformId)))(projectAssignees)
 	const projectToReject = assocPath(['assignees', assigneeIndex, 'accepted'], projectStreamerRejectedKey, project)
 
-	const assigneesLeft = getNumberOfPendingOrAcceptedAssignees(projectToReject)
+	const assigneesLeft = getPendingOrAcceptedAssignees(projectToReject)
 
 	const assigneeToReject = head(projectAssignee)
 
