@@ -70,6 +70,7 @@ export default async ({ userId, payload }) => {
 			],
 		},
 	}
+
 	await documentClient.batchWrite(auditParams).promise()
 
 	const newProject = projectSerializer([
