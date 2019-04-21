@@ -28,6 +28,7 @@ export default async ({ userId, payload }) => {
 	const serializedProject = await assigneeSerializer({
 		project: payload, payloadLenses,
 	})
+	return serializedProject
 	const projectId = `project-${uuid()}`
 
 	const projectCommon = projectDenormalizeFields(serializedProject)
@@ -87,7 +88,7 @@ export default async ({ userId, payload }) => {
 			title: dareCreatedTitle,
 		}
 		sendEmail(emailData, dareCreatedEmail)
-	} catch (err) {}
+	} catch (err) { }
 
 	return {
 		id: projectId,
