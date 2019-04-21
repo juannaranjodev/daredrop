@@ -9,7 +9,7 @@ import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQue
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { projectStreamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
-import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getNumberOfPendingOrAcceptedAssignees'
+import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPendingOrAcceptedAssignees'
 import auditProject from 'root/src/server/api/actions/auditProject'
 
 import getTimestamp from 'root/src/shared/util/getTimestamp'
