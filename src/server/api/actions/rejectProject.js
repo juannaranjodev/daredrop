@@ -1,4 +1,4 @@
-import { head } from 'ramda'
+import { head, prop, view } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -6,6 +6,7 @@ import { REJECT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointI
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { customError } from 'root/src/server/api/errors'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
+import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { projectStreamerRejectedKey } from 'root/src/server/api/lenses'
 
@@ -23,13 +24,13 @@ export default (async (/* { payload } */) => {
 	const projectId = viewProjectId(payload)
 	const assigneeId = viewAssigneeId(payload)
 	const message = viewMessage(payload)
-	const [
-		project,
-	] = await dynamoQueryProjectAssignee(
-		projectId, assigneeId,
-	)
 
-	const projectToReject = head(project)
+	const [projectAssignee] = await dynamoQueryProjectAssignee(projectId, assigneeId)
+
+	const [project] = head(await dynamoQueryProject(null, projectId))
+	// console.log(prop('assignees', project))
+	const projectToReject = head(projectAssignee)
+	// console.log(projectToReject)
 	if (!projectToReject) {
 		return customError(404, { error: 'Project or assignee doesn\'t exist' })
 	}
@@ -57,10 +58,8 @@ export default (async (/* { payload } */) => {
 
 	await documentClient.batchWrite(rejectionParams).promise()
 	const projectToReturn = projectSerializer([
-		...projectToReject,
+		projectToReject,
 	])
-
-	console.log(projectToReject)
 
 	return {
 		...projectToReturn,
