@@ -232,18 +232,19 @@ const styles = {
 		bodyCard: {
 			position: 'relative',
 		},
-		pledgedMark: {
-			fontSize: 12,
-			color: primaryColor,
-			backgroundColor: 'white',
-			textAlign: 'center',
-			border: `1px solid ${primaryColor}`,
-			borderRadius: 5,
-			position: 'absolute',
-			width: 278,
-			marginTop: -21,
-			marginLeft: -15,
-		},
+	},
+	pledgedMark: {
+		fontSize: 12,
+		color: primaryColor,
+		backgroundColor: 'white',
+		textAlign: 'center',
+		border: `1px solid ${primaryColor}`,
+		borderRadius: 5,
+		position: 'absolute',
+		width: 278,
+		marginTop: -21,
+		marginLeft: -15,
+		zIndex: 1000,
 	},
 }
 export const ListItemUnconnected = memo(({
