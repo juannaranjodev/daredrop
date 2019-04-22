@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
 
 import {
-	gtXsMediaQuery, gtSmMediaQuery, gtMdMediaQuery, smMediaQuery,
+	gtXsMediaQuery, gtSmMediaQuery, smMediaQuery,
 } from 'root/src/client/web/commonStyles'
 
 import Assignee from 'root/src/client/web/record/Assignee'
@@ -12,7 +12,9 @@ import Assignee from 'root/src/client/web/record/Assignee'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import Title from 'root/src/client/web/typography/Title'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
+import ButtonSubtitle from 'root/src/client/web/base/CustomButton/buttonWithSubtitle'
 import Button from 'root/src/client/web/base/Button'
+import LoadingButton from 'root/src/client/web/base/LoadingButton'
 import { TwitchButton } from 'root/src/client/web/base/CustomButton'
 
 import { twitchOauthUrl } from 'root/src/shared/constants/twitch'
@@ -20,7 +22,7 @@ import TextField from '@material-ui/core/TextField'
 
 import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionButton'
 import { storageSet } from 'root/src/shared/util/storage'
-import isOneOfAssigneesSelector from 'root/src/client/logic/project/selectors/isOneOfAssigneesSelector'
+import goToDeliveryFormHandler from 'root/src/client/logic/project/handlers/goToDeliveryFormHandler'
 import { APPROVE_PROJECT, REJECT_PROJECT, REJECT_ACTIVE_PROJECT } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 
 import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
@@ -31,8 +33,10 @@ import goToClaimProjectHandler from 'root/src/client/logic/project/handlers/goTo
 
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
-
 const styles = {
+	centered: {
+		margin: '0 auto',
+	},
 	title: {
 		marginTop: 28,
 		marginBottom: 20,
@@ -42,6 +46,19 @@ const styles = {
 	},
 	image: {
 		width: '100%',
+	},
+	iframeContainer: {
+		position: 'relative',
+		overflow: 'hidden',
+		paddingTop: '100%',
+	},
+	iframe: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100%',
+		border: 0,
 	},
 	sidebar: {
 		[smMediaQuery]: {
@@ -166,13 +183,13 @@ const styles = {
 	},
 }
 
-
 export const ViewProjectModule = memo(({
 	addToFavorites, removeToFavorites, favoritesAmount, myFavorites,
 	projectId, projectDescription, projectTitle, pledgeAmount, assignees,
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
-	myPledge, status, canRejectActiveProject, pledgers, created, userData = {},
+	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
+	userData = {}, approvedVideoUrl, isOneOfAssignees,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -185,7 +202,7 @@ export const ViewProjectModule = memo(({
 	return (
 		<div className="flex layout-row layout-align-center-start">
 			<MaxWidthContainer>
-				<div className="flex layout-row layout-wrap">
+				<div className={classNames('flex flex-sm-70 layout-row layout-wrap', classes.centered)}>
 					<div className={classNames(
 						'flex-100', 'layout-row',
 						'layout-align-center', classes.title,
@@ -205,7 +222,18 @@ export const ViewProjectModule = memo(({
 
 					</div>
 					<div className="flex-100 flex-gt-sm-60 flex-order-1">
-						<img alt="Game" src={gameImage} className={classes.image} />
+						{ternary(approvedVideoUrl,
+							<div className={classes.iframeContainer}>
+								<iframe
+									className={classes.iframe}
+									src={approvedVideoUrl}
+									frameBorder="0"
+									scrolling="no"
+									allowFullScreen
+									title={projectTitle}
+								/>
+							</div>,
+							<img alt="Game" src={gameImage} className={classes.image} />)}
 					</div>
 					<div
 						className={classNames(
@@ -231,7 +259,7 @@ export const ViewProjectModule = memo(({
 								</div>
 								<div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
 									<SubHeader>Days to go</SubHeader>
-									<div className={classNames(classes.text)}>{created}</div>
+									<div className={classNames(classes.text)}>{daysToGo}</div>
 								</div>
 							</div>
 							<div className={classNames(classes.sidebarItem, classes.streamerTitle)}>
@@ -291,7 +319,7 @@ export const ViewProjectModule = memo(({
 									</div>,
 								)
 							}
-							{ternary(isOneOfAssigneesSelector(assignees, userData),
+							{ternary(isOneOfAssignees,
 								<TwitchButton
 									title="Accept or reject Dare"
 									onClick={goToClaimProjectHandler(
@@ -309,6 +337,26 @@ export const ViewProjectModule = memo(({
 									href={twitchOauthUrl()}
 								/>)}
 							{
+									onClick={
+										ternary(isAuthenticated,
+											() => {
+												storageSet('redirectAssignee', assignees[0].username)
+												storageSet('redirectUri', window.location.pathname)
+											},
+											goToSignInHandler(pushRoute))
+									}
+									href={orNull(isAuthenticated,
+										twitchOauthUrl)}
+								/>)}
+							{
+								orNull(isOneOfAssignees,
+									<ButtonSubtitle
+										title="Deliver Dare Video"
+										subtitle="Upload to complete the Dare"
+										onClick={goToDeliveryFormHandler(pushRoute)}
+									/>)
+							}
+							{
 								orNull(
 									canRejectProject,
 									<div className={classes.sidebarItem}>
@@ -321,33 +369,41 @@ export const ViewProjectModule = memo(({
 							}
 							{
 								isNil(myFavorites) || myFavorites == 0
-									? <div className={classes.sidebarItem}>
-										<Button
-											buttonType="noBackgroundButton"
-											onClick={
-												ternary(
-													isAuthenticated,
-													addToFavorites,
-													goToSignInHandler(pushRoute),
-												)}
-										>
-											<FavoriteBorderIcon className={classes.leftIcon} />
-											Add to Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
-										</Button>
-									</div>
-									:									<div className={classes.sidebarItem}>
-										<Button
-											buttonType="noBackgroundButton"
-											onClick={
-												ternary(
-													isAuthenticated,
-													removeToFavorites,
-													goToSignInHandler(pushRoute),
-												)}
-										>
-											Added to your Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
-										</Button>
-									</div>
+									? (
+										<div className={classes.sidebarItem}>
+											<LoadingButton
+												buttonType="noBackgroundButton"
+												loading={favoritesProcessing}
+												onClick={
+													ternary(
+														isAuthenticated,
+														addToFavorites,
+														goToSignInHandler(pushRoute),
+													)
+												}
+											>
+												<FavoriteBorderIcon className={classes.leftIcon} />
+												Add to Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
+											</LoadingButton>
+										</div>
+									)
+									: (
+										<div className={classes.sidebarItem}>
+											<LoadingButton
+												buttonType="noBackgroundButton"
+												loading={favoritesProcessing}
+												onClick={
+													ternary(
+														isAuthenticated,
+														removeToFavorites,
+														goToSignInHandler(pushRoute),
+													)
+												}
+											>
+												Added to your Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
+											</LoadingButton>
+										</div>
+									)
 							}
 						</div>
 					</div>

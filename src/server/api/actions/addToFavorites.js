@@ -8,7 +8,7 @@ import favoritesDynamoObj from 'root/src/server/api/actionUtil/favoritesDynamoOb
 import { generalError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-
+import moment from 'moment'
 
 export default async ({ userId, payload }) => {
 	const { projectId } = payload
@@ -23,7 +23,7 @@ export default async ({ userId, payload }) => {
 		throw generalError('Project doesn\'t exist')
 	}
 
-	const favoritesCreatedAt = Date.now()
+	const favoritesCreatedAt = moment().format()
 	const newFavoritesAmount = 1
 
 	const newFavorites = favoritesDynamoObj(

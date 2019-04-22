@@ -4,12 +4,13 @@ import { REMOVE_TO_FAVORITES } from 'root/src/shared/descriptions/endpoints/endp
 
 import createProject from 'root/src/server/api/actions/createProject'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
+import { projectApprovedKey } from 'root/src/server/api/lenses'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { internet } from 'faker'
 
 const project = createProject({
 	userId: internet.username,
-	payload: { ...createProjectPayload(), status: 'approved' },
+	payload: { ...createProjectPayload(), status: projectApprovedKey },
 })
 
 describe('removeToFavorites', () => {

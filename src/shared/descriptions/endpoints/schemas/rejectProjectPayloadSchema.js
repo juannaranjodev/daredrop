@@ -5,6 +5,13 @@ export default {
 		assigneeId: {
 			type: 'string',
 		},
+		message: {
+			type: 'string',
+			maxLength: 300,
+			errorMessage: {
+				maxLength: '300 characters max.',
+			},
+		},
 	},
 	required: ['projectId', 'assigneeId'],
 	additionalProperties: false,

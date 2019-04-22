@@ -33,6 +33,10 @@ import initApiRecordRequest from 'root/src/client/logic/api/reducers/initApiReco
 import generalRecordModification from 'root/src/client/logic/api/reducers/generalRecordModification'
 import currentListPayload from 'root/src/client/logic/api/reducers/currentListPayload'
 
+// project
+import favoritesProcessingStart from 'root/src/client/logic/project/reducers/favoritesProcessingStart'
+import favoritesProcessingEnd from 'root/src/client/logic/project/reducers/favoritesProcessingEnd'
+
 import apiRecordClickActionRequestError from 'root/src/client/logic/api/reducers/apiRecordClickActionRequestError'
 import apiRecordClickActionRequestSuccess from 'root/src/client/logic/api/reducers/apiRecordClickActionRequestSuccess'
 import initApiRecordClickActionRequest from 'root/src/client/logic/api/reducers/initApiRecordClickActionRequest'
@@ -53,6 +57,10 @@ import apiFetchUserDataSuccess from 'root/src/client/logic/api/reducers/apiFetch
 // listeners
 import popStateListener from 'root/src/client/logic/route/listeners/popStateListener'
 import windowSizeListener from 'root/src/client/logic/app/listeners/windowSizeListener'
+
+// modal
+import displayModal from 'root/src/client/logic/modal/reducers/displayModal'
+
 
 const store = createStore(
 	{
@@ -96,6 +104,9 @@ const store = createStore(
 		...currentPage,
 		...hasMore,
 		...setFirstPage,
+		...favoritesProcessingStart,
+		...favoritesProcessingEnd,
+		...displayModal,
 	}, // reducer object
 	// [], // sagas
 	[
