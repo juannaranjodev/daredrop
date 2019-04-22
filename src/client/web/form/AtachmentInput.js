@@ -39,8 +39,8 @@ const styles = {
 		marginRight: 20,
 	},
 	attachmentWrap: {
-		marginTop: 12,
-		marginBottom: 25,
+		marginTop: 10,
+		marginBottom: -3,
 	},
 }
 
