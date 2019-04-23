@@ -30,7 +30,7 @@ export default ({ streamers, dareTitle }) => {
                   
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">We have 30 days for ${arrayToStringParser(streamers)} to deliver on it.</p>
+                      <p style="margin:0;padding:0;">We have 7 days for ${arrayToStringParser(streamers)} to deliver on it.</p>
                     </td>
                   </tr>
                   

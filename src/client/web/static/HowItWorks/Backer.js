@@ -42,7 +42,7 @@ const Backer = ({ classes }) => (
 		</Card>
 		<Card title="Expire" icon={ClockIcon}>
 			<p>
-		  If the streamer can’t deliver in 30 days, your Dare will expire.
+		  If the streamer can’t deliver in 7 days, your Dare will expire.
 			</p><p>You
 		  won’t have to pay and the streamer won’t be able to gather the
 		  Bounty.
