@@ -3,6 +3,7 @@ import getRecordSelector from 'root/src/client/logic/api/selectors/getRecordSele
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
 import moment from 'moment'
+import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const { viewCreated } = responseLenses
@@ -12,5 +13,5 @@ export default (state, props) => {
 		getRecordSelector(state, props),
 	)
 	const diff = moment().diff(created, 'days')
-	return `${7 - diff}`
+	return `${daysToExpire - diff}`
 }

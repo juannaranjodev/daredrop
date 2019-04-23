@@ -5,6 +5,7 @@ import { dynamoItemsProp } from 'root/src/server/api/lenses'
 import listResults from 'root/src/server/api/actionUtil/listResults'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import moment from 'moment'
+import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
@@ -34,9 +35,9 @@ export default async (status, payload) => {
 	)
 
 	// Filter expired projects
-	const filterExpired = dare => {
+	const filterExpired = (dare) => {
 		const diff = moment().diff(dare.approved, 'days')
-		return diff <= 7
+		return diff <= daysToExpire
 	}
 	const filteredProjects = filter(filterExpired, combinedProjects)
 
