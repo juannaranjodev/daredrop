@@ -222,7 +222,7 @@ export const ViewProjectModule = memo(({
 							</div>)}
 
 					</div>
-					<div className="flex-100 flex-gt-sm-60 flex-order-1">
+					<div className="flex-100 flex-gt-sm-55 flex-order-1">
 						{ternary(approvedVideoUrl,
 							<div className={classes.iframeContainer}>
 								<iframe
@@ -236,13 +236,13 @@ export const ViewProjectModule = memo(({
 							</div>,
 							<img alt="Game" src={gameImage} className={classes.image} />)}
 						<div className={classNames(
-							'flex-100', 'flex-order-1', 'flex-order-gt-sm-3', 'flex-gt-sm-60',
+							'flex-100', 'flex-order-1', 'flex-order-gt-sm-3', 'flex-gt-sm-100',
 							classes.descriptionContainer,
 						)}
 						>
 							<div className={classNames(classes.descriptionTitle)}>Description</div>
 							<div className={classNames('flex-100', 'layout-row')}>
-								<div className={classNames('flex-90')}>
+								<div className={classNames('flex-100')}>
 									{ternary(canEditProjectDetails,
 										<TextField
 											type="textarea"
@@ -267,7 +267,7 @@ export const ViewProjectModule = memo(({
 					</div>
 					<div
 						className={classNames(
-							'flex-100 flex-gt-sm-40',
+							'flex-100 flex-gt-sm-45',
 							'flex-order-3 flex-order-gt-sm-2',
 							'layout-column',
 						)}
