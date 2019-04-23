@@ -13,7 +13,7 @@ import clipboard from 'root/src/client/assets/icons/clipboard.png'
 import AddToClipboardButton from 'root/src/client/web/base/AddToClipboardButton'
 
 import {
-	TwitterShareButton, FacebookShareButton, VKShareButton,
+	TwitterShareButton, FacebookShareButton, RedditShareButton, VKShareButton, RedditIcon,
 } from 'react-share'
 
 import classNames from 'classnames'
@@ -32,16 +32,11 @@ const socialIconSet = memo(({ classes, url }) => (
 				<FontAwesomeIcon icon={faTwitter} size="2x" color="#ffffff" />
 			</div>
 		</TwitterShareButton>
-		<a href="">
-			<div className={classNames(classes.SocialIcon, classes.Youtube)}>
-				<FontAwesomeIcon icon={faYoutube} size="2x" color="#ffffff" />
+		<RedditShareButton url={url}>
+			<div className={classNames(classes.SocialIcon, classes.Reddit)}>
+				<RedditIcon size={56} round />
 			</div>
-		</a>
-		<a href="">
-			<div className={classNames(classes.SocialIcon, classes.Instagram)}>
-				<FontAwesomeIcon icon={faInstagram} size="2x" color="#ffffff" />
-			</div>
-		</a>
+		</RedditShareButton>
 		<VKShareButton url={url}>
 			<div className={classNames(classes.SocialIcon, classes.VK)}>
 				<FontAwesomeIcon icon={faVk} size="2x" color="#ffffff" />

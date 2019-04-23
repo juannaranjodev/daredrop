@@ -7,7 +7,7 @@ import { paymentMethod } from 'root/src/shared/descriptions/endpoints/recordType
 import pledgeProjectPayloadSchema from 'root/src/shared/descriptions/endpoints/schemas/pledgeProjectPayloadSchema'
 import { PLEDGE_PROJECT, GET_PAYMENT_METHODS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import {
-	VIEW_PROJECT_ROUTE_ID, CREATE_PROJECT_ROUTE_ID,
+	PLEDGE_SUCCESS_PAGE_ROUTE_ID, CREATE_PROJECT_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
 
 export const formCommon = {
@@ -60,9 +60,9 @@ export default {
 					valuePath: ['formData', 'pledgeAmount'],
 				}],
 				onSuccessRedirect: {
-					routeId: VIEW_PROJECT_ROUTE_ID,
+					routeId: PLEDGE_SUCCESS_PAGE_ROUTE_ID,
 					routeParams: [
-						['recordId', { $sub: ['resBody', 'id'] }],
+						['recordId', { $sub: ['res', 'body', 'id'] }],
 					],
 				},
 			},

@@ -80,7 +80,7 @@ export default {
 		],
 	},
 	[PLEDGE_SUCCESS_PAGE_ROUTE_ID]: {
-		url: '/pledge-success',
+		url: '/pledge-success/:recordId',
 		modules: [
 			PLEDGE_SUCCESS_PAGE_MODULE_ID,
 		],
