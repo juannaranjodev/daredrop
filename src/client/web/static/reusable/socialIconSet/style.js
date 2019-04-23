@@ -14,6 +14,7 @@ const styles = {
 		alignItems: 'center',
 		justifyContent: 'center',
 		marginRight: 14.8,
+		cursor: 'pointer',
 		'@media (min-width: 375px):not(:last-of-type)': {
 			marginRight: 14.8,
 		},
@@ -23,9 +24,6 @@ const styles = {
 	},
 	Twitter: {
 		backgroundColor: '#2aa3ef',
-	},
-	Youtube: {
-		backgroundColor: '#f52929',
 	},
 	Instagram: {
 		backgroundImage: 'linear-gradient(to bottom, #7024c4, #c21975 42%, #c74c4d 70%, #e09b3d)',

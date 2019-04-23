@@ -13,7 +13,7 @@ import SocialIconSet from 'root/src/client/web/static/reusable/socialIconSet'
 import styles from './style'
 
 
-const SuccessPage = ({ classes, pageContent }) => (
+const SuccessPage = ({ classes, pageContent, sharedUrl }) => (
 	<div className="flex layout-column layout-align-space-between">
 		<section className={classes.section}>
 			<div className={classes.content}>
@@ -34,7 +34,7 @@ const SuccessPage = ({ classes, pageContent }) => (
 			className={classNames(classes.imageWrapper, 'flex flex-column layout-align-end')}
 		>
 			<div className={classes.imageContainer}>
-				<SocialIconSet className={classes.icons} url="" />
+				<SocialIconSet className={classes.icons} url={sharedUrl} />
 			</div>
 		</div>
 	</div>

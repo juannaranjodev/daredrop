@@ -30,14 +30,12 @@ const promiseTypeMap = {
 		}
 	},
 	twitchGames: async (input) => {
-		console.log(input)
 		try {
 			const searchResults = await ajax({
 				url: `${baseUrlV5}search/games`,
 				headers: { 'Client-ID': clientId },
 				queryParams: { query: input, type: 'suggest' },
 			})
-			console.log(searchResults)
 			return map(
 				({ name, _id, box }) => ({
 					label: name,
