@@ -68,6 +68,7 @@ export default async ({ payload }) => {
 		},
 	}
 
+	// here also for the future rejection of project needs to be separate action to handle transactWrite properly
 	await documentClient.batchWrite(rejectionParams).promise()
 
 	if (equals(length(assigneesLeft), 0)) {
@@ -77,6 +78,7 @@ export default async ({ payload }) => {
 				audit: projectAllStreamersRejectedKey,
 			},
 		}
+		// ^^^^^^^ comment above
 		await auditProject(payload)
 		await rejectProjectByStatus(projectId, ['favorites', 'pledge'])
 	}
