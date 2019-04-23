@@ -28,6 +28,8 @@ const moduleTypeAction = (moduleType) => {
 			return externalModuleOnEnter
 		case 'form':
 			return formModuleOnEnter
+		case 'stepForm':
+			return formModuleOnEnter
 		default:
 	}
 }
