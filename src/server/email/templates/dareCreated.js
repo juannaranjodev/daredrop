@@ -29,7 +29,7 @@ export default ({ dareTitle }) => {
                   
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">Remember your Dare will expire in 30 days, so tell your friends and streamers about it so we can make it happen!</p>
+                      <p style="margin:0;padding:0;">Remember your Dare will expire in 7 days, so tell your friends and streamers about it so we can make it happen!</p>
                     </td>
                   </tr>
                   

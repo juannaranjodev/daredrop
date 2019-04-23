@@ -22,11 +22,11 @@ export default async ({ userId, payload }) => {
 
 	const diff = moment().diff(respons.created, 'days')
 	const nowHours = moment(respons.created).day()
-	if (!(diff > 30 && Number(nowHours) > 17 && respons.status === projectApprovedKey)) {
+	if (!(diff > 7 && Number(nowHours) > 17 && respons.status === projectApprovedKey)) {
 		return respons
 	}
 	return {
 		status: 410,
-		message: 'This dare is expire',
+		message: 'This dare has expired',
 	}
 }
