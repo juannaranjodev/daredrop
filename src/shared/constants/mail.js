@@ -1,4 +1,4 @@
-export const ourUrl = 'dev.watt.tv'
+export const ourUrl = process.env.DOMAIN_NAME || 'localhost:8585'
 export const logoSrc = `${ourUrl}/logo.png`
 export const rulesOfUseUrl = `${ourUrl}/terms`
 export const marketplaceUrl = `${ourUrl}/marketplace`
