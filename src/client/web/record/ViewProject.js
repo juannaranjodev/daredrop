@@ -70,9 +70,11 @@ const styles = {
 	},
 	sidebarItem: {
 		marginTop: 10,
-		marginBottom: 20,
-		'& > button': {
+		marginBottom: 10,
+		'& button': {
 			borderRadius: 20,
+			marginTop: 0,
+			marginBottom: 0,
 		},
 		'& span': {
 			textTransform: 'none',
@@ -163,7 +165,6 @@ const styles = {
 		},
 	},
 	streamerTitle: {
-		marginTop: 9,
 		marginBottom: 0,
 		'& div': {
 			fontWeight: 'bold',
@@ -234,6 +235,35 @@ export const ViewProjectModule = memo(({
 								/>
 							</div>,
 							<img alt="Game" src={gameImage} className={classes.image} />)}
+						<div className={classNames(
+							'flex-100', 'flex-order-1', 'flex-order-gt-sm-3', 'flex-gt-sm-60',
+							classes.descriptionContainer,
+						)}
+						>
+							<div className={classNames(classes.descriptionTitle)}>Description</div>
+							<div className={classNames('flex-100', 'layout-row')}>
+								<div className={classNames('flex-90')}>
+									{ternary(canEditProjectDetails,
+										<TextField
+											type="textarea"
+											value={description || ''}
+											onChange={e => setDescription(e.target.value)}
+											variant="outlined"
+											fullWidth
+										/>,
+										<div className={classes.description}>
+											{projectDescription}
+										</div>)}
+								</div>
+								{orNull(canEditProjectDetails,
+									<Button
+										onClick={() => updateProject({ title, description, projectId })}
+										isSmallButton
+									>
+									Save
+									</Button>)}
+							</div>
+						</div>
 					</div>
 					<div
 						className={classNames(
@@ -398,35 +428,6 @@ export const ViewProjectModule = memo(({
 										</div>
 									)
 							}
-						</div>
-					</div>
-					<div className={classNames(
-						'flex-100', 'flex-order-2', 'flex-order-gt-sm-3',
-						classes.descriptionContainer,
-					)}
-					>
-						<div className={classNames(classes.descriptionTitle)}>Description</div>
-						<div className={classNames('flex-100', 'layout-row')}>
-							<div className={classNames('flex-90')}>
-								{ternary(canEditProjectDetails,
-									<TextField
-										type="textarea"
-										value={description || ''}
-										onChange={e => setDescription(e.target.value)}
-										variant="outlined"
-										fullWidth
-									/>,
-									<div className={classes.description}>
-										{projectDescription}
-									</div>)}
-							</div>
-							{orNull(canEditProjectDetails,
-								<Button
-									onClick={() => updateProject({ title, description, projectId })}
-									isSmallButton
-								>
-									Save
-								</Button>)}
 						</div>
 					</div>
 				</div>
