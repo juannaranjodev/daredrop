@@ -71,6 +71,7 @@ const styles = {
 		letterSpacing: '0.3px',
 		transition: '0s',
 		zIndex: 201,
+		marginBottom: '4px',
 	},
 	cardFooter: {
 		height: 147,
@@ -241,9 +242,9 @@ const styles = {
 		border: `1px solid ${primaryColor}`,
 		borderRadius: 5,
 		position: 'absolute',
-		width: 278,
-		marginTop: -21,
-		marginLeft: -15,
+		width: 280,
+		marginTop: -22,
+		marginLeft: -16,
 		zIndex: 1000,
 	},
 }
