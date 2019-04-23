@@ -13,7 +13,7 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { generalError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey, projectRejectedKey } from 'root/src/server/api/lenses'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import projectStatusKeySelector from 'root/src/server/api/actionUtil/projectStatusKeySelector'
 
@@ -38,6 +38,11 @@ export default async ({ userId, payload }) => {
 
 	// if current audit action is 'approve', create or update approved date of project. (key: 'approved')
 	if (equals(viewAudit(payload), projectApprovedKey)) {
+		const currentDateTime = moment().format()
+		auditedProject = set(lensProp(projectApprovedKey), currentDateTime, projectToPledge)
+	}
+
+	if (equals(viewAudit(payload), projectRejectedKey)) {
 		const currentDateTime = moment().format()
 		auditedProject = set(lensProp(projectApprovedKey), currentDateTime, projectToPledge)
 	}
