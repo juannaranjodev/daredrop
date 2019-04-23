@@ -34,7 +34,7 @@ const SuccessPage = ({ classes, pageContent }) => (
 			className={classNames(classes.imageWrapper, 'flex flex-column layout-align-end')}
 		>
 			<div className={classes.imageContainer}>
-				<SocialIconSet className={classes.icons} />
+				<SocialIconSet className={classes.icons} url="" />
 			</div>
 		</div>
 	</div>
