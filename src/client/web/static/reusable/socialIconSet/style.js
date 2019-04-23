@@ -32,7 +32,13 @@ const styles = {
 	},
 	VK: {
 		backgroundColor: '#4c77a6',
+	},
+	clipboard: {
 		marginRight: 0,
+		width: 54,
+		'& img': {
+			width: '100%',
+		},
 	},
 }
 export default styles
