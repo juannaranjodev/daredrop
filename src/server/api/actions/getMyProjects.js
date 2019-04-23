@@ -1,4 +1,4 @@
-import { uniqBy, prop, sort, filter } from 'ramda'
+import { uniq, prop, sort, filter, map } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
@@ -9,6 +9,7 @@ import {
 import { descendingCreated } from 'root/src/server/api/actionUtil/sortUtil'
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
+import getProjectsByIds from 'root/src/server/api/actionUtil/getProjectsByIds'
 
 const PageItemLedngth = 8
 
@@ -34,12 +35,13 @@ export default async ({ userId, payload }) => {
 	const pledgedProjects = dynamoItemsProp(pledgedProjectsDdb)
 	const favoritesProjects = dynamoItemsProp(favoritesProjectsDdb)
 
-	const myProjects = uniqBy(prop('pk'), [...pledgedProjects, ...favoritesProjects])
+	const myProjectsIdsArr = uniq(map(prop('pk'), [...pledgedProjects, ...favoritesProjects]))
+
+	const myProjects = await getProjectsByIds(myProjectsIdsArr)
 
 	const allPage = myProjects.length % PageItemLedngth > 0
 		? Math.round(myProjects.length / PageItemLedngth) + 1
 		: Math.round(myProjects.length / PageItemLedngth)
-
 
 	let { currentPage } = payload
 	if (currentPage === undefined) {
@@ -58,11 +60,10 @@ export default async ({ userId, payload }) => {
 	}
 	const filteredProjects = filter(filterExpired, sortedProjects)
 
-
 	return {
 		allPage,
 		currentPage: payload.currentPage,
 		interval: PageItemLedngth,
-		items: [...myProjectsSerializer(filteredProjects)],
+		items: filteredProjects,
 	}
 }
