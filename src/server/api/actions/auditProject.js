@@ -16,6 +16,7 @@ import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import { projectApprovedKey, projectRejectedKey } from 'root/src/server/api/lenses'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import projectStatusKeySelector from 'root/src/server/api/actionUtil/projectStatusKeySelector'
+import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectByStatus'
 
 import moment from 'moment'
 
@@ -42,11 +43,6 @@ export default async ({ userId, payload }) => {
 		auditedProject = set(lensProp(projectApprovedKey), currentDateTime, projectToPledge)
 	}
 
-	if (equals(viewAudit(payload), projectRejectedKey)) {
-		const currentDateTime = moment().format()
-		auditedProject = set(lensProp(projectApprovedKey), currentDateTime, projectToPledge)
-	}
-
 	const auditedProjectToPledge = {
 		...auditedProject,
 		[SORT_KEY]: replace(
@@ -54,6 +50,11 @@ export default async ({ userId, payload }) => {
 			viewAudit(payload),
 			auditedProject[SORT_KEY],
 		),
+	}
+
+	// for the future rejection of project needs to be separate action to handle transactWrite properly
+	if (equals(viewAudit(payload), projectRejectedKey)) {
+		await rejectProjectByStatus(projectId, ['favorites', 'pledge'])
 	}
 
 	const auditParams = {
