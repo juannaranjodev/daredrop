@@ -4,13 +4,16 @@ import {
 	CREATE_PROJECT_FORM_MODULE_ID,
 } from 'root/src/shared/descriptions/modules/moduleIds'
 
-import { CREATE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { CREATE_PROJECT, GET_PAYMENT_METHODS } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { paymentMethod } from 'root/src/shared/descriptions/endpoints/recordTypes'
 import createProjectPayloadSchema from 'root/src/shared/descriptions/endpoints/schemas/createProjectPayloadSchema'
 import { formCommon } from 'root/src/shared/descriptions/modules/pledgeProjectForm'
 
 export default {
 	[CREATE_PROJECT_FORM_MODULE_ID]: {
 		moduleType: 'stepForm',
+		recordType: paymentMethod,
+		endpointId: GET_PAYMENT_METHODS,
 		schema: compose(
 			dissocPath(['properties', 'projectId']),
 			dissocPath(['properties', 'stripeCardId']),
