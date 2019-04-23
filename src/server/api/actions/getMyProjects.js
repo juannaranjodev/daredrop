@@ -1,4 +1,4 @@
-import { uniqBy, prop, sort } from 'ramda'
+import { uniqBy, prop, sort, filter } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
@@ -7,6 +7,8 @@ import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
 import { descendingCreated } from 'root/src/server/api/actionUtil/sortUtil'
+import moment from 'moment'
+import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
 const PageItemLedngth = 8
 
@@ -50,10 +52,17 @@ export default async ({ userId, payload }) => {
 
 	const sortedProjects = sort(descendingCreated, projects)
 
+	const filterExpired = (dare) => {
+		const diff = moment().diff(dare.approved, 'days')
+		return diff <= daysToExpire
+	}
+	const filteredProjects = filter(filterExpired, sortedProjects)
+
+
 	return {
 		allPage,
 		currentPage: payload.currentPage,
 		interval: PageItemLedngth,
-		items: [...myProjectsSerializer(sortedProjects)],
+		items: [...myProjectsSerializer(filteredProjects)],
 	}
 }
