@@ -121,7 +121,7 @@ const UniversalFormTextField = ({
 
 const StyledTextField = ({
 	moduleKey, fieldId, fieldPath, setInput, fieldValue, fieldLabel, fieldError, fieldHasError,
-	fieldType, fieldMultiline, fieldPlaceholder, classes, fieldMax,
+	fieldType, fieldMultiline, fieldPlaceholder, classes, fieldMax, fieldMultilineRows,
 }) => (
 	<div>
 		<TextField
@@ -130,6 +130,7 @@ const StyledTextField = ({
 			label={fieldLabel}
 			type={fieldType}
 			multiline={fieldMultiline}
+			rows={fieldMultilineRows || '1'}
 			variant="outlined"
 			value={fieldValue}
 			error={fieldHasError}
