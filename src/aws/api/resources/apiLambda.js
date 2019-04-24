@@ -5,7 +5,7 @@ import getAtt from 'root/src/aws/util/getAtt'
 import {
 	API_LAMBDA_FUNCTION, API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE,
 } from 'root/src/aws/api/resourceIds'
-import { DOMAIN_NAME } from 'root/src/aws/staticHosting/outputIds'
+import { RECORD_SET } from 'root/src/aws/staticHosting/resourceIds'
 
 export default {
 	[API_LAMBDA_FUNCTION]: {
@@ -13,14 +13,14 @@ export default {
 		DependsOn: [
 			API_LAMBDA_EXECUTION_ROLE,
 			API_DYNAMO_DB_TABLE,
-			DOMAIN_NAME,
+			RECORD_SET,
 		],
 		Properties: {
 			Code: fnBuildPath('api'),
 			Environment: {
 				Variables: {
 					API_DYNAMO_DB_TABLE: ref(API_DYNAMO_DB_TABLE),
-					DOMAIN_NAME: ref(DOMAIN_NAME),
+					RECORD_SET: ref(RECORD_SET),
 				},
 			},
 			// FunctionName: String,
