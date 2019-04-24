@@ -8,6 +8,7 @@ import TitleFormText from 'root/src/client/web/typography/TitleFormText'
 import Body from 'root/src/client/web/typography/Body'
 import { doveGray } from 'root/src/client/web/commonStyles'
 import SubTitle from 'root/src/client/web/typography/SubTitle'
+
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = {
@@ -16,6 +17,9 @@ const styles = {
 	},
 	subFieldText: {
 		marginTop: 8,
+	},
+	subFieldTopText: {
+		margin: '8px 0',
 	},
 	inline: {
 		display: 'inline',
@@ -36,6 +40,7 @@ const styles = {
 const Fields = memo(
 	({
 		subFieldText,
+		subFieldTopText,
 		labelFieldText,
 		classes,
 		children,

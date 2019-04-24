@@ -39,7 +39,6 @@ const styles = {
 	},
 	formContainer: {
 		width: 360,
-
 		'@media (max-width: 600px)': {
 			width: 340,
 		},
@@ -78,7 +77,7 @@ export const FormModuleUnconnected = memo(({
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
-		<div className="flex layout-row layout-align-center">
+		<div className="inline-flex layout-row layout-align-center">
 			<div className={classes.formContainer}>
 				{orNull(
 					formTitle,

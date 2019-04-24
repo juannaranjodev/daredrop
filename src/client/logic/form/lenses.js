@@ -162,6 +162,7 @@ export const formModuleSchema = {
 						properties: {
 							action: { type: 'function' },
 							label: { type: 'string' },
+							buttonType: { type: 'string' },
 						},
 					},
 				},
