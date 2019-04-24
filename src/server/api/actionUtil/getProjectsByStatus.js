@@ -45,7 +45,7 @@ export default async (status, payload) => {
 		? Math.round(filteredProjects.length / PageItemLength) + 1
 		: Math.round(filteredProjects.length / PageItemLength)
 
-	let { currentPage } = payload
+	let { currentPage } = payload.payload
 	if (currentPage === undefined) {
 		currentPage = 1
 	}
