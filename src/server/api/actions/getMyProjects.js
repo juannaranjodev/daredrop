@@ -2,7 +2,6 @@ import { uniq, prop, sort, filter, map } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
-import myProjectsSerializer from 'root/src/server/api/serializers/myProjectsSerializer'
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
