@@ -39,31 +39,31 @@ export default async ({ userId, payload }) => {
 
 	const myProjects = await getProjectsByIds(myProjectsIdsArr)
 
-	const allPage = myProjects.length % PageItemLedngth > 0
-		? Math.round(myProjects.length / PageItemLedngth) + 1
-		: Math.round(myProjects.length / PageItemLedngth)
+	const filterExpired = (dare) => {
+		const diff = moment().diff(dare.approved, 'days')
+		return diff <= daysToExpire
+	}
+	const filteredProjects = filter(filterExpired, myProjects)
+
+	const sortedProjects = sort(descendingCreated, filteredProjects)
+
+	const allPage = sortedProjects.length % PageItemLedngth > 0
+		? Math.round(sortedProjects.length / PageItemLedngth) + 1
+		: Math.round(sortedProjects.length / PageItemLedngth)
 
 	let { currentPage } = payload
 	if (currentPage === undefined) {
 		currentPage = 1
 	}
-	const projects = myProjects.slice(
+	const projects = sortedProjects.slice(
 		(currentPage - 1) * PageItemLedngth,
 		currentPage * PageItemLedngth,
 	)
-
-	const sortedProjects = sort(descendingCreated, projects)
-
-	const filterExpired = (dare) => {
-		const diff = moment().diff(dare.approved, 'days')
-		return diff <= daysToExpire
-	}
-	const filteredProjects = filter(filterExpired, sortedProjects)
 
 	return {
 		allPage,
 		currentPage: payload.currentPage,
 		interval: PageItemLedngth,
-		items: filteredProjects,
+		items: projects,
 	}
 }
