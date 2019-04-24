@@ -8,6 +8,7 @@ import {
 	primarySquareButton,
 	universalForm,
 	noBackgroundButton,
+	outlinedButton,
 } from 'root/src/client/web/componentTypes'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -50,6 +51,19 @@ const styles = {
 			backgroundColor: 'transparent',
 		},
 	},
+	outlinedButton: {
+		color: primaryColor,
+		border: `1px solid ${primaryColor}`,
+		backgroundColor: 'transparent',
+		padding: 'auto',
+		fontSize: 18,
+		textTransform: 'none',
+		boxShadow: '0 5px 6px 0 rgba(0, 0, 0, 0.16)',
+		'&:hover': {
+			color: secondaryColor,
+			backgroundColor: 'transparent',
+		},
+	},
 	unstyled: {
 		color: primaryColor,
 		backgroundColor: 'transparent',
@@ -63,7 +77,7 @@ const styles = {
 
 export const ButtonUnstyled = memo(({
 	classes, onClick, disabled, children, style, isSmallButton,
-	buttonType, unstyled, disableRipple, additionalClass, formType,
+	buttonType, unstyled, additionalClass, formType,
 }) => (
 		<Button
 			className={classNames(
@@ -72,6 +86,7 @@ export const ButtonUnstyled = memo(({
 				{ [classes.unstyled]: unstyled },
 				({ [classes.primarySquareButton]: buttonType === primarySquareButton || formType === universalForm }),
 				({ [classes.noBackgroundButton]: buttonType === noBackgroundButton }),
+				({ [classes.outlinedButton]: buttonType === outlinedButton }),
 				({ [classes.smallButton]: isSmallButton }),
 				additionalClass,
 			)}
