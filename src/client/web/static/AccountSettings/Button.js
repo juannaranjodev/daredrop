@@ -16,7 +16,7 @@ const Button = memo(({ classes, routeId, href, children, routeParams, pushRoute 
 			<button
 				className={classes.button}
 			>
-				Twitch Oauth
+				Connect Twitch
 			</button>
 		</a>,
 		<button
