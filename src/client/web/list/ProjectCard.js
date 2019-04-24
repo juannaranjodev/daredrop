@@ -9,6 +9,9 @@ import Button from 'root/src/client/web/base/Button'
 import ShareMenu from 'root/src/client/web/base/ShareMenu'
 import Body from 'root/src/client/web/typography/Body'
 import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
+import {
+	primaryColor,
+} from 'root/src/client/web/commonStyles'
 import classNames from 'classnames'
 import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
 
@@ -68,6 +71,7 @@ const styles = {
 		letterSpacing: '0.3px',
 		transition: '0s',
 		zIndex: 201,
+		marginBottom: '4px',
 	},
 	cardFooter: {
 		height: 147,
@@ -230,12 +234,24 @@ const styles = {
 			position: 'relative',
 		},
 	},
+	pledgedMark: {
+		fontSize: 12,
+		color: primaryColor,
+		backgroundColor: 'white',
+		textAlign: 'center',
+		border: `1px solid ${primaryColor}`,
+		borderRadius: 5,
+		position: 'absolute',
+		width: 280,
+		marginTop: -22,
+		marginLeft: -16,
+		zIndex: 1000,
+	},
 }
-
 export const ListItemUnconnected = memo(({
 	recordId, pushRoute, projectTitle, projectDescription, classes,
 	projectGameImage, projectAssigneesImages, projectShareUrl, projectGames, isAuthenticated,
-	projectAssigneesName, approvedVideoUrl,
+	projectAssigneesName, approvedVideoUrl, projectPledged,
 }) => {
 	const [hover, setHover] = useState(false)
 	const [over, setOver] = useState(false)
@@ -273,6 +289,14 @@ export const ListItemUnconnected = memo(({
 							({ [classes.noOverlay]: approvedVideoUrl }),
 						)}
 					>
+						{
+							projectPledged && (
+								<div className={classes.pledgedMark}>
+								Pledged
+								</div>
+							)
+						}
+
 						<div
 							className={classNames(classes.headerText, 'flex')}
 							onClick={goToViewProjectHandler(recordId, pushRoute)}

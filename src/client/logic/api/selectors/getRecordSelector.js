@@ -10,7 +10,13 @@ const { viewRecordsChild } = apiStoreLenses
 export default (state, props = {}) => {
 	const { moduleId, recordId } = props
 	const endpointId = moduleEndpointIdSelector(state, { moduleId })
-	const recordType = recordTypeSelector(endpointId)
+	let recordType
+	if (typeof endpointId === 'string') {
+		recordType = recordTypeSelector(endpointId)
+	}	else {
+		recordType = recordTypeSelector(endpointId[0])
+	}
+
 	// From a list module we just pass in the recordId, for a record view we
 	// have to get it from the current route params
 	let recordStoreId

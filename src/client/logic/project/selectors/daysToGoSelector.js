@@ -5,6 +5,7 @@ import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 import moment from 'moment'
+import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const { viewApproved } = responseLenses
@@ -22,10 +23,10 @@ export default (state, props) => {
 	if (equals(status, projectApprovedKey)) {
 		if (isNil(approved)) {
 			return '-'
-		} else {
+		} 
 			const diff = moment().diff(approved, 'days')
-			return `${30 - diff}`
-		}
+			return `${daysToExpire - diff}`
+		
 	} else {
 		return '-'
 	}

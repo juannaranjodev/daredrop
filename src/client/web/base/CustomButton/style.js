@@ -20,12 +20,11 @@ const styledTwitchButton = {
 		justifyContent: 'center',
 		alignItems: 'center',
 		padding: 5,
-		marginBottom: 20,
 		color: '#800080',
 		lineHeight: 1,
 		fontWeight: 500,
 		height: 48,
-		minWidth: 278,
+		minWidth: '100%',
 		'& .button-subtitle': {
 			fontSize: 12,
 			fontWeight: 200,
