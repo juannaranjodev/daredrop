@@ -9,6 +9,9 @@ export default (currentPage, hasMore) => async (dispatch) => {
 		dispatch(setHasMore(false))
 		const currentModuleId = getCurrentModuleId()
 		const endpointId = getEndpointIdFromModules(currentModuleId)
-		return dispatch(apiRequest(endpointId, { currentPage: add(currentPage, 1) }))
+		if (typeof endpointId === 'string') {
+			return dispatch(apiRequest(endpointId, { currentPage: add(currentPage, 1) }))
+		}
+		return dispatch(apiRequest(endpointId[0], { currentPage: add(currentPage, 1) }))
 	}
 }
