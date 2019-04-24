@@ -14,9 +14,10 @@ export default (state, props) => {
 	const isNotNull = compose(viewHandlers(__, moduleDescriptions), moduleIdProp)(props)
 	if (isNotNull) {
 		return compose(
-			addIndex(map)(({ label }, handlerIndex) => [
+			addIndex(map)(({ label, buttonType }, handlerIndex) => [
 				label,
 				handlerIndex,
+				buttonType,
 			]),
 			viewHandlers(__, moduleDescriptions),
 			moduleIdProp,

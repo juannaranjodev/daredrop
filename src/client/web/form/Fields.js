@@ -19,12 +19,14 @@ const Fields = memo(({
 	labelFieldText,
 	fieldValue,
 	fieldMax,
+	subFieldTopText,
 ]) => {
 	const wrapperProps = {
 		subFieldText,
 		labelFieldText,
 		key: fieldId,
 		formType,
+		subFieldTopText,
 	}
 	const props = {
 		fieldType: inputType,

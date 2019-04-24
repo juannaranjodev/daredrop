@@ -1,4 +1,5 @@
 import { dissocPath, compose, set, lensProp, without, view } from 'ramda'
+import { outlinedButton } from 'root/src/client/web/componentTypes'
 
 import {
 	CLAIM_PROJECT_FORM_MODULE_ID,
@@ -28,13 +29,13 @@ export default {
 				fieldId: 'amountRequested',
 				inputType: 'amountNumber',
 				label: 'Enter amount',
-				subFieldTopCaption: 'This is the amount your fans need to pledge in order for you to deliver. Only about 90% of charges are generally successful, take that into account when setting your goal.',
 				labelFieldText: [
 					{
 						text: 'Amount Requested',
 						required: true,
 					},
 				],
+				subFieldTopText: 'This is the amount your fans need to pledge in order for you to deliver. Only about 90% of charges are generally successful, take that into account when setting your goal.',
 			},
 		],
 		submits: [
@@ -46,6 +47,7 @@ export default {
 		handlers: [
 			{
 				label: 'Reject',
+				buttonType: outlinedButton,
 			},
 		],
 	},
