@@ -6,6 +6,10 @@ import {
 
 import { CREATE_PROJECT, GET_PAYMENT_METHODS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { paymentMethod } from 'root/src/shared/descriptions/endpoints/recordTypes'
+import {
+	DARE_CREATE_SUCCESS_ROUTE_ID,
+} from 'root/src/shared/descriptions/routes/routeIds'
+
 import createProjectPayloadSchema from 'root/src/shared/descriptions/endpoints/schemas/createProjectPayloadSchema'
 import { formCommon } from 'root/src/shared/descriptions/modules/pledgeProjectForm'
 
@@ -91,6 +95,12 @@ export default {
 			{
 				label: 'Confirm',
 				endpointId: CREATE_PROJECT,
+				onSuccessRedirect: {
+					routeId: DARE_CREATE_SUCCESS_ROUTE_ID,
+					routeParams: [
+						['recordId', { $sub: ['res', 'body', 'id'] }],
+					],
+				},
 			},
 		],
 	},
