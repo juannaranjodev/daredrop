@@ -1,6 +1,7 @@
 import { head, not } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
+import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
@@ -32,11 +33,11 @@ export default async ({ payload, userId }) => {
 	] = await dynamoQueryProjectAssignee(
 		projectId, assigneeId,
 	)
+
 	const projectToConfirm = head(projectToAccept)
 	if (!projectToConfirm) {
 		throw generalError('Project or assignee doesn\'t exist')
 	}
-
 	const acceptationParams = {
 		RequestItems: {
 			[TABLE_NAME]: [
@@ -50,21 +51,25 @@ export default async ({ payload, userId }) => {
 						},
 					},
 				},
+				{
+					PutRequest: {
+						Item: {
+							projectId: projectToConfirm.pk,
+							[SORT_KEY]: `project|${projectAcceptedKey}`,
+							[PARTITION_KEY]: `accepted|${assigneeId}`,
+							amountRequested: viewAmountRequested(payload),
+						},
+					},
+				},
 			],
 		},
 	}
 
 	await documentClient.batchWrite(acceptationParams).promise()
+
 	const project = projectSerializer([
 		...projectToAccept,
 	])
-
-	console.log({
-		...project,
-		status: projectAcceptedKey,
-		amountRequested: viewAmountRequested(payload),
-		projectId,
-	})
 
 	return {
 		...project,
