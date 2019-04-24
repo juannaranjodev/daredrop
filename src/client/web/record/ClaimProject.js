@@ -1,28 +1,33 @@
 import React, { memo } from 'react'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
-import { withStyles } from '@material-ui/core/styles'
 import cn from 'classnames'
+
+import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
+import withModuleContext from 'root/src/client/util/withModuleContext'
 
 const styles = {
 	container: {
-		margin: '65px auto',
+		margin: '0 auto',
 		width: 360,
 		'@media (max-width: 600px)': {
 			width: 340,
 		},
-		'& > p': {
-			fontSize: 20,
-		},
+	},
+	text: {
+		marginLeft: 5,
+		fontSize: 20,
 	},
 }
 
 const ClaimProjectDescription = memo(
-	({ classes }) => (
+	({ classes, projectDescription }) => (
 		<div className={cn('flex', classes.container)}>
 			<SubHeader>Description:</SubHeader>
-			<p>Lorem ipsum dolor sit amet, te est justo idque laoreet. Pri habeo quodsi tractatos in, usu ea alii postea. Commune atomorum definitionem qui et, vel semper hendrerit ut. Vix nulla rationibus et, an alia vidit diceret qui, cu est tacimates atomorum repudiare.</p>
+			<p className={classes.text}>{projectDescription}</p>
 		</div>
 	),
 )
 
-export default withStyles(styles)(ClaimProjectDescription)
+export default withModuleContext(
+	viewProjectConnector(ClaimProjectDescription, styles),
+)

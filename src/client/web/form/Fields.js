@@ -5,7 +5,8 @@ import SubForm from 'root/src/client/web/form/SubForm'
 import AmountNumber from 'root/src/client/web/form/AmountNumber'
 import StripeCard from 'root/src/client/web/form/StripeCard'
 import AutoComplete from 'root/src/client/web/form/AutoComplete'
-
+import AtachmentInput from 'root/src/client/web/form/AtachmentInput'
+import TimeStampInput from 'root/src/client/web/form/TimeStampInput'
 import InputWrapper from 'root/src/client/web/form/InputWrapper'
 
 const Fields = memo(({
@@ -19,12 +20,14 @@ const Fields = memo(({
 	labelFieldText,
 	fieldValue,
 	fieldMax,
+	subTextLabel,
 ]) => {
 	const wrapperProps = {
 		subFieldText,
 		labelFieldText,
 		key: fieldId,
 		formType,
+		subTextLabel,
 	}
 	const props = {
 		fieldType: inputType,
@@ -70,6 +73,18 @@ const Fields = memo(({
 			return (
 				<InputWrapper {...wrapperProps}>
 					<AutoComplete {...props} />
+				</InputWrapper>
+			)
+		case 'atachmentInput':
+			return (
+				<InputWrapper {...wrapperProps}>
+					<AtachmentInput {...props} />
+				</InputWrapper>
+			)
+		case 'timeStamp':
+			return (
+				<InputWrapper {...wrapperProps}>
+					<TimeStampInput {...props} />
 				</InputWrapper>
 			)
 		default:

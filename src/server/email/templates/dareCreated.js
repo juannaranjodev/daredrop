@@ -1,5 +1,6 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourName, rulesOfUseUrl } from 'root/src/shared/constants/mail'
+import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
 export default ({ dareTitle }) => {
 	const mailContent = `
@@ -29,7 +30,7 @@ export default ({ dareTitle }) => {
                   
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">Remember your Dare will expire in 30 days, so tell your friends and streamers about it so we can make it happen!</p>
+                      <p style="margin:0;padding:0;">Remember your Dare will expire in ${daysToExpire} days, so tell your friends and streamers about it so we can make it happen!</p>
                     </td>
                   </tr>
                   

@@ -8,6 +8,7 @@ import projectAssigneesImagesSelector from 'root/src/client/logic/project/select
 import projectShareUrlSelector from 'root/src/client/logic/project/selectors/projectShareUrlSelector'
 import projectGamesSelector from 'root/src/client/logic/project/selectors/projectGamesSelector'
 import isAuthenticated from 'root/src/client/logic/auth/selectors/isAuthenticated'
+import projectPledgedSelector from 'root/src/client/logic/project/selectors/projectPledgedSelector'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import projectAssigneNameSelector from 'root/src/client/logic/project/selectors/projectAssigneNameSelector'
 import approvedVideoUrlSelector from 'root/src/client/logic/project/selectors/approvedVideoUrlSelector'
@@ -22,6 +23,7 @@ export default reduxConnector(
 		['projectAssigneesName', projectAssigneNameSelector],
 		['projectShareUrl', projectShareUrlSelector],
 		['projectGames', projectGamesSelector],
+		['projectPledged', projectPledgedSelector],
 		['isAuthenticated', isAuthenticated],
 		['approvedVideoUrl', approvedVideoUrlSelector],
 	],
