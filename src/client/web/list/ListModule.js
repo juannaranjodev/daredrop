@@ -1,4 +1,4 @@
-import { map, head } from 'ramda'
+import { map, head, last } from 'ramda'
 import React, { memo, useState } from 'react'
 
 import classNames from 'classnames'
@@ -63,7 +63,6 @@ export const CardList = ({
 							'layout-row layout-wrap',
 						)}
 					>
-
 						{map(recordId => (
 							<ProjectCard key={recordId} recordId={recordId} filterList={list[1]} />
 						), head(list))}
@@ -104,7 +103,7 @@ const UniversalList = ({
 					}}
 					onClick={setDefaultPaymentMethod}
 				/>
-			), list)}
+			), last(list))}
 			<div className={classes.buttons}>
 				{map(({ title, routeId, buttonType }) => (
 					<LinkButton
@@ -133,8 +132,8 @@ export const ListModuleUnconnected = memo((props) => {
 			return (
 				<List>
 					{map(recordId => (
-						<ProjectCard key={recordId} recordId={recordId} />
-					), props.list)}
+						<ProjectCard key={recordId} recordId={recordId} filterList={props.list[0]} />
+					), last(props.list))}
 				</List>
 			)
 	}
