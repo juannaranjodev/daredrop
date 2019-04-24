@@ -23,7 +23,7 @@ export const determineAuthHof = authDeterminedFn => () => dispatch => (
 	}).then(
 		(session) => {
 			const payload = {
-				userId: session.getIdToken().payload['cognito:username'],
+				userId: `user-${session.getIdToken().payload['cognito:username']}`,
 			}
 			dispatch(apiRequest('GET_OAUTH_TOKENS', payload))
 			return dispatch(authDeterminedFn(session))

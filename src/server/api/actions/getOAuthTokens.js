@@ -3,7 +3,7 @@ import oAuthTokenSerializer from 'root/src/server/api/serializers/oAuthTokenSeri
 import { map } from 'ramda'
 
 export default async ({ payload: { payload, userId } }) => {
-	const [tokenDdb] = await dynamoQueryOAuth(
+	const tokenDdb = await dynamoQueryOAuth(
 		userId, payload,
 	)
 
