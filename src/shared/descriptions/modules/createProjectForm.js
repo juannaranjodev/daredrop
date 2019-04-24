@@ -56,7 +56,7 @@ export default {
 					{
 						fieldId: 'description',
 						inputType: 'text',
-						placeholder: 'Get 7 headshot kills with one deagle clip.\n- with 7 staticHostingOutputs, get 7 headshot kills with a desert eagle\n- no reloading between kills',
+						placeholder: 'Get 7 headshot kills with one deagle clip.\n- with 7 shots, get 7 headshot kills with a desert eagle\n- no reloading between kills',
 						multiline: true,
 						multilineRows: '4',
 						subFieldText: 'Make sure you describe what you want to see in detail so the streamer can deliver what you want.*',
