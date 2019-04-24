@@ -1,5 +1,5 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
-import { ourName } from 'root/src/shared/constants/mail'
+import { ourName, rulesOfUseUrl } from 'root/src/shared/constants/mail'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
 export default ({ dareTitle }) => {
@@ -20,7 +20,7 @@ export default ({ dareTitle }) => {
                   
                   <tr>
                     <td style="margin:0;padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">We’re reviewing your Dare ${dareTitle} to make sure it jives with our <a href="/" style="text-decoration:none;color:#1976d2;">Rules of Use</a>. Then it’ll go live on our marketplace. This usually happens within 24 hours.</p>
+                      <p style="margin:0;padding:0;">We’re reviewing your Dare ${dareTitle} to make sure it jives with our <a href="http://${rulesOfUseUrl}" style="text-decoration:none;color:#1976d2;">Rules of Use</a>. Then it’ll go live on our marketplace. This usually happens within 24 hours.</p>
                     </td>
                   </tr>
                   
