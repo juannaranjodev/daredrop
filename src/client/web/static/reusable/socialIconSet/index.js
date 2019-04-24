@@ -22,27 +22,27 @@ import styles from './style'
 
 const socialIconSet = memo(({ classes, url }) => (
 	<div className={classes.SocialContainer}>
-		<FacebookShareButton url={url}>
+		<FacebookShareButton url={url} class={classes.sharedButton}>
 			<div className={classNames(classes.SocialIcon, classes.Facebook)}>
-				<FontAwesomeIcon icon={faFacebookF} size="2x" color="#ffffff" />
+				<FontAwesomeIcon class={classes.icon} icon={faFacebookF} size="2x" color="#ffffff" />
 			</div>
 		</FacebookShareButton>
-		<TwitterShareButton url={url}>
+		<TwitterShareButton url={url} class={classes.sharedButton}>
 			<div className={classNames(classes.SocialIcon, classes.Twitter)}>
-				<FontAwesomeIcon icon={faTwitter} size="2x" color="#ffffff" />
+				<FontAwesomeIcon class={classes.icon} icon={faTwitter} size="2x" color="#ffffff" />
 			</div>
 		</TwitterShareButton>
-		<RedditShareButton url={url}>
+		<RedditShareButton url={url} class={classes.sharedButton}>
 			<div className={classNames(classes.SocialIcon, classes.Reddit)}>
-				<RedditIcon size={56} round />
+				<RedditIcon class={classes.icon} size={56} round />
 			</div>
 		</RedditShareButton>
-		<VKShareButton url={url}>
+		<VKShareButton url={url} class={classes.sharedButton}>
 			<div className={classNames(classes.SocialIcon, classes.VK)}>
-				<FontAwesomeIcon icon={faVk} size="2x" color="#ffffff" />
+				<FontAwesomeIcon class={classes.icon} icon={faVk} size="2x" color="#ffffff" />
 			</div>
 		</VKShareButton>
-		<AddToClipboardButton url={url}>
+		<AddToClipboardButton url={url} class={classes.sharedButton}>
 			<div className={classNames(classes.SocialIcon, classes.clipboard)}>
 				<img src={clipboard} width="32px" alt="add_to_clipboard" />
 			</div>

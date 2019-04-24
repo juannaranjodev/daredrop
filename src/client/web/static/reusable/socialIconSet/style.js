@@ -4,6 +4,9 @@ const styles = {
 		justifyContent: 'center',
 		height: 54,
 		paddingTop: 10,
+		'& div:focus': {
+			outline: 'none',
+		},
 	},
 	SocialIcon: {
 		width: 54,
@@ -15,8 +18,19 @@ const styles = {
 		justifyContent: 'center',
 		marginRight: 14.8,
 		cursor: 'pointer',
+		'&:focus': {
+			outline: 'none',
+		},
+		'& div:focus': {
+			outline: 'none',
+		},
 		'@media (min-width: 375px):not(:last-of-type)': {
 			marginRight: 14.8,
+		},
+	},
+	sharedButton: {
+		'&:focus': {
+			outline: 'none',
 		},
 	},
 	Facebook: {
