@@ -1,4 +1,4 @@
-import { map } from 'ramda'
+import { map, head } from 'ramda'
 import React, { memo, useState } from 'react'
 
 import classNames from 'classnames'
@@ -65,8 +65,8 @@ export const CardList = ({
 					>
 
 						{map(recordId => (
-							<ProjectCard key={recordId} recordId={recordId} />
-						), list)}
+							<ProjectCard key={recordId} recordId={recordId} filterList={list[1]} />
+						), head(list))}
 
 					</div>
 				</InfiniteScroll>

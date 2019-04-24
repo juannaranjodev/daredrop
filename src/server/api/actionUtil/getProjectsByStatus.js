@@ -26,7 +26,6 @@ export default async (status, payload) => {
 			range(1, 11),
 		),
 	)
-	// This can be optimized:
 	const combinedProjects = reduce(
 		(result, projectDdb) => [...result, ...dynamoItemsProp(projectDdb)],
 		[],
@@ -34,18 +33,18 @@ export default async (status, payload) => {
 	)
 
 	// Filter expired projects
-	const filterExpired = dare => {
+	const filterExpired = (dare) => {
 		const diff = moment().diff(dare.approved, 'days')
 		return diff <= 30
 	}
-	const filteredProjects = filter(filterExpired, combinedProjects)
 
+	const filteredProjects = filter(filterExpired, combinedProjects)
 
 	const allPage = filteredProjects.length % PageItemLedngth > 0
 		? Math.round(filteredProjects.length / PageItemLedngth) + 1
 		: Math.round(filteredProjects.length / PageItemLedngth)
 
-	let { currentPage } = payload.payload
+	let { currentPage } = payload
 	if (currentPage === undefined) {
 		currentPage = 1
 	}
