@@ -128,6 +128,7 @@ export const formModuleSchema = {
 								],
 							},
 							label: { type: 'string' },
+							subTextLabel: { type: 'string' },
 							// copy of fields
 							subFormFields: {
 								type: 'array',
@@ -161,6 +162,7 @@ export const formModuleSchema = {
 						properties: {
 							action: { type: 'function' },
 							label: { type: 'string' },
+							buttonType: { type: 'string' },
 						},
 					},
 				},

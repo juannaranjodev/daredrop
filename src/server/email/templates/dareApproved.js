@@ -1,6 +1,7 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourName } from 'root/src/shared/constants/mail'
 import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
+import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
 export default ({ streamers, dareTitle }) => {
 	const mailContent = `
@@ -30,7 +31,7 @@ export default ({ streamers, dareTitle }) => {
                   
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">We have 30 days for ${arrayToStringParser(streamers)} to deliver on it.</p>
+                      <p style="margin:0;padding:0;">We have ${daysToExpire} days for ${arrayToStringParser(streamers)} to deliver on it.</p>
                     </td>
                   </tr>
                   

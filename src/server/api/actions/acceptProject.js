@@ -1,22 +1,32 @@
-import { head } from 'ramda'
+import { head, not } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
-import { generalError } from 'root/src/server/api/errors'
+import { generalError, authorizationError } from 'root/src/server/api/errors'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
+import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { projectAcceptedKey } from 'root/src/server/api/lenses'
+
+import isOneOfAssigneesSelector from 'root/src/server/api/actionUtil/isOneOfAssigneesSelector'
 
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested, viewAssigneeId } = payloadLenses
 
-export default async ({ payload }) => {
+export default async ({ payload, userId }) => {
 	const projectId = viewProjectId(payload)
 	const assigneeId = viewAssigneeId(payload)
+
+	const userTokens = await dynamoQueryOAuth(userId)
+	const isOneOfAssignees = isOneOfAssigneesSelector(userTokens, assigneeId)
+	if (not(isOneOfAssignees)) {
+		throw authorizationError('Assignee is not listed on this dare')
+	}
+
 	const [
 		projectToAccept,
 	] = await dynamoQueryProjectAssignee(
