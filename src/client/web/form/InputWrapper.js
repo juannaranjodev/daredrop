@@ -5,7 +5,9 @@ import classNames from 'classnames'
 
 import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
 import TitleFormText from 'root/src/client/web/typography/TitleFormText'
-import SubFieldTopCaption from 'root/src/client/web/typography/SubFieldTopCaption'
+import Body from 'root/src/client/web/typography/Body'
+import { doveGray } from 'root/src/client/web/commonStyles'
+import SubTitle from 'root/src/client/web/typography/SubTitle'
 
 import { withStyles } from '@material-ui/core/styles'
 
@@ -25,6 +27,14 @@ const styles = {
 	labelFieldText: {
 		marginBottom: 8,
 	},
+	subTextLabel: {
+		marginBottom: 20,
+		marginTop: -8,
+		'& div': {
+			fontSize: 18,
+			color: '#707070',
+		},
+	},
 }
 
 const Fields = memo(
@@ -35,6 +45,7 @@ const Fields = memo(
 		classes,
 		children,
 		formType,
+		subTextLabel,
 	}) => (
 		<div className={classNames(classes.space, { [classes.inline]: (formType === 'universalForm') })}>
 			{orNull(
@@ -44,9 +55,9 @@ const Fields = memo(
 				</div>,
 			)}
 			{orNull(
-				subFieldTopText,
-				<div className={classes.subFieldTopText}>
-					<SubFieldTopCaption>{subFieldTopText}</SubFieldTopCaption>
+				subTextLabel,
+				<div className={classes.subTextLabel}>
+					<SubTitle>{subTextLabel}</SubTitle>
 				</div>,
 			)}
 			{children}

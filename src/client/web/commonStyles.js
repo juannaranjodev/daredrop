@@ -7,6 +7,7 @@ export const lightGrey = '#9f9f9f'
 export const lineColor = '#7F7F7F'
 export const linkColor = '#1976D2'
 export const linkHoverColor = '#4ca2f7'
+export const doveGray = '#707070'
 
 export const navigationColor = '#000'
 
