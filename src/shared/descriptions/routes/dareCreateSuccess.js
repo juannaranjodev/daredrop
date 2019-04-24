@@ -8,7 +8,7 @@ import {
 
 export default {
 	[DARE_CREATE_SUCCESS_ROUTE_ID]: {
-		url: '/dare-create-success',
+		url: '/dare-create-success/:recordId',
 		modules: [
 			DARE_CREATE_SUCCESS_MODULE_ID,
 		],

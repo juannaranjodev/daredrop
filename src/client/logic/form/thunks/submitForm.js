@@ -72,10 +72,9 @@ export const submitFormHof = (
 
 			const {
 				onSuccessRecordUpdates, endpointId, onSuccessRedirect,
-			} = pathOr([
+			} = pathOr({}, [
 				moduleId, 'submits', correctedSubmitIndex,
-				'onSuccessRecordUpdates',
-			], {}, moduleDescriptionsObj)
+			], moduleDescriptionsObj)
 			const recordType = recordTypeSelector(endpointId)
 			const recordId = idProp(res)
 			const recordStoreKey = createRecordStoreKey(
@@ -93,6 +92,7 @@ export const submitFormHof = (
 
 			if (onSuccessRedirect) {
 				const { routeId, routeParams } = onSuccessRedirect
+
 				successPromises.push(
 					dispatch(
 						subPushRoute(routeId, routeParams, substitutes),

@@ -4,6 +4,9 @@ const styles = {
 		justifyContent: 'center',
 		height: 54,
 		paddingTop: 10,
+		'& div:focus': {
+			outline: 'none',
+		},
 	},
 	SocialIcon: {
 		width: 54,
@@ -14,8 +17,20 @@ const styles = {
 		alignItems: 'center',
 		justifyContent: 'center',
 		marginRight: 14.8,
+		cursor: 'pointer',
+		'&:focus': {
+			outline: 'none',
+		},
+		'& div:focus': {
+			outline: 'none',
+		},
 		'@media (min-width: 375px):not(:last-of-type)': {
 			marginRight: 14.8,
+		},
+	},
+	sharedButton: {
+		'&:focus': {
+			outline: 'none',
 		},
 	},
 	Facebook: {
@@ -24,15 +39,18 @@ const styles = {
 	Twitter: {
 		backgroundColor: '#2aa3ef',
 	},
-	Youtube: {
-		backgroundColor: '#f52929',
-	},
 	Instagram: {
 		backgroundImage: 'linear-gradient(to bottom, #7024c4, #c21975 42%, #c74c4d 70%, #e09b3d)',
 	},
 	VK: {
 		backgroundColor: '#4c77a6',
+	},
+	clipboard: {
 		marginRight: 0,
+		width: 54,
+		'& img': {
+			width: '100%',
+		},
 	},
 }
 export default styles
