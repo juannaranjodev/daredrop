@@ -1,6 +1,5 @@
-import { equals, forEach, or, and, pathOr, propOr, prop, compose } from 'ramda'
+import { equals, forEach, or, propOr } from 'ramda'
 
-import { ternary } from 'root/src/shared/util/ramdaPlus'
 import createListStoreKey from 'root/src/client/logic/api/util/createListStoreKey'
 import createRecordStoreKey from 'root/src/client/logic/api/util/createRecordStoreKey'
 import { idProp } from 'root/src/client/logic/api/lenses'
@@ -27,15 +26,13 @@ import endpointTypeSelector from 'root/src/client/logic/api/selectors/endpointTy
 import invokeApiLambda from 'root/src/client/logic/api/util/invokeApiLambda'
 import invokeApiExternal from 'root/src/client/logic/api/util/invokeApiExternal'
 
-import getPathFromUrl from 'root/src/client/logic/route/util/getPathFromUrl'
 import matchPath from 'root/src/client/logic/route/util/matchPath'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 
 import endpointMappings from 'root/src/client/logic/api/util/endpointMappings'
 import determineToken from 'root/src/client/logic/api/util/determineToken'
 
-import { TWITCH_OAUTH_FAILURE_ROUTE_ID, TWITCH_OAUTH_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
-import { GET_OAUTH_TOKENS } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { TWITCH_OAUTH_FAILURE_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 
 export const fetchList = async (dispatch, state, endpointId, payload) => {
 	const recordType = recordTypeSelector(endpointId)
@@ -92,17 +89,18 @@ export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 			if (redirectUri && isAssignee) {
 				const { routeId, routeParams } = matchPath(redirectUri)
 				dispatch(pushRoute(routeId, routeParams))
-				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes))
+				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes, false))
 			} else if (redirectUri && !isAssignee) {
 				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes, true))
 			} else {
-				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes))
+				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes, false))
 			}
 			storageClearItem('redirectUri')
 			storageClearItem('redirectAssignee')
 		}
 		return externalRes
 	} catch (error) {
+		console.log(error)
 		dispatch(pushRoute(TWITCH_OAUTH_FAILURE_ROUTE_ID))
 		dispatch(apiExternalRequestError(error))
 		return error
@@ -110,13 +108,11 @@ export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 }
 
 export const fetchUserData = async (dispatch, state, endpointId, payload) => {
-	const currentRouteId = compose(prop('routeId'), matchPath, getPathFromUrl)()
-	if (TWITCH_OAUTH_ROUTE_ID) return
 	const recordType = recordTypeSelector(endpointId)
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	if (lambdaRes.body.length > 0) {
 		forEach((res) => {
-			const recordStoreKey = createRecordStoreKey(endpointId, (`${res.pk}-${res.sk.split('|')[0]}`))
+			const recordStoreKey = createRecordStoreKey(endpointId, (`${res.pk}-${res.sk}`))
 			dispatch(apiFetchUserDataSuccess(recordStoreKey, recordType, res))
 		}, lambdaRes.body)
 	} else {

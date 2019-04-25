@@ -4,7 +4,11 @@ import moduleListPayloadMapSelector from 'root/src/client/logic/api/selectors/mo
 
 export default ({ moduleId }) => async (dispatch) => {
 	const endpointId = moduleEndpointIdSelector({ /* state */ }, { moduleId })
-
 	const payload = moduleListPayloadMapSelector({}, { moduleId })
-	return dispatch(apiRequest(endpointId, payload !== undefined ? payload : {}))
+	if (typeof endpointId === 'string') {
+		return [dispatch(apiRequest(endpointId, payload !== undefined ? payload : {}))]
+	}
+	return endpointId.map(
+		endpoint => dispatch(apiRequest(endpoint, payload !== undefined ? payload : {})),
+	)
 }

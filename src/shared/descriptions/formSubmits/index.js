@@ -8,6 +8,8 @@ import createPledgeForm from 'root/src/shared/descriptions/formSubmits/createPle
 import changePasswordAuth from 'root/src/shared/descriptions/formSubmits/changePasswordAuth'
 import changePasswordForm from 'root/src/shared/descriptions/formSubmits/changePasswordForm'
 import addPaymentForm from 'root/src/shared/descriptions/formSubmits/addPaymentForm'
+import claimProjectForm from 'root/src/shared/descriptions/formSubmits/claimProjectForm'
+import deliveryDareForm from 'root/src/shared/descriptions/formSubmits/deliveryDareForm'
 
 export default {
 	...createProjectForm,
@@ -20,4 +22,6 @@ export default {
 	...changePasswordAuth,
 	...changePasswordForm,
 	...addPaymentForm,
+	...claimProjectForm,
+	...deliveryDareForm,
 }

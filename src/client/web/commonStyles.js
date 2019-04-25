@@ -2,10 +2,12 @@ export const fontFamily = 'Roboto'
 
 export const primaryColor = '#800080'
 export const secondaryColor = '#A301A3'
+export const lightGrey = '#9f9f9f'
 
 export const lineColor = '#7F7F7F'
 export const linkColor = '#1976D2'
 export const linkHoverColor = '#4ca2f7'
+export const doveGray = '#707070'
 
 export const navigationColor = '#000'
 
@@ -28,6 +30,8 @@ export const navLinkStyle = {
 	},
 	padding: [[0, 24]],
 }
+
+export const primaryColorBorder = '1px solid #800080'
 
 
 export const xsMediaQuery = '@media (max-width: 599px)'

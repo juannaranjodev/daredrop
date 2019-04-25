@@ -128,6 +128,7 @@ export const formModuleSchema = {
 								],
 							},
 							label: { type: 'string' },
+							subTextLabel: { type: 'string' },
 							// copy of fields
 							subFormFields: {
 								type: 'array',
@@ -152,6 +153,17 @@ export const formModuleSchema = {
 					properties: {
 						label: { type: 'string' },
 						routeId: { type: 'string' },
+					},
+				},
+				handlers: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							action: { type: 'function' },
+							label: { type: 'string' },
+							buttonType: { type: 'string' },
+						},
 					},
 				},
 			},

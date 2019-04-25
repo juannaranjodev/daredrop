@@ -1,16 +1,17 @@
-import { map, range, reduce } from 'ramda'
+import { map, range, reduce, filter } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
-
 import listResults from 'root/src/server/api/actionUtil/listResults'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import moment from 'moment'
+import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
 
-const PageItemLedngth = 8
+const PageItemLength = 8
 
 export default async (status, payload) => {
 	const shardedProjects = await Promise.all(
@@ -26,31 +27,37 @@ export default async (status, payload) => {
 			range(1, 11),
 		),
 	)
-	// This can be optimized:
 	const combinedProjects = reduce(
 		(result, projectDdb) => [...result, ...dynamoItemsProp(projectDdb)],
 		[],
 		shardedProjects,
 	)
 
+	// Filter expired projects
+	const filterExpired = (dare) => {
+		const diff = moment().diff(dare.approved, 'days')
+		return diff <= daysToExpire
+	}
 
-	const allPage = combinedProjects.length % PageItemLedngth > 0
-		? Math.round(combinedProjects.length / PageItemLedngth) + 1
-		: Math.round(combinedProjects.length / PageItemLedngth)
+	const filteredProjects = filter(filterExpired, combinedProjects)
 
-	let { currentPage } = payload.payload
+	const allPage = filteredProjects.length % PageItemLength > 0
+		? Math.round(filteredProjects.length / PageItemLength) + 1
+		: Math.round(filteredProjects.length / PageItemLength)
+
+	let { currentPage } = payload
 	if (currentPage === undefined) {
 		currentPage = 1
 	}
-	const projects = combinedProjects.slice(
-		(currentPage - 1) * PageItemLedngth,
-		currentPage * PageItemLedngth,
+	const projects = filteredProjects.slice(
+		(currentPage - 1) * PageItemLength,
+		currentPage * PageItemLength,
 	)
 
 	return {
 		allPage,
 		currentPage: payload.currentPage,
-		interval: PageItemLedngth,
+		interval: PageItemLength,
 		...listResults({
 			dynamoResults: { Items: map(project => [project], projects) },
 			serializer: projectSerializer,

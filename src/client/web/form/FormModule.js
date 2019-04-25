@@ -8,11 +8,11 @@ import Fields from 'root/src/client/web/form/Fields'
 import Submits from 'root/src/client/web/form/Submits'
 import Header from 'root/src/client/web/typography/Header'
 import Body from 'root/src/client/web/typography/Body'
-import Button from 'root/src/client/web/base/Button'
 import Link from 'root/src/client/web/base/Link'
 import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
 import FormTitle from 'root/src/client/web/typography/FormTitle'
 import formModuleConnector from 'root/src/client/logic/form/connectors/formModuleConnector'
+import Handlers from 'root/src/client/web/form/Handlers'
 
 import backToPrevHandler from 'root/src/client/logic/form/handlers/backToPrevHandler'
 import goToViewProjectHandler from 'root/src/client/logic/project/handlers/goToViewProjectHandler'
@@ -25,7 +25,7 @@ import classNames from 'classnames'
 const styles = {
 	space: {
 		marginTop: 25,
-		marginBottom: 25,
+		marginBottom: 48,
 	},
 	noMarginTop: {
 		marginTop: 0,
@@ -34,11 +34,11 @@ const styles = {
 		marginBottom: 0,
 	},
 	paymentTitle: {
+		marginTop: 25,
 		fontSize: 32,
 	},
 	formContainer: {
 		width: 360,
-
 		'@media (max-width: 600px)': {
 			width: 340,
 		},
@@ -65,16 +65,19 @@ const styles = {
 			textTransform: 'none',
 		},
 	},
+	formTitle: {
+		fontSize: 32,
+	},
 }
 
 export const FormModuleUnconnected = memo(({
 	formFieldTypes, formTitle, formSubmits, moduleId, moduleKey, submitForm,
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
-	classes, subTitle, formType, backButton,
+	classes, subTitle, formType, backButton, formHandlers, handleAction,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
-		<div className="flex layout-row layout-align-center">
+		<div className="inline-flex layout-row layout-align-center">
 			<div className={classes.formContainer}>
 				{orNull(
 					formTitle,
@@ -85,7 +88,7 @@ export const FormModuleUnconnected = memo(({
 							'layout-row layout-align-center',
 						)}
 					>
-						<Header additionalClass={classNames({ [classes.paymentTitle]: (formType === universalForm) })}>{formTitle}</Header>
+						<Header additionalClass={classNames({ [classes.paymentTitle]: (formType === universalForm) }, classes.formTitle)}>{formTitle}</Header>
 					</div>,
 				)}
 				{orNull(
@@ -144,6 +147,12 @@ export const FormModuleUnconnected = memo(({
 							formType={formType}
 							setWasSubmitted={setWasSubmitted}
 						/>
+						{orNull(formHandlers, <Handlers
+							moduleKey={moduleKey}
+							formHandlers={formHandlers}
+							handlerFn={handleAction}
+							formType={formType}
+						/>)}
 					</div>
 					{orNull(
 						postSubmitText,

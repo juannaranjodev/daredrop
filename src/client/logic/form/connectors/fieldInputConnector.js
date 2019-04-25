@@ -7,6 +7,7 @@ import fieldError from 'root/src/client/logic/form/selectors/fieldError'
 import fieldHasError from 'root/src/client/logic/form/selectors/fieldHasError'
 import fieldPlaceholder from 'root/src/client/logic/form/selectors/fieldPlaceholder'
 import fieldMultiline from 'root/src/client/logic/form/selectors/fieldMultiline'
+import fieldMultilineRows from 'root/src/client/logic/form/selectors/fieldMultilineRows'
 
 import setInput from 'root/src/client/logic/form/thunks/setInput'
 
@@ -19,6 +20,7 @@ export default reduxConnector(
 		['fieldHasError', fieldHasError],
 		['fieldPlaceholder', fieldPlaceholder],
 		['fieldMultiline', fieldMultiline],
+		['fieldMultilineRows', fieldMultilineRows],
 	],
 	[['setInput', setInput]],
 )

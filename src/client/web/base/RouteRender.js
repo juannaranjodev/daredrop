@@ -15,6 +15,7 @@ import Footer from 'root/src/client/web/footer/Footer'
 import BannerFooter from 'root/src/client/web/footer/BannerFooter'
 import BannerHeader from 'root/src/client/web/header/BannerHeader'
 import UserDataModule from 'root/src/client/web/userData/UserDataModule'
+import ModalModule from 'root/src/client/web/modal/ModalModule'
 
 import { ModuleContextProvider } from 'root/src/client/util/withModuleContext'
 
@@ -82,6 +83,12 @@ export const RenderModules = ({ moduleTypes, routeId }) => (
 				return (
 					<ModuleContextProvider {...moduleProps}>
 						<UserDataModule />
+					</ModuleContextProvider>
+				)
+			case 'modal':
+				return (
+					<ModuleContextProvider {...moduleProps}>
+						<ModalModule />
 					</ModuleContextProvider>
 				)
 			default:

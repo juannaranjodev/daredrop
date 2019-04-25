@@ -15,7 +15,7 @@ import withModuleContext from 'root/src/client/util/withModuleContext'
 
 import staticModuleConnector from 'root/src/client/logic/static/connectors/staticModuleConnector'
 
-export const StaticModuleUnconnected = memo(({ staticPageType, pageContent }) => {
+export const StaticModuleUnconnected = memo(({ staticPageType, pageContent, sharedUrl }) => {
 	switch (staticPageType) {
 		case 'howItWorks':
 			return <HowItWorks />
@@ -32,7 +32,7 @@ export const StaticModuleUnconnected = memo(({ staticPageType, pageContent }) =>
 		case 'accountSettings':
 			return <AccountSettings />
 		case 'successPage':
-			return <SuccessPage pageContent={pageContent} />
+			return <SuccessPage pageContent={pageContent} sharedUrl={sharedUrl} />
 		case 'SteperHeaderModule':
 			return <StepHeaderModule />
 		default:

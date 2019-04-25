@@ -40,10 +40,14 @@ import managePaymentForm from 'root/src/shared/descriptions/modules/managePaymen
 import managePaymentList from 'root/src/shared/descriptions/modules/managePaymentList'
 import steperHeaderModule from 'root/src/shared/descriptions/modules/steperHeaderModule'
 import titleHeaderMarketplace from 'root/src/shared/descriptions/modules/titleHeaderMarketplace'
+import claimProject from 'root/src/shared/descriptions/modules/claimProject'
+import claimProjectForm from 'root/src/shared/descriptions/modules/claimProjectForm'
+import rejectProjectModal from 'root/src/shared/descriptions/modules/rejectProjectModal'
 import deliverDareSuccessPage from 'root/src/shared/descriptions/modules/deliverDareSuccessPage'
 import myProjectsList from 'root/src/shared/descriptions/modules/myProjectsList'
 import pendingVideosList from 'root/src/shared/descriptions/modules/pendingVideosList'
 
+import deliveryDareForm from 'root/src/shared/descriptions/modules/deliveryDareForm'
 
 const allModules = {
 	...loginForm,
@@ -87,9 +91,13 @@ const allModules = {
 	...managePaymentList,
 	...steperHeaderModule,
 	...titleHeaderMarketplace,
+	...claimProject,
+	...claimProjectForm,
+	...rejectProjectModal,
 	...deliverDareSuccessPage,
 	...myProjectsList,
 	...pendingVideosList,
+	...deliveryDareForm,
 }
 
 export default allModules
