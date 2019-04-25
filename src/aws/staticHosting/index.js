@@ -8,9 +8,9 @@ import outputs from 'root/src/aws/staticHosting/outputs'
 
 export const staticHostingResources = {
 	...cloudFrontDistribution,
-	...staticBucket,
 	...recordSet,
 	...ssl,
+	...staticBucket,
 	...publicBucketPolicy,
 }
 

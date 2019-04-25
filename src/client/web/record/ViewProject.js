@@ -376,7 +376,7 @@ export const ViewProjectModule = memo(({
 									<ButtonSubtitle
 										title="Deliver Dare Video"
 										subtitle="Upload to complete the Dare"
-										onClick={goToDeliveryFormHandler(pushRoute)}
+										onClick={goToDeliveryFormHandler(pushRoute, projectId)}
 									/>)
 							}
 							{
