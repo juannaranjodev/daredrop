@@ -11,9 +11,6 @@ export default {
 				IndexDocument: 'index.html',
 				ErrorDocument: 'index.html',
 			},
-			CorsConfiguration: {
-				AllowedHeaders: ['Authorization', 'Content-Length']
-			}
 		},
 	},
 }
