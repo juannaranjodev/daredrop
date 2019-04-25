@@ -6,6 +6,10 @@ import {
 
 import { CREATE_PROJECT, GET_PAYMENT_METHODS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { paymentMethod } from 'root/src/shared/descriptions/endpoints/recordTypes'
+import {
+	DARE_CREATE_SUCCESS_ROUTE_ID,
+} from 'root/src/shared/descriptions/routes/routeIds'
+
 import createProjectPayloadSchema from 'root/src/shared/descriptions/endpoints/schemas/createProjectPayloadSchema'
 import { formCommon } from 'root/src/shared/descriptions/modules/pledgeProjectForm'
 
@@ -39,7 +43,7 @@ export default {
 						placeholder: 'Select',
 						labelFieldText: [
 							{
-								text: 'Select assignees',
+								text: 'Select Streamers',
 								required: true,
 							},
 						],
@@ -47,11 +51,10 @@ export default {
 					{
 						fieldId: 'title',
 						inputType: 'text',
-						label: 'My new dare Title',
+						placeholder: 'Deagle Monster',
 						labelFieldText: [
 							{
 								text: 'Dare Title',
-								subText: 'What do you want to see? :',
 								required: true,
 							},
 						],
@@ -60,8 +63,9 @@ export default {
 					{
 						fieldId: 'description',
 						inputType: 'text',
-						label: 'My new dare Description',
+						placeholder: 'Get 7 headshot kills with one deagle clip.\n- with 7 shots, get 7 headshot kills with a desert eagle\n- no reloading between kills',
 						multiline: true,
+						multilineRows: '4',
 						subFieldText: 'Make sure you describe what you want to see in detail so the streamer can deliver what you want.*',
 						labelFieldText: [
 							{
@@ -91,6 +95,12 @@ export default {
 			{
 				label: 'Confirm',
 				endpointId: CREATE_PROJECT,
+				onSuccessRedirect: {
+					routeId: DARE_CREATE_SUCCESS_ROUTE_ID,
+					routeParams: [
+						['recordId', { $sub: ['res', 'body', 'id'] }],
+					],
+				},
 			},
 		],
 	},

@@ -1,5 +1,5 @@
 import {
-	GET_FAVORITES_LIST,
+	GET_FAVORITES_LIST, GET_PLEDGED_PROJECTS,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import {
 	FAVORITES_PROJECTS_LIST_MODULE_ID,
@@ -12,6 +12,6 @@ export default {
 		listType: 'card',
 		listPayload: { currentPage: 1 },
 		recordType: project,
-		endpointId: GET_FAVORITES_LIST,
+		endpointId: [GET_FAVORITES_LIST, GET_PLEDGED_PROJECTS],
 	},
 }

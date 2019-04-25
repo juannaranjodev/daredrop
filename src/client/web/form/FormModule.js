@@ -25,7 +25,7 @@ import classNames from 'classnames'
 const styles = {
 	space: {
 		marginTop: 25,
-		marginBottom: 25,
+		marginBottom: 48,
 	},
 	noMarginTop: {
 		marginTop: 0,
@@ -34,11 +34,11 @@ const styles = {
 		marginBottom: 0,
 	},
 	paymentTitle: {
+		marginTop: 25,
 		fontSize: 32,
 	},
 	formContainer: {
 		width: 360,
-
 		'@media (max-width: 600px)': {
 			width: 340,
 		},
@@ -65,6 +65,9 @@ const styles = {
 			textTransform: 'none',
 		},
 	},
+	formTitle: {
+		fontSize: 32,
+	},
 }
 
 export const FormModuleUnconnected = memo(({
@@ -74,7 +77,7 @@ export const FormModuleUnconnected = memo(({
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
-		<div className="flex layout-row layout-align-center">
+		<div className="inline-flex layout-row layout-align-center">
 			<div className={classes.formContainer}>
 				{orNull(
 					formTitle,
@@ -85,7 +88,7 @@ export const FormModuleUnconnected = memo(({
 							'layout-row layout-align-center',
 						)}
 					>
-						<Header additionalClass={classNames({ [classes.paymentTitle]: (formType === universalForm) })}>{formTitle}</Header>
+						<Header additionalClass={classNames({ [classes.paymentTitle]: (formType === universalForm) }, classes.formTitle)}>{formTitle}</Header>
 					</div>,
 				)}
 				{orNull(

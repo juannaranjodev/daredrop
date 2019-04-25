@@ -35,6 +35,7 @@ export const submitFormHof = (
 	const nullSubmitIndex = isNil(submitIndex)
 	const moduleId = moduleIdFromKey(moduleKey)
 	const submits = prop(moduleId, formSubmitsObj)
+	console.log(submits)
 	const multipleSubmits = gt(length(submits), 1)
 	if (and(multipleSubmits, nullSubmitIndex)) {
 		return Promise.resolve()
@@ -71,10 +72,9 @@ export const submitFormHof = (
 
 			const {
 				onSuccessRecordUpdates, endpointId, onSuccessRedirect,
-			} = pathOr([
+			} = pathOr({}, [
 				moduleId, 'submits', correctedSubmitIndex,
-				'onSuccessRecordUpdates',
-			], {}, moduleDescriptionsObj)
+			], moduleDescriptionsObj)
 			const recordType = recordTypeSelector(endpointId)
 			const recordId = idProp(res)
 			const recordStoreKey = createRecordStoreKey(
@@ -92,6 +92,7 @@ export const submitFormHof = (
 
 			if (onSuccessRedirect) {
 				const { routeId, routeParams } = onSuccessRedirect
+
 				successPromises.push(
 					dispatch(
 						subPushRoute(routeId, routeParams, substitutes),
@@ -109,7 +110,6 @@ export const submitFormHof = (
 			dispatch(submitFormCompleteFn(moduleKey))
 		})
 	}).catch((errors) => {
-		console.log(2)
 		console.warn(errors)
 		dispatch(setFormErrorsFn(moduleKey, errors))
 		dispatch(submitFormCompleteFn(moduleKey))

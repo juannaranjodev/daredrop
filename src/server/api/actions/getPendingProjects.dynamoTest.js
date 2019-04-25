@@ -28,6 +28,7 @@ describe('getPendingProjects', () => {
 		const event = {
 			endpointId: GET_PENDING_PROJECTS,
 			payload: { currentPage: 1 },
+			authentication: mockUserId,
 		}
 		const res = await apiFn(event)
 		expect(res.body.items.length).toEqual(2)
