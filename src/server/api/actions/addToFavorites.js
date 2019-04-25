@@ -23,11 +23,11 @@ export default async ({ userId, payload }) => {
 		throw generalError('Project doesn\'t exist')
 	}
 
-	const favoritesCreatedAt = moment().format()
+	const created = moment().format()
 	const newFavoritesAmount = 1
 
 	const newFavorites = favoritesDynamoObj(
-		projectId, projectToFavorites, userId, newFavoritesAmount, favoritesCreatedAt
+		projectId, projectToFavorites, userId, newFavoritesAmount, created,
 	)
 
 	const favoritesAmount = isNil(projectToFavorites.favoritesAmount) ? 0 : projectToFavorites.favoritesAmount
@@ -51,7 +51,7 @@ export default async ({ userId, payload }) => {
 		},
 	}
 
-	await documentClient.update(updateProjectParams).promise();
+	await documentClient.update(updateProjectParams).promise()
 
 	const newProject = projectSerializer([
 		...projectToFavoritesDdb,
@@ -59,6 +59,6 @@ export default async ({ userId, payload }) => {
 	])
 	return {
 		...newProject,
-		favoritesAmount: add(favoritesAmount, 1)
+		favoritesAmount: add(favoritesAmount, 1),
 	}
 }
