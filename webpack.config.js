@@ -5,7 +5,7 @@ const webpack = require('webpack')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
-// const appConstants = require('./src/shared/constants/app')
+const appConstants = require('./src/shared/constants/app')
 const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
 
@@ -16,7 +16,7 @@ const envVars = Object.assign(
 	{ __sha__: process.env.CIRCLE_SHA1 || 'dev' },
 	colorConstants,
 	logoConstant,
-	// appConstants,
+	appConstants(env),
 )
 
 module.exports = {
@@ -80,6 +80,7 @@ module.exports = {
 		// }),
 	],
 	optimization: {
+		minimize: true,
 		minimizer: [new TerserPlugin()],
 	},
 }

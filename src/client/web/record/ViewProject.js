@@ -17,7 +17,7 @@ import Button from 'root/src/client/web/base/Button'
 import LoadingButton from 'root/src/client/web/base/LoadingButton'
 import { TwitchButton } from 'root/src/client/web/base/CustomButton'
 
-import { twitchOauthUrl } from 'root/src/shared/constants/twitch'
+import { twitchOauthUrl } from 'root/src/client/constants'
 import TextField from '@material-ui/core/TextField'
 
 import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionButton'
@@ -260,7 +260,7 @@ export const ViewProjectModule = memo(({
 										onClick={() => updateProject({ title, description, projectId })}
 										isSmallButton
 									>
-									Save
+										Save
 									</Button>)}
 							</div>
 						</div>
@@ -364,19 +364,7 @@ export const ViewProjectModule = memo(({
 										storageSet('redirectAssignee', assignees[0].username)
 										storageSet('redirectUri', window.location.pathname)
 									}}
-									href={twitchOauthUrl()}
-								/>)}
-							{
-									onClick={
-										ternary(isAuthenticated,
-											() => {
-												storageSet('redirectAssignee', assignees[0].username)
-												storageSet('redirectUri', window.location.pathname)
-											},
-											goToSignInHandler(pushRoute))
-									}
-									href={orNull(isAuthenticated,
-										twitchOauthUrl)}
+									href={twitchOauthUrl}
 								/>)}
 							{
 								orNull(isOneOfAssignees,
@@ -398,7 +386,7 @@ export const ViewProjectModule = memo(({
 								)
 							}
 							{
-								isNil(myFavorites) || myFavorites == 0
+								isNil(myFavorites) || myFavorites === 0
 									? (
 										<div className={classes.sidebarItem}>
 											<LoadingButton

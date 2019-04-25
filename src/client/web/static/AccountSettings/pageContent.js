@@ -2,7 +2,7 @@ import {
 	CHANGE_PASSWORD_FORM_ROUTE_ID,
 	MANAGE_PAYMENT_LIST_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
-import { twitchOauthUrl } from 'root/src/shared/constants/twitch'
+import { twitchOauthUrl } from 'root/src/client/constants'
 
 
 export default {
@@ -18,7 +18,7 @@ export default {
 		},
 		{
 			text: 'Oauth Channel',
-			href: twitchOauthUrl(),
+			href: twitchOauthUrl,
 		},
 	],
 }

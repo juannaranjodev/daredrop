@@ -23,6 +23,7 @@ export default {
 					TargetOriginId: ref(STATIC_BUCKET),
 					ViewerProtocolPolicy: 'redirect-to-https',
 					MinTTL: 0,
+					Compress: true,
 					AllowedMethods: ['HEAD', 'GET'],
 					CachedMethods: ['HEAD', 'GET'],
 					ForwardedValues: {
@@ -43,13 +44,13 @@ export default {
 						},
 					},
 				],
-				DefaultRootObject : 'index.html',
-				CustomErrorResponses : [
+				DefaultRootObject: 'index.html',
+				CustomErrorResponses: [
 					{
-						ErrorCode : '404',
-						ResponsePagePath : '/index.html',
-						ResponseCode : '200',
-						ErrorCachingMinTTL : '30',
+						ErrorCode: '404',
+						ResponsePagePath: '/index.html',
+						ResponseCode: '200',
+						ErrorCachingMinTTL: '30',
 					}
 				],
 				ViewerCertificate: {
