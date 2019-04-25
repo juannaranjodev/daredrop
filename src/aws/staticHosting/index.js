@@ -7,9 +7,9 @@ import publicBucketPolicy from 'root/src/aws/staticHosting/resources/publicBucke
 import outputs from 'root/src/aws/staticHosting/outputs'
 
 export const staticHostingResources = {
-	...cloudFrontDistribution,
-	...recordSet,
-	...ssl,
+	//...cloudFrontDistribution,
+	//...recordSet,
+	//...ssl,
 	...staticBucket,
 	...publicBucketPolicy,
 }
