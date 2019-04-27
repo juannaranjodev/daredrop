@@ -15,7 +15,6 @@ const createDataToFetchObjs = (
 		payloadKey: 'assignees',
 		staticData: {
 			platform: 'twitch',
-			accepted: projectPendingKey,
 		},
 		dataMap: [
 			['image', 'profile_image_url'],
