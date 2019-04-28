@@ -35,7 +35,6 @@ export const submitFormHof = (
 	const nullSubmitIndex = isNil(submitIndex)
 	const moduleId = moduleIdFromKey(moduleKey)
 	const submits = prop(moduleId, formSubmitsObj)
-	console.log(submits)
 	const multipleSubmits = gt(length(submits), 1)
 	if (and(multipleSubmits, nullSubmitIndex)) {
 		return Promise.resolve()
