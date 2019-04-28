@@ -12,17 +12,13 @@ import Assignee from 'root/src/client/web/record/Assignee'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import Title from 'root/src/client/web/typography/Title'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
-import ButtonSubtitle from 'root/src/client/web/base/CustomButton/buttonWithSubtitle'
 import Button from 'root/src/client/web/base/Button'
 import LoadingButton from 'root/src/client/web/base/LoadingButton'
-import { TwitchButton } from 'root/src/client/web/base/CustomButton'
 
-import { twitchOauthUrl } from 'root/src/shared/constants/twitch'
+import ClaimButton from 'root/src/client/web/record/ClaimButton'
 import TextField from '@material-ui/core/TextField'
 
 import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionButton'
-import { storageSet } from 'root/src/shared/util/storage'
-import goToDeliveryFormHandler from 'root/src/client/logic/project/handlers/goToDeliveryFormHandler'
 import { APPROVE_PROJECT, REJECT_PROJECT, REJECT_ACTIVE_PROJECT } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 
 import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
@@ -190,11 +186,10 @@ export const ViewProjectModule = memo(({
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
-	userData = {}, approvedVideoUrl, isOneOfAssignees,
+	userData = {}, approvedVideoUrl, isOneOfAssignees, projectAcceptanceStatus
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
-
 	useEffect(() => {
 		setTitle(projectTitle)
 		setDescription(projectDescription)
@@ -349,36 +344,13 @@ export const ViewProjectModule = memo(({
 									</div>,
 								)
 							}
-							{ternary(isOneOfAssignees,
-								<TwitchButton
-									title="Accept or reject Dare"
-									onClick={goToClaimProjectHandler(
-										projectId, pushRoute,
-									)}
-								/>,
-								<TwitchButton
-									title="Accept or reject Dare"
-									subtitle="Connect with Twitch"
-									withIcon
-									onClick={
-										ternary(isAuthenticated,
-											() => {
-												storageSet('redirectAssignees', JSON.stringify(assignees))
-												storageSet('redirectUri', window.location.pathname)
-											},
-											goToSignInHandler(pushRoute))
-									}
-									href={orNull(isAuthenticated,
-										twitchOauthUrl)}
-								/>)}
-							{
-								orNull(isOneOfAssignees,
-									<ButtonSubtitle
-										title="Deliver Dare Video"
-										subtitle="Upload to complete the Dare"
-										onClick={goToDeliveryFormHandler(pushRoute, projectId)}
-									/>)
-							}
+							{ClaimButton({
+								projectAcceptanceStatus,
+								projectId,
+								assignees,
+								pushRoute,
+								isAuthenticated
+							})}
 							{
 								orNull(
 									canRejectProject,

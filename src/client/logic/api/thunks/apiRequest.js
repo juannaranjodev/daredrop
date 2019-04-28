@@ -86,7 +86,10 @@ export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 		if (or(equals(status, 200), displayName)) {
 			const redirectUri = propOr(undefined, 'value', storageGet('redirectUri'))
 			const redirectAssignees = propOr(undefined, 'value', storageGet('redirectAssignees'))
-			const isAssignee = isOneOfAssignees(externalRes.displayName, JSON.parse(redirectAssignees))
+			let isAssignee
+			if (redirectAssignees) {
+				isAssignee = isOneOfAssignees(externalRes.displayName, JSON.parse(redirectAssignees))
+			}
 			if (redirectUri && isAssignee) {
 				const { routeId, routeParams } = matchPath(redirectUri)
 				dispatch(pushRoute(routeId, routeParams))
