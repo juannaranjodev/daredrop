@@ -1,12 +1,14 @@
-import { uniqBy, prop, sort } from 'ramda'
+import { uniq, prop, sort, filter, map } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
-import myProjectsSerializer from 'root/src/server/api/serializers/myProjectsSerializer'
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
 import { descendingCreated } from 'root/src/server/api/actionUtil/sortUtil'
+import moment from 'moment'
+import { daysToExpire } from 'root/src/shared/constants/timeConstants'
+import getProjectsByIds from 'root/src/server/api/actionUtil/getProjectsByIds'
 
 const PageItemLedngth = 8
 
@@ -32,28 +34,35 @@ export default async ({ userId, payload }) => {
 	const pledgedProjects = dynamoItemsProp(pledgedProjectsDdb)
 	const favoritesProjects = dynamoItemsProp(favoritesProjectsDdb)
 
-	const myProjects = uniqBy(prop('pk'), [...pledgedProjects, ...favoritesProjects])
+	const myProjectsIdsArr = uniq(map(prop('pk'), [...pledgedProjects, ...favoritesProjects]))
 
-	const allPage = myProjects.length % PageItemLedngth > 0
-		? Math.round(myProjects.length / PageItemLedngth) + 1
-		: Math.round(myProjects.length / PageItemLedngth)
+	const myProjects = await getProjectsByIds(myProjectsIdsArr)
 
+	const filterExpired = (dare) => {
+		const diff = moment().diff(dare.approved, 'days')
+		return diff <= daysToExpire
+	}
+	const filteredProjects = filter(filterExpired, myProjects)
+
+	const sortedProjects = sort(descendingCreated, filteredProjects)
+
+	const allPage = sortedProjects.length % PageItemLedngth > 0
+		? Math.round(sortedProjects.length / PageItemLedngth) + 1
+		: Math.round(sortedProjects.length / PageItemLedngth)
 
 	let { currentPage } = payload
 	if (currentPage === undefined) {
 		currentPage = 1
 	}
-	const projects = myProjects.slice(
+	const projects = sortedProjects.slice(
 		(currentPage - 1) * PageItemLedngth,
 		currentPage * PageItemLedngth,
 	)
-
-	const sortedProjects = sort(descendingCreated, projects)
 
 	return {
 		allPage,
 		currentPage: payload.currentPage,
 		interval: PageItemLedngth,
-		items: [...myProjectsSerializer(sortedProjects)],
+		items: projects,
 	}
 }

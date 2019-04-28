@@ -1,5 +1,3 @@
-import { map, range } from 'ramda'
-
 import wait from 'root/src/testUtil/wait'
 
 import { apiFn } from 'root/src/server/api'
@@ -12,6 +10,7 @@ import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
+import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 
 describe('getAcceptedProjects', () => {
 	test('Successfully get accepted projects', async () => {
@@ -19,6 +18,21 @@ describe('getAcceptedProjects', () => {
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),
 		})
+
+		const oAuthDetails = {
+			// displayName: 'dN',
+			tokenId: 'twitch',
+			id: project.assignees[0].platformId,
+			// login: 'asdsad',
+			// thumbnail: 'image.jpg',
+			// token: 'Bearer ',
+		}
+
+		await addOAuthToken({
+			payload: oAuthDetails,
+			userId: mockUserId,
+		})
+
 		await auditProject({
 			userId: mockUserId,
 			payload: {
@@ -26,6 +40,7 @@ describe('getAcceptedProjects', () => {
 				audit: projectApprovedKey,
 			},
 		})
+
 
 		await acceptProject({
 			userId: mockUserId,
@@ -43,6 +58,7 @@ describe('getAcceptedProjects', () => {
 		const event = {
 			endpointId: GET_ACCEPTED_PROJECTS,
 		}
+
 		const res = await apiFn(event, contextMock)
 		expect(res.status).toEqual(200)
 		expect(res.body.items.length).toEqual(1)

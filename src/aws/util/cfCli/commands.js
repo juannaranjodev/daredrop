@@ -27,6 +27,10 @@ const afterCreateOrUpdate = [
 	{ title: 'Uploading statics', fn: uploadStatics },
 ]
 
+const bundleLambda = [
+	{ title: 'Bundling lambda functions', fn: webpackLambda },
+]
+
 const createUpdateCommon = [
 	{ title: 'Bundling lambda functions', fn: webpackLambda },
 	{ title: 'Updating and saving template', fn: saveCfTemplate },
@@ -58,5 +62,5 @@ const outputs = [
 ]
 
 export default {
-	create, update, remove, outputs,
+	create, update, remove, outputs, bundleLambda
 }
