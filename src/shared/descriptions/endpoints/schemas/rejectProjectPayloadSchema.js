@@ -2,9 +2,6 @@ export default {
 	type: 'object',
 	properties: {
 		projectId: { type: 'string' },
-		assigneeId: {
-			type: 'string',
-		},
 		message: {
 			type: 'string',
 			maxLength: 300,
@@ -13,6 +10,6 @@ export default {
 			},
 		},
 	},
-	required: ['projectId', 'assigneeId'],
+	required: ['projectId'],
 	additionalProperties: false,
 }

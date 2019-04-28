@@ -8,31 +8,31 @@ import { getUserData, getGameData } from 'root/src/server/api/twitchApi'
 const createDataToFetchObjs = (
 	userDataFetchFn, gameDataFetchFn, [assignees, games],
 ) => [
-	{
-		payloadData: assignees,
-		fetchFn: userDataFetchFn,
-		payloadKey: 'assignees',
-		staticData: { platform: 'twitch' },
-		dataMap: [
-			['image', 'profile_image_url'],
-			['platformId', 'id'],
-			['description', 'description'],
-			['displayName', 'display_name'],
-			['username', 'login'],
-		],
-	},
-	{
-		payloadData: games,
-		fetchFn: gameDataFetchFn,
-		payloadKey: 'games',
-		staticData: {},
-		dataMap: [
-			['id', 'id'],
-			['name', 'name'],
-			['boxArtTemplateUrl', 'box_art_url'],
-		],
-	},
-]
+		{
+			payloadData: assignees,
+			fetchFn: userDataFetchFn,
+			payloadKey: 'assignees',
+			staticData: { platform: 'twitch', accepted: 'pending' },
+			dataMap: [
+				['image', 'profile_image_url'],
+				['platformId', 'id'],
+				['description', 'description'],
+				['displayName', 'display_name'],
+				['username', 'login'],
+			],
+		},
+		{
+			payloadData: games,
+			fetchFn: gameDataFetchFn,
+			payloadKey: 'games',
+			staticData: {},
+			dataMap: [
+				['id', 'id'],
+				['name', 'name'],
+				['boxArtTemplateUrl', 'box_art_url'],
+			],
+		},
+	]
 
 export const getDataHof = (userDataFetchFn, gameDataFetchFn) => (idArrays) => {
 	const dataToFetch = createDataToFetchObjs(
