@@ -1,4 +1,4 @@
-import { head, unnest, not, length, gt, last, split, _, map, compose } from 'ramda'
+import { head, unnest, not, length, gt, last, split, replace, map, compose } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -7,12 +7,13 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { generalError, authorizationError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
-import { projectAcceptedKey } from 'root/src/server/api/lenses'
+import { projectAcceptedKey, projectPendingKey } from 'root/src/server/api/lenses'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 import splitAssigneeId from 'root/src/server/api/actionUtil/splitAssigneeId'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 import setProjectAssigneesStatus from 'root/src/server/api/actionUtil/setProjectAssigneesStatus'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
+import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
@@ -51,6 +52,7 @@ export default async ({ payload, userId }) => {
 
 	const project = setProjectAssigneesStatus(userTokensObj, projectToConfirm, projectAcceptedKey)
 
+
 	const assigneesToWrite = map(assignee => ({
 		PutRequest: {
 			Item: {
@@ -67,7 +69,22 @@ export default async ({ payload, userId }) => {
 			[TABLE_NAME]: [
 				{
 					PutRequest: {
-						Item: project,
+						Item: {
+							...project,
+							[SORT_KEY]: replace(
+								projectPendingKey,
+								projectAcceptedKey,
+								project[SORT_KEY],
+							),
+						},
+					},
+				},
+				{
+					DeleteRequest: {
+						Key: {
+							[SORT_KEY]: project[SORT_KEY],
+							[PARTITION_KEY]: project[PARTITION_KEY],
+						},
 					},
 				},
 				...assigneesToWrite,
