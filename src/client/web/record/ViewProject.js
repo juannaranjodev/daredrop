@@ -17,7 +17,7 @@ import Button from 'root/src/client/web/base/Button'
 import LoadingButton from 'root/src/client/web/base/LoadingButton'
 import { TwitchButton } from 'root/src/client/web/base/CustomButton'
 
-import { twitchOauthUrl } from 'root/src/shared/constants/twitch'
+import { twitchOauthUrl } from 'root/src/client/constants'
 import TextField from '@material-ui/core/TextField'
 
 import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionButton'
@@ -391,7 +391,7 @@ export const ViewProjectModule = memo(({
 								)
 							}
 							{
-								isNil(myFavorites) || myFavorites == 0
+								isNil(myFavorites) || myFavorites === 0
 									? (
 										<div className={classes.sidebarItem}>
 											<LoadingButton
