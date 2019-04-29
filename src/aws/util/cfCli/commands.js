@@ -26,6 +26,9 @@ const afterCreateOrUpdate = [
 	{ title: 'Saving stack output', fn: saveStackOutputs },
 	{ title: 'Uploading statics', fn: uploadStatics },
 ]
+const bundleLambda = [
+	{ title: 'Bundling lambda functions', fn: webpackLambda }
+]
 
 const bundleLambda = [
 	{ title: 'Bundling lambda functions', fn: webpackLambda },
