@@ -1,6 +1,5 @@
 import { map, prop, reduce, addIndex, propEq, find } from 'ramda'
 import { idProp } from 'root/src/client/logic/api/lenses'
-import { projectPendingKey } from 'root/src/server/api/lenses'
 
 import { payloadSchemaError } from 'root/src/server/api/errors'
 
@@ -15,6 +14,7 @@ const createDataToFetchObjs = (
 		payloadKey: 'assignees',
 		staticData: {
 			platform: 'twitch',
+			accepted: 'pending',
 		},
 		dataMap: [
 			['image', 'profile_image_url'],
