@@ -43,13 +43,13 @@ export default {
 						},
 					},
 				],
-				DefaultRootObject : 'index.html',
-				CustomErrorResponses : [
+				DefaultRootObject: 'index.html',
+				CustomErrorResponses: [
 					{
-						ErrorCode : '404',
-						ResponsePagePath : '/index.html',
-						ResponseCode : '200',
-						ErrorCachingMinTTL : '30',
+						ErrorCode: '404',
+						ResponsePagePath: '/index.html',
+						ResponseCode: '200',
+						ErrorCachingMinTTL: '30',
 					}
 				],
 				ViewerCertificate: {
