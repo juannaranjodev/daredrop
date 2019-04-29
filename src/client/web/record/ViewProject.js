@@ -260,7 +260,7 @@ export const ViewProjectModule = memo(({
 										onClick={() => updateProject({ title, description, projectId })}
 										isSmallButton
 									>
-									Save
+										Save
 									</Button>)}
 							</div>
 						</div>
@@ -363,7 +363,7 @@ export const ViewProjectModule = memo(({
 									onClick={
 										ternary(isAuthenticated,
 											() => {
-												storageSet('redirectAssignee', assignees[0].username)
+												storageSet('redirectAssignees', JSON.stringify(assignees))
 												storageSet('redirectUri', window.location.pathname)
 											},
 											goToSignInHandler(pushRoute))

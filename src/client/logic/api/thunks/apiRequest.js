@@ -4,6 +4,7 @@ import createListStoreKey from 'root/src/client/logic/api/util/createListStoreKe
 import createRecordStoreKey from 'root/src/client/logic/api/util/createRecordStoreKey'
 import { idProp } from 'root/src/client/logic/api/lenses'
 import { storageGet, storageClearItem } from 'root/src/shared/util/storage'
+import isOneOfAssignees from 'root/src/client/logic/api/util/isOneOfAssignees'
 
 import initApiListRequest from 'root/src/client/logic/api/actions/initApiListRequest'
 import apiListRequestSuccess from 'root/src/client/logic/api/actions/apiListRequestSuccess'
@@ -84,8 +85,11 @@ export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 
 		if (or(equals(status, 200), displayName)) {
 			const redirectUri = propOr(undefined, 'value', storageGet('redirectUri'))
-			const redirectAssignee = propOr(undefined, 'value', storageGet('redirectAssignee'))
-			const isAssignee = equals(externalRes.displayName, redirectAssignee)
+			const redirectAssignees = propOr(undefined, 'value', storageGet('redirectAssignees'))
+			let isAssignee
+			if (redirectAssignees) {
+				isAssignee = isOneOfAssignees(externalRes.displayName, JSON.parse(redirectAssignees))
+			}
 			if (redirectUri && isAssignee) {
 				const { routeId, routeParams } = matchPath(redirectUri)
 				dispatch(pushRoute(routeId, routeParams))
@@ -96,7 +100,7 @@ export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 				dispatch(apiExternalRequestSuccess(endpointId, lambdaRes, false))
 			}
 			storageClearItem('redirectUri')
-			storageClearItem('redirectAssignee')
+			storageClearItem('redirectAssignees')
 		}
 		return externalRes
 	} catch (error) {
