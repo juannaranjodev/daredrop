@@ -1,1 +1,3 @@
-export default () => new Date().getTime()
+import moment from 'moment'
+
+export default () => moment().format()

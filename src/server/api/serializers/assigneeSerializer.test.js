@@ -32,8 +32,8 @@ const mockChannel2 = {
 
 const mockDataArray = [
 	[
-		{ id: 146000275	 },
-		{ id: 148899812	 },
+		{ id: 146000275 },
+		{ id: 148899812 },
 	],
 	[], // should test games too but it works very similarly
 ]
@@ -52,6 +52,7 @@ describe('assigneeSerializer', () => {
 				platformId: '146000275',
 				displayName: '5gorillaz',
 				username: '5gorillaz',
+				accepted: 'pending',
 			},
 			{
 				platform: 'twitch',
@@ -60,6 +61,7 @@ describe('assigneeSerializer', () => {
 				platformId: '148899812',
 				displayName: 'sonicfingboom',
 				username: 'sonicfingboom',
+				accepted: 'pending',
 			},
 		], []])
 	})
