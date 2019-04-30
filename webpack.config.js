@@ -5,7 +5,9 @@ const webpack = require('webpack')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const appConstants = require('./src/shared/constants/app')
+// const appConstants = require('./src/shared/constants/app')
 const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
 
@@ -33,6 +35,9 @@ module.exports = {
 	},
 	devServer: {
 		historyApiFallback: true,
+		contentBase: path.join(__dirname, 'src/client/web'),
+		compress: true,
+		port: 8585,
 	},
 	module: {
 		rules: [
@@ -78,6 +83,12 @@ module.exports = {
 		// 	// set the current working directory for displaying module paths
 		// 	cwd: process.cwd(),
 		// }),
+		new CopyWebpackPlugin([
+			{
+				from: path.resolve(__dirname, './static'),
+				to: 'static',
+			},
+		]),
 	],
 	optimization: {
 		minimizer: [new TerserPlugin()],
