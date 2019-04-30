@@ -20,7 +20,8 @@
     "startDdb": "docker start dynamodb",
     "build": "webpack --config webpack.config.js -p",
     "bundleLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda",
-    "runLambda": "docker run -v $PWD/.cloudFormation/:/var/task awslambda-node dareMeDevApiLambdaFunction.default"
+    "genAWSCreds": "./node_modules/.bin/babel-node --presets=env ./customScripts/generateAWSCredentials.js",
+    "runLambda": "docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
