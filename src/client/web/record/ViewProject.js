@@ -186,7 +186,7 @@ export const ViewProjectModule = memo(({
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
-	userData = {}, approvedVideoUrl, isOneOfAssignees, projectAcceptanceStatus
+	userData = {}, approvedVideoUrl, isOneOfAssignees, projectAcceptanceStatus,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -349,19 +349,8 @@ export const ViewProjectModule = memo(({
 								projectId,
 								assignees,
 								pushRoute,
-								isAuthenticated
+								isAuthenticated,
 							})}
-							{
-								orNull(
-									canRejectProject,
-									<div className={classes.sidebarItem}>
-										<RecordClickActionButton
-											recordClickActionId={REJECT_PROJECT}
-											recordId={projectId}
-										/>
-									</div>,
-								)
-							}
 							{
 								isNil(myFavorites) || myFavorites === 0
 									? (

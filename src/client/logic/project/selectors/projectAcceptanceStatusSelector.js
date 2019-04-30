@@ -1,15 +1,14 @@
-import { anyPass, equals, filter, length, map, prop, intersection, gt, find, propEq, head } from 'ramda'
+import { filter, length, map, prop, intersection, gt, propEq, head } from 'ramda'
 import objectToArray from 'root/src/client/logic/api/util/objectToArray'
 
 import projectAssigneesSelector from 'root/src/client/logic/project/selectors/projectAssigneesSelector'
 import getUserDataSelector from 'root/src/client/logic/api/selectors/getUserDataSelector'
-import isOneOfAssigneesSelector from 'root/src/client/logic/project/selectors/isOneOfAssigneesSelector'
 import { notConnected, connectedNotClaimed, accepted, notEligible } from 'root/src/shared/constants/projectAcceptanceStatuses'
 import {
 	projectPendingKey,
 	projectAcceptedKey,
 	projectStreamerRejectedKey,
-	projectDeliveredKey
+	projectDeliveredKey,
 } from 'root/src/server/api/lenses'
 
 export default (state, props) => {
@@ -22,9 +21,7 @@ export default (state, props) => {
 	if (!isAssignee) {
 		return notConnected
 	}
-	const filteredAssignee = map((assigneeName) => {
-		return head(filter(propEq('displayName', assigneeName), assignees))
-	}, assigneeNames)
+	const filteredAssignee = map(assigneeName => head(filter(propEq('displayName', assigneeName), assignees)), assigneeNames)
 
 	const assignee = head(filteredAssignee)
 	const acceptanceStatus = prop('accepted', assignee)
@@ -36,5 +33,7 @@ export default (state, props) => {
 			return notEligible
 		case (projectAcceptedKey):
 			return accepted
+		default:
+			return notEligible
 	}
 }
