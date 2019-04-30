@@ -19,8 +19,7 @@
     "build": "webpack --config webpack.config.js -p",
     "bundleLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda",
     "runLambda": "docker run -v $PWD/.cloudFormation/:/var/task awslambda-node dareMeDevApiLambdaFunction.default",
-    "lmb": "docker run -v $PWD/.cloudFormation/:/var/task lmb dareMeXDevApiLambdaFunction.default",
-    "throttledTest": "find . -path .\/node_modules -prune -o \\( -name \"*test.js\" -o -name \"*dynamoTest.js\" \\) | sed -e 's\/^\/yarn test \"\/g;' | sed -e 's\/$\/\"\/g;' > tempThrottledTest.sh && sh tempThrottledTest.sh && rm tempThrottledTest.sh\r\n"
+    "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmb dareMeXDevApiLambdaFunction.default"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.15",

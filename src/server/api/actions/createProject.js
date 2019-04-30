@@ -87,7 +87,7 @@ export default async ({ userId, payload }) => {
 			title: dareCreatedTitle,
 		}
 		sendEmail(emailData, dareCreatedEmail)
-	} catch (err) {}
+	} catch (err) { }
 
 	return {
 		id: projectId,

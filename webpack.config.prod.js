@@ -9,8 +9,11 @@ const appConstants = require('./src/shared/constants/app')
 const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
 
+//ATM the only one thing that differentiates this file 
+//from webpack.config.js is const env = 'production'
+
 // const env = slsConstants.env || 'dev'
-const env = 'development'
+const env = 'production'
 const isProd = env === 'production'
 const envVars = Object.assign(
 	{ __sha__: process.env.CIRCLE_SHA1 || 'dev' },

@@ -20,12 +20,8 @@ describe('getAcceptedProjects', () => {
 		})
 
 		const oAuthDetails = {
-			// displayName: 'dN',
 			tokenId: 'twitch',
 			id: project.assignees[0].platformId,
-			// login: 'asdsad',
-			// thumbnail: 'image.jpg',
-			// token: 'Bearer ',
 		}
 
 		await addOAuthToken({
@@ -40,7 +36,6 @@ describe('getAcceptedProjects', () => {
 				audit: projectApprovedKey,
 			},
 		})
-
 
 		await acceptProject({
 			userId: mockUserId,
@@ -57,10 +52,13 @@ describe('getAcceptedProjects', () => {
 		await wait(750)
 		const event = {
 			endpointId: GET_ACCEPTED_PROJECTS,
+			payload: {
+				currentPage: 1,
+			},
 		}
 
 		const res = await apiFn(event, contextMock)
-		expect(res.status).toEqual(200)
+		expect(res.statusCode).toEqual(200)
 		expect(res.body.items.length).toEqual(1)
 	})
 })

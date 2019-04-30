@@ -7,7 +7,7 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { generalError, authorizationError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
-import { projectAcceptedKey, projectPendingKey } from 'root/src/server/api/lenses'
+import { projectAcceptedKey, projectApprovedKey } from 'root/src/server/api/lenses'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 import splitAssigneeId from 'root/src/server/api/actionUtil/splitAssigneeId'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
@@ -23,20 +23,17 @@ export default async ({ payload, userId }) => {
 	const userTokens = await dynamoQueryOAuth(userId)
 	const amountRequested = viewAmountRequested(payload)
 
-	const [
-		projectToAccept,
-	] = await dynamoQueryProject(
+	const [projectToAccept] = head(await dynamoQueryProject(
 		null,
 		projectId,
-	)
+	))
 
 	const userTokensInProject = userTokensInProjectSelector(userTokens, projectToAccept)
 	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
 
-	const projectToConfirm = head(projectToAccept)
-	if (!projectToConfirm) {
+	if (!projectToAccept) {
 		throw generalError('Project or assignee doesn\'t exist')
 	}
 
@@ -50,10 +47,9 @@ export default async ({ payload, userId }) => {
 
 	const assigneeArr = unnest(unnest(assigneeArrNested))
 
-	const project = setProjectAssigneesStatus(userTokensObj, projectToConfirm, projectAcceptedKey)
+	const project = setProjectAssigneesStatus(userTokensObj, projectToAccept, projectAcceptedKey)
 
-
-	const assigneesToWrite = map(assignee => ({
+	const assigneesToWrite = map(assignee => ([{
 		PutRequest: {
 			Item: {
 				...assignee,
@@ -62,7 +58,24 @@ export default async ({ payload, userId }) => {
 				modified: getTimestamp(),
 			},
 		},
-	}), assigneeArr)
+	},
+	// here for future performance of DynamoDB, implementation of
+	// above would need to be removed due to denormalized data
+	{
+		PutRequest: {
+			Item: {
+				[PARTITION_KEY]: project.pk,
+				[SORT_KEY]: replace(
+					'assignee',
+					// here accepted is not enough descriptive, for future
+					// would prefer to change it to something like assigneeAccepted
+					'accepted',
+					assignee[SORT_KEY],
+				),
+				amountRequested: viewAmountRequested(payload),
+			},
+		},
+	}]), assigneeArr)
 
 	const acceptationParams = {
 		RequestItems: {
@@ -72,7 +85,7 @@ export default async ({ payload, userId }) => {
 						Item: {
 							...project,
 							[SORT_KEY]: replace(
-								projectPendingKey,
+								projectApprovedKey,
 								projectAcceptedKey,
 								project[SORT_KEY],
 							),
@@ -87,7 +100,7 @@ export default async ({ payload, userId }) => {
 						},
 					},
 				},
-				...assigneesToWrite,
+				...unnest(assigneesToWrite),
 			],
 		},
 	}
