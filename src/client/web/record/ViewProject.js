@@ -363,7 +363,7 @@ export const ViewProjectModule = memo(({
 								)
 							}
 							{
-								isNil(myFavorites) || myFavorites == 0
+								isNil(myFavorites) || myFavorites === 0
 									? (
 										<div className={classes.sidebarItem}>
 											<LoadingButton
