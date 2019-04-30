@@ -9,6 +9,7 @@ export default {
 				maxLength: '300 characters max.',
 			},
 		},
+		assigneeId: { type: 'string' },
 	},
 	required: ['projectId'],
 	additionalProperties: false,

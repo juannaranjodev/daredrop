@@ -13,9 +13,10 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { generalError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey, projectRejectedKey } from 'root/src/server/api/lenses'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import projectStatusKeySelector from 'root/src/server/api/actionUtil/projectStatusKeySelector'
+import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectByStatus'
 
 import moment from 'moment'
 
@@ -51,6 +52,11 @@ export default async ({ userId, payload }) => {
 		),
 	}
 
+	// for the future rejection of project needs to be separate action to handle transactWrite properly
+	if (equals(viewAudit(payload), projectRejectedKey)) {
+		await rejectProjectByStatus(projectId, ['favorites', 'pledge'])
+	}
+
 	const auditParams = {
 		RequestItems: {
 			[TABLE_NAME]: [
@@ -70,6 +76,7 @@ export default async ({ userId, payload }) => {
 			],
 		},
 	}
+
 	await documentClient.batchWrite(auditParams).promise()
 
 	const newProject = projectSerializer([
