@@ -8,15 +8,15 @@ import { projectApprovedKey } from 'root/src/server/api/lenses'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { internet } from 'faker'
 
-const project = createProject({
-	userId: internet.username,
-	payload: { ...createProjectPayload(), status: projectApprovedKey },
-})
 
 describe('pledgeProject', () => {
+	const projectPayload = createProjectPayload()
+	let newProject
 	test('successfully pledge a project', async () => {
-		const newProject = await project
-
+		newProject = await createProject({
+			userId: internet.username,
+			payload: { ...projectPayload, status: projectApprovedKey },
+		})
 		const pledgeAmount = 20
 
 		const event = {
@@ -40,11 +40,9 @@ describe('pledgeProject', () => {
 			},
 		})
 	})
-	test('successfully pledge to the same project', async () => {
-		const newProject = await project
 
+	test('another pledge to the same project', async () => {
 		const pledgeAmount = 20
-
 		const event = {
 			endpointId: PLEDGE_PROJECT,
 			payload: {

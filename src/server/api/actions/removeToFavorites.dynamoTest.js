@@ -8,15 +8,12 @@ import { projectApprovedKey } from 'root/src/server/api/lenses'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { internet } from 'faker'
 
-const project = createProject({
-	userId: internet.username,
-	payload: { ...createProjectPayload(), status: projectApprovedKey },
-})
-
 describe('removeToFavorites', () => {
-
 	test('successfully removed from your favorites', async () => {
-		const newProject = await project
+		const newProject = await createProject({
+			userId: internet.username,
+			payload: { ...createProjectPayload(), status: projectApprovedKey },
+		})
 
 		const event = {
 			endpointId: REMOVE_TO_FAVORITES,
@@ -27,14 +24,13 @@ describe('removeToFavorites', () => {
 		}
 		const res = await apiFn(event)
 
-		console.log(res)
 
 		expect(res).toEqual({
 			statusCode: 200,
 			body: {
 				...newProject,
 				favoritesAmount: newProject.favoritesAmount - 1,
-				myFavorites: 0
+				myFavorites: 0,
 			},
 		})
 	})
