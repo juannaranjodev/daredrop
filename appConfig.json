@@ -1,4 +1,5 @@
 {
     "name": "dareMe",
     "awsAdminProfile": "dareMeAdmin"
+    "awsRegion": "us-east-1"
 }
