@@ -8,7 +8,7 @@ import {
 import { descendingCreated } from 'root/src/server/api/actionUtil/sortUtil'
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
-import getProjectsByIds from 'root/src/server/api/actionUtil/getProjectsByIds'
+import getActiveProjectsByIds from 'root/src/server/api/actionUtil/getActiveProjectsByIds'
 
 const PageItemLedngth = 8
 
@@ -36,7 +36,7 @@ export default async ({ userId, payload }) => {
 
 	const myProjectsIdsArr = uniq(map(prop('pk'), [...pledgedProjects, ...favoritesProjects]))
 
-	const myProjects = await getProjectsByIds(myProjectsIdsArr)
+	const myProjects = await getActiveProjectsByIds(myProjectsIdsArr)
 
 	const filterExpired = (dare) => {
 		const diff = moment().diff(dare.approved, 'days')

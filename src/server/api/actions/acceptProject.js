@@ -7,7 +7,7 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { generalError, authorizationError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
-import { projectAcceptedKey } from 'root/src/server/api/lenses'
+import { projectAcceptedKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
@@ -56,7 +56,7 @@ export default async ({ payload, userId }) => {
 			Item: {
 				...assignee,
 				amountRequested,
-				accepted: projectAcceptedKey,
+				accepted: streamerAcceptedKey,
 				modified: getTimestamp(),
 			},
 		},
