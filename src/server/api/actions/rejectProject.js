@@ -9,8 +9,6 @@ import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQue
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
-import splitAssigneeId from 'root/src/server/api/actionUtil/splitAssigneeId'
-import setProjectAssigneesStatus from 'root/src/server/api/actionUtil/setProjectAssigneesStatus'
 import { projectStreamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
 import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPendingOrAcceptedAssignees'
 import auditProject from 'root/src/server/api/actions/auditProject'
@@ -19,8 +17,6 @@ import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectB
 import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
 
 import getTimestamp from 'root/src/shared/util/getTimestamp'
-
-const prt = msg => console.log(JSON.stringify(msg, null, 2))
 
 const payloadLenses = getPayloadLenses(REJECT_PROJECT)
 const { viewProjectId, viewMessage } = payloadLenses
@@ -48,7 +44,6 @@ export default async ({ payload, userId }) => {
 		token => dynamoQueryProjectAssignee(projectId, token),
 		userTokensStr,
 	))
-
 
 	const assigneeArr = unnest(unnest(assigneeArrNested))
 
