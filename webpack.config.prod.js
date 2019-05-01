@@ -5,12 +5,13 @@ const webpack = require('webpack')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const appConstants = require('./src/shared/constants/app')
 const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
 
-//ATM the only one thing that differentiates this file 
-//from webpack.config.js is const env = 'production'
+// ATM the only one thing that differentiates this file
+// from webpack.config.js is const env = 'production'
 
 // const env = slsConstants.env || 'dev'
 const env = 'production'
@@ -81,6 +82,12 @@ module.exports = {
 		// 	// set the current working directory for displaying module paths
 		// 	cwd: process.cwd(),
 		// }),
+		new CopyWebpackPlugin([
+			{
+				from: path.resolve(__dirname, './src/client/web/static/staticJs/'),
+				to: '',
+			},
+		]),
 	],
 	optimization: {
 		minimizer: [new TerserPlugin()],
