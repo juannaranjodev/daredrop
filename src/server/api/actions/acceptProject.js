@@ -1,4 +1,4 @@
-import { head, unnest, not, length, gt, last, split, omit, map, compose } from 'ramda'
+import { head, unnest, equals, not, length, gt, last, split, omit, map, compose } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -13,6 +13,8 @@ import getTimestamp from 'root/src/shared/util/getTimestamp'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import randomNumber from 'root/src/shared/util/randomNumber'
+import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
+import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
@@ -45,12 +47,6 @@ export default async ({ payload, userId }) => {
 
 	const assigneeArr = unnest(unnest(assigneeArrNested))
 
-	const project = {
-		[PARTITION_KEY]: projectToAccept[PARTITION_KEY],
-		[SORT_KEY]: `project|${projectAcceptedKey}|${randomNumber(1, 10)}`,
-		created: getTimestamp(),
-	}
-
 	const assigneesToWrite = map(assignee => ({
 		PutRequest: {
 			Item: {
@@ -62,14 +58,28 @@ export default async ({ payload, userId }) => {
 		},
 	}), assigneeArr)
 
+	const assigneesInProject = await dynamoQueryAllProjectAssignees(projectId)
+
+	let projectAcceptedRecord = []
+
+	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesInProject)
+
+	if (equals(length(acceptedAssigneesInProject), 0)) {
+		projectAcceptedRecord = [{
+			PutRequest: {
+				Item: {
+					[PARTITION_KEY]: projectToAccept[PARTITION_KEY],
+					[SORT_KEY]: `project|${projectAcceptedKey}|${randomNumber(1, 10)}`,
+					created: getTimestamp(),
+				},
+			},
+		}]
+	}
+
 	const acceptationParams = {
 		RequestItems: {
 			[TABLE_NAME]: [
-				{
-					PutRequest: {
-						Item: project,
-					},
-				},
+				...projectAcceptedRecord,
 				...assigneesToWrite,
 			],
 		},
