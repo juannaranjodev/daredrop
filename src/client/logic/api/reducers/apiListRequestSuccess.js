@@ -1,9 +1,9 @@
-import { reduce, append, compose } from 'ramda'
+import { reduce, append, compose, or } from 'ramda'
 
 import { API_LIST_REQUEST_SUCCESS } from 'root/src/client/logic/api/actionIds'
 import createRecordStoreKey from 'root/src/client/logic/api/util/createRecordStoreKey'
 import {
-	apiStoreLenses, nextKeyProp, idProp, itemsProp,
+	apiStoreLenses, nextKeyProp, idProp, itemsProp, projectIdProp,
 } from 'root/src/client/logic/api/lenses'
 
 const {
@@ -17,7 +17,7 @@ export const apiListRequestSuccess = (
 	let listIds = []
 	const listItems = itemsProp(list)
 	const recordsSet = reduce((result, record) => {
-		const recordId = idProp(record)
+		const recordId = or(idProp(record), projectIdProp(record))
 		const recordStoreId = createRecordStoreKey(recordType, recordId)
 		listIds = append(recordId, listIds)
 		return setRecordsChild(recordStoreId, record, result)
