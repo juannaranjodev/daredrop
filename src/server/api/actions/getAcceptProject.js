@@ -1,21 +1,31 @@
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
+import { map, reduce, range } from 'ramda'
 import {
-	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
+	GSI1_INDEX_NAME, GSI1_PARTITION_KEY
 } from 'root/src/shared/constants/apiDynamoIndexes'
+import { dynamoItemsProp } from 'root/src/server/api/lenses'
 import { projectAcceptedKey } from 'root/src/server/api/lenses'
 
 
+
 export default async () => {
-	const acceptedProjectParams = {
-		TableName: TABLE_NAME,
-		IndexName: GSI1_INDEX_NAME,
-		KeyConditionExpression: `${GSI1_PARTITION_KEY} = :accepted`,
-		ExpressionAttributeValues: {
-			':accepted': `project|${projectAcceptedKey}`,
-		},
-	}
-	const dynamoResults = await documentClient.query(
-		acceptedProjectParams,
-	).promise()
-	return { items: dynamoResults.Items }
+
+	const dynamoResults = await Promise.all(
+		map(index => documentClient.query({
+			TableName: TABLE_NAME,
+			IndexName: GSI1_INDEX_NAME,
+			KeyConditionExpression: `${GSI1_PARTITION_KEY} = :pk`,
+			ExpressionAttributeValues: {
+				':pk': `project|${projectAcceptedKey}|${index}`,
+			}
+		}).promise(), range(1, 11))
+	)
+
+	const items = reduce(
+		(result, projectDdb) => [...result, ...dynamoItemsProp(projectDdb)],
+		[],
+		dynamoResults,
+	)
+
+	return { items: items }
 }
