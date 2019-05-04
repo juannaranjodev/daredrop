@@ -34,6 +34,9 @@ export default (state, props) => {
 		case (projectAcceptedKey):
 			return accepted
 		default:
-			return notEligible
+			// here until fix of backend part of this feature
+			// this button will be shown, correct solution below
+			return connectedNotClaimed
+		// return notEligible
 	}
 }
