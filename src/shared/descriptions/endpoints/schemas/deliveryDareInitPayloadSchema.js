@@ -1,16 +1,11 @@
 export default {
 	type: 'object',
 	properties: {
-		videoAtach: {
-			type: 'object',
-			properties: {
-				name: { type: 'string' },
-				data: { type: 'string' },
-			},
-		},
+		videoName: { type: 'string' },
 		videoURL: { type: 'string' },
 		timeStamp: { type: 'string' },
+		projectId: { type: 'string' },
 	},
-	required: ['token'],
+	required: ['videoName', 'videoURL', 'timeStamp', 'projectId'],
 	additionalProperties: false,
 }
