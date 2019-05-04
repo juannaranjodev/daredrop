@@ -1,5 +1,5 @@
 import {
-	GET_ACTIVE_PROJECTS, GET_PLEDGED_PROJECTS,
+	GET_ACTIVE_PROJECTS, GET_PLEDGED_PROJECTS, GET_ACCEPTED_PROJECTS,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import {
 	ACTIVE_PROJECTS_LIST_MODULE_ID,
@@ -12,6 +12,10 @@ export default {
 		listType: 'card',
 		listPayload: { currentPage: 1 },
 		recordType: project,
-		endpointId: [GET_ACTIVE_PROJECTS, GET_PLEDGED_PROJECTS],
+		endpointId: [
+			GET_ACTIVE_PROJECTS,
+			GET_PLEDGED_PROJECTS,
+			GET_ACCEPTED_PROJECTS,
+		],
 	},
 }
