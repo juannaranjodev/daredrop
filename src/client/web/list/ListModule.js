@@ -9,7 +9,7 @@ import ProjectCard from 'root/src/client/web/list/ProjectCard'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 
-import modalStyle from 'root/src/client/web/list/modalStyle'
+import { listStyle } from 'root/src/client/web/list/style'
 import Title from 'root/src/client/web/typography/Title'
 import SubTitle from 'root/src/client/web/typography/SubTitle'
 import LinkButton from 'root/src/client/web/base/LinkButton'
@@ -19,32 +19,6 @@ import List from '@material-ui/core/List'
 import listModuleConnector from 'root/src/client/logic/api/connectors/listModuleConnector'
 
 import { DeletePaymentModal } from './DeletePaymentModal'
-
-const styles = {
-	paddingOffset: {
-		justifyContent: 'center',
-		borderRadius: 5,
-		boxShadow: '0 3px 26px 0 rgba(0, 0, 0, 0.16)',
-		border: 'solid 0.2px #800080',
-		backgroundColor: '#ffffff',
-		padding: 20,
-	},
-	list: {
-		width: 340,
-		margin: '0 auto',
-	},
-	subtitle: {
-		alignSelf: 'flex-start',
-		fontWeight: 'bold',
-		fontSize: 20,
-		margin: '10px 0 25px 0',
-	},
-	buttons: {
-		margin: '10px 0 50px 0',
-		width: '100%',
-	},
-	...modalStyle,
-}
 
 export const CardList = ({
 	list, currentPage, hasMore, classes, getNextPage,
@@ -64,7 +38,12 @@ export const CardList = ({
 						)}
 					>
 						{map(recordId => (
-							<ProjectCard key={recordId} recordId={recordId} filterList={list[1]} />
+							<ProjectCard
+								key={recordId}
+								recordId={recordId}
+								filterList={list[1]}
+								acceptedList={list[2]}
+							/>
 						), head(list))}
 
 					</div>
@@ -140,5 +119,5 @@ export const ListModuleUnconnected = memo((props) => {
 })
 
 export default withModuleContext(
-	listModuleConnector(ListModuleUnconnected, styles),
+	listModuleConnector(ListModuleUnconnected, listStyle),
 )
