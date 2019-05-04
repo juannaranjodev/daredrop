@@ -55,7 +55,7 @@ export const AtachmentInputUnconected = memo(({
 		const value = {
 			name: currentFile.name,
 		}
-		const arrFormat = ['mp4']
+		const arrFormat = ['mp4', 'mov', 'mpeg4', 'avi', 'wmv', 'mpegps', 'flv', 'webm', '3gp', '3gpp', 'mxf']
 		const arr = value.name.split('.')
 		const formatFile = arr[arr.length - 1]
 

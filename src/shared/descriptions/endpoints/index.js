@@ -28,7 +28,7 @@ import getMyProjects from 'root/src/shared/descriptions/endpoints/getMyProjects'
 
 import addToFavorites from 'root/src/shared/descriptions/endpoints/addToFavorites'
 import removeToFavorites from 'root/src/shared/descriptions/endpoints/removeToFavorites'
-import deliveryDare from 'root/src/shared/descriptions/endpoints/deliveryDare'
+import deliveryDareInit from 'root/src/shared/descriptions/endpoints/deliveryDareInit'
 
 import getAcceptedProjects from 'root/src/shared/descriptions/endpoints/getAcceptedProject'
 
@@ -55,7 +55,7 @@ const allEndpoints = {
 	...addToFavorites,
 	...removeToFavorites,
 	...getMyProjects,
-	...deliveryDare,
+	...deliveryDareInit,
 	...getAcceptedProjects,
 }
 
