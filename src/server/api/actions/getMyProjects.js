@@ -5,7 +5,7 @@ import { dynamoItemsProp } from 'root/src/server/api/lenses'
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
-import { descendingCreated } from 'root/src/server/api/actionUtil/sortUtil'
+import { descendingApproved } from 'root/src/server/api/actionUtil/sortUtil'
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 import getProjectsByIds from 'root/src/server/api/actionUtil/getProjectsByIds'
@@ -44,7 +44,7 @@ export default async ({ userId, payload }) => {
 	}
 	const filteredProjects = filter(filterExpired, myProjects)
 
-	const sortedProjects = sort(descendingCreated, filteredProjects)
+	const sortedProjects = sort(descendingApproved, filteredProjects)
 
 	const allPage = sortedProjects.length % PageItemLedngth > 0
 		? Math.round(sortedProjects.length / PageItemLedngth) + 1
