@@ -23,10 +23,10 @@ export default (state, { moduleId }) => {
 			const result = viewItems(item, state)
 			return !isNil(result) ? result : []
 		}, moduleProcess)
-		const filterArr = list[list.length - 1]
-		list = list.slice(0, list.length - 1)
+		const filterArr = list.slice(list.length - (endpointId.length - 1), list.length)
+		list = list.slice(0, list.length - (endpointId.length - 1))
 		list = reduce((acc, item) => acc.concat(item), [], list)
-		list = [list, filterArr]
+		list = [list, ...filterArr]
 	}
 
 	return list

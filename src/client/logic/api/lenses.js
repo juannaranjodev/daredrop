@@ -147,3 +147,4 @@ export const generalApiModuleDescriptionLenses = lensesFromSchema(
 export const nextKeyProp = prop('next')
 export const itemsProp = prop('items')
 export const idProp = prop('id')
+export const projectIdProp = prop('projectId')

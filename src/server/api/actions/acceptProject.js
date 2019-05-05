@@ -55,8 +55,8 @@ export default async ({ payload, userId }) => {
 					PutRequest: {
 						Item: {
 							[PARTITION_KEY]: projectToConfirm.pk,
-							[SORT_KEY]: `accepted|${assigneeId}`,
-							amountRequested: viewAmountRequested(payload),
+							[SORT_KEY]: `project|${projectAcceptedKey}|${randomNumber(1, 10)}`,
+							created: getTimestamp(),
 						},
 					},
 				},
