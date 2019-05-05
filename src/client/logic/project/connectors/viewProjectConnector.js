@@ -23,6 +23,7 @@ import projectTitleSelector from 'root/src/client/logic/project/selectors/projec
 import statusSelector from 'root/src/client/logic/project/selectors/statusSelector'
 import approvedVideoUrlSelector from 'root/src/client/logic/project/selectors/approvedVideoUrlSelector'
 import isOneOfAssignesSelector from 'root/src/client/logic/project/selectors/isOneOfAssigneesSelector'
+import projectAcceptanceStatusSelector from 'root/src/client/logic/project/selectors/projectAcceptanceStatusSelector'
 
 import isAuthenticatedSelector from 'root/src/client/logic/auth/selectors/isAuthenticated'
 
@@ -56,6 +57,7 @@ export default reduxConnector(
 		['userData', getUserDataSelector],
 		['approvedVideoUrl', approvedVideoUrlSelector],
 		['isOneOfAssignees', isOneOfAssignesSelector],
+		['projectAcceptanceStatus', projectAcceptanceStatusSelector],
 	],
 	[
 		['addToFavorites', addToFavorites],

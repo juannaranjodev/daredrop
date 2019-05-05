@@ -30,6 +30,8 @@ import addToFavorites from 'root/src/shared/descriptions/endpoints/addToFavorite
 import removeToFavorites from 'root/src/shared/descriptions/endpoints/removeToFavorites'
 import deliveryDare from 'root/src/shared/descriptions/endpoints/deliveryDare'
 
+import getAcceptedProjects from 'root/src/shared/descriptions/endpoints/getAcceptedProject'
+
 const allEndpoints = {
 	...createProject,
 	...getProject,
@@ -54,6 +56,7 @@ const allEndpoints = {
 	...removeToFavorites,
 	...getMyProjects,
 	...deliveryDare,
+	...getAcceptedProjects,
 }
 
 export default map(
