@@ -7,6 +7,13 @@ export default {
 		Type: 'AWS::S3::Bucket',
 		Properties: {
 			AccessControl: 'PublicRead',
+			CorsConfiguration: {
+				CorsRules: [{
+					AllowedOrigins: ['*'],
+					AllowedMethods: ['GET', 'PUT'],
+					AllowedHeaders: ['*'],
+				}],
+			},
 		},
 	},
 }

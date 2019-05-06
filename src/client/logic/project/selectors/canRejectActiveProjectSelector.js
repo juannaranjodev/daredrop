@@ -1,10 +1,13 @@
-import { and, equals } from 'ramda'
+import { and, equals, or } from 'ramda'
 
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
 import statusSelector from 'root/src/client/logic/project/selectors/statusSelector'
 import isAdminSelector from 'root/src/client/logic/auth/selectors/isAdminSelector'
 
 export default (state, props) => and(
-	equals(statusSelector(state, props), projectApprovedKey),
+	or(
+		equals(statusSelector(state, props), projectApprovedKey),
+		equals(statusSelector(state, props), projectDeliveryPendingKey),
+	),
 	isAdminSelector(state, props),
 )
