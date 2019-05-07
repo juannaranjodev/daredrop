@@ -115,11 +115,8 @@ const styles = {
 	},
 	description: {
 		width: '100%',
-		minHeight: 85,
-		fontFamily: 'Roboto',
+		minHeight: 35,
 		fontSize: 20,
-		lineHeight: 1.2,
-		color: '#000000',
 		marginTop: 8,
 	},
 	progressOuter: {
