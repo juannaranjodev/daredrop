@@ -9,18 +9,23 @@ export const payloadSchemaError = errors => ({
 	schemaErrors: errors,
 })
 
-export const notFoundError = endpointId => ({
-	statusCode: 404,
-	generalErrors: `Endpoint ${endpointId} not found`,
-})
-
 export const responseSchemaError = errors => ({
 	statusCode: 500,
 	schemaErrors: errors,
 })
 
-export const authorizationError = errorMessage => ({
+export const notFoundError = endpointId => ({
+	statusCode: 404,
+	generalErrors: `Endpoint ${endpointId} not found`,
+})
+
+export const actionForbiddenError = errors => ({
 	statusCode: 403,
+	generalErrors: errors,
+})
+
+export const authorizationError = errorMessage => ({
+	statusCode: 401,
 	generalErrors: errorMessage,
 })
 
