@@ -10,7 +10,7 @@ export default async (idsArr) => {
 		KeyConditionExpression: `${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :project)`,
 		ExpressionAttributeValues: {
 			':pk': projectId,
-			':project': 'project',
+			':project': 'project|',
 		},
 		ConsistentRead: true,
 	}), idsArr)

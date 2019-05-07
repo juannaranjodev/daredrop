@@ -7,19 +7,16 @@ import { videoBucket } from 'root/cfOutput'
 import googleOAuthClient, { youtube } from 'root/src/server/api/googleClient'
 import { dynamoItemsProp, projectApprovedKey } from 'root/src/server/api/lenses'
 import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
+import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
+import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
+import { map, prop } from 'ramda'
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
-
 const { viewDeliverySortKey, viewProjectId } = payloadLenses
-
 
 export default async ({ payload }) => {
 	const deliverySortKey = viewDeliverySortKey(payload)
 	const projectId = viewProjectId(payload)
-
-	//
-	// TODO - project assignees to description - feature is already in PR #66
-	//
 
 	const deliveryQueryParams = {
 		TableName: TABLE_NAME,
@@ -59,6 +56,12 @@ export default async ({ payload }) => {
 	const projectDdb = await documentClient.query(projectParams).promise()
 	const [project] = dynamoItemsProp(projectDdb)
 
+	const projectAssignees = await dynamoQueryAllProjectAssignees(projectId)
+	const acceptedAssignees = getAcceptedAssignees(projectAssignees)
+
+	const returnDisplayNamePlusNewline = input => `\n${prop('displayName', input)}`
+	const ytDescription = `${project.description}${map(returnDisplayNamePlusNewline, acceptedAssignees)}`
+
 	const s3data = {
 		Bucket: videoBucket,
 		Key: deliveryProject.fileName,
@@ -74,7 +77,7 @@ export default async ({ payload }) => {
 			requestBody: {
 				snippet: {
 					title: project.title,
-					description: project.description,
+					description: ytDescription,
 				},
 			},
 			media: {
@@ -89,14 +92,13 @@ export default async ({ payload }) => {
 			[PARTITION_KEY]: deliveryProject[PARTITION_KEY],
 			[SORT_KEY]: deliveryProject[SORT_KEY],
 		},
-		UpdateExpression: 'SET youTubeUploaded = :youTubeUploaded, youTubeURL = :youTubeURL',
+		UpdateExpression: 'SET youTubeURL = :youTubeURL',
 		ExpressionAttributeValues: {
-			':youTubeUploaded': true,
 			':youTubeURL': youtubeBaseUrl + youtubeUpload.data.id,
 		},
 	}
 
 	await documentClient.update(ytUpdateParams).promise()
 
-	return youtubeUpload
+	return { youtubeUpload }
 }
