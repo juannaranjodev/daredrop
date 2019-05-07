@@ -13,12 +13,11 @@ export default {
 		moduleType: 'form',
 		schema: compose(
 			dissocPath(['properties', 'projectId']),
-			dissocPath(['properties', 'assigneeId']),
 			dissocPath(['additionalProperties']),
 			set(
 				lensProp('required'),
 				without(
-					['projectId', 'assigneeId'],
+					['projectId'],
 					view(lensProp('required'), claimProjectSchemaSelector(ACCEPT_PROJECT)),
 				),
 			),
