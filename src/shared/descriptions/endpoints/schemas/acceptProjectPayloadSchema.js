@@ -5,10 +5,8 @@ export default {
 		amountRequested: {
 			type: 'number',
 		},
-		assigneeId: {
-			type: 'string',
-		},
+		assigneeId: { type: 'string' },
 	},
-	required: ['projectId', 'amountRequested', 'assigneeId'],
+	required: ['projectId', 'amountRequested'],
 	additionalProperties: false,
 }
