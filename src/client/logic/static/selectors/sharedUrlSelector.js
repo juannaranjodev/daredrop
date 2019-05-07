@@ -13,7 +13,7 @@ export default (state, props) => {
 	if (!isNil(routeParams)) {
 		const localUrl = urlFromRouteObj({
 			routeId: VIEW_PROJECT_ROUTE_ID,
-			routeParams: { recordId: routeParams.recordId },
+			routeParams: { recordId: String(routeParams.recordId) },
 		})
 
 		return `${origin}${localUrl}`
