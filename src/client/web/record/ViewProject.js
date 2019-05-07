@@ -21,11 +21,12 @@ import TextField from '@material-ui/core/TextField'
 import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionButton'
 import { APPROVE_PROJECT, REJECT_PROJECT, REJECT_ACTIVE_PROJECT } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 
+import { VIEW_PROJECT_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
+
 import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import goToSignInHandler from 'root/src/client/logic/project/handlers/goToSignInHandler'
 import goToPledgeProjectHandler from 'root/src/client/logic/project/handlers/goToPledgeProjectHandler'
-import goToClaimProjectHandler from 'root/src/client/logic/project/handlers/goToClaimProjectHandler'
 
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
@@ -325,7 +326,13 @@ export const ViewProjectModule = memo(({
 									<Button
 										onClick={ternary(
 											isAuthenticated,
-											goToPledgeProjectHandler(projectId, pushRoute),
+											goToPledgeProjectHandler({
+												recordId: projectId,
+												backPage: {
+													routeId: VIEW_PROJECT_ROUTE_ID,
+													routeParams: { recordId: projectId },
+												},
+											}, pushRoute),
 											goToSignInHandler(pushRoute),
 										)}
 									>
