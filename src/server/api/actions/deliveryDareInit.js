@@ -61,5 +61,5 @@ export default async ({ payload, userId }) => {
 	}
 
 	await documentClient.put(deliveryParams).promise()
-	return { url, fileName, deliverySortKey }
+	return { url, deliverySortKey }
 }
