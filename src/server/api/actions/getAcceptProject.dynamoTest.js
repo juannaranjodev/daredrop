@@ -13,10 +13,7 @@ import acceptProject from 'root/src/server/api/actions/acceptProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 
 describe('getAcceptedProjects', () => {
-	test('skipped test here', () => {
-		console.log('skipped test here')
-	})
-	test.skip('Successfully get accepted projects', async () => {
+	test('Successfully get accepted projects', async () => {
 		// this won't work with actual implementation. there is a need to change acceptProject.js
 		// and getAcceptProject.js
 		const project = await createProject({
@@ -57,6 +54,9 @@ describe('getAcceptedProjects', () => {
 		await wait(750)
 		const event = {
 			endpointId: GET_ACCEPTED_PROJECTS,
+			payload: {
+				currentPage: 1,
+			},
 		}
 
 		const res = await apiFn(event, contextMock)
