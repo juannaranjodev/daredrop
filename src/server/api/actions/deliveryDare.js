@@ -59,8 +59,8 @@ export default async ({ payload }) => {
 	const projectAssignees = await dynamoQueryAllProjectAssignees(projectId)
 	const acceptedAssignees = getAcceptedAssignees(projectAssignees)
 
-	const returnDisplayNamePlusNewline = input => `\n${prop('displayName', input)}`
-	const ytDescription = `${project.description}${map(returnDisplayNamePlusNewline, acceptedAssignees)}`
+	const displayNameOnNewline = input => `\n${prop('displayName', input)}`
+	const ytDescription = `${project.description}${map(displayNameOnNewline, acceptedAssignees)}`
 
 	const s3data = {
 		Bucket: videoBucket,
