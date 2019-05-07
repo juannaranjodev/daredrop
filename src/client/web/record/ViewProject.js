@@ -177,7 +177,6 @@ const styles = {
 	},
 	youPledge: {
 		marginTop: 7,
-		fontFamily: 'Roboto',
 		fontSize: 12,
 		fontWeight: 'bold',
 		'& span': {
