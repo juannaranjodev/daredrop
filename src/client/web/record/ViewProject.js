@@ -178,6 +178,18 @@ const styles = {
 	pledgeButton: {
 		marginBottom: 65,
 	},
+	youPledge: {
+		marginTop: 7,
+		fontFamily: 'Roboto',
+		fontSize: 12,
+		fontWeight: 'bold',
+		'& span': {
+			fontWeight: 'normal',
+		},
+	},
+	totalPledge: {
+		marginTop: 14,
+	},
 }
 
 export const ViewProjectModule = memo(({
@@ -272,9 +284,16 @@ export const ViewProjectModule = memo(({
 						>
 							<div className={classNames(classes.progressOuter)}>
 								<div className={classNames(classes.progressInner)} />
+								{ !isNil(myPledge)
+									&& (
+										<div className={classNames(classes.youPledge)}>
+										You Pledged: <span>{myPledge}$</span>
+										</div>
+									)
+								}
 							</div>
 							<div className={classNames('flex', 'layout-row', 'layout-wrap')}>
-								<div className={classNames('flex-40', 'flex-gt-sm-100', classes.sidebarItem)}>
+								<div className={classNames('flex-40', 'flex-gt-sm-100', classes.sidebarItem, classes.totalPledge)}>
 									<SubHeader>Total Pledged</SubHeader>
 									<div className={classNames(classes.text)}>{pledgeAmount}</div>
 								</div>
