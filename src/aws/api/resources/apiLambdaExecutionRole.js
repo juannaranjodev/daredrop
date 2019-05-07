@@ -53,6 +53,11 @@ export default {
 							},
 							{
 								Effect: 'Allow',
+								Action: 'secretsmanager:GetSecretValue',
+								Resource: 'arn:aws:secretsmanager:*:*:*',
+							},
+							{
+								Effect: 'Allow',
 								Action: [
 									'cognito-idp:AdminGetUser',
 								],

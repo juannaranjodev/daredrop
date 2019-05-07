@@ -20,10 +20,10 @@ export default async ({ payload }) => {
 
 	const deliveryQueryParams = {
 		TableName: TABLE_NAME,
-		KeyConditionExpression: `${PARTITION_KEY} = :pk and ${SORT_KEY} = :sk`,
+		KeyConditionExpression: `${PARTITION_KEY} = :projectId and ${SORT_KEY} = :deliveryDareSk`,
 		ExpressionAttributeValues: {
-			':pk': projectId,
-			':sk': deliverySortKey,
+			':projectId': projectId,
+			':deliveryDareSk': deliverySortKey,
 		},
 	}
 
@@ -71,7 +71,7 @@ export default async ({ payload }) => {
 
 	const youtubeUpload = await youtube.videos.insert(
 		{
-			auth: googleOAuthClient,
+			auth: await googleOAuthClient,
 			part: 'id,snippet',
 			notifySubscribers: false,
 			requestBody: {
