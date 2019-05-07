@@ -1,20 +1,16 @@
 import ref from 'root/src/aws/util/ref'
 
 import {
-	RECORD_SET, VIDEO_BUCKET,
+	RECORD_SET,
 } from 'root/src/aws/staticHosting/resourceIds'
 
 import {
-	DOMAIN_NAME, VIDEO_UPLOAD_BUCKET,
+	DOMAIN_NAME,
 } from 'root/src/aws/staticHosting/outputIds'
 
 export default {
-	// [DOMAIN_NAME]: {
-	//	Description: 'Route53 RecordSet domain name',
-	//	Value: ref(RECORD_SET),
-	// },
-	[VIDEO_UPLOAD_BUCKET]: {
-		Description: 'Bucket for uploaded videos',
-		Value: ref(VIDEO_BUCKET),
+	[DOMAIN_NAME]: {
+		Description: 'Route53 RecordSet domain name',
+		Value: ref(RECORD_SET),
 	},
 }

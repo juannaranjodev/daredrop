@@ -1,14 +1,21 @@
 import { google } from 'googleapis'
+import { redirectURI } from 'root/src/shared/constants/googleOAuth'
+import { SecretsManager } from 'aws-sdk'
 
-const id = '820043552365-hg50v27lo2031so6o39prt9nvnvi8clg.apps.googleusercontent.com'
-const secret = 'ybVEUucv4FH-beF1hhE2kHpq'
-const refresh = '1/8OF0JV4QmU-a5jnvpclqGqg_OonXmFdazdZOEQZd2xM'
-const redirectURI = 'https://developers.google.com/oauthplayground'
+const secretsClient = new SecretsManager()
+const secretName = 'googleOAuth'
 
-const oauth2Client = new google.auth.OAuth2(id, secret, redirectURI)
-oauth2Client.setCredentials({
-	refresh_token: refresh,
+export default new Promise((resolve) => {
+	secretsClient.getSecretValue({ SecretId: secretName }, (err, data) => {
+		const { clientSecret, refreshToken, clientId } = JSON.parse(data.SecretString)
+		const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectURI)
+
+		oauth2Client.setCredentials({
+			refresh_token: refreshToken,
+		})
+
+		resolve(oauth2Client)
+	})
 })
 
-export default oauth2Client
 export const youtube = google.youtube('v3')
