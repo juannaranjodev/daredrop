@@ -284,7 +284,7 @@ export const ViewProjectModule = memo(({
 								{ !isNil(myPledge)
 									&& (
 										<div className={classNames(classes.youPledge)}>
-										You Pledged: <span>{myPledge}$</span>
+										You Pledged: <span>${myPledge}</span>
 										</div>
 									)
 								}
