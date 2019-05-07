@@ -8,6 +8,6 @@ import {
 export default ({ body }) => async (dispatch) => {
 	analyticsSendItem(body, 'Dare')
 	return dispatch(
-		pushRoute(DARE_CREATE_SUCCESS_ROUTE_ID),
+		pushRoute(DARE_CREATE_SUCCESS_ROUTE_ID, { recordId: body.id }),
 	)
 }
