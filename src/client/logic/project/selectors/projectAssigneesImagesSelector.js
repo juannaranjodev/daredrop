@@ -11,7 +11,6 @@ const { pathOrAssignees } = responseLenses
 
 export default (state, props) => {
 	const assignneDidNotRejected = assignee => not(equals(prop('accepted', assignee), projectStreamerRejectedKey))
-
 	return map(
 		propOr('http://placehold.jp/24/3d4070/ffffff/100x100.png?text=assignee', 'image'),
 		filter(assignneDidNotRejected, pathOrAssignees([1], getRecordSelector(state, props))),

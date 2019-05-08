@@ -12,10 +12,7 @@ const createDataToFetchObjs = (
 		payloadData: assignees,
 		fetchFn: userDataFetchFn,
 		payloadKey: 'assignees',
-		staticData: {
-			platform: 'twitch',
-			accepted: 'pending',
-		},
+		staticData: { platform: 'twitch' },
 		dataMap: [
 			['image', 'profile_image_url'],
 			['platformId', 'id'],
