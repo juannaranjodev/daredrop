@@ -20,9 +20,9 @@
     "startDdb": "docker start dynamodb",
     "build": "webpack --config webpack.config.js -p",
     "bundleLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda",
-    "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmb dareMeXDevApiLambdaFunction.default",
     "genAWSCreds": "./node_modules/.bin/babel-node --presets=env ./customScripts/generateAWSCredentials.js",
-    "runLambda": "docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default"
+    "runLambda": "docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default",
+    "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmbz dareMeZDevApiLambdaFunction.default"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
@@ -67,6 +67,7 @@
     "file-loader": "^1.1.11",
     "find-root": "^1.1.0",
     "folktale": "^2.1.0",
+    "googleapis": "^39.2.0",
     "history": "^4.7.2",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^23.6.0",
