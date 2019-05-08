@@ -5,7 +5,7 @@ import {
 import { authenticated } from 'root/src/shared/constants/authenticationTypes'
 
 import { listEndpointType } from 'root/src/shared/descriptions/endpoints/lenses'
-import { projectList } from 'root/src/shared/descriptions/endpoints/recordTypes'
+import { projectPledged } from 'root/src/shared/descriptions/endpoints/recordTypes'
 
 
 import projectResponseSchema from 'root/src/shared/descriptions/endpoints/schemas/projectResponseSchema'
@@ -17,7 +17,7 @@ export default {
 	[GET_PLEDGED_PROJECTS]: {
 		authentication: authenticated,
 		endpointType: listEndpointType,
-		recordType: projectList,
+		recordType: projectPledged,
 		payloadSchema,
 		responseSchema,
 	},

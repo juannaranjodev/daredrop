@@ -52,7 +52,6 @@ describe('assigneeSerializer', () => {
 				platformId: '146000275',
 				displayName: '5gorillaz',
 				username: '5gorillaz',
-				accepted: 'pending',
 			},
 			{
 				platform: 'twitch',
@@ -61,7 +60,6 @@ describe('assigneeSerializer', () => {
 				platformId: '148899812',
 				displayName: 'sonicfingboom',
 				username: 'sonicfingboom',
-				accepted: 'pending',
 			},
 		], []])
 	})
