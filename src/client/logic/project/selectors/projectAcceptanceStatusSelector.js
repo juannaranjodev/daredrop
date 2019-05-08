@@ -27,16 +27,17 @@ export default (state, props) => {
 	const acceptanceStatus = prop('accepted', assignee)
 
 	switch (acceptanceStatus) {
-		case (projectPendingKey):
-			return connectedNotClaimed
+		// case (projectPendingKey):
+		// 	return connectedNotClaimed
 		case (projectStreamerRejectedKey || projectDeliveredKey):
 			return notEligible
 		case (projectAcceptedKey):
 			return accepted
 		default:
 			// here until fix of backend part of this feature
-			// this button will be shown, correct solution below
-			return connectedNotClaimed
+			// this button will be shown, correct solution is the last one below
+			return accepted
+		// return connectedNotClaimed
 		// return notEligible
 	}
 }

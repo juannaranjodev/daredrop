@@ -49,6 +49,13 @@ export const submitFormHof = (
 			const onSuccessFn = path(
 				[correctedSubmitIndex, 'onSuccess'], submits,
 			)
+			const additionalThunkFn = path(
+				[correctedSubmitIndex, 'additionalThunk'], submits,
+			)
+
+			if (additionalThunkFn) {
+				successPromises.push(dispatch(additionalThunkFn(formData, res)))
+			}
 
 			if (onSuccessFn) {
 				const partialFormEntries = viewFormChild(`db-${moduleKey}`, state)
