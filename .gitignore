@@ -1,6 +1,7 @@
 node_modules
 build
 .cloudFormation
+.env
 cfOutput.js
 cfTemplate.json
 dist
