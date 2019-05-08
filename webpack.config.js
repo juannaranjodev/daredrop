@@ -4,7 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const appConstants = require('./src/shared/constants/app')
 // const appConstants = require('./src/shared/constants/app')
@@ -24,6 +23,7 @@ const envVars = Object.assign(
 module.exports = {
 	mode: env,
 	devtool: isProd ? false : 'source-map',
+	node: { fs: 'empty' },
 	entry: [
 		'babel-polyfill',
 		path.resolve(__dirname, 'src/client/web/app.js'),
