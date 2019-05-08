@@ -1,5 +1,6 @@
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
 import currentRouteParamsRecordId from 'root/src/client/logic/route/selectors/currentRouteParamsRecordId'
+import { secret } from 'root/src/aws/util/secretManager'
 import { PLEDGE_PROJECT, ADD_PAYMENT_METHOD } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 export default formData => async (dispatch, getState) => {
@@ -20,6 +21,7 @@ export default formData => async (dispatch, getState) => {
 		dispatch(apiRequest(ADD_PAYMENT_METHOD, addPaymentPayload))
 		stripeCardId = stripeRes.source.id
 	}
+
 	const apiPayload = {
 		...formData,
 		projectId,
