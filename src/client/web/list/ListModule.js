@@ -22,36 +22,41 @@ import { DeletePaymentModal } from './DeletePaymentModal'
 
 export const CardList = ({
 	list, currentPage, hasMore, classes, getNextPage,
-}) => (
-	<div className="flex layout-row layout-align-center-start">
-		<MaxWidthContainer>
-			<div className="flex layout-row layout-align-center">
-				<InfiniteScroll
-					pageStart={0}
-					loadMore={() => getNextPage(currentPage, hasMore)}
-					hasMore={hasMore}
-				>
-					<div
-						className={classNames(
-							classes.paddingOffset,
-							'layout-row layout-wrap',
-						)}
+}) => {
+	const [timeouts, setTimeouts] = useState([])
+	return (
+		<div className="flex layout-row layout-align-center-start">
+			<MaxWidthContainer>
+				<div className="flex layout-row layout-align-center">
+					<InfiniteScroll
+						pageStart={0}
+						loadMore={() => getNextPage(currentPage, hasMore)}
+						hasMore={hasMore}
 					>
-						{map(recordId => (
-							<ProjectCard
-								key={recordId}
-								recordId={recordId}
-								filterList={list[1]}
-								acceptedList={list[2]}
-							/>
-						), head(list))}
+						<div
+							className={classNames(
+								classes.paddingOffset,
+								'layout-row layout-wrap',
+							)}
+						>
+							{map(recordId => (
+								<ProjectCard
+									timeouts={timeouts}
+									setTimeouts={setTimeouts}
+									key={recordId}
+									recordId={recordId}
+									filterList={list[1]}
+									acceptedList={list[2]}
+								/>
+							), head(list))}
 
-					</div>
-				</InfiniteScroll>
-			</div>
-		</MaxWidthContainer>
-	</div>
-)
+						</div>
+					</InfiniteScroll>
+				</div>
+			</MaxWidthContainer>
+		</div>
+	)
+}
 
 const UniversalList = ({
 	list, classes, listTitle, listSubtitle, listControls, deletePaymentMethod, setDefaultPaymentMethod,
