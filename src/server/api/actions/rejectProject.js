@@ -14,7 +14,7 @@ import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPen
 import auditProject from 'root/src/server/api/actions/auditProject'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectByStatus'
-import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 
@@ -24,7 +24,16 @@ const { viewProjectId, viewMessage } = payloadLenses
 export default async ({ payload, userId }) => {
 	const projectId = viewProjectId(payload)
 	const message = viewMessage(payload)
-	const [projectToReject] = head(await dynamoQueryProject(null, projectId))
+
+	const [projectToRejectDdb, assigneesDdb] = await dynamoQueryProject(
+		null,
+		projectId,
+	)
+
+	const projectToReject = projectSerializer([
+		...projectToRejectDdb,
+		...assigneesDdb,
+	])
 
 	const userTokens = await dynamoQueryOAuth(userId)
 
@@ -64,8 +73,7 @@ export default async ({ payload, userId }) => {
 		},
 	}
 
-	const assigneesInProject = await dynamoQueryAllProjectAssignees(projectId)
-	const activeAssigneesInProject = getPendingOrAcceptedAssignees(assigneesInProject)
+	const activeAssigneesInProject = getPendingOrAcceptedAssignees(assigneesDdb)
 
 	// here also for the future rejection of project needs to be separate action contained here (instead of auditProject) to handle transactWrite properly
 	await documentClient.batchWrite(rejectionParams).promise()
@@ -84,7 +92,6 @@ export default async ({ payload, userId }) => {
 
 	return omit([PARTITION_KEY, SORT_KEY],
 		{
-			projectId: projectToReject[PARTITION_KEY],
 			...projectToReject,
 			message,
 		})

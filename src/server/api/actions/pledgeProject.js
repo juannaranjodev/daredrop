@@ -24,7 +24,7 @@ const { viewPledgeAmount, viewStripeCardId } = payloadLenses
 export default async ({ userId, payload }) => {
 	const { projectId } = payload
 	const [
-		projectToPledgeDdb,
+		projectToPledgeDdb, assigneesDdb,
 	] = await dynamoQueryProject(
 		userId, projectId,
 	)
@@ -35,7 +35,6 @@ export default async ({ userId, payload }) => {
 	}
 
 	const newPledgeAmount = viewPledgeAmount(payload)
-
 	const sourceId = viewStripeCardId(payload)
 	if (!validateStripeSourceId(sourceId)) {
 		throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
@@ -55,7 +54,6 @@ export default async ({ userId, payload }) => {
 		},
 		ConsistentRead: true,
 	}).promise()
-
 
 	const { pledgeAmount } = projectToPledge
 
@@ -86,6 +84,7 @@ export default async ({ userId, payload }) => {
 
 	const newProject = projectSerializer([
 		...projectToPledgeDdb,
+		...assigneesDdb,
 		newPledge,
 	])
 
@@ -107,13 +106,15 @@ export default async ({ userId, payload }) => {
 		sendEmail(emailData, pledgeMadeMail)
 	} catch (err) { }
 
+
 	return {
 		...newProject,
 		userId,
 		pledgeAmount: add(
-			viewPledgeAmount(newProject),
+			viewPledgeAmount(projectToPledge),
 			newPledgeAmount,
 		),
+		myPledge: newPledgeAmount,
 		pledgers: add(newProject.pledgers, addPledgers),
 	}
 }

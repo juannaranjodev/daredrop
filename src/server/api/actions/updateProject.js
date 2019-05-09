@@ -7,6 +7,7 @@ import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoInde
 import updateDynamoObj from 'root/src/server/api/actionUtil/updateDynamoObj'
 import { generalError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 /**
  * Updates the project (dare) description
@@ -17,7 +18,7 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 export default async ({ userId, payload }) => {
 	const { projectId, description, title, stripeCardId } = payload
 
-	const [project] = await dynamoQueryProject(
+	const [project, assignees] = await dynamoQueryProject(
 		userId, projectId,
 	)
 	// Checks if the descriptions are equal, if so, we avoid a database call
@@ -59,18 +60,14 @@ export default async ({ userId, payload }) => {
 
 	await documentClient.update(updateProjectParams).promise()
 
-	const newProject = {
-		...projectToUpdate,
+	const newProject = projectSerializer([
+		...project,
+		...assignees,
 		...newUpdate,
-	}
-
-	const serialize = pick([
-		'title', 'image', 'description', 'pledgeAmount',
-		'assignees', 'games', 'status', 'favoritesAmount', 'pledgers', 'created',
-	], newProject)
+	])
 
 	const newProjectSerialized = {
-		...serialize,
+		...newProject,
 		id: projectId,
 		status: prop(1, split('|', projectToUpdate.sk)),
 	}
@@ -78,5 +75,7 @@ export default async ({ userId, payload }) => {
 	return {
 		userId,
 		...newProjectSerialized,
+		description,
+		title,
 	}
 }

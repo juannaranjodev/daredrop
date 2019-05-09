@@ -15,15 +15,15 @@ export default async (userId, projectId) => {
 	}
 	// Don't have to grab these anymore cause they are de-normalized on project
 	// ...may have to make a toggle for this fn though
-	// const assigneeParams = {
-	// 	TableName: TABLE_NAME,
-	// 	KeyConditionExpression: `${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :assignee)`,
-	// 	ExpressionAttributeValues: {
-	// 		':pk': projectId,
-	// 		':assignee': 'assignee',
-	// 	},
-	// 	ConsistentRead: true,
-	// }
+	const assigneeParams = {
+		TableName: TABLE_NAME,
+		KeyConditionExpression: `${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :assignee)`,
+		ExpressionAttributeValues: {
+			':pk': projectId,
+			':assignee': 'assignee',
+		},
+		ConsistentRead: true,
+	}
 	// const gameParams = {
 	// 	TableName: TABLE_NAME,
 	// 	KeyConditionExpression: `${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :game)`,
@@ -53,9 +53,9 @@ export default async (userId, projectId) => {
 		ConsistentRead: true,
 	}
 
-	const [projectDdb, /* assigneesDdb, gamesDdb, */ myPledgeDdb, myFavoritesDdb] = await Promise.all([
+	const [projectDdb, assigneesDdb, /* gamesDdb, */ myPledgeDdb, myFavoritesDdb] = await Promise.all([
 		documentClient.query(projectParams).promise(),
-		// documentClient.query(assigneeParams).promise(),
+		documentClient.query(assigneeParams).promise(),
 		// documentClient.query(gameParams).promise(),
 		documentClient.query(myPledgeParams).promise(),
 		documentClient.query(myFavoritesParams).promise(),
@@ -63,7 +63,7 @@ export default async (userId, projectId) => {
 
 	return [
 		dynamoItemsProp(projectDdb),
-		// dynamoItemsProp(assigneesDdb),
+		dynamoItemsProp(assigneesDdb),
 		// dynamoItemsProp(gamesDdb),
 		dynamoItemsProp(myPledgeDdb),
 		dynamoItemsProp(myFavoritesDdb),

@@ -8,7 +8,7 @@ import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
 export default async ({ userId, payload }) => {
 	const projectId = prop('projectId', payload)
-	const [project, myPledge, myFavorites] = await dynamoQueryProject(
+	const [project, assignees, myPledge, myFavorites] = await dynamoQueryProject(
 		userId, projectId,
 	)
 
@@ -16,6 +16,7 @@ export default async ({ userId, payload }) => {
 		userId,
 		...projectSerializer([
 			...project,
+			...assignees,
 			...myPledge,
 			...myFavorites,
 		]),

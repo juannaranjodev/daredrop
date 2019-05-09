@@ -1,4 +1,4 @@
-import { reduce, pick, prepend, startsWith, split, prop } from 'ramda'
+import { reduce, pick, append, prepend, startsWith, split, prop } from 'ramda'
 
 import { skProp, pkProp } from 'root/src/server/api/lenses'
 
@@ -27,7 +27,7 @@ export default projectArr => reduce(
 				projectPart,
 			)
 			return overAssignees(
-				prepend({ platform, platformId, ...assigneeObj }),
+				append({ platform, platformId, ...assigneeObj }),
 				result,
 			)
 		}
@@ -42,7 +42,7 @@ export default projectArr => reduce(
 			const projectObj = pick(
 				[
 					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl',
-					'assignees', 'games', 'pledgers', 'created', 'approved', 'favoritesAmount',
+					'games', 'pledgers', 'created', 'approved', 'favoritesAmount',
 				],
 				projectPart,
 			)
