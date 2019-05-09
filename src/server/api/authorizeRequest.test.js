@@ -54,7 +54,7 @@ describe('authorizeRequest', () => {
 		}
 		expect(errorObj).toEqual({
 			generalErrors: 'MOCK_VALIDATION_ERROR',
-			statusCode: 403,
+			statusCode: 401,
 		})
 	})
 	test('Admin required, user is admin', async () => {
@@ -78,7 +78,7 @@ describe('authorizeRequest', () => {
 		}
 		expect(errorObj).toEqual({
 			generalErrors: 'Must be admin user',
-			statusCode: 403,
+			statusCode: 401,
 		})
 	})
 })

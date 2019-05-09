@@ -1,7 +1,6 @@
 import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
-
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { generalError, authorizationError } from 'root/src/server/api/errors'
@@ -21,8 +20,8 @@ const { viewProjectId, viewAmountRequested } = payloadLenses
 
 export default async ({ payload, userId }) => {
 	const projectId = viewProjectId(payload)
-	const userTokens = await dynamoQueryOAuth(userId)
 	const amountRequested = viewAmountRequested(payload)
+	const userTokens = await dynamoQueryOAuth(userId)
 
 	const [projectToAcceptDdb, assigneesDdb] = await dynamoQueryProject(
 		null,

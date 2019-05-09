@@ -37,7 +37,7 @@ import { stringify } from 'qs'
 
 
 export default ({
-	url, method, body, queryParams, headers,
+	url, method, body, queryParams, headers, file,
 }) => new Promise((resolve, reject) => {
 	const queryString = queryParams
 		? `?${stringify(queryParams, { indices: false })}` : ''
@@ -71,5 +71,9 @@ export default ({
 	xhr.onerror = () => {
 		reject(new Error('Network Error'))
 	}
-	xhr.send(jsonBody)
+	if (file) {
+		xhr.send(file)
+	} else {
+		xhr.send(jsonBody)
+	}
 })
