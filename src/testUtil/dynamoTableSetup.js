@@ -26,10 +26,32 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 
 
 jest.mock('root/src/server/api/twitchApi', () => {
+	/* eslint-disable global-require */
 	const { userData, gameData } = require('root/src/server/api/mocks/twitchApiMock')
 	return {
 		getUserData: jest.fn(() => Promise.resolve(userData)),
 		getGameData: jest.fn(() => Promise.resolve(gameData)),
+	}
+})
+
+jest.mock('root/src/server/api/s3Client', () => ({
+	getSignedUrl: jest.fn(() => ('https://s3.aws.amazon.com/somepresignedUrl')),
+	getObject: jest.fn(() => ({
+		createReadStream: jest.fn(() => ('someReadStream')),
+	})),
+}))
+
+jest.mock('root/src/server/api/googleClient', () => {
+	/* eslint-disable global-require */
+	const { insertVideoMock } = require('root/src/server/api/mocks/youtubeMock')
+	return {
+		__esModule: true,
+		default: 'googleAuthMock',
+		youtube: {
+			videos: {
+				insert: jest.fn(() => Promise.resolve(insertVideoMock)),
+			},
+		},
 	}
 })
 
