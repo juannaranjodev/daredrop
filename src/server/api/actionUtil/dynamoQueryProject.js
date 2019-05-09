@@ -3,13 +3,13 @@ import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoInde
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
 
 
-export default async (userId, projectId) => {
+export default async (userId, projectId, projectStatus) => {
 	const projectParams = {
 		TableName: TABLE_NAME,
 		KeyConditionExpression: `${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :project)`,
 		ExpressionAttributeValues: {
 			':pk': projectId,
-			':project': 'project',
+			':project': `project${projectStatus ? `|${projectStatus}` : ''}`,
 		},
 		ConsistentRead: true,
 	}

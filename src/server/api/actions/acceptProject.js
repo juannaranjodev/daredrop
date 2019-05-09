@@ -44,12 +44,12 @@ export default async ({ payload, userId }) => {
 
 	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
 
-	const assigneeArrNested = await Promise.all(map(
+	const userAssigneeArrNested = await Promise.all(map(
 		token => dynamoQueryProjectAssignee(projectId, token),
 		userTokensStr,
 	))
 
-	const assigneeArr = unnest(unnest(assigneeArrNested))
+	const userAssigneeArr = unnest(unnest(userAssigneeArrNested))
 
 	const assigneesToWrite = map(assignee => ({
 		PutRequest: {
@@ -60,7 +60,7 @@ export default async ({ payload, userId }) => {
 				modified: getTimestamp(),
 			},
 		},
-	}), assigneeArr)
+	}), userAssigneeArr)
 
 	let projectAcceptedRecord = []
 

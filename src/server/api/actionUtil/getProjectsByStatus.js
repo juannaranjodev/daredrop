@@ -1,37 +1,20 @@
-import { sort, map, range, reduce, filter } from 'ramda'
+import { sort, map, filter } from 'ramda'
 
-import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
-import { dynamoItemsProp } from 'root/src/server/api/lenses'
-import listResults from 'root/src/server/api/actionUtil/listResults'
-import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
-
-import {
-	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
-} from 'root/src/shared/constants/apiDynamoIndexes'
+import dynamoQueryShardedProjects from 'root/src/server/api/actionUtil/dynamoQueryShardedProjects'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPendingOrAcceptedAssignees'
 
 const PageItemLength = 8
 
 export default async (status, sortKey, payload) => {
-	const shardedProjects = await Promise.all(
-		map(
-			index => documentClient.query({
-				TableName: TABLE_NAME,
-				IndexName: GSI1_INDEX_NAME,
-				KeyConditionExpression: `${GSI1_PARTITION_KEY} = :pk`,
-				ExpressionAttributeValues: {
-					':pk': `project|${status}|${index}`,
-				},
-			}).promise(),
-			range(1, 11),
-		),
-	)
-	const combinedProjects = reduce(
-		(result, projectDdb) => [...result, ...dynamoItemsProp(projectDdb)],
-		[],
-		shardedProjects,
-	)
+	const projectsDdb = await dynamoQueryShardedProjects(status)
+
+	const serializedProjects = map(([projectDdb, assigneesDdb]) => projectSerializer([
+		...projectDdb,
+		...getPendingOrAcceptedAssignees(assigneesDdb),
+	]), projectsDdb)
 
 	// Filter expired projects
 	const filterExpired = (dare) => {
@@ -39,7 +22,7 @@ export default async (status, sortKey, payload) => {
 		return diff <= daysToExpire
 	}
 
-	const filteredProjects = filter(filterExpired, combinedProjects)
+	const filteredProjects = filter(filterExpired, serializedProjects)
 
 	const sortedProjects = sort(sortKey, filteredProjects)
 
@@ -60,9 +43,6 @@ export default async (status, sortKey, payload) => {
 		allPage,
 		currentPage: payload.currentPage,
 		interval: PageItemLength,
-		...listResults({
-			dynamoResults: { Items: map(project => [project], projects) },
-			serializer: projectSerializer,
-		}),
+		items: projects,
 	}
 }

@@ -13,7 +13,6 @@ const {
 export default projectArr => reduce(
 	(result, projectPart) => {
 		const sk = skProp(projectPart)
-
 		if (startsWith('pledge', sk)) {
 			return setMyPledge(viewPledgeAmount(projectPart), result)
 		}
@@ -23,7 +22,7 @@ export default projectArr => reduce(
 		if (startsWith('assignee', sk)) {
 			const [, platform, platformId] = split('|', sk)
 			const assigneeObj = pick(
-				['image', 'description', 'displayName', 'username'],
+				['image', 'description', 'displayName', 'username', 'accepted'],
 				projectPart,
 			)
 			return overAssignees(
@@ -46,6 +45,7 @@ export default projectArr => reduce(
 				],
 				projectPart,
 			)
+
 			return {
 				...result,
 				...projectObj,

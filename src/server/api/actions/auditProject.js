@@ -80,7 +80,7 @@ export default async ({ userId, payload }) => {
 	await documentClient.batchWrite(auditParams).promise()
 
 	const newProject = projectSerializer([
-		...projectToPledgeDdb,
+		auditedProject,
 		...assigneesDdb,
 		...myPledgeDdb,
 	])
@@ -100,7 +100,6 @@ export default async ({ userId, payload }) => {
 	} catch (err) { }
 
 	return {
-		userId,
 		...newProject,
 		status: viewAudit(payload),
 	}
