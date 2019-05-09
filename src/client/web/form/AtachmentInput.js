@@ -47,40 +47,34 @@ const styles = {
 export const AtachmentInputUnconected = memo(({
 	moduleKey, fieldPath, setInput, classes,
 }) => {
-	const [file, setFile] = useState({})
+	const [fileName, setFileName] = useState('')
 	const [open, setOpen] = useState(false)
 
 	const onChange = async (e) => {
 		const currentFile = e.target.files[0]
-		const value = {
-			name: currentFile.name,
-		}
-		const arrFormat = ['mp4']
-		const arr = value.name.split('.')
+
+		const arrFormat = ['mp4', 'mov', 'mpeg4', 'avi', 'wmv', 'mpegps', 'flv', 'webm', '3gp', '3gpp', 'mxf']
+		const arr = currentFile.name.split('.')
 		const formatFile = arr[arr.length - 1]
 
 		if (arrFormat.includes(formatFile)) {
-			const reader = new FileReader()
-
-			reader.onload = (theFile => (event) => {
-				const result = { data: event.target.result, name: theFile.name }
-				setInput(moduleKey, fieldPath, result)
-				setFile(currentFile)
-			})(currentFile)
-
-			reader.readAsDataURL(currentFile)
+			const value = {
+				name: currentFile.name,
+				file: currentFile,
+			}
+			setFileName(currentFile.name)
 			setInput(moduleKey, fieldPath, value)
 		} else {
 			setOpen(true)
-			setFile({})
+			setFileName('')
 		}
 	}
 	return (
 		<div className={classes.attachmentWrap}>
-			<label htmlFor="file" className={classes.iconWrap}>
+			<label htmlFor="file" className={classes.iconWrap} accept="video/*">
 				<Attachment className={classes.icon} fontSize="large" />
 				<div className={classes.fileChose}>
-					{file.name}
+					{fileName}
 				</div>
 			</label>
 			<input type="file" id="file" name="file" className={classes.input} onChange={onChange} />
