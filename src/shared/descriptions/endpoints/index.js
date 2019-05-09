@@ -22,6 +22,9 @@ import authTwitch from 'root/src/shared/descriptions/endpoints/authTwitch'
 import getAuthTokens from 'root/src/shared/descriptions/endpoints/getAuthTokens'
 
 import getActiveProjects from 'root/src/shared/descriptions/endpoints/getActiveProjects'
+import getFilteredProjects from 'root/src/shared/descriptions/endpoints/getFilteredProjects'
+import getFilteredProjectsByGame from 'root/src/shared/descriptions/endpoints/getFilteredProjectsByGame'
+import getFilteredProjectsByStreamer from 'root/src/shared/descriptions/endpoints/getFilteredProjectsByStreamer'
 import getPendingProjects from 'root/src/shared/descriptions/endpoints/getPendingProjects'
 import getFavoritesList from 'root/src/shared/descriptions/endpoints/getFavoritesList'
 import getMyProjects from 'root/src/shared/descriptions/endpoints/getMyProjects'
@@ -40,6 +43,9 @@ const allEndpoints = {
 	...getPledgedProjects,
 	...auditProject,
 	...getActiveProjects,
+	...getFilteredProjects,
+	...getFilteredProjectsByGame,
+	...getFilteredProjectsByStreamer,
 	...getPendingProjects,
 	...getFavoritesList,
 	...authTwitch,
