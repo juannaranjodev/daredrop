@@ -4,5 +4,5 @@ export default {
 		gameId: { type: 'string' },
 		streamerId: { type: 'string' },
 	},
-	additionalProperties: false,
+	additionalProperties: true,
 }

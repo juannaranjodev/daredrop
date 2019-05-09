@@ -10,7 +10,7 @@ export default async ( payload ) => {
     if (payload.payload.streamerId){
         const filteredProjectssByStreamer = await getFilteredProjectsByStreamer(payload)
         if(payload.payload.gameId){
-            filteredProjects.items = intersection(filteredProjects.items,filteredProjectssByStreamer)
+            filteredProjects.items = intersection(filteredProjects.items,filteredProjectssByStreamer.items)
         }else{
             filteredProjects = filteredProjectssByStreamer
         }

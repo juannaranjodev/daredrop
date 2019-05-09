@@ -1,4 +1,4 @@
-import { sort, map, range, reduce, filter } from 'ramda'
+import { sort, map, range, reduce, filter,contains } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
@@ -13,7 +13,7 @@ import {
 
 const PageItemLength = 8
 
-export default async (status, sortKey, payload) => {
+export default async (status, sortKey, payload, filteredProjectsByGameAndStreamer) => {
 	const shardedProjects = await Promise.all(
 		map(
 			index => documentClient.query({
@@ -39,7 +39,15 @@ export default async (status, sortKey, payload) => {
 		return diff <= daysToExpire
 	}
 
-	const filteredProjects = filter(filterExpired, combinedProjects)
+	const filterByGameAndStreamer = (dare) =>{
+		return contains({"id":dare.pk}, filteredProjectsByGameAndStreamer.items)
+	}
+
+	let filteredProjects = filter(filterExpired, combinedProjects)
+
+	if (filteredProjectsByGameAndStreamer != null){
+		filteredProjects = filter(filterByGameAndStreamer,filteredProjects)
+	}
 
 	const sortedProjects = sort(sortKey, filteredProjects)
 
