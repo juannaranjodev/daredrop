@@ -35,9 +35,6 @@ import getMyProjects from 'root/src/server/api/actions/getMyProjects'
 import getAcceptProject from 'root/src/server/api/actions/getAcceptProject'
 import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
-import getFilteredProjects from 'root/src/server/api/actions/getFilteredProjects'
-import getFilteredProjectsByGame from 'root/src/server/api/actions/getFilteredProjectsByGame'
-import getFilteredProjectsByStreamer from 'root/src/server/api/actions/getFilteredProjectsByStreamer'
 
 export default {
 	[CREATE_PROJECT]: createProject,
@@ -75,7 +72,4 @@ export default {
 
 	[GET_ACCEPTED_PROJECTS]: getAcceptProject,
 
-	[GET_FILTERED_PROJECTS]: getFilteredProjects,
-	[GET_FILTERED_PROJECTS_BY_GAME]: getFilteredProjectsByGame,
-	[GET_FILTERED_PROJECTS_BY_STREAMER]: getFilteredProjectsByStreamer,
 }
