@@ -4,6 +4,7 @@ export default {
 		currentPage: { type: 'integer' },
 		gameId: { type: 'string' },
 		streamerId: { type: 'string' },
+		sortType: { type: 'string' },
 	},
 	required: ['currentPage'],
 	additionalProperties: false,

@@ -1,4 +1,4 @@
-import { sort, map, range, reduce, filter,contains } from 'ramda'
+import { sort, map, range, reduce, filter,contains,prop } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
@@ -6,7 +6,8 @@ import listResults from 'root/src/server/api/actionUtil/listResults'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
-import {SORT_BY_BOUNTY,SORT_BY_TIME_LEFT,SORT_BY_NEWEST,SORT_BY_ACCEPTED} from 'root/src/shared/constants/sortTypesOfProject'
+
+import { sortByType, descendingApproved } from 'root/src/server/api/actionUtil/sortUtil'
 
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
@@ -14,7 +15,8 @@ import {
 
 const PageItemLength = 8
 
-export default async (status, sortKey, payload, filteredProjectsByGameAndStreamer) => {
+export default async (status, sortType, payload, filteredProjectsByGameAndStreamer) => {
+	const realPayload = payload.payload
 	const shardedProjects = await Promise.all(
 		map(
 			index => documentClient.query({
@@ -49,14 +51,13 @@ export default async (status, sortKey, payload, filteredProjectsByGameAndStreame
 	if (filteredProjectsByGameAndStreamer != null){
 		filteredProjects = filter(filterByGameAndStreamer,filteredProjects)
 	}
-
-	const sortedProjects = sort(sortKey, filteredProjects)
-
+	const diffBySortType = prop(sortType, sortByType) ? prop(sortType, sortByType) : descendingApproved
+	const sortedProjects = sort(diffBySortType, filteredProjects)
 	const allPage = sortedProjects.length % PageItemLength > 0
 		? Math.round(sortedProjects.length / PageItemLength) + 1
 		: Math.round(sortedProjects.length / PageItemLength)
 
-	let { currentPage } = payload.payload
+	let { currentPage } = realPayload
 	if (currentPage === undefined) {
 		currentPage = 1
 	}
@@ -67,7 +68,7 @@ export default async (status, sortKey, payload, filteredProjectsByGameAndStreame
 
 	return {
 		allPage,
-		currentPage: payload.currentPage,
+		currentPage: realPayload.currentPage,
 		interval: PageItemLength,
 		...listResults({
 			dynamoResults: { Items: map(project => [project], projects) },
