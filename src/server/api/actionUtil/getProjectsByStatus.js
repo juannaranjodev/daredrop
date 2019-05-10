@@ -7,7 +7,7 @@ import projectSerializer from 'root/src/server/api/serializers/projectSerializer
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
-import { sortByType, descendingApproved } from 'root/src/server/api/actionUtil/sortUtil'
+import { sortByType } from 'root/src/server/api/actionUtil/sortUtil'
 
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
@@ -17,7 +17,7 @@ import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredPro
 
 const PageItemLength = 8
 
-export default async (status,payload) => {
+export default async (status,sortType,payload) => {
 	const realPayload = payload.payload
 	const shardedProjects = await Promise.all(
 		map(
@@ -56,7 +56,8 @@ export default async (status,payload) => {
 	}
 	//End Filter with filter items
 
-	const diffBySortType = prop(realPayload.sortType, sortByType) ? prop(realPayload.sortType, sortByType) : descendingApproved
+	const diffBySortType = prop(realPayload.sortType, sortByType) ?
+		prop(realPayload.sortType, sortByType) : prop(sortType, sortByType)
 	const sortedProjects = sort(diffBySortType, filteredProjects)
 	const allPage = sortedProjects.length % PageItemLength > 0
 		? Math.round(sortedProjects.length / PageItemLength) + 1
