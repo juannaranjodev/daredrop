@@ -3,7 +3,7 @@ import { redirectURI } from 'root/src/shared/constants/googleOAuth'
 import { SecretsManager } from 'aws-sdk'
 
 const secretsClient = new SecretsManager()
-const secretName = 'googleOAuth'
+const secretName = 'google_OAuth'
 
 export default new Promise((resolve) => {
 	secretsClient.getSecretValue({ SecretId: secretName }, (err, data) => {
