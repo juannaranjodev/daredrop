@@ -17,7 +17,7 @@ import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredPro
 
 const PageItemLength = 8
 
-export default async (status,sortType,payload) => {
+export default async (status,defaultSortType,payload) => {
 	const realPayload = payload.payload
 	const shardedProjects = await Promise.all(
 		map(
@@ -57,7 +57,7 @@ export default async (status,sortType,payload) => {
 	//End Filter with filter items
 
 	const diffBySortType = prop(realPayload.sortType, sortByType) ?
-		prop(realPayload.sortType, sortByType) : prop(sortType, sortByType)
+		prop(realPayload.sortType, sortByType) : prop(defaultSortType, sortByType)
 	const sortedProjects = sort(diffBySortType, filteredProjects)
 	const allPage = sortedProjects.length % PageItemLength > 0
 		? Math.round(sortedProjects.length / PageItemLength) + 1
