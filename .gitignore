@@ -6,3 +6,4 @@ cfTemplate.json
 dist
 secrets.js
 .idea/
+AWSCredentials.txt

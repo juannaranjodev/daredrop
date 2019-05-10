@@ -32,8 +32,8 @@ const mockChannel2 = {
 
 const mockDataArray = [
 	[
-		{ id: 146000275	 },
-		{ id: 148899812	 },
+		{ id: 146000275 },
+		{ id: 148899812 },
 	],
 	[], // should test games too but it works very similarly
 ]

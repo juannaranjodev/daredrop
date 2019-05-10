@@ -1,5 +1,4 @@
 // docker run --name dynamodb -p 9000:8000 amazon/dynamodb-local
-
 import {
 	merge, propOr, prop, head, values, compose, set, lensPath, map, dissoc,
 } from 'ramda'
@@ -22,6 +21,37 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 		TABLE_NAME: tableName,
 		dynamoDb: new DynamoDB(mockConfig),
 		documentClient: new DynamoDB.DocumentClient(mockConfig),
+	}
+})
+
+
+jest.mock('root/src/server/api/twitchApi', () => {
+	/* eslint-disable global-require */
+	const { userData, gameData } = require('root/src/server/api/mocks/twitchApiMock')
+	return {
+		getUserData: jest.fn(() => Promise.resolve(userData)),
+		getGameData: jest.fn(() => Promise.resolve(gameData)),
+	}
+})
+
+jest.mock('root/src/server/api/s3Client', () => ({
+	getSignedUrl: jest.fn(() => ('https://s3.aws.amazon.com/somepresignedUrl')),
+	getObject: jest.fn(() => ({
+		createReadStream: jest.fn(() => ('someReadStream')),
+	})),
+}))
+
+jest.mock('root/src/server/api/googleClient', () => {
+	/* eslint-disable global-require */
+	const { insertVideoMock } = require('root/src/server/api/mocks/youtubeMock')
+	return {
+		__esModule: true,
+		default: 'googleAuthMock',
+		youtube: {
+			videos: {
+				insert: jest.fn(() => Promise.resolve(insertVideoMock)),
+			},
+		},
 	}
 })
 
@@ -72,4 +102,4 @@ afterAll(async () => {
 	await dynamoDb.deleteTable({ TableName: TABLE_NAME }).promise()
 })
 
-jest.setTimeout(40000)
+jest.setTimeout(500000)

@@ -43,6 +43,7 @@ export default async ({ userId, payload }) => {
 		pledgers: 1,
 	}
 
+
 	const projectAssignees = map(assignee => ({
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: join('|', [
@@ -50,6 +51,7 @@ export default async ({ userId, payload }) => {
 			prop('platform', assignee),
 			prop('platformId', assignee),
 		]),
+		accepted: 'pending',
 		...omit(['platform', 'platformId'], assignee),
 	}), viewAssignees(serializedProject))
 
@@ -87,7 +89,7 @@ export default async ({ userId, payload }) => {
 			title: dareCreatedTitle,
 		}
 		sendEmail(emailData, dareCreatedEmail)
-	} catch (err) {}
+	} catch (err) { }
 
 	return {
 		id: projectId,

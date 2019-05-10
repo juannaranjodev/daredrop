@@ -1,4 +1,4 @@
-import { head, not } from 'ramda'
+import { equals, head, unnest, not, length, gt, last, split, map, compose, omit } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -6,68 +6,86 @@ import { REJECT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointI
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { generalError, authorizationError } from 'root/src/server/api/errors'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
+import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
-import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import { projectStreamerRejectedKey } from 'root/src/server/api/lenses'
-
-import isOneOfAssigneesSelector from 'root/src/server/api/actionUtil/isOneOfAssigneesSelector'
+import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
+import { projectStreamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
+import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPendingOrAcceptedAssignees'
+import auditProject from 'root/src/server/api/actions/auditProject'
+import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectByStatus'
+import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
 
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 const payloadLenses = getPayloadLenses(REJECT_PROJECT)
-const { viewProjectId, viewAssigneeId, viewMessage } = payloadLenses
+const { viewProjectId, viewMessage } = payloadLenses
 
 export default async ({ payload, userId }) => {
 	const projectId = viewProjectId(payload)
-	const assigneeId = viewAssigneeId(payload)
 	const message = viewMessage(payload)
+	const [projectToReject] = head(await dynamoQueryProject(null, projectId))
 
 	const userTokens = await dynamoQueryOAuth(userId)
-	const isOneOfAssignees = isOneOfAssigneesSelector(userTokens, assigneeId)
 
-	if (not(isOneOfAssignees)) {
+	const userTokensInProject = userTokensInProjectSelector(userTokens, projectToReject)
+
+	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
 
-	const [
-		project,
-	] = await dynamoQueryProjectAssignee(
-		projectId, assigneeId,
-	)
-	const projectToReject = head(project)
 	if (!projectToReject) {
 		throw generalError('Project or assignee doesn\'t exist')
 	}
 
-	if (projectToReject.amountRequested) {
-		delete projectToReject.amountRequested
-	}
+	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
+
+	const assigneeArrNested = await Promise.all(map(
+		token => dynamoQueryProjectAssignee(projectId, token),
+		userTokensStr,
+	))
+
+	const assigneeArr = unnest(unnest(assigneeArrNested))
+
+	const assigneesToWrite = map(assignee => ({
+		PutRequest: {
+			Item: {
+				...assignee,
+				message,
+				accepted: projectStreamerRejectedKey,
+				modified: getTimestamp(),
+			},
+		},
+	}), assigneeArr)
 
 	const rejectionParams = {
 		RequestItems: {
-			[TABLE_NAME]: [
-				{
-					PutRequest: {
-						Item: {
-							...projectToReject,
-							accepted: projectStreamerRejectedKey,
-							message,
-							created: getTimestamp(),
-						},
-					},
-				},
-			],
+			[TABLE_NAME]: assigneesToWrite,
 		},
 	}
 
-	await documentClient.batchWrite(rejectionParams).promise()
-	const projectToReturn = projectSerializer([
-		...projectToReject,
-	])
+	const assigneesInProject = await dynamoQueryAllProjectAssignees(projectId)
+	const activeAssigneesInProject = getPendingOrAcceptedAssignees(assigneesInProject)
 
-	return {
-		...projectToReturn,
-		status: projectStreamerRejectedKey,
-		message,
+	// here also for the future rejection of project needs to be separate action contained here (instead of auditProject) to handle transactWrite properly
+	await documentClient.batchWrite(rejectionParams).promise()
+
+	if (equals(length(activeAssigneesInProject) - length(assigneeArr), 0)) {
+		const payload = {
+			payload: {
+				projectId,
+				audit: projectAllStreamersRejectedKey,
+			},
+		}
+		// ^^^^^^^ comment above
+		await auditProject(payload)
+		await rejectProjectByStatus(projectId, ['favorites', 'pledge'])
 	}
+
+	return omit([PARTITION_KEY, SORT_KEY],
+		{
+			projectId: projectToReject[PARTITION_KEY],
+			...projectToReject,
+			message,
+		})
 }

@@ -12,24 +12,21 @@ import Assignee from 'root/src/client/web/record/Assignee'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import Title from 'root/src/client/web/typography/Title'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
-import ButtonSubtitle from 'root/src/client/web/base/CustomButton/buttonWithSubtitle'
 import Button from 'root/src/client/web/base/Button'
 import LoadingButton from 'root/src/client/web/base/LoadingButton'
-import { TwitchButton } from 'root/src/client/web/base/CustomButton'
 
-import { twitchOauthUrl } from 'root/src/shared/constants/twitch'
+import ClaimButton from 'root/src/client/web/record/ClaimButton'
 import TextField from '@material-ui/core/TextField'
 
 import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionButton'
-import { storageSet } from 'root/src/shared/util/storage'
-import goToDeliveryFormHandler from 'root/src/client/logic/project/handlers/goToDeliveryFormHandler'
 import { APPROVE_PROJECT, REJECT_PROJECT, REJECT_ACTIVE_PROJECT } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
+
+import { VIEW_PROJECT_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 
 import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import goToSignInHandler from 'root/src/client/logic/project/handlers/goToSignInHandler'
 import goToPledgeProjectHandler from 'root/src/client/logic/project/handlers/goToPledgeProjectHandler'
-import goToClaimProjectHandler from 'root/src/client/logic/project/handlers/goToClaimProjectHandler'
 
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
@@ -119,11 +116,8 @@ const styles = {
 	},
 	description: {
 		width: '100%',
-		minHeight: 85,
-		fontFamily: 'Roboto',
+		minHeight: 35,
 		fontSize: 20,
-		lineHeight: 1.2,
-		color: '#000000',
 		marginTop: 8,
 	},
 	progressOuter: {
@@ -182,6 +176,17 @@ const styles = {
 	pledgeButton: {
 		marginBottom: 65,
 	},
+	youPledge: {
+		marginTop: 7,
+		fontSize: 12,
+		fontWeight: 'bold',
+		'& span': {
+			fontWeight: 'normal',
+		},
+	},
+	totalPledge: {
+		marginTop: 14,
+	},
 }
 
 export const ViewProjectModule = memo(({
@@ -190,11 +195,10 @@ export const ViewProjectModule = memo(({
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
-	userData = {}, approvedVideoUrl, isOneOfAssignees,
+	userData = {}, approvedVideoUrl, isOneOfAssignees, projectAcceptanceStatus,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
-
 	useEffect(() => {
 		setTitle(projectTitle)
 		setDescription(projectDescription)
@@ -260,7 +264,7 @@ export const ViewProjectModule = memo(({
 										onClick={() => updateProject({ title, description, projectId })}
 										isSmallButton
 									>
-									Save
+										Save
 									</Button>)}
 							</div>
 						</div>
@@ -277,9 +281,16 @@ export const ViewProjectModule = memo(({
 						>
 							<div className={classNames(classes.progressOuter)}>
 								<div className={classNames(classes.progressInner)} />
+								{ !isNil(myPledge)
+									&& (
+										<div className={classNames(classes.youPledge)}>
+										You Pledged: <span>${myPledge}</span>
+										</div>
+									)
+								}
 							</div>
 							<div className={classNames('flex', 'layout-row', 'layout-wrap')}>
-								<div className={classNames('flex-40', 'flex-gt-sm-100', classes.sidebarItem)}>
+								<div className={classNames('flex-40', 'flex-gt-sm-100', classes.sidebarItem, classes.totalPledge)}>
 									<SubHeader>Total Pledged</SubHeader>
 									<div className={classNames(classes.text)}>{pledgeAmount}</div>
 								</div>
@@ -330,7 +341,13 @@ export const ViewProjectModule = memo(({
 									<Button
 										onClick={ternary(
 											isAuthenticated,
-											goToPledgeProjectHandler(projectId, pushRoute),
+											goToPledgeProjectHandler({
+												recordId: projectId,
+												backPage: {
+													routeId: VIEW_PROJECT_ROUTE_ID,
+													routeParams: { recordId: projectId },
+												},
+											}, pushRoute),
 											goToSignInHandler(pushRoute),
 										)}
 									>
@@ -349,49 +366,15 @@ export const ViewProjectModule = memo(({
 									</div>,
 								)
 							}
-							{ternary(isOneOfAssignees,
-								<TwitchButton
-									title="Accept or reject Dare"
-									onClick={goToClaimProjectHandler(
-										projectId, pushRoute,
-									)}
-								/>,
-								<TwitchButton
-									title="Accept or reject Dare"
-									subtitle="Connect with Twitch"
-									withIcon
-									onClick={
-										ternary(isAuthenticated,
-											() => {
-												storageSet('redirectAssignee', assignees[0].username)
-												storageSet('redirectUri', window.location.pathname)
-											},
-											goToSignInHandler(pushRoute))
-									}
-									href={orNull(isAuthenticated,
-										twitchOauthUrl)}
-								/>)}
+							{ClaimButton({
+								projectAcceptanceStatus,
+								projectId,
+								assignees,
+								pushRoute,
+								isAuthenticated,
+							})}
 							{
-								orNull(isOneOfAssignees,
-									<ButtonSubtitle
-										title="Deliver Dare Video"
-										subtitle="Upload to complete the Dare"
-										onClick={goToDeliveryFormHandler(pushRoute, projectId)}
-									/>)
-							}
-							{
-								orNull(
-									canRejectProject,
-									<div className={classes.sidebarItem}>
-										<RecordClickActionButton
-											recordClickActionId={REJECT_PROJECT}
-											recordId={projectId}
-										/>
-									</div>,
-								)
-							}
-							{
-								isNil(myFavorites) || myFavorites == 0
+								isNil(myFavorites) || myFavorites === 0
 									? (
 										<div className={classes.sidebarItem}>
 											<LoadingButton

@@ -35,7 +35,6 @@ export const submitFormHof = (
 	const nullSubmitIndex = isNil(submitIndex)
 	const moduleId = moduleIdFromKey(moduleKey)
 	const submits = prop(moduleId, formSubmitsObj)
-	console.log(submits)
 	const multipleSubmits = gt(length(submits), 1)
 	if (and(multipleSubmits, nullSubmitIndex)) {
 		return Promise.resolve()
@@ -50,6 +49,13 @@ export const submitFormHof = (
 			const onSuccessFn = path(
 				[correctedSubmitIndex, 'onSuccess'], submits,
 			)
+			const additionalThunkFn = path(
+				[correctedSubmitIndex, 'additionalThunk'], submits,
+			)
+
+			if (additionalThunkFn) {
+				successPromises.push(dispatch(additionalThunkFn(formData, res)))
+			}
 
 			if (onSuccessFn) {
 				const partialFormEntries = viewFormChild(`db-${moduleKey}`, state)

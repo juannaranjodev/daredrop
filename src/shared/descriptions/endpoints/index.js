@@ -29,7 +29,10 @@ import getPendingVideos from 'root/src/shared/descriptions/endpoints/getPendingV
 
 import addToFavorites from 'root/src/shared/descriptions/endpoints/addToFavorites'
 import removeToFavorites from 'root/src/shared/descriptions/endpoints/removeToFavorites'
+import deliveryDareInit from 'root/src/shared/descriptions/endpoints/deliveryDareInit'
 import deliveryDare from 'root/src/shared/descriptions/endpoints/deliveryDare'
+
+import getAcceptedProjects from 'root/src/shared/descriptions/endpoints/getAcceptedProject'
 
 const allEndpoints = {
 	...createProject,
@@ -55,7 +58,9 @@ const allEndpoints = {
 	...removeToFavorites,
 	...getMyProjects,
 	...getPendingVideos,
+	...deliveryDareInit,
 	...deliveryDare,
+	...getAcceptedProjects,
 }
 
 export default map(

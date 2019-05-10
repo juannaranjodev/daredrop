@@ -6,6 +6,7 @@ import {
 	UPDATE_PROJECT, SAVE_PARTIAL_DARE_FORM, ACCEPT_PROJECT, REJECT_PROJECT,
 	SET_DEFAULT_PAYMENT_METHOD, ADD_TO_FAVORITES, REMOVE_TO_FAVORITES,
 	GET_FAVORITES_LIST, GET_MY_PROJECTS, GET_ACCEPTED_PROJECTS,
+	DELIVERY_DARE_INIT, DELIVERY_DARE,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -32,6 +33,8 @@ import removeToFavorites from 'root/src/server/api/actions/removeToFavorites'
 import getMyProjects from 'root/src/server/api/actions/getMyProjects'
 import getPendingVideos from 'root/src/server/api/actions/getPendingVideos'
 import getAcceptProject from 'root/src/server/api/actions/getAcceptProject'
+import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
+import deliveryDare from 'root/src/server/api/actions/deliveryDare'
 
 
 export default {
@@ -65,6 +68,9 @@ export default {
 	[ACCEPT_PROJECT]: acceptProject,
 	[REJECT_PROJECT]: rejectProject,
 	[SET_DEFAULT_PAYMENT_METHOD]: setDafaultPaymentMethod,
+
+	[DELIVERY_DARE_INIT]: deliveryDareInit,
+	[DELIVERY_DARE]: deliveryDare,
 
 	[GET_ACCEPTED_PROJECTS]: getAcceptProject,
 }
