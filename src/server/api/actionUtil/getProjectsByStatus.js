@@ -6,6 +6,7 @@ import listResults from 'root/src/server/api/actionUtil/listResults'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
+import {SORT_BY_BOUNTY,SORT_BY_TIME_LEFT,SORT_BY_NEWEST,SORT_BY_ACCEPTED} from 'root/src/shared/constants/sortTypesOfProject'
 
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
