@@ -13,9 +13,11 @@ import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
 
+import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredProjectIds'
+
 const PageItemLength = 8
 
-export default async (status, sortType, payload, filteredProjectsByGameAndStreamer) => {
+export default async (status,payload) => {
 	const realPayload = payload.payload
 	const shardedProjects = await Promise.all(
 		map(
@@ -41,17 +43,20 @@ export default async (status, sortType, payload, filteredProjectsByGameAndStream
 		const diff = moment().diff(dare.approved, 'days')
 		return diff <= daysToExpire
 	}
-
-	const filterByGameAndStreamer = (dare) =>{
-		return contains({"id":dare.pk}, filteredProjectsByGameAndStreamer.items)
-	}
-
 	let filteredProjects = filter(filterExpired, combinedProjects)
 
-	if (filteredProjectsByGameAndStreamer != null){
-		filteredProjects = filter(filterByGameAndStreamer,filteredProjects)
+	//Start Filter with filter items
+	const filteredProjectIds = await getFilteredProjectIds(prop("filter", realPayload))
+	const filterByIds = (dare) =>{
+		return contains({"id":dare.pk}, filteredProjectIds)
 	}
-	const diffBySortType = prop(sortType, sortByType) ? prop(sortType, sortByType) : descendingApproved
+
+	if (filteredProjectIds != null){
+		filteredProjects = filter(filterByIds,filteredProjects)
+	}
+	//End Filter with filter items
+
+	const diffBySortType = prop(realPayload.sortType, sortByType) ? prop(realPayload.sortType, sortByType) : descendingApproved
 	const sortedProjects = sort(diffBySortType, filteredProjects)
 	const allPage = sortedProjects.length % PageItemLength > 0
 		? Math.round(sortedProjects.length / PageItemLength) + 1
