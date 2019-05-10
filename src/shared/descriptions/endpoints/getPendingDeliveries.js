@@ -1,5 +1,5 @@
 import {
-	GET_PENDING_VIDEOS,
+	GET_PENDING_DELIVERIES,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import { admin } from 'root/src/shared/constants/authenticationTypes'
@@ -12,7 +12,7 @@ import projectResponseSchema from 'root/src/shared/descriptions/endpoints/schema
 export const responseSchema = projectResponseSchema
 
 export default {
-	[GET_PENDING_VIDEOS]: {
+	[GET_PENDING_DELIVERIES]: {
 		authentication: admin,
 		endpointType: listEndpointType,
 		recordType: projectList,

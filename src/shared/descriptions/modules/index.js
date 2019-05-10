@@ -45,7 +45,7 @@ import claimProjectForm from 'root/src/shared/descriptions/modules/claimProjectF
 import rejectProjectModal from 'root/src/shared/descriptions/modules/rejectProjectModal'
 import deliverDareSuccessPage from 'root/src/shared/descriptions/modules/deliverDareSuccessPage'
 import myProjectsList from 'root/src/shared/descriptions/modules/myProjectsList'
-import pendingVideosList from 'root/src/shared/descriptions/modules/pendingVideosList'
+import pendingDeliveriesList from 'root/src/shared/descriptions/modules/pendingDeliveriesList'
 
 import deliveryDareForm from 'root/src/shared/descriptions/modules/deliveryDareForm'
 
@@ -96,7 +96,7 @@ const allModules = {
 	...rejectProjectModal,
 	...deliverDareSuccessPage,
 	...myProjectsList,
-	...pendingVideosList,
+	...pendingDeliveriesList,
 	...deliveryDareForm,
 }
 

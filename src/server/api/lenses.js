@@ -26,7 +26,6 @@ export const dynamoItemsProp = prop('Items')
 export const projectPendingKey = 'pending'
 export const projectApprovedKey = 'approved'
 export const projectRejectedKey = 'rejected'
-export const projectVideoPendingKey = 'videoPending'
 export const projectVideoAcceptedKey = 'videoAccepted'
 export const projectVideoRejectedKey = 'videoRejected'
 export const projectAcceptedKey = 'projectAccepted'
