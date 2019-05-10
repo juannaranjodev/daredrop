@@ -7,4 +7,5 @@ export const ascendingApproved = ascend(prop('approved'))
 export const descendingApproved = descend(prop('approved'))
 export const sortByType = {
     [SORT_BY_BOUNTY] : descend(prop('pledgeAmount')),
+
 }
