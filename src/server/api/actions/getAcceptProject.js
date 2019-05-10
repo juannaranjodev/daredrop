@@ -22,7 +22,7 @@ export default async () => {
 		(result, projectDdb) => {
 			const [project] = dynamoItemsProp(projectDdb)
 			if (project) {
-				return [...result, { id: project.pk }]
+				return [...result, { id: project.pk, accepted: project.created }]
 			}
 			return result
 		},
