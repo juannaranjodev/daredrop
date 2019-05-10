@@ -38,6 +38,7 @@ describe('auditProject', () => {
 			body: {
 				...newProject,
 				status: projectApprovedKey,
+				approved: res.body.approved,
 			},
 		})
 	})

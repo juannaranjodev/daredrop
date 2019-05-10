@@ -13,7 +13,6 @@ export default new Promise((resolve) => {
 		oauth2Client.setCredentials({
 			refresh_token: refreshToken,
 		})
-
 		resolve(oauth2Client)
 	})
 })

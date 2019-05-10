@@ -5,10 +5,10 @@ import projectAssigneesSelector from 'root/src/client/logic/project/selectors/pr
 import getUserDataSelector from 'root/src/client/logic/api/selectors/getUserDataSelector'
 import { notConnected, connectedNotClaimed, accepted, notEligible } from 'root/src/shared/constants/projectAcceptanceStatuses'
 import {
-	projectPendingKey,
-	projectAcceptedKey,
-	projectStreamerRejectedKey,
-	projectDeliveredKey,
+	streamerPendingKey,
+	streamerAcceptedKey,
+	streamerRejectedKey,
+	streamerDeliveredKey,
 } from 'root/src/server/api/lenses'
 
 export default (state, props) => {
@@ -27,17 +27,13 @@ export default (state, props) => {
 	const acceptanceStatus = prop('accepted', assignee)
 
 	switch (acceptanceStatus) {
-		// case (projectPendingKey):
-		// 	return connectedNotClaimed
-		case (projectStreamerRejectedKey || projectDeliveredKey):
+		case (streamerPendingKey):
+			return connectedNotClaimed
+		case (streamerRejectedKey || streamerDeliveredKey):
 			return notEligible
-		case (projectAcceptedKey):
+		case (streamerAcceptedKey):
 			return accepted
 		default:
-			// here until fix of backend part of this feature
-			// this button will be shown, correct solution is the last one below
-			return accepted
-		// return connectedNotClaimed
-		// return notEligible
+			return notEligible
 	}
 }

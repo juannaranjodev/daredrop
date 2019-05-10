@@ -21,7 +21,7 @@
     "build": "webpack --config webpack.config.js -p",
     "bundleLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda",
     "genAWSCreds": "./node_modules/.bin/babel-node --presets=env ./customScripts/generateAWSCredentials.js",
-    "runLambda": "docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default",
+    "runLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default",
     "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmbz dareMeZDevApiLambdaFunction.default"
   },
   "dependencies": {

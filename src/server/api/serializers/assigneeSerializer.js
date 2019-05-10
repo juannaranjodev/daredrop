@@ -1,5 +1,6 @@
 import { map, prop, reduce, addIndex, propEq, find } from 'ramda'
 import { idProp } from 'root/src/client/logic/api/lenses'
+import { streamerPendingKey } from 'root/src/server/api/lenses'
 
 import { payloadSchemaError } from 'root/src/server/api/errors'
 
@@ -12,7 +13,10 @@ const createDataToFetchObjs = (
 		payloadData: assignees,
 		fetchFn: userDataFetchFn,
 		payloadKey: 'assignees',
-		staticData: { platform: 'twitch' },
+		staticData: {
+			platform: 'twitch',
+			accepted: streamerPendingKey,
+		},
 		dataMap: [
 			['image', 'profile_image_url'],
 			['platformId', 'id'],
