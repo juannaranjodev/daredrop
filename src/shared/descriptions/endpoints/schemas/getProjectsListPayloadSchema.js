@@ -2,8 +2,16 @@ export default {
 	type: 'object',
 	properties: {
 		currentPage: { type: 'integer' },
-		gameId: { type: 'string' },
-		streamerId: { type: 'string' },
+		filter:{
+			type: 'array',
+			items:{
+				type:'object',
+				properties: {
+					param: { type: 'string' },
+					value: { type: 'string' },
+				},
+			}
+		},
 		sortType: { type: 'string' },
 	},
 	required: ['currentPage'],
