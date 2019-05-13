@@ -7,6 +7,7 @@ import {
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
 
 export default async (items) => {
+    if (items == undefined || items.length == 0) return null
     const filteredResults = await Promise.all(
         map((item) => {return documentClient.query({
                 TableName: TABLE_NAME,
