@@ -1,4 +1,4 @@
-import { intersection, prop, map, head, reduce } from 'ramda'
+import { intersection, prop, map, head, reduce, equals, length } from 'ramda'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 import {
@@ -7,7 +7,7 @@ import {
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
 
 export default async (items) => {
-    if (items == undefined || items.length == 0) {
+    if (items == undefined || equals(length(items), 0)) {
         return null
     }
     const filteredResults = await Promise.all(
