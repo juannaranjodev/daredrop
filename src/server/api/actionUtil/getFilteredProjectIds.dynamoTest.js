@@ -2,7 +2,7 @@ import wait from 'root/src/testUtil/wait'
 
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import createProject from 'root/src/server/api/actions/createProject'
-import { map , range } from 'ramda'
+import { map, range } from 'ramda'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
@@ -38,11 +38,18 @@ describe('getFilteredProjectIds', () => {
 		// This test will fail because of a race condition occasionally. Should
 		// figure out a better solution to this at some point...maybe a retry?
 		await wait(750)
-		const filters0 = [{ param: 'game', value: '138585' }, {param:"assignee|twitch",value:"19571641"}]
+
+		const filters0 = [
+			{ param: 'game', value: '138585' },
+			{ param: "assignee|twitch", value: "19571641" }
+		]
 		const res0 = await getFilteredProjectIds(filters0)
 		expect(res0.length).toBe(9)
 
-		const filters1 = [{ param: 'game', value: '1385815' }, {param:"assignee|twitch",value:"19571641"}]
+		const filters1 = [
+			{ param: 'game', value: '1385815' },
+			{ param: "assignee|twitch", value: "19571641" }
+		]
 		const res1 = await getFilteredProjectIds(filters1)
 		expect(res1.length).toBe(0)
 	})
