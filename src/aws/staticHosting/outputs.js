@@ -9,10 +9,10 @@ import {
 } from 'root/src/aws/staticHosting/outputIds'
 
 export default {
-	// [DOMAIN_NAME]: {
-	// 	Description: 'Route53 RecordSet domain name',
-	// 	Value: ref(RECORD_SET),
-	// },
+	[DOMAIN_NAME]: {
+		Description: 'Route53 RecordSet domain name',
+		Value: ref(RECORD_SET),
+	},
 	[VIDEO_UPLOAD_BUCKET]: {
 		Description: 'Bucket for videos uploaded by streamers',
 		Value: ref(VIDEO_BUCKET),
