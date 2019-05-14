@@ -9,13 +9,13 @@ import videoBucketPolicy from 'root/src/aws/staticHosting/resources/videoBucketP
 import outputs from 'root/src/aws/staticHosting/outputs'
 
 export const staticHostingResources = {
-	...cloudFrontDistribution,
-	...recordSet,
-	...ssl,
+	// ...cloudFrontDistribution,
+	// ...recordSet,
+	// ...ssl,
 	...staticBucket,
 	...publicBucketPolicy,
 	...videoBucket,
-	...videoBucketPolicy
+	...videoBucketPolicy,
 }
 
 export const staticHostingOutputs = outputs

@@ -36,13 +36,21 @@ describe('getActiveProjects', () => {
 		// firing all at once and having the same approval date
 
 		const p0 = await auditProj(projectArr[0])
+		await wait(700)
 		const p1 = await auditProj(projectArr[1])
+		await wait(700)
 		const p2 = await auditProj(projectArr[2])
+		await wait(700)
 		const p3 = await auditProj(projectArr[3])
+		await wait(700)
 		const p4 = await auditProj(projectArr[4])
+		await wait(700)
 		const p5 = await auditProj(projectArr[5])
+		await wait(700)
 		const p6 = await auditProj(projectArr[6])
+		await wait(700)
 		const p7 = await auditProj(projectArr[7])
+		await wait(700)
 		const p8 = await auditProj(projectArr[8])
 
 
@@ -57,7 +65,8 @@ describe('getActiveProjects', () => {
 
 
 		expect(res.body.items.length).toEqual(8)
-		expect(res.body.items[1].sk).toEqual(approvedProjectArr[1].sk)
+		expect(res.body.items[0]).toEqual(approvedProjectArr[0])
+		expect(res.body.items[1]).toEqual(approvedProjectArr[1])
 		expect(res.body.items[2]).toEqual(approvedProjectArr[2])
 		expect(res.body.allPage).toEqual(2)
 	})
