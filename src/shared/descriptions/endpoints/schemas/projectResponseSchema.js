@@ -15,6 +15,7 @@ export default {
 		myPledge: { type: 'integer' },
 		myFavorites: { type: 'integer' },
 		approved: { type: 'string' },
+		amountRequested: { type: 'string' },
 		created: { type: 'string' },
 		deliveries: {
 			type: 'array',
