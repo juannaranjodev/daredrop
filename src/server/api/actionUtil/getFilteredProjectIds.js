@@ -1,4 +1,4 @@
-import { intersection, prop, map, forEach, reduce } from 'ramda'
+import { intersection, prop, map, head, reduce } from 'ramda'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 import {
@@ -35,7 +35,7 @@ export default async (items) => {
                     result,
                     filteredIds(filteredResult)
                 )
-        }, filteredIds(filteredResults[0]), filteredResults
+        }, filteredIds( head(filteredResults) ), filteredResults
     )
     return result
 }
