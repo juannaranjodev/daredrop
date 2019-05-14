@@ -104,9 +104,9 @@ describe('auditProject', () => {
 		expect(newProject.status).toEqual(projectPendingKey)
 
 		// for now mocking status because of lack of addVideo endpoint
-		newProject.status = projectVideoPendingKey
+		newProject.status = projectDeliveryPendingKey
 
-		expect(newProject.status).toEqual(projectVideoPendingKey)
+		expect(newProject.status).toEqual(projectDeliveryPendingKey)
 		const event = {
 			endpointId: AUDIT_PROJECT,
 			payload: {

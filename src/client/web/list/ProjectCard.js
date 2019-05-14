@@ -24,7 +24,7 @@ import { projectCardStyle } from 'root/src/client/web/list/style'
 export const ListItemUnconnected = memo(({
 	recordId, pushRoute, projectTitle, projectDescription, classes,
 	projectGameImage, projectAssigneesImages, projectShareUrl, projectGames, isAuthenticated,
-	projectAssigneesName, approvedVideoUrl, projectPledged, projectAccepted, timeouts, setTimeouts,
+	projectAssigneesName, projectDeliveries, projectPledged, projectAccepted, timeouts, setTimeouts,
 }) => {
 	const [hover, setHover] = useState(false)
 	const [over, setOver] = useState(false)
@@ -47,7 +47,7 @@ export const ListItemUnconnected = memo(({
 			onMouseLeave={() => setOver(false)}
 			onMouseOver={() => setOver(true)}
 		>
-			{orNull(approvedVideoUrl, <div
+			{orNull(projectDeliveries, <div
 				className={classes.videoOverlay}
 				onClick={goToViewProjectHandler(recordId, pushRoute, timeouts)}
 			/>)}
@@ -63,7 +63,7 @@ export const ListItemUnconnected = memo(({
 						className={classNames(
 							classes.cardHeader,
 							'layout-row layout-align-start-center',
-							({ [classes.noOverlay]: approvedVideoUrl }),
+							({ [classes.noOverlay]: projectDeliveries }),
 						)}
 					>
 						{
@@ -111,7 +111,7 @@ export const ListItemUnconnected = memo(({
 						projectAssigneesImages.length > 5 && classes.projectUnsetJustify,
 					)}
 					>
-						{orNull(approvedVideoUrl,
+						{orNull(projectDeliveries,
 							<FontAwesomeIcon
 								className={classes.playIcon}
 								icon={faPlayCircle}
@@ -147,7 +147,7 @@ export const ListItemUnconnected = memo(({
 						className={classNames(
 							'layout-column layout-align-space-around',
 							classes.cardFooter,
-							({ [classes.noOverlay]: approvedVideoUrl }),
+							({ [classes.noOverlay]: projectDeliveries }),
 						)}
 					>
 						<div className={classes.cardGameTitle}>

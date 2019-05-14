@@ -1,4 +1,4 @@
-import { map, range, reverse, prop, compose, sort, addIndex } from 'ramda'
+import { map, range, reverse } from 'ramda'
 
 import wait from 'root/src/testUtil/wait'
 
@@ -12,7 +12,7 @@ import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
 
-describe('getActiveProjects', () => {
+describe('getPendingDeliveries', () => {
 	test('Successfully get active projects', async () => {
 		const projectArr = await Promise.all(
 			map(

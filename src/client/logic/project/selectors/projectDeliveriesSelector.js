@@ -4,6 +4,6 @@ import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
-const { viewApprovedVideoUrl } = responseLenses
+const { viewDeliveries } = responseLenses
 
-export default (state, props) => viewApprovedVideoUrl(getRecordSelector(state, props))
+export default (state, props) => viewDeliveries(getRecordSelector(state, props))

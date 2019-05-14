@@ -46,6 +46,7 @@ import rejectProjectModal from 'root/src/shared/descriptions/modules/rejectProje
 import deliverDareSuccessPage from 'root/src/shared/descriptions/modules/deliverDareSuccessPage'
 import myProjectsList from 'root/src/shared/descriptions/modules/myProjectsList'
 import pendingDeliveriesList from 'root/src/shared/descriptions/modules/pendingDeliveriesList'
+import titleHeaderPendingDeliveries from 'root/src/shared/descriptions/modules/titleHeaderPendingDeliveries'
 
 import deliveryDareForm from 'root/src/shared/descriptions/modules/deliveryDareForm'
 
@@ -98,6 +99,7 @@ const allModules = {
 	...myProjectsList,
 	...pendingDeliveriesList,
 	...deliveryDareForm,
+	...titleHeaderPendingDeliveries,
 }
 
 export default allModules
