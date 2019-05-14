@@ -1,4 +1,4 @@
-import { intersection, prop, map, forEach } from 'ramda'
+import { intersection, prop, map, forEach, reduce } from 'ramda'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 import {
@@ -23,25 +23,19 @@ export default async (items) => {
             ).promise()
         }, items)
     )
+    const filteredIds = (filteredResult) => map(
+        (item) => (
+            {"id": prop('pk', item)}
+        ), dynamoItemsProp(filteredResult)
+    )
 
-    let result = null
-
-    forEach((filteredResult) => {
-        if (result == null) {
-            result = map((item) => {
-                return {
-                    "id": prop('pk', item)
-                }
-            }, dynamoItemsProp(filteredResult))
-        }
-        else {
-            result = intersection(result,
-                map((item) => {
-                    return {
-                        "id": prop('pk', item)
-                    }
-                },dynamoItemsProp(filteredResult)))
-        }
-    }, filteredResults)
+    const result = reduce(
+        (result, filteredResult) => {
+            return intersection(
+                    result,
+                    filteredIds(filteredResult)
+                )
+        }, filteredIds(filteredResults[0]), filteredResults
+    )
     return result
 }
