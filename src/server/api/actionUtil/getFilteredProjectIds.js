@@ -27,7 +27,7 @@ export default async (items) => {
             result = map((item) => {return {"id":prop('pk',item)}}, dynamoItemsProp(filteredResult))
         }
         else {
-            result = intersection(result, map(prop('pk'), dynamoItemsProp(filteredResult)))
+            result = intersection(result, map((item) => {return {"id":prop('pk',item)}}, dynamoItemsProp(filteredResult)))
         }
     })
     return result
