@@ -34,6 +34,7 @@ export default async ({ payload, userId }) => {
 	])
 
 	const userTokensInProject = userTokensInProjectSelector(userTokens, projectToAccept)
+
 	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
@@ -51,20 +52,31 @@ export default async ({ payload, userId }) => {
 
 	const userAssigneeArr = unnest(unnest(userAssigneeArrNested))
 
-	const assigneesToWrite = map(assignee => ({
-		PutRequest: {
-			Item: {
-				...assignee,
-				amountRequested,
-				accepted: streamerAcceptedKey,
-				modified: getTimestamp(),
+	const assigneesToWrite = unnest(map((assignee) => {
+		const updateProjectParam = {
+			TableName: TABLE_NAME,
+			Key: {
+				[PARTITION_KEY]: assignee[PARTITION_KEY],
+				[SORT_KEY]: assignee[SORT_KEY],
 			},
-		},
-	}), userAssigneeArr)
+			UpdateExpression: 'SET amountRequested = :amountRequested, accepted = :newAccepted, modified = :newModified',
+			ExpressionAttributeValues: {
+				':amountRequested': amountRequested,
+				':newAccepted': streamerAcceptedKey,
+				':newModified': getTimestamp(),
+			},
+		}
+		return documentClient.update(updateProjectParam).promise()
+	}, userAssigneeArr))
+
+
+	const assigneesInProject = await dynamoQueryAllProjectAssignees(projectId)
 
 	let projectAcceptedRecord = []
 
 	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesDdb)
+
+	Promise.all(assigneesToWrite)
 
 	if (equals(length(acceptedAssigneesInProject), 0)) {
 		projectAcceptedRecord = [{
@@ -78,16 +90,31 @@ export default async ({ payload, userId }) => {
 		}]
 	}
 
+	const assignee = await dynamoQueryAllProjectAssignees(projectId)
+
 	const acceptationParams = {
 		RequestItems: {
 			[TABLE_NAME]: [
 				...projectAcceptedRecord,
-				...assigneesToWrite,
 			],
 		},
 	}
 
 	await documentClient.batchWrite(acceptationParams).promise()
+
+	const updateProjectParam = {
+		TableName: TABLE_NAME,
+		Key: {
+			[PARTITION_KEY]: projectToAccept[PARTITION_KEY],
+			[SORT_KEY]: projectToAccept[SORT_KEY],
+		},
+		UpdateExpression: 'SET assignees = :newAssignees',
+		ExpressionAttributeValues: {
+			':newAssignees': assignee,
+		},
+	}
+
+	await documentClient.update(updateProjectParam).promise()
 
 	return omit([PARTITION_KEY, SORT_KEY],
 		{
