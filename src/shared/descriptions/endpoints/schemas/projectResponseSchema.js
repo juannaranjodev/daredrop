@@ -14,7 +14,6 @@ export default {
 		myPledge: { type: 'integer' },
 		myFavorites: { type: 'integer' },
 		approved: { type: 'string' },
-		amountRequested: { type: 'string' },
 		created: { type: 'string' },
 		deliveries: {
 			type: 'array',
@@ -30,6 +29,8 @@ export default {
 				additionalProperties: true,
 			},
 		},
+		approvedVideoUrl: { type: 'string' },
+		pledgeAmount: { type: 'integer' },
 		status: {
 			type: 'string',
 			enum: [projectApprovedKey, projectRejectedKey, projectPendingKey],
@@ -44,8 +45,8 @@ export default {
 						enum: ['twitch', 'youtube'],
 					},
 					image: { type: 'string' },
+					amountRequested: { type: 'string' },
 					description: { type: 'string' },
-					pledgeAmount: { type: 'integer' },
 					platformId: { type: 'string' },
 					displayName: { type: 'string' },
 					username: { type: 'string' },
