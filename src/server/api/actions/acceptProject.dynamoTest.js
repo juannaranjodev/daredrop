@@ -52,14 +52,14 @@ describe('getAcceptedProjects', () => {
 				amountRequested: 1000,
 			},
 		})
-
-		await rejectProject({
-			userId: `${mockUserId}2`,
-			payload: {
-				projectId: project.id,
-				amountRequested: 1000,
-			},
-		})
+		// console.log('e')
+		// await rejectProject({
+		// 	userId: `${mockUserId}2`,
+		// 	payload: {
+		// 		projectId: project.id,
+		// 		amountRequested: 1000,
+		// 	},
+		// })
 
 		const event = {
 			endpointId: GET_PROJECT,

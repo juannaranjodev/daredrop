@@ -42,7 +42,6 @@ export default projectArr => reduce(
 				[
 					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl',
 					'assignees', 'games', 'pledgers', 'created', 'approved', 'favoritesAmount',
-					'amountRequested',
 				],
 				projectPart,
 			)
