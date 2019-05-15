@@ -52,14 +52,14 @@ describe('getAcceptedProjects', () => {
 				amountRequested: 1000,
 			},
 		})
-		// console.log('e')
-		// await rejectProject({
-		// 	userId: `${mockUserId}2`,
-		// 	payload: {
-		// 		projectId: project.id,
-		// 		amountRequested: 1000,
-		// 	},
-		// })
+
+		await rejectProject({
+			userId: `${mockUserId}2`,
+			payload: {
+				projectId: project.id,
+				amountRequested: 1000,
+			},
+		})
 
 		const event = {
 			endpointId: GET_PROJECT,
@@ -69,13 +69,13 @@ describe('getAcceptedProjects', () => {
 		}
 		const res = await apiFn(event)
 		expect(res.body.status).toBe(projectAcceptedKey)
-
 		const event2 = {
 			endpointId: GET_ACTIVE_PROJECTS,
 			payload: { currentPage: 1 },
 			// authentication: mockUserId,
 		}
 		const res2 = await apiFn(event2)
+
 		expect(res2.body.items.length).toBe(1)
 	})
 })

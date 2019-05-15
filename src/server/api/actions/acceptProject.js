@@ -14,6 +14,9 @@ import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoInde
 import randomNumber from 'root/src/shared/util/randomNumber'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
+import getAssigneeObject from 'root/src/server/api/actionUtil/getAssigneeObject'
+
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
@@ -101,7 +104,6 @@ export default async ({ payload, userId }) => {
 	}
 
 	await documentClient.batchWrite(acceptationParams).promise()
-
 	const updateProjectParam = {
 		TableName: TABLE_NAME,
 		Key: {
@@ -110,7 +112,7 @@ export default async ({ payload, userId }) => {
 		},
 		UpdateExpression: 'SET assignees = :newAssignees',
 		ExpressionAttributeValues: {
-			':newAssignees': assignee,
+			':newAssignees': getAssigneeObject(assignee),
 		},
 	}
 
