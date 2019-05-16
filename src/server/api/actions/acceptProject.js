@@ -91,19 +91,19 @@ export default async ({ payload, userId }) => {
 				},
 			},
 		}]
+
+		const acceptationParams = {
+			RequestItems: {
+				[TABLE_NAME]: [
+					...projectAcceptedRecord,
+				],
+			},
+		}
+
+		await documentClient.batchWrite(acceptationParams).promise()
 	}
 
 	const assignee = await dynamoQueryAllProjectAssignees(projectId)
-
-	const acceptationParams = {
-		RequestItems: {
-			[TABLE_NAME]: [
-				...projectAcceptedRecord,
-			],
-		},
-	}
-
-	await documentClient.batchWrite(acceptationParams).promise()
 	const updateProjectParam = {
 		TableName: TABLE_NAME,
 		Key: {

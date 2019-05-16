@@ -49,7 +49,7 @@ describe('getAcceptedProjects', () => {
 		// So this kinda sucks, but there is no way to ConsistenRead on a GSI.
 		// This test will fail because of a race condition occasionally. Should
 		// figure out a better solution to this at some point...maybe a retry?
-		await wait(750)
+		await wait(1000)
 		const event = {
 			endpointId: GET_ACCEPTED_PROJECTS,
 			payload: {
