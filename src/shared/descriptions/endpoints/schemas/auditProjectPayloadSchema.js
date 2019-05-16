@@ -1,5 +1,5 @@
 import {
-	projectApprovedKey, projectRejectedKey, projectVideoAcceptedKey, projectVideoRejectedKey,
+	projectApprovedKey, projectRejectedKey,
 } from 'root/src/server/api/lenses'
 
 export default {
@@ -11,8 +11,6 @@ export default {
 			enum: [
 				projectApprovedKey,
 				projectRejectedKey,
-				projectVideoAcceptedKey,
-				projectVideoRejectedKey,
 			],
 		},
 	},
