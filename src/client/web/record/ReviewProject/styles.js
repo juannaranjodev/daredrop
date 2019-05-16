@@ -83,16 +83,6 @@ export default {
 	'mb-10': {
 		marginBottom: 10,
 	},
-	reason: {
-		height: 25,
-		fontFamily: 'Roboto',
-		fontSize: 20,
-		fontWeight: 'bold',
-		lineHeight: 1.2,
-		textAlign: 'left',
-		color: '#000000',
-		marginBottom: 8,
-	},
 	rejectDescription: {
 		height: 82.8,
 		fontFamily: 'Roboto',
@@ -106,9 +96,17 @@ export default {
 		backgroundColor: '#ffffff',
 		boxSizing: 'border-box',
 		paddingTop: 20,
+		marginTop: 5,
+		marginBottom: 0,
 		paddingLeft: 6,
 		resize: 'none',
 		width: '100%',
+	},
+	rejectionContainer: {
+		marginBottom: 15,
+	},
+	rejectMessage: {
+		fontSize: 12,
 	},
 	red: {
 		color: '#ff0000',

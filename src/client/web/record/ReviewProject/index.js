@@ -7,18 +7,18 @@ import Title from 'root/src/client/web/typography/Title'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
 
 import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionButton'
-import { APPROVE_PROJECT, REJECT_PROJECT } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
+import { APPROVE_DELIVERY_ACTION, REJECT_DELIVERY_ACTION } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 
 import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 
 import { outlinedButton, primarySquareButton } from 'root/src/client/web/componentTypes'
-import styles from './reviewProjectStyle'
-
+import { orNull } from 'root/src/shared/util/ramdaPlus'
+import styles from './styles'
 
 export const ViewProjectModule = memo(({
 	projectId, projectDescription, projectTitle,
-	classes, projectDeliveries,
+	classes, projectDeliveries, recordClickActionError,
 }) => {
 	const [rejectDescription, setRejectDescription] = useState('')
 	return (
@@ -35,13 +35,13 @@ export const ViewProjectModule = memo(({
 						</div>
 					</div>
 					<div className="flex-100 flex-gt-sm-55 flex-order-1">
-	<div className={classes.iframeContainer}>
+						<div className={classes.iframeContainer}>
 							<iframe
-	className={classes.iframe}
+								className={classes.iframe}
 								src={prop('videoURL', propOr(null, 0, projectDeliveries))}
-	frameBorder="0"
-	scrolling="no"
-	allowFullScreen
+								frameBorder="0"
+								scrolling="no"
+								allowFullScreen
 								title={projectTitle}
 							/>
 						</div>
@@ -53,8 +53,8 @@ export const ViewProjectModule = memo(({
 							<div className={classNames(classes.descriptionTitle)}>Description</div>
 							<div className={classNames('flex-100', 'layout-row')}>
 								<div className={classNames('flex-100')}>
-	<div className={classes.description}>
-	{projectDescription}
+									<div className={classes.description}>
+										{projectDescription}
 									</div>
 								</div>
 							</div>
@@ -72,32 +72,41 @@ export const ViewProjectModule = memo(({
 							className={classNames(classes.sidebar, 'layout-column')}
 						>
 							<div className={classNames('flex-40', 'flex-gt-sm-100', classes.sidebarItem, classes.totalPledge)}>
-	<SubHeader>Time Dare Started:</SubHeader>
+								<SubHeader>Time Dare Started:</SubHeader>
 								<div className={classNames(classes.text)}>{prop('timeStamp', propOr(null, 0, projectDeliveries))}</div>
 							</div>
-	<div className={classes.sidebarItem}>
-	<RecordClickActionButton
-	recordClickActionId={APPROVE_PROJECT}
-	recordId={projectId}
-	buttonType={primarySquareButton}
+							<div className={classes.sidebarItem}>
+								<RecordClickActionButton
+									recordClickActionId={APPROVE_DELIVERY_ACTION}
+									recordId={projectId}
+									buttonType={primarySquareButton}
 								/>
 								<SubHeader>
-         Reject Reason<span className={classes.red}>*</span>:
-</SubHeader>
-								<textarea
-	className={classNames(classes.rejectDescription, classes['mb-10'])}
-	placeholder="Reject reason"
-									value={rejectDescription}
-									onChange={e => setRejectDescription(e.target.value)}
-								/>
+									Reject Reason<span className={classes.red}>*</span>:
+								</SubHeader>
+								<div className={classes.rejectionContainer}>
+									<textarea
+										className={classNames(classes.rejectDescription, classes['mb-10'])}
+										placeholder="Reject reason"
+										value={rejectDescription}
+										onChange={e => setRejectDescription(e.target.value)}
+									/>
+									<span className={classNames(classes.red, classes.rejectMessage)}>
+										{orNull(
+											prop('message', recordClickActionError),
+											prop('message', recordClickActionError),
+										)}
+									</span>
+								</div>
 								<RecordClickActionButton
-									recordClickActionId={REJECT_PROJECT}
+									recordClickActionId={REJECT_DELIVERY_ACTION}
 									recordId={projectId}
 									buttonType={outlinedButton}
+									payload={{ message: rejectDescription }}
 								/>
-								<SubHeader className={classes.reason}>
-         If you can't decide what to do please email your supervisor with the URL of the Dare.
-</SubHeader>
+								<SubHeader>
+									If you can't decide what to do please email your supervisor with the URL of the Dare.
+								</SubHeader>
 							</div>
 						</div>
 					</div>
