@@ -2,7 +2,6 @@ import React, { memo, useState } from 'react'
 import { isNil, filter, not, equals } from 'ramda'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import projectListItemConnector from 'root/src/client/logic/project/connectors/projectListItemConnector'
-import goToViewProjectHandler from 'root/src/client/logic/project/handlers/goToViewProjectHandler'
 import goToSignInHandler from 'root/src/client/logic/project/handlers/goToSignInHandler'
 import goToPledgeProjectHandler from 'root/src/client/logic/project/handlers/goToPledgeProjectHandler'
 import Button from 'root/src/client/web/base/Button'
@@ -25,12 +24,12 @@ export const ListItemUnconnected = memo(({
 	recordId, pushRoute, projectTitle, projectDescription, classes,
 	projectGameImage, projectAssigneesImages, projectShareUrl, projectGames, isAuthenticated,
 	projectAssigneesName, projectDeliveries, projectPledged, projectAccepted, timeouts, setTimeouts,
+	listRouteHandler,
 }) => {
 	const [hover, setHover] = useState(false)
 	const [over, setOver] = useState(false)
 	const [nameHover, setNameHover] = useState(undefined)
 	const [nameOver, setNameOver] = useState(undefined)
-
 	const timeoutFilter = filter(timeout => t => not(equals(timeout, t)))
 	const onMouseLeave = func => () => {
 		const timeout = setTimeout(() => {
@@ -49,7 +48,7 @@ export const ListItemUnconnected = memo(({
 		>
 			{orNull(projectDeliveries, <div
 				className={classes.videoOverlay}
-				onClick={goToViewProjectHandler(recordId, pushRoute, timeouts)}
+				onClick={listRouteHandler(recordId, pushRoute, timeouts)}
 			/>)}
 			<div
 				className={classNames(
@@ -87,7 +86,7 @@ export const ListItemUnconnected = memo(({
 						<div className={classes.headerContainer}>
 							<div
 								className={classNames(classes.headerText, 'flex')}
-								onClick={goToViewProjectHandler(recordId, pushRoute, timeouts)}
+								onClick={listRouteHandler(recordId, pushRoute, timeouts)}
 							>
 								<h3 className={classNames(classes.headerTextH3)}>{projectTitle}</h3>
 							</div>
@@ -102,7 +101,7 @@ export const ListItemUnconnected = memo(({
 					</div>
 				</div>
 				<div
-					onClick={goToViewProjectHandler(recordId, pushRoute, timeouts)}
+					onClick={listRouteHandler(recordId, pushRoute, timeouts)}
 					className={classes.bodyCard}
 				>
 					<div className={classNames(
