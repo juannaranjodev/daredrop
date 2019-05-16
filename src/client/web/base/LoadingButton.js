@@ -5,7 +5,6 @@ import Button from 'root/src/client/web/base/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { withStyles } from '@material-ui/core/styles'
 
-
 const buttonProgressStyles = {
 	buttonProgress: {
 		position: 'absolute',
@@ -38,18 +37,18 @@ export default withStyles(wrapperStyles)(
 	({
 		children, onClick, classes, loading, formType, buttonType,
 	}) => (
-			<div className="flex layout-row layout-align-center">
-				<div className={classes.wrapper}>
-					<Button
-						disabled={loading}
-						onClick={onClick}
-						formType={formType}
-						buttonType={buttonType}
-					>
-						{children}
-					</Button>
-					<RenderLoading loading={loading} />
-				</div>
+		<div className="flex layout-row layout-align-center">
+			<div className={classes.wrapper}>
+				<Button
+					disabled={loading}
+					onClick={onClick}
+					formType={formType}
+					buttonType={buttonType}
+				>
+					{children}
+				</Button>
+				<RenderLoading loading={loading} />
 			</div>
-		),
+		</div>
+	),
 )

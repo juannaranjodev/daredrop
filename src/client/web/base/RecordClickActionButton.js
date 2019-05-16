@@ -6,13 +6,14 @@ import recordClickActionButtonConnector from 'root/src/client/logic/api/connecto
 import LoadingButton from 'root/src/client/web/base/LoadingButton'
 
 export const ActionButtonUnconnected = memo(({
-	label, loading, recordId, recordClickActionId, recordClickAction,
+	label, loading, recordId, recordClickActionId, recordClickAction, buttonType,
 }) => (
 	<LoadingButton
 		onClick={recordClickActionButtonHandler(
 			recordId, recordClickActionId, recordClickAction,
 		)}
 		loading={loading}
+		buttonType={buttonType}
 	>
 		{label}
 	</LoadingButton>

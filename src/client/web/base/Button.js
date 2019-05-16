@@ -86,6 +86,7 @@ export const ButtonUnstyled = memo(({
 			{ [classes.unstyled]: unstyled },
 			({ [classes.primarySquareButton]: buttonType === primarySquareButton || formType === universalForm }),
 			({ [classes.noBackgroundButton]: buttonType === noBackgroundButton }),
+			({ [classes.outlinedButton]: buttonType === outlinedButton }),
 			({ [classes.smallButton]: isSmallButton }),
 			additionalClass,
 		)}

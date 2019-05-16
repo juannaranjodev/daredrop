@@ -43,7 +43,7 @@ export default projectArr => reduce(
 		if (startsWith(`project|${projectDeliveryPendingKey}`, sk)) {
 			const deliveryObj = pick(
 				[
-					'videoURL', 'timestamp', 's3ObjectURL',
+					'videoURL', 'timeStamp', 's3ObjectURL',
 				],
 				projectPart,
 			)
