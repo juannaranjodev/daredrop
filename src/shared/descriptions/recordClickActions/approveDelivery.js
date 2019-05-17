@@ -1,4 +1,4 @@
-import { projectDeliveryAcceptedKey } from 'root/src/server/api/lenses'
+import { projectDeliveryApprovedKey } from 'root/src/server/api/lenses'
 
 import { APPROVE_DELIVERY_ACTION } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 import { APPROVE_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -14,7 +14,7 @@ export default {
 			{
 				modification: 'set',
 				path: [':recordStoreKey', 'status'],
-				value: projectDeliveryAcceptedKey,
+				value: projectDeliveryApprovedKey,
 			},
 		],
 	},

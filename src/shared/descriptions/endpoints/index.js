@@ -31,6 +31,8 @@ import addToFavorites from 'root/src/shared/descriptions/endpoints/addToFavorite
 import removeToFavorites from 'root/src/shared/descriptions/endpoints/removeToFavorites'
 import deliveryDareInit from 'root/src/shared/descriptions/endpoints/deliveryDareInit'
 import deliveryDare from 'root/src/shared/descriptions/endpoints/deliveryDare'
+import approveDelivery from 'root/src/shared/descriptions/endpoints/approveDelivery'
+import rejectDelivery from 'root/src/shared/descriptions/endpoints/rejectDelivery'
 
 import getAcceptedProjects from 'root/src/shared/descriptions/endpoints/getAcceptedProject'
 
@@ -61,6 +63,8 @@ const allEndpoints = {
 	...deliveryDareInit,
 	...deliveryDare,
 	...getAcceptedProjects,
+	...approveDelivery,
+	...rejectDelivery,
 }
 
 export default map(
