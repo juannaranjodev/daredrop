@@ -38,7 +38,7 @@ export default (
 				}
 				return { ...result, [key]: value }
 			},
-			{ ...actionPayload },
+			actionPayload,
 			payloadMap,
 		)
 
