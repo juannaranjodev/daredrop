@@ -7,7 +7,7 @@ import Title from 'root/src/client/web/typography/Title'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
 
 import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionButton'
-import { APPROVE_DELIVERY_ACTION, REJECT_DELIVERY_ACTION } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
+import { APPROVE_DELIVERY, REJECT_DELIVERY } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 
 import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
 import withModuleContext from 'root/src/client/util/withModuleContext'
@@ -67,7 +67,6 @@ export const ViewProjectModule = memo(({
 							'layout-column',
 						)}
 					>
-
 						<div
 							className={classNames(classes.sidebar, 'layout-column')}
 						>
@@ -77,7 +76,7 @@ export const ViewProjectModule = memo(({
 							</div>
 							<div className={classes.sidebarItem}>
 								<RecordClickActionButton
-									recordClickActionId={APPROVE_DELIVERY_ACTION}
+									recordClickActionId={APPROVE_DELIVERY}
 									recordId={projectId}
 									buttonType={primarySquareButton}
 								/>
@@ -99,7 +98,7 @@ export const ViewProjectModule = memo(({
 									</span>
 								</div>
 								<RecordClickActionButton
-									recordClickActionId={REJECT_DELIVERY_ACTION}
+									recordClickActionId={REJECT_DELIVERY}
 									recordId={projectId}
 									buttonType={outlinedButton}
 									payload={{ message: rejectDescription }}

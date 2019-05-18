@@ -6,7 +6,7 @@ import {
 	UPDATE_PROJECT, SAVE_PARTIAL_DARE_FORM, ACCEPT_PROJECT, REJECT_PROJECT,
 	SET_DEFAULT_PAYMENT_METHOD, ADD_TO_FAVORITES, REMOVE_TO_FAVORITES,
 	GET_FAVORITES_LIST, GET_MY_PROJECTS, GET_ACCEPTED_PROJECTS,
-	DELIVERY_DARE_INIT, DELIVERY_DARE, APPROVE_DELIVERY, REJECT_DELIVERY,
+	DELIVERY_DARE_INIT, DELIVERY_DARE, APPROVE_OR_REJECT_DELIVERY,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -35,8 +35,7 @@ import getPendingDeliveries from 'root/src/server/api/actions/getPendingDeliveri
 import getAcceptProject from 'root/src/server/api/actions/getAcceptProject'
 import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
-import approveDelivery from 'root/src/server/api/actions/approveDelivery'
-import rejectDelivery from 'root/src/server/api/actions/rejectDelivery'
+import approveOrRejectDelivery from 'root/src/server/api/actions/approveOrRejectDelivery'
 
 
 export default {
@@ -73,8 +72,7 @@ export default {
 
 	[DELIVERY_DARE_INIT]: deliveryDareInit,
 	[DELIVERY_DARE]: deliveryDare,
-	[APPROVE_DELIVERY]: approveDelivery,
-	[REJECT_DELIVERY]: rejectDelivery,
+	[APPROVE_OR_REJECT_DELIVERY]: approveOrRejectDelivery,
 
 	[GET_ACCEPTED_PROJECTS]: getAcceptProject,
 }

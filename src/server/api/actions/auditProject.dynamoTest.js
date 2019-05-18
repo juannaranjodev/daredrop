@@ -9,9 +9,6 @@ import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import {
 	projectApprovedKey,
 	projectPendingKey,
-	projectDeliveryPendingKey,
-	projectVideoAcceptedKey,
-	projectVideoRejectedKey,
 	projectRejectedKey,
 } from 'root/src/server/api/lenses'
 

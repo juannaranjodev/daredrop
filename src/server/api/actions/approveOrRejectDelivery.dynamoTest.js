@@ -1,11 +1,11 @@
 import { apiFn } from 'root/src/server/api'
 
-import { APPROVE_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { APPROVE_OR_REJECT_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import createProject from 'root/src/server/api/actions/createProject'
 
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
-import { projectApprovedKey, projectDeliveredKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey, projectDeliveredKey, projectDeliveryRejectedKey } from 'root/src/server/api/lenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
@@ -67,14 +67,42 @@ describe('approveDelivery', async () => {
 
 		const event = {
 			userId: mockUserId,
-			endpointId: APPROVE_DELIVERY,
+			endpointId: APPROVE_OR_REJECT_DELIVERY,
 			payload: {
 				projectId: project.id,
+				audit: projectDeliveredKey,
 			},
 		}
 
 		const res = await apiFn(event)
 
 		expect(res.body.status).toEqual(projectDeliveredKey)
+	})
+	test('can\' reject delivery without message', async () => {
+		const event = {
+			userId: mockUserId,
+			endpointId: APPROVE_OR_REJECT_DELIVERY,
+			payload: {
+				projectId: project.id,
+				audit: projectDeliveryRejectedKey,
+			},
+		}
+		const res = await apiFn(event)
+
+		expect(res.statusCode).toEqual(400)
+	})
+	test('can reject delivery', async () => {
+		const event = {
+			userId: mockUserId,
+			endpointId: APPROVE_OR_REJECT_DELIVERY,
+			payload: {
+				projectId: project.id,
+				audit: projectDeliveryRejectedKey,
+				message: 'asdf;lksdafikjmdsifjkm',
+			},
+		}
+		const res = await apiFn(event)
+
+		expect(res.body.status).toEqual(projectDeliveryRejectedKey)
 	})
 })
