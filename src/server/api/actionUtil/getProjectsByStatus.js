@@ -1,4 +1,4 @@
-import { sort, map, range, reduce, filter, contains, prop } from 'ramda'
+import { sort, map, filter, contains, prop } from 'ramda'
 
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
@@ -30,11 +30,12 @@ export default async (status, defaultSortType, payload) => {
 
 	// Start Filter with filter items
 	const filteredProjectIds = await getFilteredProjectIds(prop('filter', realPayload))
-	const filterByIds = dare => contains({ id: dare.pk }, serializedProjects)
+	const filterByIds = dare => contains({ id: dare.id }, filteredProjectIds)
 
 	if (filteredProjectIds != null) {
 		filteredProjects = filter(filterByIds, filteredProjects)
 	}
+
 	// End Filter with filter items
 
 	const diffBySortType = prop(realPayload.sortType, sortByType)
