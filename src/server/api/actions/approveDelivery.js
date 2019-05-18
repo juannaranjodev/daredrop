@@ -1,4 +1,4 @@
-import { prop, concat, compose, propEq, join, length, gt, last, split, omit, map, filter, assoc, tap, __, head } from 'ramda'
+import { prop, propEq, map, filter } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -6,23 +6,26 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import { streamerAcceptedKey, streamerDeliveryApprovedKey, projectAcceptedKey, projectDeliveredKey } from 'root/src/server/api/lenses'
+import { streamerAcceptedKey, streamerDeliveryApprovedKey, projectDeliveredKey } from 'root/src/server/api/lenses'
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
-import changeProjectStatus from 'root/src/server/api/actionUtil/changeProjectStatus'
+import archiveProject from 'root/src/server/api/actionUtil/archiveProject'
+import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId } = payloadLenses
 
 
-export default async ({ payload, userId }) => {
+export default async ({ payload }) => {
 	const projectId = viewProjectId(payload)
 
-	const [projectToApproveDdb, assigneesDdb] = await dynamoQueryProject(null, projectId, projectAcceptedKey)
+	const [projectToApproveDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
+
+	const projectSerialized = projectSerializer([...projectToApproveDdb, ...assigneesDdb])
 
 	const projectAssignees = prop('assignees', projectSerializer([
 		...assigneesDdb,
 	]))
-
 
 	const projectAcceptedAssignees = filter(propEq('accepted', streamerAcceptedKey), projectAssignees)
 
@@ -38,27 +41,28 @@ export default async ({ payload, userId }) => {
 		},
 	}), projectAcceptedAssignees)
 
+	const projectDataToArchive = archiveProject(projectToApproveDdb)
 
-	const projectToWrite = {
+	const projectDelivered = {
 		PutRequest: {
 			Item: {
-				...changeProjectStatus(projectAcceptedKey, projectDeliveredKey, head(projectToApproveDdb)),
+				[PARTITION_KEY]: prop('id', projectSerialized),
+				[SORT_KEY]: await generateUniqueSortKey(prop('id', projectSerialized), `project|${projectDeliveredKey}`, 1, 10),
+				created: getTimestamp(),
 			},
 		},
 	}
 
-
 	const writeParams = {
 		RequestItems: {
-			[TABLE_NAME]: [...assigneesToWrite, projectToWrite],
+			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToArchive, projectDelivered],
 		},
 	}
-
 
 	await documentClient.batchWrite(writeParams).promise()
 
 	return {
-		...projectSerializer([...projectToApproveDdb, ...assigneesDdb]),
+		...projectSerialized,
 		status: projectDeliveredKey,
 	}
 }

@@ -67,7 +67,7 @@ export default async ({ payload, userId }) => {
 	const url = s3.getSignedUrl('putObject', params)
 
 	if (!deliverySortKey) {
-		deliverySortKey = await generateUniqueSortKey(projectId, `project|${projectDeliveryPendingKey}|`, 1, 10)
+		deliverySortKey = await generateUniqueSortKey(projectId, `project|${projectDeliveryPendingKey}`, 1, 10)
 	}
 
 	const dareDeliveryObject = {

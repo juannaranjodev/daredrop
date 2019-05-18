@@ -41,16 +41,19 @@ export default (
 			{ ...actionPayload },
 			payloadMap,
 		)
-		const validationErrors = reduce((result, validationObj) => {
-			const nextErr = recordClickActionValidation(validationObj, payload)
-			return { ...result, ...nextErr }
-		}, {}, validation)
-		if (not(isEmpty(validationErrors))) {
-			return dispatch(
-				apiRecordClickActionRequestError(
-					recordClickActionStoreKey, validationErrors,
-				),
-			)
+
+		if (validation) {
+			const validationErrors = reduce((result, validationObj) => {
+				const nextErr = recordClickActionValidation(validationObj, payload)
+				return { ...result, ...nextErr }
+			}, {}, validation)
+			if (not(isEmpty(validationErrors))) {
+				return dispatch(
+					apiRecordClickActionRequestError(
+						recordClickActionStoreKey, validationErrors,
+					),
+				)
+			}
 		}
 		const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 		const { statusCode, body, statusError, generalError } = lambdaRes
