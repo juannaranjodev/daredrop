@@ -6,7 +6,8 @@ import {
 	SAVE_PARTIAL_DARE_FORM, ACCEPT_PROJECT, REJECT_PROJECT,
 	SET_DEFAULT_PAYMENT_METHOD, ADD_TO_FAVORITES, REMOVE_TO_FAVORITES,
 	GET_FAVORITES_LIST, GET_MY_PROJECTS, GET_ACCEPTED_PROJECTS,
-	DELIVERY_DARE_INIT, DELIVERY_DARE,
+	DELIVERY_DARE_INIT, DELIVERY_DARE, GET_FILTERED_PROJECTS_BY_GAME,
+	GET_FILTERED_PROJECTS_BY_STREAMER,GET_FILTERED_PROJECTS
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -34,7 +35,6 @@ import getMyProjects from 'root/src/server/api/actions/getMyProjects'
 import getAcceptProject from 'root/src/server/api/actions/getAcceptProject'
 import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
-
 
 export default {
 	[CREATE_PROJECT]: createProject,
@@ -71,4 +71,5 @@ export default {
 	[DELIVERY_DARE]: deliveryDare,
 
 	[GET_ACCEPTED_PROJECTS]: getAcceptProject,
+
 }
