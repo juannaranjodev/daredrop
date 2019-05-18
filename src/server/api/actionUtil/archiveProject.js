@@ -4,9 +4,7 @@ import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoInde
 export default compose(unnest, map(project => ([
 	{
 		PutRequest: {
-			Item: {
-				...assoc('sk', `archival-${prop('sk', project)}`, project),
-			},
+			Item: assoc('sk', `archival-${prop('sk', project)}`, project),
 		},
 	},
 	{
