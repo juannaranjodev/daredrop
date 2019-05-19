@@ -24,7 +24,7 @@ export default async ({ userId, payload }) => {
 	).promise()
 
 	// Filter `dynamoResults` with the value `favoritesAmount == 1`
-	const favoritesProjects = filter(propEq('favoritesAmount', 1), dynamoItemsProp(dynamoResults))
+	const favoritesProjects = filter(propEq('myFavorites', 1), dynamoItemsProp(dynamoResults))
 
 	// check if each project is not rejected or expired
 	const filterValidate = async (dare) => {

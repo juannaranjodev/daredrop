@@ -4,10 +4,9 @@ import {
 	AUDIT_PROJECT, GET_ACTIVE_PROJECTS, GET_PENDING_PROJECTS,
 	GET_PAYMENT_METHODS, ADD_PAYMENT_METHOD, DELETE_PAYMENT_METHOD, UPDATE_PROJECT,
 	SAVE_PARTIAL_DARE_FORM, ACCEPT_PROJECT, REJECT_PROJECT,
-	SET_DEFAULT_PAYMENT_METHOD, ADD_TO_FAVORITES, REMOVE_TO_FAVORITES,
+	SET_DEFAULT_PAYMENT_METHOD, AUDIT_FAVORITES,
 	GET_FAVORITES_LIST, GET_MY_PROJECTS, GET_ACCEPTED_PROJECTS,
-	DELIVERY_DARE_INIT, DELIVERY_DARE, GET_FILTERED_PROJECTS_BY_GAME,
-	GET_FILTERED_PROJECTS_BY_STREAMER,GET_FILTERED_PROJECTS
+	DELIVERY_DARE_INIT, DELIVERY_DARE,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -29,8 +28,7 @@ import setDafaultPaymentMethod from 'root/src/server/api/actions/setDefaultPayme
 import updateProject from 'root/src/server/api/actions/updateProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
 import rejectProject from 'root/src/server/api/actions/rejectProject'
-import addToFavorites from 'root/src/server/api/actions/addToFavorites'
-import removeToFavorites from 'root/src/server/api/actions/removeToFavorites'
+import auditFavorites from 'root/src/server/api/actions/auditFavorites'
 import getMyProjects from 'root/src/server/api/actions/getMyProjects'
 import getAcceptProject from 'root/src/server/api/actions/getAcceptProject'
 import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
@@ -45,8 +43,7 @@ export default {
 	[GET_PLEDGED_PROJECTS]: getPledgedProjects,
 	[GET_MY_PROJECTS]: getMyProjects,
 
-	[ADD_TO_FAVORITES]: addToFavorites,
-	[REMOVE_TO_FAVORITES]: removeToFavorites,
+	[AUDIT_FAVORITES]: auditFavorites,
 
 	[AUDIT_PROJECT]: auditProject,
 
