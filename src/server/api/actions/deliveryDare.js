@@ -10,6 +10,7 @@ import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
 import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
 import { map, prop } from 'ramda'
+import moment from 'moment'
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
 const { viewDeliverySortKey, viewProjectId } = payloadLenses
@@ -59,8 +60,8 @@ export default async ({ payload }) => {
 	const projectAssignees = await dynamoQueryAllProjectAssignees(projectId)
 	const acceptedAssignees = getAcceptedAssignees(projectAssignees)
 
-	const displayNameOnNewline = input => `\n${prop('displayName', input)}`
-	const ytDescription = `${project.description}${map(displayNameOnNewline, acceptedAssignees)}`
+	const displayPlusNewline = input => `${prop('displayName', input)}: https://www.twitch.tv/${prop('displayName', input)}\n`
+	const ytDescription = `${map(displayPlusNewline, acceptedAssignees)}${project.description}`
 
 	const s3data = {
 		Bucket: videoBucket,
@@ -72,12 +73,16 @@ export default async ({ payload }) => {
 	const youtubeUpload = await youtube.videos.insert(
 		{
 			auth: await googleOAuthClient,
-			part: 'id,snippet',
+			part: 'id,snippet,status',
 			notifySubscribers: false,
 			requestBody: {
 				snippet: {
 					title: project.title,
 					description: ytDescription,
+				},
+				status: {
+					privacyStatus: 'private',
+					publishAt: moment().add('days', 2).format('YYYY-MM-DDThh:mm:ss.sZ'),
 				},
 			},
 			media: {
