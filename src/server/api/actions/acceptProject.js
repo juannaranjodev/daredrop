@@ -1,4 +1,4 @@
-import { head, unnest, equals, not, length, gt, last, split, omit, map, compose } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -13,7 +13,7 @@ import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQue
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import randomNumber from 'root/src/shared/util/randomNumber'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
-import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
@@ -23,10 +23,15 @@ export default async ({ payload, userId }) => {
 	const amountRequested = viewAmountRequested(payload)
 	const userTokens = await dynamoQueryOAuth(userId)
 
-	const [projectToAccept] = head(await dynamoQueryProject(
+	const [projectToAcceptDdb, assigneesDdb] = await dynamoQueryProject(
 		null,
 		projectId,
-	))
+	)
+
+	const projectToAccept = projectSerializer([
+		...projectToAcceptDdb,
+		...assigneesDdb,
+	])
 
 	const userTokensInProject = userTokensInProjectSelector(userTokens, projectToAccept)
 	if (not(gt(length(userTokensInProject), 0))) {
@@ -39,12 +44,12 @@ export default async ({ payload, userId }) => {
 
 	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
 
-	const assigneeArrNested = await Promise.all(map(
+	const userAssigneeArrNested = await Promise.all(map(
 		token => dynamoQueryProjectAssignee(projectId, token),
 		userTokensStr,
 	))
 
-	const assigneeArr = unnest(unnest(assigneeArrNested))
+	const userAssigneeArr = unnest(unnest(userAssigneeArrNested))
 
 	const assigneesToWrite = map(assignee => ({
 		PutRequest: {
@@ -55,19 +60,17 @@ export default async ({ payload, userId }) => {
 				modified: getTimestamp(),
 			},
 		},
-	}), assigneeArr)
-
-	const assigneesInProject = await dynamoQueryAllProjectAssignees(projectId)
+	}), userAssigneeArr)
 
 	let projectAcceptedRecord = []
 
-	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesInProject)
+	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesDdb)
 
 	if (equals(length(acceptedAssigneesInProject), 0)) {
 		projectAcceptedRecord = [{
 			PutRequest: {
 				Item: {
-					[PARTITION_KEY]: projectToAccept[PARTITION_KEY],
+					[PARTITION_KEY]: prop('id', projectToAccept),
 					[SORT_KEY]: `project|${projectAcceptedKey}|${randomNumber(1, 10)}`,
 					created: getTimestamp(),
 				},
