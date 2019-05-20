@@ -5,10 +5,11 @@ import { projectApprovedKey } from 'root/src/server/api/lenses'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
+import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPendingOrAcceptedAssignees'
 
 export default async ({ userId, payload }) => {
 	const projectId = prop('projectId', payload)
-	const [project, myPledge, myFavorites] = await dynamoQueryProject(
+	const [project, assignees, myPledge, myFavorites] = await dynamoQueryProject(
 		userId, projectId,
 	)
 
@@ -16,6 +17,7 @@ export default async ({ userId, payload }) => {
 		userId,
 		...projectSerializer([
 			...project,
+			...getPendingOrAcceptedAssignees(assignees),
 			...myPledge,
 			...myFavorites,
 		]),

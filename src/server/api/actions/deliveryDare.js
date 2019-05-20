@@ -7,10 +7,11 @@ import { videoBucket } from 'root/cfOutput'
 import googleOAuthClient, { youtube } from 'root/src/server/api/googleClient'
 import { dynamoItemsProp, projectApprovedKey } from 'root/src/server/api/lenses'
 import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
-import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
 import { map, prop, join } from 'ramda'
 import moment from 'moment'
+import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
 const { viewDeliverySortKey, viewProjectId } = payloadLenses
@@ -45,20 +46,14 @@ export default async ({ payload }) => {
 
 	await documentClient.update(s3UpdateParams).promise()
 
-	const projectParams = {
-		TableName: TABLE_NAME,
-		KeyConditionExpression: `${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :projectStatusKey)`,
-		ExpressionAttributeValues: {
-			':pk': projectId,
-			':projectStatusKey': `project|${projectApprovedKey}|`,
-		},
-	}
+	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)
 
-	const projectDdb = await documentClient.query(projectParams).promise()
-	const [project] = dynamoItemsProp(projectDdb)
+	const project = projectSerializer([
+		...projectDdb,
+		...assigneesDdb,
+	])
 
-	const projectAssignees = await dynamoQueryAllProjectAssignees(projectId)
-	const acceptedAssignees = getAcceptedAssignees(projectAssignees)
+	const acceptedAssignees = getAcceptedAssignees(project.assignees)
 
 	const displayPlusNewline = input => `${prop('displayName', input)}: https://www.twitch.tv/${prop('displayName', input)}\n`
 	const ytDescription = `${join('', map(displayPlusNewline, acceptedAssignees))}${project.description}`
