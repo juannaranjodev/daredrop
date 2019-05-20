@@ -82,7 +82,7 @@ export default async ({ payload }) => {
 				},
 				status: {
 					privacyStatus: 'private',
-					publishAt: moment().add('days', 2).format('YYYY-MM-DDThh:mm:ss.sZ'),
+					publishAt: moment().add(2, 'days').format('YYYY-MM-DDThh:mm:ss.sZ'),
 				},
 			},
 			media: {
