@@ -5,6 +5,7 @@ import dynamoQueryPayoutMethod from 'root/src/server/api/actionUtil/dynamoQueryP
 
 export default async ({ userId }) => {
   const dynamoResult = await dynamoQueryPayoutMethod(userId)
+  // get only first element
   return {
     userId,
     ...head(dynamoResult)
