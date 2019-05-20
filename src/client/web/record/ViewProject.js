@@ -225,7 +225,7 @@ export const ViewProjectModule = memo(({
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
 	userData = {}, approvedVideoUrl, isOneOfAssignees, projectAcceptanceStatus,
-	goalProcess,
+	goalProgress,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -310,7 +310,7 @@ export const ViewProjectModule = memo(({
 							className={classNames(classes.sidebar, 'layout-column')}
 						>
 							<div className={classNames(classes.progressOuter)}>
-								<div className={classNames(classes.progressInner)} style={{ width: `${goalProcess}%` }} />
+								<div className={classNames(classes.progressInner)} style={{ width: `${goalProgress}%` }} />
 								{ !isNil(myPledge)
 									&& (
 										<div className={classNames(classes.youPledge)}>
