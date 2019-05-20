@@ -46,6 +46,12 @@ export default async ({ payload, userId }) => {
 		throw generalError('Project or assignee doesn\'t exist')
 	}
 
+	const assigneesInProject = await dynamoQueryAllProjectAssignees(projectId)
+
+	let projectAcceptedRecord = []
+
+	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesInProject)
+
 	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
 
 	const userAssigneeArrNested = await Promise.all(map(
@@ -71,13 +77,6 @@ export default async ({ payload, userId }) => {
 		}
 		return documentClient.update(updateProjectParam).promise()
 	}, userAssigneeArr))
-
-
-	const assigneesInProject = await dynamoQueryAllProjectAssignees(projectId)
-
-	let projectAcceptedRecord = []
-
-	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesDdb)
 
 	Promise.all(assigneesToWrite)
 
