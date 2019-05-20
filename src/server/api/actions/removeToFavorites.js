@@ -13,7 +13,7 @@ import projectSerializer from 'root/src/server/api/serializers/projectSerializer
 export default async ({ userId, payload }) => {
 	const { projectId } = payload
 	const [
-		projectToFavoritesDdb,
+		projectToFavoritesDdb, assigneesDdb,
 	] = await dynamoQueryProject(
 		userId, projectId,
 	)
@@ -27,7 +27,7 @@ export default async ({ userId, payload }) => {
 	const newFavoritesAmount = 0
 
 	const newFavorites = favoritesDynamoObj(
-		projectId, projectToFavorites, userId, newFavoritesAmount, favoritesCreatedAt
+		projectId, projectToFavorites, userId, newFavoritesAmount, favoritesCreatedAt,
 	)
 
 	const favoritesAmount = isNil(projectToFavorites.favoritesAmount) ? 0 : projectToFavorites.favoritesAmount
@@ -51,14 +51,16 @@ export default async ({ userId, payload }) => {
 		},
 	}
 
-	await documentClient.update(updateProjectParams).promise();
+	await documentClient.update(updateProjectParams).promise()
 
 	const newProject = projectSerializer([
 		...projectToFavoritesDdb,
+		...assigneesDdb,
 		newFavorites,
 	])
 	return {
 		...newProject,
-		favoritesAmount: add(favoritesAmount, -1)
+		favoritesAmount: add(favoritesAmount, -1),
+		myFavorites: 0,
 	}
 }

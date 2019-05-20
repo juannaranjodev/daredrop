@@ -6,11 +6,11 @@ export default (
 	projectId, project, userId, pledgeAmount, stripeCardId, created = false,
 ) => {
 	const data = {
+		...projectDenormalizeFields(project),
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: `pledge|${userId}`,
 		stripeCardId,
 		...(created ? { created: true } : {}),
-		...projectDenormalizeFields(project),
 		pledgeAmount,
 	}
 	return data

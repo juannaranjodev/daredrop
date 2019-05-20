@@ -17,6 +17,7 @@ import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userToke
 import { authorizationError, actionForbiddenError } from 'root/src/server/api/errors'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import dynamoQueryProjectDeliveries from 'root/src/server/api/actionUtil/dynamoQueryProjectDeliveries'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE_INIT)
 
@@ -44,7 +45,12 @@ export default async ({ payload, userId }) => {
 		deliverySortKey = prop('sk', head(userDeliveries))
 	}
 
-	const [project] = head(await dynamoQueryProject(null, projectId))
+	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
+	const project = projectSerializer([
+		...projectDdb,
+		...assigneesDdb,
+	])
+
 	const userTokensInProject = userTokensInProjectSelector(userTokens, project)
 	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')

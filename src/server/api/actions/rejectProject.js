@@ -9,12 +9,12 @@ import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQue
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
-import { projectStreamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
+import { streamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
 import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPendingOrAcceptedAssignees'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectByStatus'
-import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 
@@ -24,7 +24,16 @@ const { viewProjectId, viewMessage } = payloadLenses
 export default async ({ payload, userId }) => {
 	const projectId = viewProjectId(payload)
 	const message = viewMessage(payload)
-	const [projectToReject] = head(await dynamoQueryProject(null, projectId))
+
+	const [projectToRejectDdb, assigneesDdb] = await dynamoQueryProject(
+		null,
+		projectId,
+	)
+
+	const projectToReject = projectSerializer([
+		...projectToRejectDdb,
+		...assigneesDdb,
+	])
 
 	const userTokens = await dynamoQueryOAuth(userId)
 
@@ -40,23 +49,23 @@ export default async ({ payload, userId }) => {
 
 	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
 
-	const assigneeArrNested = await Promise.all(map(
+	const userAssigneeArrNested = await Promise.all(map(
 		token => dynamoQueryProjectAssignee(projectId, token),
 		userTokensStr,
 	))
 
-	const assigneeArr = unnest(unnest(assigneeArrNested))
+	const userAssigneeArr = unnest(unnest(userAssigneeArrNested))
 
 	const assigneesToWrite = map(assignee => ({
 		PutRequest: {
 			Item: {
 				...assignee,
 				message,
-				accepted: projectStreamerRejectedKey,
+				accepted: streamerRejectedKey,
 				modified: getTimestamp(),
 			},
 		},
-	}), assigneeArr)
+	}), userAssigneeArr)
 
 	const rejectionParams = {
 		RequestItems: {
@@ -64,13 +73,12 @@ export default async ({ payload, userId }) => {
 		},
 	}
 
-	const assigneesInProject = await dynamoQueryAllProjectAssignees(projectId)
-	const activeAssigneesInProject = getPendingOrAcceptedAssignees(assigneesInProject)
+	const activeAssigneesInProject = getPendingOrAcceptedAssignees(assigneesDdb)
 
 	// here also for the future rejection of project needs to be separate action contained here (instead of auditProject) to handle transactWrite properly
 	await documentClient.batchWrite(rejectionParams).promise()
 
-	if (equals(length(activeAssigneesInProject) - length(assigneeArr), 0)) {
+	if (equals(length(activeAssigneesInProject) - length(userAssigneeArr), 0)) {
 		const payload = {
 			payload: {
 				projectId,
@@ -84,7 +92,6 @@ export default async ({ payload, userId }) => {
 
 	return omit([PARTITION_KEY, SORT_KEY],
 		{
-			projectId: projectToReject[PARTITION_KEY],
 			...projectToReject,
 			message,
 		})

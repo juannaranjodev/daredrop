@@ -14,8 +14,6 @@ import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 
 describe('getAcceptedProjects', () => {
 	test('Successfully get accepted projects', async () => {
-		// this won't work with actual implementation. there is a need to change acceptProject.js
-		// and getAcceptProject.js
 		const project = await createProject({
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),

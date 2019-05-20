@@ -3,16 +3,15 @@ import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoInde
 import projectDenormalizeFields from 'root/src/server/api/actionUtil/projectDenormalizeFields'
 
 export default (
-	projectId, project, userId, favoritesAmount, favoritesCreatedAt
+	projectId, project, userId, favoritesAmount, favoritesCreatedAt,
 ) => {
-
 	const data = {
+		...projectDenormalizeFields(project),
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: `favorites|${userId}`,
-		...projectDenormalizeFields(project),
 		favoritesCreatedAt,
-		favoritesAmount
-	};
+		favoritesAmount,
+	}
 
-	return data;
+	return data
 }
