@@ -13,7 +13,7 @@ import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import projectAssigneNameSelector from 'root/src/client/logic/project/selectors/projectAssigneNameSelector'
 import projectDeliveriesSelector from 'root/src/client/logic/project/selectors/projectDeliveriesSelector'
 import projectAcceptedSelector from 'root/src/client/logic/project/selectors/projectAcceptedSelector'
-import goalProcessSelector from 'root/src/client/logic/project/selectors/goalProcessSelector'
+import goalProgressSelector from 'root/src/client/logic/project/selectors/goalProgressSelector'
 
 export default reduxConnector(
 	[
@@ -26,7 +26,7 @@ export default reduxConnector(
 		['projectShareUrl', projectShareUrlSelector],
 		['projectGames', projectGamesSelector],
 		['projectPledged', projectPledgedSelector],
-		['goalProcess', goalProcessSelector],
+		['goalProcess', goalProgressSelector],
 		['projectAccepted', projectAcceptedSelector],
 		['isAuthenticated', isAuthenticated],
 		['projectDeliveries', projectDeliveriesSelector],
