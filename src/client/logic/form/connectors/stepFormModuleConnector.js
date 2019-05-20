@@ -6,6 +6,7 @@ import onLastStep from 'root/src/client/logic/form/selectors/onLastStep'
 import onStep from 'root/src/client/logic/form/selectors/onStep'
 import onFirstStep from 'root/src/client/logic/form/selectors/onFirstStep'
 import stepFormCurrentPage from 'root/src/client/logic/form/selectors/stepFormCurrentPage'
+import customSubmitsSelector from 'root/src/client/logic/form/selectors/customSubmitsSelector'
 
 import stepFormNextPage from 'root/src/client/logic/form/actions/stepFormNextPage'
 import stepFormPrevPage from 'root/src/client/logic/form/actions/stepFormPrevPage'
@@ -21,6 +22,7 @@ export default reduxConnector(
 		['stepForms', stepForms],
 		['formSubmits', formSubmits],
 		['stepFormCurrentPage', stepFormCurrentPage],
+		['customSubmits', customSubmitsSelector],
 	],
 	[
 		['stepFormNextPage', stepFormNextPage],

@@ -4,6 +4,7 @@ import Stepper from '@material-ui/core/Stepper'
 import Form from 'root/src/client/web/form/Form'
 import Submits from 'root/src/client/web/form/Submits'
 import LoadingButton from 'root/src/client/web/base/LoadingButton'
+import CustomSubmits from 'root/src/client/web/form/CustomSubmits'
 import Header from 'root/src/client/web/typography/Header'
 import Button from 'root/src/client/web/base/Button'
 import stepFormModuleConnector from 'root/src/client/logic/form/connectors/stepFormModuleConnector'
@@ -56,6 +57,7 @@ export const StepFormModuleUnconnected = memo(({
 	moduleKey, moduleId, moduleIndex,
 	stepFormCurrentPage, onLastStep, onFirstStep, onStep,
 	stepFormNextPage, stepFormPrevPage, savePartialForm,
+	customSubmits, customSubmitForm,
 }) => (
 	<div className="flex layout-row layout-align-center">
 		<div className={classes.formContainer}>
@@ -96,6 +98,12 @@ export const StepFormModuleUnconnected = memo(({
 						formSubmits={formSubmits}
 						submitFormFn={submitForm}
 					/>
+					{orNull(customSubmits,
+						<CustomSubmits
+							moduleKey={moduleKey}
+							customSubmits={customSubmits}
+							customSubmitFormFn={customSubmitForm}
+						/>)}
 				</div>,
 			)}
 			{orNull(

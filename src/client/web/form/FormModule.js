@@ -75,6 +75,7 @@ export const FormModuleUnconnected = memo(({
 	formFieldTypes, formTitle, formSubmits, moduleId, moduleKey, submitForm,
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
 	classes, subTitle, formType, backButton, formHandlers, handleAction, customSubmits,
+	customSubmitForm,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
@@ -148,10 +149,12 @@ export const FormModuleUnconnected = memo(({
 							formType={formType}
 							setWasSubmitted={setWasSubmitted}
 						/>
-						<CustomSubmits
-							moduleKey={moduleKey}
-							customSubmits={customSubmits}
-						/>
+						{orNull(customSubmits,
+							<CustomSubmits
+								moduleKey={moduleKey}
+								customSubmits={customSubmits}
+								submitFormFn={customSubmitForm}
+							/>)}
 						{orNull(formHandlers, <Handlers
 							moduleKey={moduleKey}
 							formHandlers={formHandlers}

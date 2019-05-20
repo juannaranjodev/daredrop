@@ -1,12 +1,13 @@
 import React, { memo } from 'react'
+import { addIndex, map } from 'ramda'
 
 export const SubmitsUnstyled = memo(({
-	customSubmits, moduleKey, submitFormFn, formType, setWasSubmitted, classes,
+	customSubmits, ...all
 }) => (
-	<div>
-		{customSubmits.map(Submit => (
-			<Submit />
-		))}
+	<div>{console.log(all)}
+		{addIndex(map)((Submit, idx) => (
+			<Submit key={idx} />
+		), customSubmits)}
 	</div>
 ))
 

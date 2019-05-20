@@ -13,6 +13,8 @@ import {
 import createProjectPayloadSchema from 'root/src/shared/descriptions/endpoints/schemas/createProjectPayloadSchema'
 import { formCommon } from 'root/src/shared/descriptions/modules/pledgeProjectForm'
 
+import PayPalButton from 'root/src/client/web/base/CustomButton/PayPalButton'
+
 export default {
 	[CREATE_PROJECT_FORM_MODULE_ID]: {
 		moduleType: 'stepForm',
@@ -91,6 +93,11 @@ export default {
 			formCommon,
 		],
 		preSubmitCaption: '*We take no responsibility for resolving discrepancies between intended project content and content which meet the requirement as stated.',
+		customSubmits: [
+			{
+				Submit: PayPalButton,
+			},
+		],
 		submits: [
 			{
 				label: 'Confirm',
