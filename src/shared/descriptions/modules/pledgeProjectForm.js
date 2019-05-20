@@ -9,6 +9,7 @@ import { PLEDGE_PROJECT, GET_PAYMENT_METHODS } from 'root/src/shared/description
 import {
 	PLEDGE_SUCCESS_PAGE_ROUTE_ID, CREATE_PROJECT_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
+import PayPalButton from 'root/src/client/web/base/CustomButton/PayPalButton'
 
 export const formCommon = {
 	schema: compose(
@@ -67,6 +68,7 @@ export default {
 				},
 			},
 		],
+		customSubmits: [PayPalButton],
 		backButton: {
 			label: 'Go back',
 			routeId: CREATE_PROJECT_ROUTE_ID,

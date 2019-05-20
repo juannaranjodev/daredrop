@@ -6,6 +6,7 @@ import { universalForm } from 'root/src/client/web/componentTypes'
 
 import Fields from 'root/src/client/web/form/Fields'
 import Submits from 'root/src/client/web/form/Submits'
+import CustomSubmits from 'root/src/client/web/form/CustomSubmits'
 import Header from 'root/src/client/web/typography/Header'
 import Body from 'root/src/client/web/typography/Body'
 import Link from 'root/src/client/web/base/Link'
@@ -73,7 +74,7 @@ const styles = {
 export const FormModuleUnconnected = memo(({
 	formFieldTypes, formTitle, formSubmits, moduleId, moduleKey, submitForm,
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
-	classes, subTitle, formType, backButton, formHandlers, handleAction,
+	classes, subTitle, formType, backButton, formHandlers, handleAction, customSubmits,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
@@ -146,6 +147,10 @@ export const FormModuleUnconnected = memo(({
 							submitFormFn={submitForm}
 							formType={formType}
 							setWasSubmitted={setWasSubmitted}
+						/>
+						<CustomSubmits
+							moduleKey={moduleKey}
+							customSubmits={customSubmits}
 						/>
 						{orNull(formHandlers, <Handlers
 							moduleKey={moduleKey}

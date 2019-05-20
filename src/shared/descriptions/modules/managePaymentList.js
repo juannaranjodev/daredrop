@@ -18,10 +18,6 @@ export default {
 				buttonType: 'primaryButton',
 			},
 			{
-				title: 'paypal',
-				buttonType: 'paypalButton',
-			},
-			{
 				title: 'Go Back',
 				routeId: ACCOUNT_SETTINGS_ROUTE_ID,
 				buttonType: 'noBackgroundButton',

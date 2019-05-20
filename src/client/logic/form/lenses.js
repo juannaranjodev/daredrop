@@ -149,6 +149,12 @@ export const formModuleSchema = {
 						},
 					},
 				},
+				customSubmits: {
+					type: 'array',
+					items: {
+						type: 'object',
+					},
+				},
 				backButton: {
 					type: 'object',
 					properties: {

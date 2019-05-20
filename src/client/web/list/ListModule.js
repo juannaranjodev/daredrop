@@ -3,13 +3,10 @@ import React, { memo, useState } from 'react'
 
 import classNames from 'classnames'
 import InfiniteScroll from 'react-infinite-scroller'
-import { ternary } from 'root/src/shared/util/ramdaPlus'
 import PaymentMethod from 'root/src/client/web/list/PaymentMethod'
 import ProjectCard from 'root/src/client/web/list/ProjectCard'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import withModuleContext from 'root/src/client/util/withModuleContext'
-import { PayPalButton } from 'react-paypal-button-v2'
-
 import { listStyle } from 'root/src/client/web/list/style'
 import Title from 'root/src/client/web/typography/Title'
 import SubTitle from 'root/src/client/web/typography/SubTitle'
@@ -90,44 +87,7 @@ const UniversalList = ({
 				/>
 			), last(list))}
 			<div className={classes.buttons}>
-				{map(({ title, routeId, buttonType, subTitle }) => ternary(
-					buttonType === 'paypalButton',
-					<PayPalButton
-						createOrder={(data, actions) => actions.order.create({
-							purchase_units: [{
-								amount: {
-									currency_code: 'USD',
-									value: '0.01',
-								},
-							}],
-						})}
-						onApprove={(data, actions) =>
-							// Capture the funds from the transaction
-							actions.order.capture().then((details) => {
-								// Show a success message to your buyer
-								alert(`Transaction completed by ${details.payer.name.given_name}`)
-
-								// OPTIONAL: Call your server to save the transaction
-								return fetch('/paypal-transaction-complete', {
-									method: 'post',
-									body: JSON.stringify({
-										orderID: data.orderID,
-									}),
-								})
-							})
-						}
-						options={{
-							clientId: 'AUDLjtlelFhnv1t5De7LgsQUVk_UJq6mAQ36LRZbsD3KwV9ZjO4X29XnbaPOSib-PjaG0x6KVEjY_GyF',
-						}}
-						key={title}
-						style={{
-							color: 'white',
-							layout: 'horizontal',
-							shape: 'pill',
-							label: title,
-							tagline: false,
-						}}
-					/>,
+				{map(({ title, routeId, buttonType, subTitle }) => (
 					<LinkButton
 						type="button"
 						key={title}
@@ -140,8 +100,9 @@ const UniversalList = ({
 							<div>{title}</div>
 							<span className="button-subtitle">{subTitle}</span>
 						</div>
-					</LinkButton>,
-				), listControls)}
+					</LinkButton>
+				),
+				listControls)}
 			</div>
 		</List>
 	)
