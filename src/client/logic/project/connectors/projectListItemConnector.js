@@ -26,7 +26,7 @@ export default reduxConnector(
 		['projectShareUrl', projectShareUrlSelector],
 		['projectGames', projectGamesSelector],
 		['projectPledged', projectPledgedSelector],
-		['goalProcess', goalProgressSelector],
+		['goalProgress', goalProgressSelector],
 		['projectAccepted', projectAcceptedSelector],
 		['isAuthenticated', isAuthenticated],
 		['projectDeliveries', projectDeliveriesSelector],
