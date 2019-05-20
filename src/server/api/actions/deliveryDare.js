@@ -9,7 +9,7 @@ import { dynamoItemsProp, projectApprovedKey } from 'root/src/server/api/lenses'
 import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
 import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
-import { map, prop } from 'ramda'
+import { map, prop, join } from 'ramda'
 import moment from 'moment'
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
@@ -61,7 +61,7 @@ export default async ({ payload }) => {
 	const acceptedAssignees = getAcceptedAssignees(projectAssignees)
 
 	const displayPlusNewline = input => `${prop('displayName', input)}: https://www.twitch.tv/${prop('displayName', input)}\n`
-	const ytDescription = `${map(displayPlusNewline, acceptedAssignees)}${project.description}`
+	const ytDescription = `${join('', map(displayPlusNewline, acceptedAssignees))}${project.description}`
 
 	const s3data = {
 		Bucket: videoBucket,
