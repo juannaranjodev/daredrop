@@ -246,6 +246,7 @@ export const projectCardStyle = {
 		borderRadius: 5,
 		width: '100%',
 		fontStyle: 'italic',
+		zIndex: 201,
 	},
 	acceptedMark: {
 		border: `1px solid ${primaryColor}`,
@@ -259,6 +260,7 @@ export const projectCardStyle = {
 		fontSize: 12,
 		fontWeight: 'bold',
 		fontStyle: 'italic',
+		zIndex: 201,
 	},
 	headerContainer: {
 		width: '100%',
