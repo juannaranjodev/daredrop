@@ -58,6 +58,7 @@ describe('getAcceptedProjects', () => {
 		}
 
 		const res = await apiFn(event, contextMock)
+
 		expect(res.statusCode).toEqual(200)
 		expect(res.body.items.length).toEqual(1)
 	})
