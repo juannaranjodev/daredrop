@@ -1,6 +1,7 @@
 import {
 	getDataHof,
 } from 'root/src/server/api/serializers/assigneeSerializer'
+import { streamerPendingKey } from 'root/src/server/api/lenses'
 
 const getUserDataMock = jest.fn()
 
@@ -15,6 +16,8 @@ const mockChannel1 = {
 	description: '5gorillaz desc',
 	profile_image_url: 'https://5gorillaz.jpg',
 	view_count: 286,
+	accepted: streamerPendingKey,
+
 }
 
 const mockChannel2 = {
@@ -27,6 +30,7 @@ const mockChannel2 = {
 	profile_image_url: 'https://sonicfingboom.jpg',
 	offline_image_url: '',
 	view_count: 0,
+	accepted: streamerPendingKey,
 }
 
 
@@ -52,6 +56,7 @@ describe('assigneeSerializer', () => {
 				platformId: '146000275',
 				displayName: '5gorillaz',
 				username: '5gorillaz',
+				accepted: streamerPendingKey,
 			},
 			{
 				platform: 'twitch',
@@ -60,6 +65,7 @@ describe('assigneeSerializer', () => {
 				platformId: '148899812',
 				displayName: 'sonicfingboom',
 				username: 'sonicfingboom',
+				accepted: streamerPendingKey,
 			},
 		], []])
 	})

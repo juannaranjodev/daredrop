@@ -8,10 +8,15 @@ import { GET_MY_PROJECTS } from 'root/src/shared/descriptions/endpoints/endpoint
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import createProject from 'root/src/server/api/actions/createProject'
 
+import auditProject from 'root/src/server/api/actions/auditProject'
+import { projectApprovedKey } from 'root/src/server/api/lenses'
+import rejectProject from 'root/src/server/api/actions/rejectProject'
+import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 
 import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
 
 describe('getMyProjects', () => {
+	let projectArr
 	test('Successfully get my projects', async () => {
 		await Promise.all(
 			map(
@@ -22,7 +27,7 @@ describe('getMyProjects', () => {
 				range(1, 3),
 			),
 		)
-		const projectArr = await Promise.all(
+		projectArr = await Promise.all(
 			map(
 				() => createProject({
 					userId: mockUserId,
@@ -45,5 +50,42 @@ describe('getMyProjects', () => {
 		expect(res.body.items.length).toEqual(2)
 		expect(res.body.items[0].sk).toEqual(projectArr[0].sk)
 		expect(res.body.items[1].sk).toEqual(projectArr[1].sk)
+	})
+
+	test('gets correct amount of assignees displayed after one rejects', async () => {
+		const oAuthDetails = {
+			tokenId: 'twitch',
+			id: projectArr[0].assignees[0].platformId,
+		}
+
+		await addOAuthToken({
+			payload: oAuthDetails,
+			userId: mockUserId,
+		})
+
+		await auditProject({
+			userId: mockUserId,
+			payload: {
+				projectId: projectArr[0].id,
+				audit: projectApprovedKey,
+			},
+		})
+
+		await rejectProject({
+			userId: mockUserId,
+			payload: {
+				projectId: projectArr[0].id,
+				assigneeId: `twitch|${projectArr[0].assignees[0].platformId}`,
+			},
+		})
+
+		const event = {
+			endpointId: GET_MY_PROJECTS,
+			payload: { currentPage: 1 },
+			authentication: mockUserId,
+		}
+		const res = await apiFn(event, contextMock)
+
+		expect(res.body.items[0].assignees.length).toEqual(1)
 	})
 })
