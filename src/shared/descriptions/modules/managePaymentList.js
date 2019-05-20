@@ -15,7 +15,11 @@ export default {
 			{
 				title: 'Add Credit Card',
 				routeId: MANAGE_PAYMENT_FORM_ROUTE_ID,
-				buttonType: 'primarySquareButton',
+				buttonType: 'primaryButton',
+			},
+			{
+				title: 'paypal',
+				buttonType: 'paypalButton',
 			},
 			{
 				title: 'Go Back',

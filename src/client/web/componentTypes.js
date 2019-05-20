@@ -1,4 +1,4 @@
-export const primarySquareButton = 'primarySquareButton'
+export const primaryButton = 'primaryButton'
 export const outlinedButton = 'outlinedButton'
 export const universalForm = 'universalForm'
 export const noBackgroundButton = 'noBackgroundButton'
