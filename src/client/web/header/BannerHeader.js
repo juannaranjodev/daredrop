@@ -10,6 +10,9 @@ import SubTitle from 'root/src/client/web/typography/SubTitle'
 
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import withModuleContext from 'root/src/client/util/withModuleContext'
+import Select from '@material-ui/core/Select'
+import OutlinedInput from '@material-ui/core/OutlinedInput'
+import MenuItem from '@material-ui/core/MenuItem'
 
 import bannerHeaderConnector from 'root/src/client/logic/header/connectors/bannerHeaderConnector'
 
@@ -74,6 +77,13 @@ const styles = {
 			color: secondaryColor,
 		},
 	},
+	filterContainer: {
+		display: 'flex',
+		justifyContent: 'flex-end',
+	},
+	label: {
+		fontSize: 14,
+	},
 }
 
 export const BannerHeaderUnconnected = memo(({
@@ -96,7 +106,7 @@ export const BannerHeaderUnconnected = memo(({
 						<SubTitle>{bannerImageSubText}</SubTitle>
 					</div>
 				</div>
-			</div>
+    </div>
 			))
 		}
 		<div className="layout-row layout-align-center">
@@ -111,6 +121,29 @@ export const BannerHeaderUnconnected = memo(({
 							<Link routeId={linkRouteId}>
 								<span className={classes.newDare}>{linkLabel}</span>
 							</Link>
+						</div>,
+					)}
+					{orNull(
+						createNewDareActive,
+						<div className={classes.filterContainer}>
+							<div className={classes.sort}>
+								<div className={classes.label}>Sort By:</div>
+								<Select
+									label="Sort By:"
+									value="Newest"
+									input={(
+										<OutlinedInput
+											name="age"
+											id="outlined-age-simple"
+										/>
+									)}
+								>
+									<MenuItem value="Newest">Newest</MenuItem>
+									<MenuItem value="Accepted">Accepted</MenuItem>
+									<MenuItem value="Bounty Amount">Bounty Amount</MenuItem>
+									<MenuItem value="Time Left">Time Left</MenuItem>
+								</Select>
+							</div>
 						</div>,
 					)}
 				</div>
