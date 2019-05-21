@@ -10,6 +10,7 @@ import changePasswordForm from 'root/src/shared/descriptions/formSubmits/changeP
 import addPaymentForm from 'root/src/shared/descriptions/formSubmits/addPaymentForm'
 import claimProjectForm from 'root/src/shared/descriptions/formSubmits/claimProjectForm'
 import deliveryDareForm from 'root/src/shared/descriptions/formSubmits/deliveryDareForm'
+import addPayoutForm from 'root/src/shared/descriptions/formSubmits/addPayoutForm'
 
 export default {
 	...createProjectForm,
@@ -24,4 +25,5 @@ export default {
 	...addPaymentForm,
 	...claimProjectForm,
 	...deliveryDareForm,
+  ...addPayoutForm
 }

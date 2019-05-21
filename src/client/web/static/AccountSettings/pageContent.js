@@ -1,6 +1,7 @@
 import {
 	CHANGE_PASSWORD_FORM_ROUTE_ID,
 	MANAGE_PAYMENT_LIST_ROUTE_ID,
+  MANAGE_PAYOUT_METHOD_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
 import { twitchOauthUrl } from 'root/src/client/constants'
 
@@ -20,5 +21,9 @@ export default {
 			text: 'Oauth Channel',
 			href: twitchOauthUrl,
 		},
+    {
+      text: 'Payout Method',
+      routeId: MANAGE_PAYOUT_METHOD_ID
+    }
 	],
 }

@@ -12,13 +12,14 @@ const { viewSubmits } = formModuleLenses
 const { viewFormSubmitting } = formStoreLenses
 
 export default (state, props) => compose(
-	addIndex(map)(({ label }, submitIndex) => [
+	addIndex(map)(({ label, buttonType }, submitIndex) => [
 		label,
 		submitIndex,
 		equals(
 			viewFormSubmitting(props.moduleKey, state),
 			submitIndex,
 		),
+    buttonType
 	]),
 	viewSubmits(__, moduleDescriptions),
 	moduleIdProp,
