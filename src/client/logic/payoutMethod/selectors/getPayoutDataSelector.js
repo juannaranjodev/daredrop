@@ -6,7 +6,7 @@ import { apiStoreLenses } from 'root/src/client/logic/api/lenses'
 const { viewRecordsChild } = apiStoreLenses
 
 export default (state, recordType ) => {
-  const paramsRecordId = currentRouteParamsRecordId(state)
-  const recordStoreId = createRecordStoreKey(recordType, paramsRecordId)
-  return viewRecordsChild(recordStoreId, state)
+	const paramsRecordId = currentRouteParamsRecordId(state)
+	const recordStoreId = createRecordStoreKey(recordType, paramsRecordId)
+	return viewRecordsChild(recordStoreId, state)
 }

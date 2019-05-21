@@ -7,9 +7,9 @@ import { apiStoreLenses } from 'root/src/client/logic/api/lenses'
 const { setRecordsChild } = apiStoreLenses
 
 export default {
-  [ADD_PAYOUT_METHOD_ON_SUCCESS]: (state, { body }) => {
-    const paramsRecordId = currentRouteParamsRecordId(state)
-    const paymentMethodStoreKey = createPayoutMethodStoreKey(paramsRecordId)
-    return (setRecordsChild(paymentMethodStoreKey, body, state))
-  },
+	[ADD_PAYOUT_METHOD_ON_SUCCESS]: (state, { body }) => {
+		const paramsRecordId = currentRouteParamsRecordId(state)
+		const paymentMethodStoreKey = createPayoutMethodStoreKey(paramsRecordId)
+		return (setRecordsChild(paymentMethodStoreKey, body, state))
+	},
 }

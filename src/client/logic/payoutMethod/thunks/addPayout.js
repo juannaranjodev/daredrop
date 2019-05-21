@@ -4,16 +4,16 @@ import getPayoutDataSelector from 'root/src/client/logic/payoutMethod/selectors/
 import { payoutMethod } from 'root/src/shared/descriptions/endpoints/recordTypes'
 
 export default (formData, props) => async (dispatch, getState) => {
-  const state = getState()
-  const payout = getPayoutDataSelector(state, payoutMethod)
+	const state = getState()
+	const payout = getPayoutDataSelector(state, payoutMethod)
 
-  const { email } = formData
-  const apiPayload = {
-    ...formData,
-    email: email,
-  }
-  if (payout && payout.email) {
-    return dispatch(apiRequest(UPDATE_PAYOUT_METHOD, apiPayload))
-  }
-  return dispatch(apiRequest(ADD_PAYOUT_METHOD, apiPayload))
+	const { email } = formData
+	const apiPayload = {
+		...formData,
+		email: email,
+	}
+	if (payout && payout.email) {
+		return dispatch(apiRequest(UPDATE_PAYOUT_METHOD, apiPayload))
+	}
+	return dispatch(apiRequest(ADD_PAYOUT_METHOD, apiPayload))
 }

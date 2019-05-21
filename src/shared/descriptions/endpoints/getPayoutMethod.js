@@ -1,5 +1,5 @@
 import {
-  GET_PAYOUT_METHOD,
+	GET_PAYOUT_METHOD,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import { recordEndpointType } from 'root/src/shared/descriptions/endpoints/lenses'
@@ -9,9 +9,9 @@ import payoutMethodResponseSchema from 'root/src/shared/descriptions/endpoints/s
 export const responseSchema = payoutMethodResponseSchema
 
 export default {
-  [GET_PAYOUT_METHOD]: {
-    endpointType: recordEndpointType,
-    recordType: payoutMethod,
-    responseSchema,
-  },
+	[GET_PAYOUT_METHOD]: {
+		endpointType: recordEndpointType,
+		recordType: payoutMethod,
+		responseSchema,
+	},
 }

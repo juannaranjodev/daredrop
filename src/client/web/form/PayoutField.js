@@ -5,23 +5,23 @@ import payoutItemConnector from 'root/src/client/logic/payoutMethod/connectors/p
 
 
 const PayoutField = ({
-  moduleKey, moduleId, formFieldTypes, formType, wasSubmitted, email, setInput
+	moduleKey, moduleId, formFieldTypes, formType, wasSubmitted, email, setInput
 }) => {
-  useEffect(() => {
-    setInput(moduleKey, ['email'], email)
-  }, [email])
-  
-  return (
-    <Fields
-      moduleKey={moduleKey}
-      moduleId={moduleId}
-      formFieldTypes={formFieldTypes}
-      formType={formType}
-      wasSubmitted={wasSubmitted}
-    />
-  )
+	useEffect(() => {
+		setInput(moduleKey, ['email'], email)
+	}, [email])
+	
+	return (
+		<Fields
+			moduleKey={moduleKey}
+			moduleId={moduleId}
+			formFieldTypes={formFieldTypes}
+			formType={formType}
+			wasSubmitted={wasSubmitted}
+		/>
+	)
 }
 
 export default withModuleContext(
-  payoutItemConnector(PayoutField, {}),
+	payoutItemConnector(PayoutField, {}),
 )

@@ -4,8 +4,8 @@ import emailSelector from 'root/src/client/logic/payoutMethod/selectors/emailSel
 import setInput from 'root/src/client/logic/form/thunks/setInput'
 
 export default reduxConnector(
-  [
-    ['email', emailSelector],
-  ],
-  [['setInput', setInput]],
+	[
+		['email', emailSelector],
+	],
+	[['setInput', setInput]],
 )

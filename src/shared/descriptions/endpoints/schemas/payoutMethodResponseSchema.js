@@ -1,8 +1,8 @@
 
 export default {
-  type: 'object',
-  properties: {
-    email: { type: 'string' },    
-  },
-  additionalProperties: false,
+	type: 'object',
+	properties: {
+		email: { type: 'string' },
+	},
+	additionalProperties: false,
 }

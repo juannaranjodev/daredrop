@@ -1,5 +1,5 @@
 import {
-  ADD_PAYOUT_METHOD,
+	ADD_PAYOUT_METHOD,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import { authenticated } from 'root/src/shared/constants/authenticationTypes'
@@ -10,10 +10,10 @@ import addPayoutMethodPayloadSchema from 'root/src/shared/descriptions/endpoints
 export const payloadSchema = addPayoutMethodPayloadSchema
 
 export default {
-  [ADD_PAYOUT_METHOD]: {
-    authentication: authenticated,
-    endpointType: recordEndpointType,
-    recordType: payoutMethod,
-    payloadSchema,
-  },
+	[ADD_PAYOUT_METHOD]: {
+		authentication: authenticated,
+		endpointType: recordEndpointType,
+		recordType: payoutMethod,
+		payloadSchema,
+	},
 }

@@ -109,23 +109,23 @@ export const FormModuleUnconnected = memo(({
 					onSubmit={submitFormHandler(submitForm, moduleKey, null, setWasSubmitted)}
 					className={classNames({ 'layout-column layout-align-center-stretch': (formType !== universalForm) })}
 				>
-          {ternary(
-            identical(formType, 'payout'),
-            <PayoutField
-              moduleKey={moduleKey}
-              moduleId={moduleId}
-              formFieldTypes={formFieldTypes}
-              formType={formType}
-              wasSubmitted={wasSubmitted}
-            />,
-            <Fields
-              moduleKey={moduleKey}
-              moduleId={moduleId}
-              formFieldTypes={formFieldTypes}
-              formType={formType}
-              wasSubmitted={wasSubmitted}
-            />            
-          )}
+					{ternary(
+						identical(formType, 'payout'),
+						<PayoutField
+							moduleKey={moduleKey}
+							moduleId={moduleId}
+							formFieldTypes={formFieldTypes}
+							formType={formType}
+							wasSubmitted={wasSubmitted}
+						/>,
+						<Fields
+							moduleKey={moduleKey}
+							moduleId={moduleId}
+							formFieldTypes={formFieldTypes}
+							formType={formType}
+							wasSubmitted={wasSubmitted}
+						/>						
+					)}
 					{orNull(
 						preSubmitText,
 						<div
