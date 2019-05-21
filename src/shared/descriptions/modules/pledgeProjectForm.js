@@ -50,6 +50,7 @@ export default {
 		recordType: paymentMethod,
 		endpointId: GET_PAYMENT_METHODS,
 		preSubmitCaption: '*This is just a pledge and you’ll only be charged if the streamer delivers. If they don’t deliver, you won’t pay a thing!',
+		successPage: PLEDGE_SUCCESS_PAGE_ROUTE_ID,
 		submits: [
 			{
 				label: 'Confirm',
@@ -65,6 +66,11 @@ export default {
 						['recordId', { $sub: ['res', 'body', 'id'] }],
 					],
 				},
+			},
+		],
+		customSubmits: [
+			{
+				submit: 'payPalButton',
 			},
 		],
 		backButton: {

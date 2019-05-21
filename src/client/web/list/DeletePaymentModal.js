@@ -26,16 +26,16 @@ export const DeletePaymentModal = memo(({
 			<SubHeader additionalClass={classes.modalHeader}>Remove Credit Card</SubHeader>
 				Are you sure you want to delete this credit card?
 				It will be deleted from your account
-   </DialogContent>
+		</DialogContent>
 		<Button
 			additionalClass={classes.modalButton}
-			buttonType="primarySquareButton"
+			buttonType="primaryButton"
 			onClick={async () => {
 				await deletePaymentMethod(modalRecordId)
 				closeModal()
 			}}
 		>Confirm
-		</Button>
+   </Button>
 	</Dialog>
 ))
 

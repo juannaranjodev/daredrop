@@ -39,7 +39,7 @@ export default {
 		submits: [
 			{
 				label: 'Add Paypal Account',
-				buttonType: 'primaryRoundButton',
+				buttonType: 'primaryButton',
 			},
 		],
 		backButton: {

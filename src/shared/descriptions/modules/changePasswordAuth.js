@@ -37,7 +37,7 @@ export default {
 		submits: [
 			{
 				label: 'Change password',
-				buttonType: 'primarySquareButton',
+				buttonType: 'primaryButton',
 			},
 		],
 		backButton: {

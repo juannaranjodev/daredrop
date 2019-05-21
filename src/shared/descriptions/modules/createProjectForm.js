@@ -91,6 +91,12 @@ export default {
 			formCommon,
 		],
 		preSubmitCaption: '*We take no responsibility for resolving discrepancies between intended project content and content which meet the requirement as stated.',
+		customSubmits: [
+			{
+				submit: 'payPalButton',
+			},
+		],
+		successPage: DARE_CREATE_SUCCESS_ROUTE_ID,
 		submits: [
 			{
 				label: 'Confirm',
