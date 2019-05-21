@@ -16,7 +16,20 @@ export default {
 		myFavorites: { type: 'integer' },
 		approved: { type: 'string' },
 		created: { type: 'string' },
-		approvedVideoUrl: { type: 'string' },
+		deliveries: {
+			type: 'array',
+			items: {
+				type: 'object',
+				properties: {
+					videoURL: { type: 'string' },
+					s3ObjectURL: { type: 'string' },
+					timeStamp: { type: 'string' },
+					youTubeURL: { type: 'string' },
+				},
+				required: ['videoURL', 's3ObjectURL', 'timeStamp'],
+				additionalProperties: true,
+			},
+		},
 		status: {
 			type: 'string',
 			enum: [projectApprovedKey, projectRejectedKey, projectPendingKey],

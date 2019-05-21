@@ -1,4 +1,4 @@
-import { map, addIndex, isNil } from 'ramda'
+import { map, addIndex, isNil, propOr, prop } from 'ramda'
 import React, { memo, useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
@@ -225,7 +225,7 @@ export const ViewProjectModule = memo(({
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
-	userData = {}, approvedVideoUrl, isOneOfAssignees, projectAcceptanceStatus,
+	userData = {}, projectDeliveries, isOneOfAssignees, projectAcceptanceStatus,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -257,11 +257,11 @@ export const ViewProjectModule = memo(({
 
 					</div>
 					<div className="flex-100 flex-gt-sm-55 flex-order-1">
-						{ternary(approvedVideoUrl,
+						{ternary(projectDeliveries,
 							<div className={classes.iframeContainer}>
 								<iframe
 									className={classes.iframe}
-									src={approvedVideoUrl}
+									src={projectDeliveries}
 									frameBorder="0"
 									scrolling="no"
 									allowFullScreen
@@ -311,10 +311,10 @@ export const ViewProjectModule = memo(({
 						>
 							<div className={classNames(classes.progressOuter)}>
 								<div className={classNames(classes.progressInner)} />
-								{ !isNil(myPledge)
+								{!isNil(myPledge)
 									&& (
 										<div className={classNames(classes.youPledge)}>
-										You Pledged: <span>${myPledge}</span>
+											You Pledged: <span>${myPledge}</span>
 										</div>
 									)
 								}
