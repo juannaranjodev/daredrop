@@ -1,5 +1,6 @@
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
 import addPaymentMethodSerializer from 'root/src/server/api/serializers/addPaymentMethodSerializer'
 
 export default async ({ userId, payload }) => {
@@ -8,6 +9,7 @@ export default async ({ userId, payload }) => {
 		TableName: TABLE_NAME,
 		Item: {
 			[PARTITION_KEY]: userId,
+      created: getTimestamp(),
 			...paymentMethod,
 		},
 	}
