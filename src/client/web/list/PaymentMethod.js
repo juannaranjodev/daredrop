@@ -2,7 +2,8 @@ import React, { memo } from 'react'
 import cardDateSelector from 'root/src/client/web/list/util/cardDateSelector'
 import paymentMethodListItemConnector from 'root/src/client/logic/paymentMethod/connectors/paymentMethodListItemConnector'
 import withModuleContext from 'root/src/client/util/withModuleContext'
-
+import { ternary } from 'root/src/shared/util/ramdaPlus'
+import { equals } from 'ramda'
 
 import classNames from 'classnames'
 
@@ -15,7 +16,8 @@ const styles = {
 		marginBottom: 27,
 		cursor: 'pointer',
 	},
-	cardDetails: {
+	paymentDetails: {
+		transform: 'translateY(1px)',
 	},
 	button: {
 		width: 'auto',
@@ -24,7 +26,7 @@ const styles = {
 }
 
 export const PaymentMethodUnconnected = memo(({
-	classes, expMonth, expYear, lastFour, openModal, isDefault, onClick, recordId,
+	classes, expMonth, expYear, lastFour, openModal, isDefault, onClick, recordId, brand,
 }) => (
 	<div
 		className={classNames('flex layout-row layout-align-space-between-center', classes.root)}
@@ -34,10 +36,15 @@ export const PaymentMethodUnconnected = memo(({
 			className={classNames('flex layout-row layout-align-space-between-center')}
 		>
 			<RadioButton checked={isDefault} />
-			<div className={classNames('flex layout-column', classes.cardDetails)}>
-				<strong>********{lastFour}</strong>
-				<span>Expires {cardDateSelector(expMonth, expYear)}</span>
-			</div>
+
+			{ternary(equals(brand, 'PayPal'),
+				<div className={classNames('flex layout-column', classes.paymentDetails)}>
+					<strong>{brand}</strong>
+				</div>,
+				<div className={classNames('flex layout-column')}>
+					<strong>{brand} ****{lastFour}</strong>
+					<span>Expires {cardDateSelector(expMonth, expYear)}</span>
+				</div>)}
 		</div>
 
 		<Button
