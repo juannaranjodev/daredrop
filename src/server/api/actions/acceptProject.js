@@ -1,4 +1,4 @@
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -51,7 +51,6 @@ export default async ({ payload, userId }) => {
 	let projectAcceptedRecord = []
 
 	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesInProject)
-
 	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
 
 	const userAssigneeArrNested = await Promise.all(map(
@@ -103,11 +102,12 @@ export default async ({ payload, userId }) => {
 	}
 
 	const assignee = await dynamoQueryAllProjectAssignees(projectId)
+
 	const updateProjectParam = {
 		TableName: TABLE_NAME,
 		Key: {
-			[PARTITION_KEY]: projectToAccept[PARTITION_KEY],
-			[SORT_KEY]: projectToAccept[SORT_KEY],
+			[PARTITION_KEY]: prop('id', projectToAccept),
+			[SORT_KEY]: head(projectToAcceptDdb)[SORT_KEY],
 		},
 		UpdateExpression: 'SET assignees = :newAssignees',
 		ExpressionAttributeValues: {
