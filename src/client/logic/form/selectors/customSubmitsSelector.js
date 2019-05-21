@@ -8,8 +8,8 @@ import { moduleIdProp } from 'root/src/client/logic/route/lenses'
 const { pathOrCustomSubmits } = formModuleLenses
 
 export default (state, props) => compose(
-	addIndex(map)(({ Submit, specificSubmitProps }, submitIndex) => [
-		Submit,
+	addIndex(map)(({ submit, specificSubmitProps }, submitIndex) => [
+		submit,
 		specificSubmitProps,
 		submitIndex,
 	]),

@@ -15,8 +15,6 @@ import { formCommon } from 'root/src/shared/descriptions/modules/pledgeProjectFo
 import payPalCreateOrder from 'root/src/client/logic/form/thunks/payPalCreateOrder'
 import payPalOnApprove from 'root/src/client/logic/form/thunks/payPalOnApprove'
 
-import PayPalButton from 'root/src/client/web/base/CustomButton/PayPalButton'
-
 export default {
 	[CREATE_PROJECT_FORM_MODULE_ID]: {
 		moduleType: 'stepForm',
@@ -97,7 +95,7 @@ export default {
 		preSubmitCaption: '*We take no responsibility for resolving discrepancies between intended project content and content which meet the requirement as stated.',
 		customSubmits: [
 			{
-				Submit: PayPalButton,
+				submit: 'payPalButton',
 				specificSubmitProps: {
 					payPalCreateOrder,
 					payPalOnApprove,
