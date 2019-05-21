@@ -79,6 +79,8 @@ export default async ({ payload, userId }) => {
 
 	Promise.all(assigneesToWrite)
 
+	Promise.all(assigneesToWrite)
+
 	if (equals(length(acceptedAssigneesInProject), 0)) {
 		projectAcceptedRecord = [{
 			PutRequest: {

@@ -75,7 +75,6 @@ describe('getAcceptedProjects', () => {
 			// authentication: mockUserId,
 		}
 		const res2 = await apiFn(event2)
-		console.log(res.body.assignees)
 		expect(res2.body.items.length).toBe(1)
 	})
 })

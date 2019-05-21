@@ -131,7 +131,7 @@ const styles = {
 		marginBottom: 18.5,
 	},
 	progressInner: {
-		width: '25%',
+		width: '5%',
 		height: 12,
 		borderRadius: 8,
 		backgroundColor: '#800080',
