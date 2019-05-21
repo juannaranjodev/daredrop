@@ -15,6 +15,7 @@ import stepFormPrevPage from 'root/src/client/logic/form/actions/stepFormPrevPag
 import submitForm from 'root/src/client/logic/form/thunks/submitForm'
 import savePartialForm from 'root/src/client/logic/form/thunks/savePartialForm'
 import payPalCreateOrder from 'root/src/client/logic/form/thunks/payPalCreateOrder'
+import payPalOnApprove from 'root/src/client/logic/form/thunks/payPalOnApprove'
 
 export default reduxConnector(
 	[
@@ -33,5 +34,6 @@ export default reduxConnector(
 		['savePartialForm', savePartialForm],
 		['submitForm', submitForm],
 		['payPalCreateOrder', payPalCreateOrder],
+		['payPalOnApprove', payPalOnApprove],
 	],
 )

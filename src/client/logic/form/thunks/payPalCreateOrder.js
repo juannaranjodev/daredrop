@@ -14,8 +14,11 @@ export default (data, actions, { moduleId, formSchema, formData, moduleKey }) =>
 					value: toString(prop('pledgeAmount', formData)),
 				},
 			}],
+			application_context: {
+				shipping_preference: 'NO_SHIPPING',
+			},
 		})
 	} catch (err) {
-		dispatch(setFormErrors(moduleKey, err))
+		return dispatch(setFormErrors(moduleKey, err))
 	}
 }

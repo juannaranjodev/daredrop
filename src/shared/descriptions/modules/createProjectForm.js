@@ -12,8 +12,6 @@ import {
 
 import createProjectPayloadSchema from 'root/src/shared/descriptions/endpoints/schemas/createProjectPayloadSchema'
 import { formCommon } from 'root/src/shared/descriptions/modules/pledgeProjectForm'
-import payPalCreateOrder from 'root/src/client/logic/form/thunks/payPalCreateOrder'
-import payPalOnApprove from 'root/src/client/logic/form/thunks/payPalOnApprove'
 
 export default {
 	[CREATE_PROJECT_FORM_MODULE_ID]: {
@@ -96,12 +94,9 @@ export default {
 		customSubmits: [
 			{
 				submit: 'payPalButton',
-				specificSubmitProps: {
-					payPalCreateOrder,
-					payPalOnApprove,
-				},
 			},
 		],
+		successPage: DARE_CREATE_SUCCESS_ROUTE_ID,
 		submits: [
 			{
 				label: 'Confirm',

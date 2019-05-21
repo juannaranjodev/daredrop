@@ -2,9 +2,7 @@ import { PayPalButton } from 'react-paypal-button-v2'
 import React, { memo } from 'react'
 
 const PayPalButtonUnconnected = memo(({
-	props: {
-		payPalCreateOrder, payPalOnApprove,
-	},
+	payPalCreateOrder, payPalOnApprove,
 	customSubmitsData,
 }) => (
 	<PayPalButton
@@ -13,6 +11,7 @@ const PayPalButtonUnconnected = memo(({
 		options={{
 			clientId: PAYPAL_CLIENT_ID,
 			intent: 'authorize',
+			'disable-funding': 'card,credit,sepa',
 		}}
 		style={{
 			color: 'white',

@@ -9,8 +9,6 @@ import { PLEDGE_PROJECT, GET_PAYMENT_METHODS } from 'root/src/shared/description
 import {
 	PLEDGE_SUCCESS_PAGE_ROUTE_ID, CREATE_PROJECT_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
-import payPalCreateOrder from 'root/src/client/logic/form/thunks/payPalCreateOrder'
-import payPalOnApprove from 'root/src/client/logic/form/thunks/payPalOnApprove'
 
 export const formCommon = {
 	schema: compose(
@@ -52,6 +50,7 @@ export default {
 		recordType: paymentMethod,
 		endpointId: GET_PAYMENT_METHODS,
 		preSubmitCaption: '*This is just a pledge and you’ll only be charged if the streamer delivers. If they don’t deliver, you won’t pay a thing!',
+		successPage: PLEDGE_SUCCESS_PAGE_ROUTE_ID,
 		submits: [
 			{
 				label: 'Confirm',
@@ -72,10 +71,6 @@ export default {
 		customSubmits: [
 			{
 				submit: 'payPalButton',
-				specificSubmitProps: {
-					payPalCreateOrder,
-					payPalOnApprove,
-				},
 			},
 		],
 		backButton: {
