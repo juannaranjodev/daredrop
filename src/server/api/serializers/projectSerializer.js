@@ -22,7 +22,7 @@ export default projectArr => reduce(
 		if (startsWith('assignee', sk)) {
 			const [, platform, platformId] = split('|', sk)
 			const assigneeObj = pick(
-				['image', 'description', 'displayName', 'username', 'accepted'],
+				['image', 'description', 'displayName', 'username', 'accepted', 'amountRequested'],
 				projectPart,
 			)
 			return overAssignees(

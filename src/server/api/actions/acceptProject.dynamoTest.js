@@ -67,17 +67,15 @@ describe('getAcceptedProjects', () => {
 				projectId: project.id,
 			},
 		}
-
 		const res = await apiFn(event)
-
 		expect(res.body.status).toBe(projectAcceptedKey)
-
 		const event2 = {
 			endpointId: GET_ACTIVE_PROJECTS,
 			payload: { currentPage: 1 },
 			// authentication: mockUserId,
 		}
 		const res2 = await apiFn(event2)
+		console.log(res.body.assignees)
 		expect(res2.body.items.length).toBe(1)
 	})
 })
