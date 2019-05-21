@@ -1,5 +1,5 @@
 import getRecordSelector from 'root/src/client/logic/api/selectors/getRecordSelector'
-import { reduce } from 'ramda'
+import { reduce, prop } from 'ramda'
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
 
@@ -7,7 +7,6 @@ import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {
 	viewId,
-	viewAmountRequested,
 	viewPledgeAmount,
 	viewAssignees,
 } = responseLenses
@@ -19,7 +18,7 @@ export default (state, props) => {
 	if (accepted) {
 		const assignees = viewAssignees(record)
 		const pledgeRequest = reduce(
-			(accum, assignee) => accum + viewAmountRequested(assignee),
+			(accum, assignee) => accum + prop('amountRequested', assignee),
 			0,
 			assignees,
 		)
