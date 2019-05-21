@@ -12,6 +12,8 @@ import {
 
 import createProjectPayloadSchema from 'root/src/shared/descriptions/endpoints/schemas/createProjectPayloadSchema'
 import { formCommon } from 'root/src/shared/descriptions/modules/pledgeProjectForm'
+import payPalCreateOrder from 'root/src/client/logic/form/thunks/payPalCreateOrder'
+import payPalOnApprove from 'root/src/client/logic/form/thunks/payPalOnApprove'
 
 import PayPalButton from 'root/src/client/web/base/CustomButton/PayPalButton'
 
@@ -96,6 +98,10 @@ export default {
 		customSubmits: [
 			{
 				Submit: PayPalButton,
+				specificSubmitProps: {
+					payPalCreateOrder,
+					payPalOnApprove,
+				},
 			},
 		],
 		submits: [

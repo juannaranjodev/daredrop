@@ -10,6 +10,8 @@ import {
 	PLEDGE_SUCCESS_PAGE_ROUTE_ID, CREATE_PROJECT_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
 import PayPalButton from 'root/src/client/web/base/CustomButton/PayPalButton'
+import payPalCreateOrder from 'root/src/client/logic/form/thunks/payPalCreateOrder'
+import payPalOnApprove from 'root/src/client/logic/form/thunks/payPalOnApprove'
 
 export const formCommon = {
 	schema: compose(
@@ -68,7 +70,15 @@ export default {
 				},
 			},
 		],
-		customSubmits: [PayPalButton],
+		customSubmits: [
+			{
+				Submit: PayPalButton,
+				specificSubmitProps: {
+					payPalCreateOrder,
+					payPalOnApprove,
+				},
+			},
+		],
 		backButton: {
 			label: 'Go back',
 			routeId: CREATE_PROJECT_ROUTE_ID,

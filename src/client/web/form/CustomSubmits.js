@@ -1,13 +1,12 @@
 import React, { memo } from 'react'
-import { addIndex, map } from 'ramda'
+import { map } from 'ramda'
 
 export const SubmitsUnstyled = memo(({
-	customSubmits, ...all
+	customSubmits, customSubmitsData, payPalCreateOrder,
 }) => (
-	<div>{console.log(all)}
-		{addIndex(map)((Submit, idx) => (
-			<Submit key={idx} />
-		), customSubmits)}
+	<div>{map(([Submit, specificSubmitProps, submitIndex]) => (
+		<Submit key={submitIndex} props={{ ...specificSubmitProps, payPalCreateOrder }} customSubmitsData={customSubmitsData} />
+	), customSubmits)}
 	</div>
 ))
 

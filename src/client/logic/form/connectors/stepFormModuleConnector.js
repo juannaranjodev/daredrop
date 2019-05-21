@@ -7,12 +7,14 @@ import onStep from 'root/src/client/logic/form/selectors/onStep'
 import onFirstStep from 'root/src/client/logic/form/selectors/onFirstStep'
 import stepFormCurrentPage from 'root/src/client/logic/form/selectors/stepFormCurrentPage'
 import customSubmitsSelector from 'root/src/client/logic/form/selectors/customSubmitsSelector'
+import customSubmitsDataSelector from 'root/src/client/logic/form/selectors/customSubmitsDataSelector'
 
 import stepFormNextPage from 'root/src/client/logic/form/actions/stepFormNextPage'
 import stepFormPrevPage from 'root/src/client/logic/form/actions/stepFormPrevPage'
 
 import submitForm from 'root/src/client/logic/form/thunks/submitForm'
 import savePartialForm from 'root/src/client/logic/form/thunks/savePartialForm'
+import payPalCreateOrder from 'root/src/client/logic/form/thunks/payPalCreateOrder'
 
 export default reduxConnector(
 	[
@@ -23,11 +25,13 @@ export default reduxConnector(
 		['formSubmits', formSubmits],
 		['stepFormCurrentPage', stepFormCurrentPage],
 		['customSubmits', customSubmitsSelector],
+		['customSubmitsData', customSubmitsDataSelector],
 	],
 	[
 		['stepFormNextPage', stepFormNextPage],
 		['stepFormPrevPage', stepFormPrevPage],
 		['savePartialForm', savePartialForm],
 		['submitForm', submitForm],
+		['payPalCreateOrder', payPalCreateOrder],
 	],
 )

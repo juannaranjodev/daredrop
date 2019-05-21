@@ -57,7 +57,7 @@ export const StepFormModuleUnconnected = memo(({
 	moduleKey, moduleId, moduleIndex,
 	stepFormCurrentPage, onLastStep, onFirstStep, onStep,
 	stepFormNextPage, stepFormPrevPage, savePartialForm,
-	customSubmits, customSubmitForm,
+	customSubmits, customSubmitsData, payPalCreateOrder,
 }) => (
 	<div className="flex layout-row layout-align-center">
 		<div className={classes.formContainer}>
@@ -87,7 +87,7 @@ export const StepFormModuleUnconnected = memo(({
 				>
 					<span className={classes.transformNone}>
 							Next
-					</span>
+      </span>
 				</LoadingButton>,
 			)}
 			{orNull(
@@ -102,7 +102,8 @@ export const StepFormModuleUnconnected = memo(({
 						<CustomSubmits
 							moduleKey={moduleKey}
 							customSubmits={customSubmits}
-							customSubmitFormFn={customSubmitForm}
+							customSubmitsData={customSubmitsData}
+							payPalCreateOrder={payPalCreateOrder}
 						/>)}
 				</div>,
 			)}
@@ -117,7 +118,7 @@ export const StepFormModuleUnconnected = memo(({
 					>
 						<span className={classes.backButtonText}>
 								Go Back
-						</span>
+							</span>
 					</Button>
 				</div>,
 			)}
