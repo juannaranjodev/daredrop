@@ -146,7 +146,7 @@ export const formModuleSchema = {
 							additionalThunk: { type: 'function' },
 							onSuccess: { type: 'function' },
 							label: { type: 'string' },
-              buttonType: { type: 'string' }
+							buttonType: { type: 'string' }
 						},
 					},
 				},
