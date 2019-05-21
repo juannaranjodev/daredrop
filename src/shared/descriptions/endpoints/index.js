@@ -64,9 +64,9 @@ const allEndpoints = {
 	...deliveryDareInit,
 	...deliveryDare,
 	...getAcceptedProjects,
-  ...addPayoutMethod,
-  ...getPayoutMethod,
-  ...updatePayoutMethod
+	...addPayoutMethod,
+	...getPayoutMethod,
+	...updatePayoutMethod
 }
 
 export default map(

@@ -16,7 +16,7 @@ const endpointDescriptionSchema = {
 						'project',
 						'projectList',
 						'paymentMethod',
-            'payoutMethod'
+						'payoutMethod'
 					],
 				},
 			},

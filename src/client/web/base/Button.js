@@ -6,7 +6,7 @@ import {
 } from 'root/src/client/web/commonStyles'
 import {
 	primarySquareButton,
-  primaryRoundButton,
+	primaryRoundButton,
 	universalForm,
 	noBackgroundButton,
 	outlinedButton,
@@ -38,13 +38,13 @@ const styles = {
 		textTransform: 'none',
 		boxShadow: '0 5px 6px 0 rgba(0, 0, 0, 0.16)',
 	},
-  primaryRoundButton: {
-    padding: 10,
-    fontSize: 18,
-    borderRadius: 20,
-    textTransform: 'none',
-    boxShadow: '0 5px 6px 0 rgba(0, 0, 0, 0.16)',
-  },
+	primaryRoundButton: {
+		padding: 10,
+		fontSize: 18,
+		borderRadius: 20,
+		textTransform: 'none',
+		boxShadow: '0 5px 6px 0 rgba(0, 0, 0, 0.16)',
+	},
 	noBackgroundButton: {
 		padding: 10,
 		fontSize: 18,
@@ -92,7 +92,7 @@ export const ButtonUnstyled = memo(({
 			style,
 			classes.button,
 			{ [classes.unstyled]: unstyled },
-      ({ [classes.primaryRoundButton]: buttonType === primaryRoundButton }),
+			({ [classes.primaryRoundButton]: buttonType === primaryRoundButton }),
 			({ [classes.noBackgroundButton]: buttonType === noBackgroundButton }),
 			({ [classes.primarySquareButton]: buttonType === primarySquareButton || formType === universalForm }),
 			({ [classes.smallButton]: isSmallButton }),

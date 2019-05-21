@@ -19,7 +19,7 @@ export default (state, props) => compose(
 			viewFormSubmitting(props.moduleKey, state),
 			submitIndex,
 		),
-    buttonType
+		buttonType
 	]),
 	viewSubmits(__, moduleDescriptions),
 	moduleIdProp,

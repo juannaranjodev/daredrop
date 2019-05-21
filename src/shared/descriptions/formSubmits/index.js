@@ -25,5 +25,5 @@ export default {
 	...addPaymentForm,
 	...claimProjectForm,
 	...deliveryDareForm,
-  ...addPayoutForm
+	...addPayoutForm
 }

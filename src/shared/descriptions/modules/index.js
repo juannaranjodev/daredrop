@@ -96,7 +96,7 @@ const allModules = {
 	...deliverDareSuccessPage,
 	...myProjectsList,
 	...deliveryDareForm,
-  ...payoutMethodForm
+	...payoutMethodForm
 }
 
 export default allModules

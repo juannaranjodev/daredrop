@@ -108,7 +108,7 @@ const store = createStore(
 		...favoritesProcessingStart,
 		...favoritesProcessingEnd,
 		...displayModal,
-    ...addPayoutMethodOnSuccess
+		...addPayoutMethodOnSuccess
 	}, // reducer object
 	// [], // sagas
 	[
