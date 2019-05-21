@@ -14,6 +14,11 @@ import getPaymentMethods from 'root/src/shared/descriptions/endpoints/getPayment
 import getPaymentMethod from 'root/src/shared/descriptions/endpoints/getPaymentMethod'
 import addPaymentMethod from 'root/src/shared/descriptions/endpoints/addPaymentMethod'
 import deletePaymentMethod from 'root/src/shared/descriptions/endpoints/deletePaymentMethod'
+
+import addPayoutMethod from 'root/src/shared/descriptions/endpoints/addPayoutMethod'
+import getPayoutMethod from 'root/src/shared/descriptions/endpoints/getPayoutMethod'
+import updatePayoutMethod from 'root/src/shared/descriptions/endpoints/updatePayoutMethod'
+
 import acceptProject from 'root/src/shared/descriptions/endpoints/acceptProject'
 import rejectProject from 'root/src/shared/descriptions/endpoints/rejectProject'
 
@@ -59,6 +64,9 @@ const allEndpoints = {
 	...deliveryDareInit,
 	...deliveryDare,
 	...getAcceptedProjects,
+	...addPayoutMethod,
+	...getPayoutMethod,
+	...updatePayoutMethod
 }
 
 export default map(

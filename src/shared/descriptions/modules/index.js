@@ -46,6 +46,7 @@ import rejectProjectModal from 'root/src/shared/descriptions/modules/rejectProje
 import deliverDareSuccessPage from 'root/src/shared/descriptions/modules/deliverDareSuccessPage'
 import myProjectsList from 'root/src/shared/descriptions/modules/myProjectsList'
 import deliveryDareForm from 'root/src/shared/descriptions/modules/deliveryDareForm'
+import payoutMethodForm from 'root/src/shared/descriptions/modules/payoutMethod'
 
 const allModules = {
 	...loginForm,
@@ -95,6 +96,7 @@ const allModules = {
 	...deliverDareSuccessPage,
 	...myProjectsList,
 	...deliveryDareForm,
+	...payoutMethodForm
 }
 
 export default allModules

@@ -4,6 +4,7 @@ import {
 	MANAGE_PAYMENT_FORM_ROUTE_ID,
 	CHANGE_PASSWORD_FORM_ROUTE_ID,
 	CHANGE_PASSWORD_SUCCESS_ROUTE_ID,
+	MANAGE_PAYOUT_METHOD_ID
 } from 'root/src/shared/descriptions/routes/routeIds'
 
 
@@ -14,6 +15,7 @@ import {
 	CHANGE_PASSWORD_SUCCESS_MODULE_ID,
 	MANAGE_PAYMENT_LIST_MODULE_ID,
 	MANAGE_PAYMENT_FORM_MODULE_ID,
+	MANAGE_PAYOUT_METHOD_MODULE_ID
 } from 'root/src/shared/descriptions/modules/moduleIds'
 
 export default {
@@ -42,4 +44,9 @@ export default {
 		url: '/add-payment',
 		modules: [ACCOUNT_SETTINGS_BANNER_HEADER_MODULE_ID, MANAGE_PAYMENT_FORM_MODULE_ID],
 	},
+
+	[MANAGE_PAYOUT_METHOD_ID]: {
+		url: '/payout-method',
+		modules: [ACCOUNT_SETTINGS_BANNER_HEADER_MODULE_ID, MANAGE_PAYOUT_METHOD_MODULE_ID]
+	}
 }
