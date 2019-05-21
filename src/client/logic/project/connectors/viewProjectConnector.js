@@ -21,7 +21,7 @@ import projectDescriptionSelector from 'root/src/client/logic/project/selectors/
 import projectGameImageSquareSelector from 'root/src/client/logic/project/selectors/projectGameImageSquareSelector'
 import projectTitleSelector from 'root/src/client/logic/project/selectors/projectTitleSelector'
 import statusSelector from 'root/src/client/logic/project/selectors/statusSelector'
-import approvedVideoUrlSelector from 'root/src/client/logic/project/selectors/approvedVideoUrlSelector'
+import projectDeliveriesSelector from 'root/src/client/logic/project/selectors/projectDeliveriesSelector'
 import isOneOfAssignesSelector from 'root/src/client/logic/project/selectors/isOneOfAssigneesSelector'
 import projectAcceptanceStatusSelector from 'root/src/client/logic/project/selectors/projectAcceptanceStatusSelector'
 
@@ -55,7 +55,7 @@ export default reduxConnector(
 		['projectTitle', projectTitleSelector],
 		['status', statusSelector],
 		['userData', getUserDataSelector],
-		['approvedVideoUrl', approvedVideoUrlSelector],
+		['projectDeliveries', projectDeliveriesSelector],
 		['isOneOfAssignees', isOneOfAssignesSelector],
 		['projectAcceptanceStatus', projectAcceptanceStatusSelector],
 	],
@@ -64,5 +64,8 @@ export default reduxConnector(
 		['pushRoute', pushRoute],
 		['removeToFavorites', removeToFavorites],
 		['updateProject', updateProject],
+		['isAuthenticated', isAuthenticatedSelector],
+		['canApproveProject', canApproveProjectSelector],
+		['canPledgeProject', canPledgeProjectSelector],
 	],
 )

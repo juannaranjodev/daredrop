@@ -6,7 +6,9 @@ import {
 	SAVE_PARTIAL_DARE_FORM, ACCEPT_PROJECT, REJECT_PROJECT,
 	SET_DEFAULT_PAYMENT_METHOD, AUDIT_FAVORITES,
 	GET_FAVORITES_LIST, GET_MY_PROJECTS, GET_ACCEPTED_PROJECTS,
-	DELIVERY_DARE_INIT, DELIVERY_DARE,
+	DELIVERY_DARE_INIT, DELIVERY_DARE, GET_FILTERED_PROJECTS_BY_GAME,
+	GET_FILTERED_PROJECTS_BY_STREAMER,GET_FILTERED_PROJECTS, 
+ ADD_PAYOUT_METHOD, GET_PAYOUT_METHOD, UPDATE_PAYOUT_METHOD
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -33,6 +35,9 @@ import getMyProjects from 'root/src/server/api/actions/getMyProjects'
 import getAcceptProject from 'root/src/server/api/actions/getAcceptProject'
 import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
+import addPayoutMethod from 'root/src/server/api/actions/addPayoutMethod'
+import getPayoutMethod from 'root/src/server/api/actions/getPayoutMethod'
+import updatePayoutMethod from 'root/src/server/api/actions/updatePayoutMethod'
 
 export default {
 	[CREATE_PROJECT]: createProject,
@@ -68,5 +73,8 @@ export default {
 	[DELIVERY_DARE]: deliveryDare,
 
 	[GET_ACCEPTED_PROJECTS]: getAcceptProject,
-
+ 
+ [ADD_PAYOUT_METHOD]: addPayoutMethod,
+ [GET_PAYOUT_METHOD]: getPayoutMethod,
+ [UPDATE_PAYOUT_METHOD]: updatePayoutMethod,
 }

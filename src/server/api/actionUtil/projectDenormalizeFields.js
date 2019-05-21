@@ -1,5 +1,5 @@
 import { pick } from 'ramda'
 
 export default project => pick([
-	'title', 'description', 'pledgeAmount', 'assignees', 'games', 'favoritesAmount', 'pledgers', 'approved',
+	'title', 'description', 'pledgeAmount', 'games', 'favoritesAmount', 'pledgers', 'approved',
 ], project)

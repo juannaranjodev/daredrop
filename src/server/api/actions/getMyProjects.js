@@ -8,7 +8,9 @@ import {
 import { descendingApproved } from 'root/src/server/api/actionUtil/sortUtil'
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
-import getProjectsByIds from 'root/src/server/api/actionUtil/getProjectsByIds'
+import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPendingOrAcceptedAssignees'
 
 const PageItemLedngth = 8
 
@@ -36,13 +38,19 @@ export default async ({ userId, payload }) => {
 
 	const myProjectsIdsArr = uniq(map(prop('pk'), [...pledgedProjects, ...favoritesProjects]))
 
-	const myProjects = await getProjectsByIds(myProjectsIdsArr)
+	const myProjects = await Promise.all(map(projectId => dynamoQueryProject(null, projectId),
+		myProjectsIdsArr))
+
+	const myProjectsSerialized = map(([project, assignees]) => projectSerializer([
+		...project,
+		...getPendingOrAcceptedAssignees(assignees),
+	]), myProjects)
 
 	const filterExpired = (dare) => {
 		const diff = moment().diff(dare.approved, 'days')
 		return diff <= daysToExpire
 	}
-	const filteredProjects = filter(filterExpired, myProjects)
+	const filteredProjects = filter(filterExpired, myProjectsSerialized)
 
 	const sortedProjects = sort(descendingApproved, filteredProjects)
 

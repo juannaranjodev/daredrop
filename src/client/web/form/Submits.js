@@ -7,8 +7,8 @@ import submitFormHandler from 'root/src/client/logic/form/handlers/submitFormHan
 export const SubmitsUnstyled = memo(({
 	formSubmits, moduleKey, submitFormFn, formType, setWasSubmitted, classes,
 }) => (
-	<div>
-		{formSubmits.map(([label, submitIndex, submitting]) => (
+  <div>
+		{formSubmits.map(([label, submitIndex, submitting, buttonType]) => (
 			<LoadingButton
 				key={submitIndex}
 				loading={submitting}
@@ -16,6 +16,7 @@ export const SubmitsUnstyled = memo(({
 					submitFormHandler(submitFormFn, moduleKey, submitIndex, setWasSubmitted)
 				}
 				formType={formType}
+        buttonType={buttonType}
 			>
 				{label}
 			</LoadingButton>

@@ -1,4 +1,4 @@
-import { head, unnest, equals, not, length, gt, last, split, omit, map, compose } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -13,7 +13,10 @@ import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQue
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import randomNumber from 'root/src/shared/util/randomNumber'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
+import getAssigneeObject from 'root/src/server/api/actionUtil/getAssigneeObject'
+
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
@@ -23,12 +26,18 @@ export default async ({ payload, userId }) => {
 	const amountRequested = viewAmountRequested(payload)
 	const userTokens = await dynamoQueryOAuth(userId)
 
-	const [projectToAccept] = head(await dynamoQueryProject(
+	const [projectToAcceptDdb, assigneesDdb] = await dynamoQueryProject(
 		null,
 		projectId,
-	))
+	)
+
+	const projectToAccept = projectSerializer([
+		...projectToAcceptDdb,
+		...assigneesDdb,
+	])
 
 	const userTokensInProject = userTokensInProjectSelector(userTokens, projectToAccept)
+
 	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
@@ -37,54 +46,78 @@ export default async ({ payload, userId }) => {
 		throw generalError('Project or assignee doesn\'t exist')
 	}
 
-	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
-
-	const assigneeArrNested = await Promise.all(map(
-		token => dynamoQueryProjectAssignee(projectId, token),
-		userTokensStr,
-	))
-
-	const assigneeArr = unnest(unnest(assigneeArrNested))
-
-	const assigneesToWrite = map(assignee => ({
-		PutRequest: {
-			Item: {
-				...assignee,
-				amountRequested,
-				accepted: streamerAcceptedKey,
-				modified: getTimestamp(),
-			},
-		},
-	}), assigneeArr)
-
 	const assigneesInProject = await dynamoQueryAllProjectAssignees(projectId)
 
 	let projectAcceptedRecord = []
 
 	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesInProject)
+	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
+
+	const userAssigneeArrNested = await Promise.all(map(
+		token => dynamoQueryProjectAssignee(projectId, token),
+		userTokensStr,
+	))
+
+	const userAssigneeArr = unnest(unnest(userAssigneeArrNested))
+
+	const assigneesToWrite = unnest(map((assignee) => {
+		const updateProjectParam = {
+			TableName: TABLE_NAME,
+			Key: {
+				[PARTITION_KEY]: assignee[PARTITION_KEY],
+				[SORT_KEY]: assignee[SORT_KEY],
+			},
+			UpdateExpression: 'SET amountRequested = :amountRequested, accepted = :newAccepted, modified = :newModified',
+			ExpressionAttributeValues: {
+				':amountRequested': amountRequested,
+				':newAccepted': streamerAcceptedKey,
+				':newModified': getTimestamp(),
+			},
+		}
+		return documentClient.update(updateProjectParam).promise()
+	}, userAssigneeArr))
+
+	Promise.all(assigneesToWrite)
+
+	Promise.all(assigneesToWrite)
 
 	if (equals(length(acceptedAssigneesInProject), 0)) {
 		projectAcceptedRecord = [{
 			PutRequest: {
 				Item: {
-					[PARTITION_KEY]: projectToAccept[PARTITION_KEY],
+					[PARTITION_KEY]: prop('id', projectToAccept),
 					[SORT_KEY]: `project|${projectAcceptedKey}|${randomNumber(1, 10)}`,
 					created: getTimestamp(),
 				},
 			},
 		}]
+
+		const acceptationParams = {
+			RequestItems: {
+				[TABLE_NAME]: [
+					...projectAcceptedRecord,
+				],
+			},
+		}
+
+		await documentClient.batchWrite(acceptationParams).promise()
 	}
 
-	const acceptationParams = {
-		RequestItems: {
-			[TABLE_NAME]: [
-				...projectAcceptedRecord,
-				...assigneesToWrite,
-			],
+	const assignee = await dynamoQueryAllProjectAssignees(projectId)
+
+	const updateProjectParam = {
+		TableName: TABLE_NAME,
+		Key: {
+			[PARTITION_KEY]: prop('id', projectToAccept),
+			[SORT_KEY]: head(projectToAcceptDdb)[SORT_KEY],
+		},
+		UpdateExpression: 'SET assignees = :newAssignees',
+		ExpressionAttributeValues: {
+			':newAssignees': getAssigneeObject(assignee),
 		},
 	}
 
-	await documentClient.batchWrite(acceptationParams).promise()
+	await documentClient.update(updateProjectParam).promise()
 
 	return omit([PARTITION_KEY, SORT_KEY],
 		{

@@ -9,7 +9,7 @@ import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { internet } from 'faker'
 import { addIndex, map, range } from 'ramda'
 
-describe('addToFavorites', () => {
+describe('auditFavorites', () => {
 	let newProject
 	test('successfully added to your favorites', async () => {
 		newProject = await createProject({

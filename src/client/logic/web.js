@@ -43,6 +43,7 @@ import initApiRecordClickActionRequest from 'root/src/client/logic/api/reducers/
 import deletePaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/deletePaymentMethodOnSuccess'
 import setDefaultPaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/setDefaultPaymentMethodOnSuccess'
 import addPaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/addPaymentMethodOnSuccess'
+import addPayoutMethodOnSuccess from 'root/src/client/logic/payoutMethod/reducers/addPayoutMethodOnSuccess'
 
 // list
 import setFirstPage from 'root/src/client/logic/list/reducers/setFirstPage'
@@ -107,6 +108,7 @@ const store = createStore(
 		...favoritesProcessingStart,
 		...favoritesProcessingEnd,
 		...displayModal,
+		...addPayoutMethodOnSuccess
 	}, // reducer object
 	// [], // sagas
 	[

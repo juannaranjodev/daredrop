@@ -1,4 +1,4 @@
-import { reduce, pick, prepend, startsWith, split, prop } from 'ramda'
+import { reduce, pick, append, prepend, startsWith, split, prop } from 'ramda'
 
 import { skProp, pkProp } from 'root/src/server/api/lenses'
 
@@ -13,7 +13,6 @@ const {
 export default projectArr => reduce(
 	(result, projectPart) => {
 		const sk = skProp(projectPart)
-
 		if (startsWith('pledge', sk)) {
 			return setMyPledge(viewPledgeAmount(projectPart), result)
 		}
@@ -23,11 +22,11 @@ export default projectArr => reduce(
 		if (startsWith('assignee', sk)) {
 			const [, platform, platformId] = split('|', sk)
 			const assigneeObj = pick(
-				['image', 'description', 'displayName', 'username'],
+				['image', 'description', 'displayName', 'username', 'accepted', 'amountRequested'],
 				projectPart,
 			)
 			return overAssignees(
-				prepend({ platform, platformId, ...assigneeObj }),
+				append({ platform, platformId, ...assigneeObj }),
 				result,
 			)
 		}
@@ -46,6 +45,7 @@ export default projectArr => reduce(
 				],
 				projectPart,
 			)
+
 			return {
 				...result,
 				...projectObj,

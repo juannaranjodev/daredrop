@@ -14,7 +14,7 @@ import moment from 'moment'
 export default async ({ userId, payload }) => {
 	const { projectId } = payload
 	const [
-		projectToFavoritesDdb,
+		projectToFavoritesDdb, assigneesDdb,
 	] = await dynamoQueryProject(
 		userId, projectId,
 	)
@@ -85,6 +85,7 @@ export default async ({ userId, payload }) => {
 
 	const newProject = projectSerializer([
 		...projectToFavoritesDdb,
+		...assigneesDdb,
 	])
 
 	return {

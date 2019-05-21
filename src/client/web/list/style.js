@@ -19,6 +19,21 @@ export const projectCardStyle = {
 		position: 'relative',
 
 	},
+	progressOuter: {
+		width: '100%',
+		height: 6,
+		borderRadius: 8,
+		border: '1px solid rgba(128, 0, 128, 0.2)',
+		backgroundColor: '#ffffff',
+		boxSixing: 'border-box',
+	},
+	progressInner: {
+		marginTop: -1,
+		marginLeft: -1,
+		height: 8,
+		borderRadius: 8,
+		backgroundColor: '#800080',
+	},
 	hover: {
 		boxShadow: '0 1px 26px 0 rgba(0,0,0,1)',
 		transform: 'scale(1.05)',
@@ -246,6 +261,7 @@ export const projectCardStyle = {
 		borderRadius: 5,
 		width: '100%',
 		fontStyle: 'italic',
+		zIndex: 201,
 	},
 	acceptedMark: {
 		border: `1px solid ${primaryColor}`,
@@ -259,6 +275,7 @@ export const projectCardStyle = {
 		fontSize: 12,
 		fontWeight: 'bold',
 		fontStyle: 'italic',
+		zIndex: 201,
 	},
 	headerContainer: {
 		width: '100%',
