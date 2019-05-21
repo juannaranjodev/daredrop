@@ -53,7 +53,6 @@ export default async (status, defaultSortType, payload) => {
 		(currentPage - 1) * PageItemLength,
 		currentPage * PageItemLength,
 	)
-
 	return {
 		allPage,
 		currentPage: realPayload.currentPage,

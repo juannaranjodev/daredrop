@@ -22,7 +22,7 @@ export default projectArr => reduce(
 		if (startsWith('assignee', sk)) {
 			const [, platform, platformId] = split('|', sk)
 			const assigneeObj = pick(
-				['image', 'description', 'displayName', 'username', 'accepted'],
+				['image', 'description', 'displayName', 'username', 'accepted', 'amountRequested'],
 				projectPart,
 			)
 			return overAssignees(
@@ -41,7 +41,7 @@ export default projectArr => reduce(
 			const projectObj = pick(
 				[
 					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl',
-					'games', 'pledgers', 'created', 'approved', 'favoritesAmount',
+					'assignees', 'games', 'pledgers', 'created', 'approved', 'favoritesAmount',
 				],
 				projectPart,
 			)

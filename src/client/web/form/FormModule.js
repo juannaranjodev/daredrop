@@ -1,6 +1,7 @@
 import React, { memo, useState } from 'react'
+import { identical } from 'ramda'
 
-import { orNull } from 'root/src/shared/util/ramdaPlus'
+import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
 import { secondaryColor } from 'root/src/client/web/commonStyles'
 import { universalForm } from 'root/src/client/web/componentTypes'
 
@@ -14,6 +15,8 @@ import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
 import FormTitle from 'root/src/client/web/typography/FormTitle'
 import formModuleConnector from 'root/src/client/logic/form/connectors/formModuleConnector'
 import Handlers from 'root/src/client/web/form/Handlers'
+
+import PayoutField from 'root/src/client/web/form/PayoutField'
 
 import backToPrevHandler from 'root/src/client/logic/form/handlers/backToPrevHandler'
 import goToViewProjectHandler from 'root/src/client/logic/project/handlers/goToViewProjectHandler'
@@ -108,13 +111,23 @@ export const FormModuleUnconnected = memo(({
 					onSubmit={submitFormHandler(submitForm, moduleKey, null, setWasSubmitted)}
 					className={classNames({ 'layout-column layout-align-center-stretch': (formType !== universalForm) })}
 				>
-					<Fields
-						moduleKey={moduleKey}
-						moduleId={moduleId}
-						formFieldTypes={formFieldTypes}
-						formType={formType}
-						wasSubmitted={wasSubmitted}
-					/>
+					{ternary(
+						identical(formType, 'payout'),
+						<PayoutField
+							moduleKey={moduleKey}
+							moduleId={moduleId}
+							formFieldTypes={formFieldTypes}
+							formType={formType}
+							wasSubmitted={wasSubmitted}
+						/>,
+						<Fields
+							moduleKey={moduleKey}
+							moduleId={moduleId}
+							formFieldTypes={formFieldTypes}
+							formType={formType}
+							wasSubmitted={wasSubmitted}
+						/>						
+					)}
 					{orNull(
 						preSubmitText,
 						<div
