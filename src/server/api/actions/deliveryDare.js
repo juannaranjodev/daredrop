@@ -8,7 +8,8 @@ import googleOAuthClient, { youtube } from 'root/src/server/api/googleClient'
 import { dynamoItemsProp, projectApprovedKey } from 'root/src/server/api/lenses'
 import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
-import { map, prop } from 'ramda'
+import { map, prop, join } from 'ramda'
+import moment from 'moment'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
@@ -54,8 +55,8 @@ export default async ({ payload }) => {
 
 	const acceptedAssignees = getAcceptedAssignees(project.assignees)
 
-	const displayNameOnNewline = input => `\n${prop('displayName', input)}`
-	const ytDescription = `${project.description}${map(displayNameOnNewline, acceptedAssignees)}`
+	const displayPlusNewline = input => `${prop('displayName', input)}: https://www.twitch.tv/${prop('displayName', input)}\n`
+	const ytDescription = `${join('', map(displayPlusNewline, acceptedAssignees))}${project.description}`
 
 	const s3data = {
 		Bucket: videoBucket,
@@ -67,12 +68,16 @@ export default async ({ payload }) => {
 	const youtubeUpload = await youtube.videos.insert(
 		{
 			auth: await googleOAuthClient,
-			part: 'id,snippet',
+			part: 'id,snippet,status',
 			notifySubscribers: false,
 			requestBody: {
 				snippet: {
 					title: project.title,
 					description: ytDescription,
+				},
+				status: {
+					privacyStatus: 'private',
+					publishAt: moment().add(2, 'days').format('YYYY-MM-DDThh:mm:ss.sZ'),
 				},
 			},
 			media: {
