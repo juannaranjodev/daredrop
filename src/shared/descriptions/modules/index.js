@@ -45,6 +45,9 @@ import claimProjectForm from 'root/src/shared/descriptions/modules/claimProjectF
 import rejectProjectModal from 'root/src/shared/descriptions/modules/rejectProjectModal'
 import deliverDareSuccessPage from 'root/src/shared/descriptions/modules/deliverDareSuccessPage'
 import myProjectsList from 'root/src/shared/descriptions/modules/myProjectsList'
+import pendingDeliveriesList from 'root/src/shared/descriptions/modules/pendingDeliveriesList'
+import titleHeaderPendingDeliveries from 'root/src/shared/descriptions/modules/titleHeaderPendingDeliveries'
+
 import deliveryDareForm from 'root/src/shared/descriptions/modules/deliveryDareForm'
 import payoutMethodForm from 'root/src/shared/descriptions/modules/payoutMethod'
 
@@ -95,8 +98,10 @@ const allModules = {
 	...rejectProjectModal,
 	...deliverDareSuccessPage,
 	...myProjectsList,
+	...pendingDeliveriesList,
 	...deliveryDareForm,
-	...payoutMethodForm
+	...titleHeaderPendingDeliveries,
+	...payoutMethodForm,
 }
 
 export default allModules

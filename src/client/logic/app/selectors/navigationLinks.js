@@ -1,6 +1,7 @@
 import {
 	ACTIVE_PROJECTS_ROUTE_ID, HOW_IT_WORKS_ROUTE_ID, LOGIN_ROUTE_ID,
 	MY_PROJECTS_ROUTE_ID, PENDING_PROJECTS_ROUTE_ID, SIGN_OUT, ACCOUNT_SETTINGS_ROUTE_ID,
+	PENDING_DELIVERIES_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
 
 import { ternary } from 'root/src/shared/util/ramdaPlus'
@@ -29,6 +30,13 @@ export default (state, props) => ternary(
 						}]
 						: []
 					),
+					...(isAdminSelector(state, props)
+						? [{
+							label: 'Pending Deliveries',
+							routeId: PENDING_DELIVERIES_ROUTE_ID,
+						}]
+						: []
+					),
 					{ label: 'Sign Out', routeId: SIGN_OUT },
 				]
 				: [{ label: 'Sign In', routeId: LOGIN_ROUTE_ID }]
@@ -49,6 +57,13 @@ export default (state, props) => ternary(
 						? [{
 							label: 'Pending Dares',
 							routeId: PENDING_PROJECTS_ROUTE_ID,
+						}]
+						: []
+					),
+					...(isAdminSelector(state, props)
+						? [{
+							label: 'Pending Deliveries',
+							routeId: PENDING_DELIVERIES_ROUTE_ID,
 						}]
 						: []
 					),

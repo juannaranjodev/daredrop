@@ -1,4 +1,4 @@
-import { DELIVERY_DARE, DELIVERY_DARE_INIT } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { DELIVERY_DARE, DELIVERY_DARE_INIT, GET_PENDING_DELIVERIES } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { apiFn } from 'root/src/server/api'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import createProject from 'root/src/server/api/actions/createProject'
@@ -88,5 +88,48 @@ describe('deliveryDare flow', async () => {
 		}
 		const res = await apiFn(event)
 		expect(res.statusCode).toEqual(403)
+	})
+
+	test('gets list of pending deliveries', async () => {
+		const event = {
+			endpointId: GET_PENDING_DELIVERIES,
+			payload: { currentPage: 1 },
+			authentication: mockUserId,
+		}
+
+		const project2 = await createProject({
+			userId: 'user-differentuserid',
+			payload: createProjectPayload(),
+		})
+		await auditProject({
+			userId: mockUserId,
+			payload: {
+				projectId: project2.id,
+				audit: projectApprovedKey,
+			},
+		})
+
+		await acceptProject({
+			userId: mockUserId,
+			payload: {
+				projectId: project2.id,
+				assigneeId: `twitch|${project2.assignees[0].platformId}`,
+				amountRequested: 1000,
+			},
+		})
+		const deliveryPayload = deliveryDareMock(project2.id)
+
+		const deliveryEvent = {
+			endpointId: DELIVERY_DARE_INIT,
+			payload: deliveryPayload,
+			authentication: mockUserId,
+		}
+		await apiFn(deliveryEvent)
+
+		const res = await apiFn(event)
+
+		expect(res.body.items.length).toEqual(2)
+		expect(res.body.items[0].id).toEqual(project.id)
+		expect(res.body.items[1].id).toEqual(project2.id)
 	})
 })
