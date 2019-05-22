@@ -131,7 +131,6 @@ const styles = {
 		marginBottom: 18.5,
 	},
 	progressInner: {
-		width: '5%',
 		height: 12,
 		borderRadius: 8,
 		backgroundColor: '#800080',
@@ -225,7 +224,8 @@ export const ViewProjectModule = memo(({
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
-	userData = {}, projectDeliveries, isOneOfAssignees, projectAcceptanceStatus,
+	userData = {}, approvedVideoUrl, isOneOfAssignees, projectAcceptanceStatus,
+	goalProgress, projectDeliveries,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -310,8 +310,8 @@ export const ViewProjectModule = memo(({
 							className={classNames(classes.sidebar, 'layout-column')}
 						>
 							<div className={classNames(classes.progressOuter)}>
-								<div className={classNames(classes.progressInner)} />
-								{!isNil(myPledge)
+								<div className={classNames(classes.progressInner)} style={{ width: `${goalProgress}%` }} />
+								{ !isNil(myPledge)
 									&& (
 										<div className={classNames(classes.youPledge)}>
 											You Pledged: <span>${myPledge}</span>
