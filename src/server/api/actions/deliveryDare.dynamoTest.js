@@ -127,6 +127,7 @@ describe('deliveryDare flow', async () => {
 		await apiFn(deliveryEvent)
 
 		const res = await apiFn(event)
+		console.log(JSON.stringify(res, null, 2))
 		expect(res.body.items.length).toEqual(2)
 		expect(res.body.items[0].id).toEqual(project.id)
 		expect(res.body.items[1].id).toEqual(project2.id)

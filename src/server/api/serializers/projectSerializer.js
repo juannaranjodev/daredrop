@@ -7,7 +7,7 @@ import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {
-	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewMyFavorites,
+	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewMyFavorites, overDeliveries,
 } = responseLenses
 
 export default projectArr => reduce(
