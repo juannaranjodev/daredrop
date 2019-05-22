@@ -64,5 +64,7 @@ describe('getListOfFavorites', () => {
 		expect(res.body.items.length).toEqual(4)
 		expect(res.body.items[0].sk).toEqual(projectArr[0].sk)
 		expect(res.body.items[1].sk).toEqual(projectArr[1].sk)
+		expect(res.body.items[2].sk).toEqual(projectArr[2].sk)
+		expect(res.body.items[3].sk).toEqual(projectArr[3].sk)
 	})
 })

@@ -12,7 +12,7 @@ import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 
 describe('getPendingProjects', () => {
 	test('Successfully get pending projects', async () => {
-		await Promise.all(
+		const projects = await Promise.all(
 			map(
 				() => createProject({
 					userId: mockUserId,

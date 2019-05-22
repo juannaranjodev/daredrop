@@ -6,7 +6,6 @@ export default (
 	projectId, project, userId, myFavorites, created, removingFromFavorites,
 ) => {
 	const data = {
-		...projectDenormalizeFields(project),
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: ternary(removingFromFavorites, `archival-favorites|${userId}`, `favorites|${userId}`),
 		created,

@@ -103,6 +103,7 @@ const allModules = {
 	...titleHeaderPendingDeliveries,
 	...dareDeliveryDetail,
 	...payoutMethodForm
+	...payoutMethodForm,
 }
 
 export default allModules
