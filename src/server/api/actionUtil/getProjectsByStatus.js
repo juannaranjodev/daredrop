@@ -4,7 +4,6 @@ import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 import dynamoQueryShardedProjects from 'root/src/server/api/actionUtil/dynamoQueryShardedProjects'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPendingOrAcceptedAssignees'
 
 import { sortByType } from 'root/src/server/api/actionUtil/sortUtil'
 
@@ -16,10 +15,7 @@ export default async (status, defaultSortType, payload) => {
 	const realPayload = payload.payload
 	const projectsDdb = await dynamoQueryShardedProjects(status)
 
-	const serializedProjects = map(([projectDdb, assigneesDdb]) => projectSerializer([
-		...projectDdb,
-		...getPendingOrAcceptedAssignees(assigneesDdb),
-	]), projectsDdb)
+	const serializedProjects = map(compose(dissoc('myPledge'), projectSerializer), projectsDdb)
 
 	// Filter expired projects
 	const filterExpired = (dare) => {
