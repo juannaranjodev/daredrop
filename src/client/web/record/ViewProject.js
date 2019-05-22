@@ -220,7 +220,7 @@ const styles = {
 }
 
 export const ViewProjectModule = memo(({
-	addToFavorites, removeToFavorites, favoritesAmount, myFavorites,
+	auditFavorites, removeToFavorites, favoritesAmount, myFavorites,
 	projectId, projectDescription, projectTitle, pledgeAmount, assignees,
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
@@ -403,44 +403,25 @@ export const ViewProjectModule = memo(({
 								pushRoute,
 								isAuthenticated,
 							})}
-							{
-								isNil(myFavorites) || myFavorites === 0
-									? (
-										<div className={classes.sidebarItem}>
-											<LoadingButton
-												buttonType="noBackgroundButton"
-												loading={favoritesProcessing}
-												onClick={
-													ternary(
-														isAuthenticated,
-														addToFavorites,
-														goToSignInHandler(pushRoute),
-													)
-												}
-											>
-												<FavoriteBorderIcon className={classes.leftIcon} />
-												Add to Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
-											</LoadingButton>
-										</div>
-									)
-									: (
-										<div className={classes.sidebarItem}>
-											<LoadingButton
-												buttonType="noBackgroundButton"
-												loading={favoritesProcessing}
-												onClick={
-													ternary(
-														isAuthenticated,
-														removeToFavorites,
-														goToSignInHandler(pushRoute),
-													)
-												}
-											>
-												Added to your Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
-											</LoadingButton>
-										</div>
-									)
-							}
+
+							<div className={classes.sidebarItem}>
+								<LoadingButton
+									buttonType="noBackgroundButton"
+									loading={favoritesProcessing}
+									onClick={
+										ternary(
+											isAuthenticated,
+											auditFavorites,
+											goToSignInHandler(pushRoute),
+										)
+									}
+								>
+									<FavoriteBorderIcon className={classes.leftIcon} />
+									{ternary(myFavorites,
+										'Added to your Favorites',
+										'Add to Favorites')}({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
+								</LoadingButton>
+							</div>
 						</div>
 					</div>
 				</div>
