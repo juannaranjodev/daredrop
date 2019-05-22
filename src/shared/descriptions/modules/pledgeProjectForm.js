@@ -66,11 +66,7 @@ export default {
 						['recordId', { $sub: ['res', 'body', 'id'] }],
 					],
 				},
-			},
-		],
-		customSubmits: [
-			{
-				submit: 'payPalButton',
+				customSubmit: 'payPalButton',
 			},
 		],
 		backButton: {
