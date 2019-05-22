@@ -41,6 +41,7 @@ export default async ({ userId, payload }) => {
 		created,
 		...projectCommon,
 		pledgers: 1,
+		favoritesAmount: 0,
 	}
 
 
@@ -99,6 +100,7 @@ export default async ({ userId, payload }) => {
 		...projectCommon,
 		assignees: viewAssignees(serializedProject),
 		pledgers: 1,
+		favoritesAmount: 0,
 		created,
 	}
 }

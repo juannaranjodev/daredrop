@@ -1,5 +1,5 @@
 import {
-	ADD_TO_FAVORITES,
+	AUDIT_FAVORITES,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { authenticated } from 'root/src/shared/constants/authenticationTypes'
 
@@ -13,7 +13,7 @@ export const payloadSchema = addToFavoritesPayloadSchema
 export const responseSchema = projectResponseSchema
 
 export default {
-	[ADD_TO_FAVORITES]: {
+	[AUDIT_FAVORITES]: {
 		authentication: authenticated,
 		endpointType: recordEndpointType,
 		recordType: project,

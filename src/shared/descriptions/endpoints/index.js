@@ -30,8 +30,9 @@ import getActiveProjects from 'root/src/shared/descriptions/endpoints/getActiveP
 import getPendingProjects from 'root/src/shared/descriptions/endpoints/getPendingProjects'
 import getFavoritesList from 'root/src/shared/descriptions/endpoints/getFavoritesList'
 import getMyProjects from 'root/src/shared/descriptions/endpoints/getMyProjects'
+import getPendingDeliveries from 'root/src/shared/descriptions/endpoints/getPendingDeliveries'
 
-import addToFavorites from 'root/src/shared/descriptions/endpoints/addToFavorites'
+import auditFavorites from 'root/src/shared/descriptions/endpoints/auditFavorites'
 import removeToFavorites from 'root/src/shared/descriptions/endpoints/removeToFavorites'
 import deliveryDareInit from 'root/src/shared/descriptions/endpoints/deliveryDareInit'
 import deliveryDare from 'root/src/shared/descriptions/endpoints/deliveryDare'
@@ -58,9 +59,10 @@ const allEndpoints = {
 	...updateProject,
 	...acceptProject,
 	...rejectProject,
-	...addToFavorites,
+	...auditFavorites,
 	...removeToFavorites,
 	...getMyProjects,
+	...getPendingDeliveries,
 	...deliveryDareInit,
 	...deliveryDare,
 	...getAcceptedProjects,

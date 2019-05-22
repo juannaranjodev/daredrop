@@ -68,6 +68,20 @@ export default {
 				additionalProperties: false,
 			},
 		},
+		deliveries: {
+			type: 'array',
+			items: {
+				type: 'object',
+				properties: {
+					videoURL: { type: 'string' },
+					s3ObjectURL: { type: 'string' },
+					timeStamp: { type: 'string' },
+					youTubeURL: { type: 'string' },
+				},
+				required: ['videoURL', 's3ObjectURL', 'timeStamp'],
+				additionalProperties: true,
+			},
+		},
 	},
 	required: ['id', 'title', 'image', 'description', 'pledgeAmount', 'status', 'favoritesAmount'],
 	additionalProperties: false,

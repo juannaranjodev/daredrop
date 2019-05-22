@@ -9,7 +9,7 @@ import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload
 import createProject from 'root/src/server/api/actions/createProject'
 
 import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
-import addToFavorites from 'root/src/server/api/actions/addToFavorites'
+import auditFavorites from 'root/src/server/api/actions/auditFavorites'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 
@@ -41,7 +41,7 @@ describe('getListOfFavorites', () => {
 		// add to favorites
 		await Promise.all(
 			map(
-				project => addToFavorites({
+				project => auditFavorites({
 					userId: mockUserId,
 					payload: {
 						projectId: project.id,
@@ -64,5 +64,7 @@ describe('getListOfFavorites', () => {
 		expect(res.body.items.length).toEqual(4)
 		expect(res.body.items[0].sk).toEqual(projectArr[0].sk)
 		expect(res.body.items[1].sk).toEqual(projectArr[1].sk)
+		expect(res.body.items[2].sk).toEqual(projectArr[2].sk)
+		expect(res.body.items[3].sk).toEqual(projectArr[3].sk)
 	})
 })

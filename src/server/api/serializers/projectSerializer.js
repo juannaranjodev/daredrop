@@ -1,13 +1,13 @@
-import { reduce, pick, append, prepend, startsWith, split, prop } from 'ramda'
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq } from 'ramda'
 
-import { skProp, pkProp } from 'root/src/server/api/lenses'
+import { skProp, pkProp, projectDeliveryPendingKey, streamerRejectedKey } from 'root/src/server/api/lenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {
-	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewFavoritesAmount,
+	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewMyFavorites, overDeliveries,
 } = responseLenses
 
 export default projectArr => reduce(
@@ -17,10 +17,13 @@ export default projectArr => reduce(
 			return setMyPledge(viewPledgeAmount(projectPart), result)
 		}
 		if (startsWith('favorites', sk)) {
-			return setMyFavorites(viewFavoritesAmount(projectPart), result)
+			return setMyFavorites(viewMyFavorites(projectPart), result)
 		}
 		if (startsWith('assignee', sk)) {
 			const [, platform, platformId] = split('|', sk)
+			if (propEq('accepted', streamerRejectedKey, projectPart)) {
+				return result
+			}
 			const assigneeObj = pick(
 				['image', 'description', 'displayName', 'username', 'accepted', 'amountRequested'],
 				projectPart,
@@ -37,11 +40,20 @@ export default projectArr => reduce(
 			)
 			return overGames(prepend(game), result)
 		}
+		if (startsWith(`project|${projectDeliveryPendingKey}`, sk)) {
+			const deliveryObj = pick(
+				[
+					'videoURL', 'timestamp', 's3ObjectURL',
+				],
+				projectPart,
+			)
+			return overDeliveries(append(deliveryObj), result)
+		}
 		if (startsWith('project', sk)) {
 			const projectObj = pick(
 				[
 					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl',
-					'assignees', 'games', 'pledgers', 'created', 'approved', 'favoritesAmount',
+					'games', 'pledgers', 'created', 'approved', 'favoritesAmount',
 				],
 				projectPart,
 			)

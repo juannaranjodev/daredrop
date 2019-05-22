@@ -1,4 +1,4 @@
-import { map, range, reverse, prop, compose, sort, addIndex } from 'ramda'
+import { map, range, reverse, prop, compose, omit, sort, addIndex } from 'ramda'
 
 import wait from 'root/src/testUtil/wait'
 
@@ -11,6 +11,8 @@ import createProject from 'root/src/server/api/actions/createProject'
 import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
+import incrementDateCreatedInDb from 'root/src/testUtil/incrementDateCreatedInDb'
+import expectOmitDate from 'root/src/testUtil/expectOmitDate'
 
 describe('getActiveProjects', () => {
 	test('Successfully get active projects', async () => {
@@ -24,50 +26,36 @@ describe('getActiveProjects', () => {
 			),
 		)
 
-		const auditProj = project => auditProject({
-			userId: mockUserId,
-			payload: {
-				projectId: project.id,
-				audit: projectApprovedKey,
-			},
-		})
+		const auditProjectArr = await Promise.all(
+			map(
+				project => auditProject({
+					userId: mockUserId,
+					payload: {
+						projectId: project.id,
+						audit: projectApprovedKey,
+					},
+				}),
+				projectArr,
+			),
+		)
 
-		// this solution sucks but i don't have idea how to prevent
-		// firing all at once and having the same approval date
+		await incrementDateCreatedInDb(map(prop('id'), projectArr))
 
-		const p0 = await auditProj(projectArr[0])
-		await wait(1000)
-		const p1 = await auditProj(projectArr[1])
-		await wait(1000)
-		const p2 = await auditProj(projectArr[2])
-		await wait(1000)
-		const p3 = await auditProj(projectArr[3])
-		await wait(1000)
-		const p4 = await auditProj(projectArr[4])
-		await wait(1000)
-		const p5 = await auditProj(projectArr[5])
-		await wait(1000)
-		const p6 = await auditProj(projectArr[6])
-		await wait(1000)
-		const p7 = await auditProj(projectArr[7])
-		await wait(1000)
-		const p8 = await auditProj(projectArr[8])
-
-
-		const approvedProjectArr = reverse([p0, p1, p2, p3, p4, p5, p6, p7, p8])
+		const approvedProjectArr = reverse(auditProjectArr)
 
 		const event = {
 			endpointId: GET_ACTIVE_PROJECTS,
 			payload: { currentPage: 1 },
 			// authentication: mockUserId,
 		}
+
 		const res = await apiFn(event, contextMock)
 
-
 		expect(res.body.items.length).toEqual(8)
-		expect(res.body.items[0]).toEqual(approvedProjectArr[0])
-		expect(res.body.items[1]).toEqual(approvedProjectArr[1])
-		expect(res.body.items[2]).toEqual(approvedProjectArr[2])
+		expectOmitDate(res.body.items[0], approvedProjectArr[0])
+		expectOmitDate(res.body.items[1], approvedProjectArr[1])
+		expectOmitDate(res.body.items[2], approvedProjectArr[2])
+		expectOmitDate(res.body.items[3], approvedProjectArr[3])
 		expect(res.body.allPage).toEqual(2)
 
 		const event0 = {

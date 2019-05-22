@@ -14,8 +14,6 @@ import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoInde
 import randomNumber from 'root/src/shared/util/randomNumber'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import dynamoQueryAllProjectAssignees from 'root/src/server/api/actionUtil/dynamoQueryAllProjectAssignees'
-import getAssigneeObject from 'root/src/server/api/actionUtil/getAssigneeObject'
 
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
@@ -46,7 +44,7 @@ export default async ({ payload, userId }) => {
 		throw generalError('Project or assignee doesn\'t exist')
 	}
 
-	const assigneesInProject = await dynamoQueryAllProjectAssignees(projectId)
+	const assigneesInProject = prop('assignees', projectToAccept)
 
 	let projectAcceptedRecord = []
 
@@ -79,8 +77,6 @@ export default async ({ payload, userId }) => {
 
 	Promise.all(assigneesToWrite)
 
-	Promise.all(assigneesToWrite)
-
 	if (equals(length(acceptedAssigneesInProject), 0)) {
 		projectAcceptedRecord = [{
 			PutRequest: {
@@ -103,8 +99,6 @@ export default async ({ payload, userId }) => {
 		await documentClient.batchWrite(acceptationParams).promise()
 	}
 
-	const assignee = await dynamoQueryAllProjectAssignees(projectId)
-
 	const updateProjectParam = {
 		TableName: TABLE_NAME,
 		Key: {
@@ -113,7 +107,7 @@ export default async ({ payload, userId }) => {
 		},
 		UpdateExpression: 'SET assignees = :newAssignees',
 		ExpressionAttributeValues: {
-			':newAssignees': getAssigneeObject(assignee),
+			':newAssignees': assigneesInProject,
 		},
 	}
 
