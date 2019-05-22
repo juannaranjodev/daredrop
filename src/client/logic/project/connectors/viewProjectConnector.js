@@ -24,7 +24,7 @@ import statusSelector from 'root/src/client/logic/project/selectors/statusSelect
 import projectDeliveriesSelector from 'root/src/client/logic/project/selectors/projectDeliveriesSelector'
 import isOneOfAssignesSelector from 'root/src/client/logic/project/selectors/isOneOfAssigneesSelector'
 import projectAcceptanceStatusSelector from 'root/src/client/logic/project/selectors/projectAcceptanceStatusSelector'
-
+import goalProgressSelector from 'root/src/client/logic/project/selectors/goalProgressSelector'
 import isAuthenticatedSelector from 'root/src/client/logic/auth/selectors/isAuthenticated'
 
 import auditFavorites from 'root/src/client/logic/project/thunks/auditFavorites'
@@ -49,6 +49,7 @@ export default reduxConnector(
 		['myFavorites', myFavoritesSelector],
 		['myPledge', myPledgeSelector],
 		['pledgeAmount', pledgeAmountSelector],
+		['goalProgress', goalProgressSelector],
 		['pledgers', pledgersSelector],
 		['projectId', recordIdSelector],
 		['projectDescription', projectDescriptionSelector],

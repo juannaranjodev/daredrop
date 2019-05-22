@@ -49,6 +49,7 @@ export default {
 					description: { type: 'string' },
 					platformId: { type: 'string' },
 					displayName: { type: 'string' },
+					amountRequested: { type: 'integer' },
 					username: { type: 'string' },
 				},
 				required: ['platform', 'image', 'platformId'],
