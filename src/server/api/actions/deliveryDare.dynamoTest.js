@@ -96,6 +96,7 @@ describe('deliveryDare flow', async () => {
 			payload: { currentPage: 1 },
 			authentication: mockUserId,
 		}
+
 		const project2 = await createProject({
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),

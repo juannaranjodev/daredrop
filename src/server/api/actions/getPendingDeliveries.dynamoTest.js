@@ -61,12 +61,17 @@ describe('getPendingDeliveries', () => {
 			payload: { currentPage: 1 },
 			// authentication: mockUserId,
 		}
+
 		const res = await apiFn(event, contextMock)
 
-
 		expect(res.body.items.length).toEqual(8)
-		expect(res.body.items[1].sk).toEqual(approvedProjectArr[1].sk)
+		expect(res.body.items[1]).toEqual(approvedProjectArr[1])
 		expect(res.body.items[2]).toEqual(approvedProjectArr[2])
+		expect(res.body.items[3]).toEqual(approvedProjectArr[3])
+		expect(res.body.items[4]).toEqual(approvedProjectArr[4])
+		expect(res.body.items[5]).toEqual(approvedProjectArr[5])
+		expect(res.body.items[6]).toEqual(approvedProjectArr[6])
+		expect(res.body.items[7]).toEqual(approvedProjectArr[7])
 		expect(res.body.allPage).toEqual(2)
 	})
 })

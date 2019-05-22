@@ -1,5 +1,5 @@
 import getProjectsByStatus from 'root/src/server/api/actionUtil/getProjectsByStatus'
 import { projectDeliveryPendingKey } from 'root/src/server/api/lenses'
-import { ascendingApproved } from 'root/src/server/api/actionUtil/sortUtil'
+import { SORT_BY_CREATED_ASC } from 'root/src/shared/constants/sortTypesOfProject'
 
-export default async payload => getProjectsByStatus(projectDeliveryPendingKey, ascendingApproved, payload)
+export default async payload => getProjectsByStatus(projectDeliveryPendingKey, SORT_BY_CREATED_ASC, payload)
