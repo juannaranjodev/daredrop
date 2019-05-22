@@ -102,7 +102,6 @@ const allModules = {
 	...deliveryDareForm,
 	...titleHeaderPendingDeliveries,
 	...dareDeliveryDetail,
-	...payoutMethodForm
 	...payoutMethodForm,
 }
 
