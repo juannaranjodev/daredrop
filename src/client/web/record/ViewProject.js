@@ -225,7 +225,7 @@ export const ViewProjectModule = memo(({
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
 	userData = {}, approvedVideoUrl, isOneOfAssignees, projectAcceptanceStatus,
-	goalProgress,
+	goalProgress, projectDeliveries,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
