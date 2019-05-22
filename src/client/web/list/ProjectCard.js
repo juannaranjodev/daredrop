@@ -23,8 +23,9 @@ import { projectCardStyle } from 'root/src/client/web/list/style'
 export const ListItemUnconnected = memo(({
 	recordId, pushRoute, projectTitle, projectDescription, classes,
 	projectGameImage, projectAssigneesImages, projectShareUrl, projectGames, isAuthenticated,
-	projectAssigneesName, projectDeliveries, projectPledged, projectAccepted, timeouts, setTimeouts,
-	listRouteHandler,
+	projectAssigneesName, projectPledged, projectAccepted, timeouts, setTimeouts,
+	projectDeliveries, listRouteHandler,
+	goalProgress,
 }) => {
 	const [hover, setHover] = useState(false)
 	const [over, setOver] = useState(false)
@@ -142,6 +143,9 @@ export const ListItemUnconnected = memo(({
 							</div>,
 						)
 					}
+					<div className={classNames(classes.progressOuter)}>
+						<div className={classNames(classes.progressInner)} style={{ width: `${goalProgress}%` }} />
+					</div>
 					<div
 						className={classNames(
 							'layout-column layout-align-space-around',

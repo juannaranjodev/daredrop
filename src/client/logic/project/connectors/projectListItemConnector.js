@@ -14,6 +14,7 @@ import projectAssigneNameSelector from 'root/src/client/logic/project/selectors/
 import projectDeliveriesSelector from 'root/src/client/logic/project/selectors/projectDeliveriesSelector'
 import projectAcceptedSelector from 'root/src/client/logic/project/selectors/projectAcceptedSelector'
 import listRouteHandlerSelector from 'root/src/client/logic/project/selectors/listRouteHandlerSelector'
+import goalProgressSelector from 'root/src/client/logic/project/selectors/goalProgressSelector'
 
 export default reduxConnector(
 	[
@@ -26,6 +27,7 @@ export default reduxConnector(
 		['projectShareUrl', projectShareUrlSelector],
 		['projectGames', projectGamesSelector],
 		['projectPledged', projectPledgedSelector],
+		['goalProgress', goalProgressSelector],
 		['projectAccepted', projectAcceptedSelector],
 		['isAuthenticated', isAuthenticated],
 		['projectDeliveries', projectDeliveriesSelector],

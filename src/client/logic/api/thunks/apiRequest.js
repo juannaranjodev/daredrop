@@ -1,4 +1,4 @@
-import { equals, forEach, or, propOr } from 'ramda'
+import { equals, forEach, or, propOr, isNil } from 'ramda'
 
 import createListStoreKey from 'root/src/client/logic/api/util/createListStoreKey'
 import createRecordStoreKey from 'root/src/client/logic/api/util/createRecordStoreKey'
@@ -133,13 +133,15 @@ const endpointTypeFunctionMap = {
 }
 
 export default (endpointId, payload) => async (dispatch, getState) => {
-	try {
-		const state = getState()
-		const endpointType = endpointTypeSelector(endpointId)
-		return endpointTypeFunctionMap[endpointType](
-			dispatch, state, endpointId, payload,
-		)
-	} catch (e) {
-		console.warn(e)
+	if (!isNil(endpointId)) {
+		try {
+			const state = getState()
+			const endpointType = endpointTypeSelector(endpointId)
+			return endpointTypeFunctionMap[endpointType](
+				dispatch, state, endpointId, payload,
+			)
+		} catch (e) {
+			console.warn(e)
+		}
 	}
 }

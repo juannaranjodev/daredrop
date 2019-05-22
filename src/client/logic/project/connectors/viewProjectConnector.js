@@ -27,7 +27,7 @@ import projectAcceptanceStatusSelector from 'root/src/client/logic/project/selec
 import recordClickActionErrorSelector from 'root/src/client/logic/project/selectors/recordClickActionErrorSelector'
 import isAuthenticatedSelector from 'root/src/client/logic/auth/selectors/isAuthenticated'
 
-import addToFavorites from 'root/src/client/logic/project/thunks/addToFavorites'
+import auditFavorites from 'root/src/client/logic/project/thunks/auditFavorites'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import removeToFavorites from 'root/src/client/logic/project/thunks/removeToFavorites'
 import updateProject from 'root/src/client/logic/project/thunks/updateProject'
@@ -61,7 +61,7 @@ export default reduxConnector(
 		['recordClickActionError', recordClickActionErrorSelector],
 	],
 	[
-		['addToFavorites', addToFavorites],
+		['auditFavorites', auditFavorites],
 		['pushRoute', pushRoute],
 		['removeToFavorites', removeToFavorites],
 		['updateProject', updateProject],

@@ -1,6 +1,6 @@
 import { reduce, pick, append, prepend, startsWith, split, prop, propEq } from 'ramda'
 
-import { skProp, pkProp, projectDeliveryPendingKey, projectStreamerRejectedKey } from 'root/src/server/api/lenses'
+import { skProp, pkProp, projectDeliveryPendingKey, streamerRejectedKey } from 'root/src/server/api/lenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
@@ -21,11 +21,11 @@ export default projectArr => reduce(
 		}
 		if (startsWith('assignee', sk)) {
 			const [, platform, platformId] = split('|', sk)
-			if (propEq('accepted', projectStreamerRejectedKey, projectPart)) {
-				return
+			if (propEq('accepted', streamerRejectedKey, projectPart)) {
+				return result
 			}
 			const assigneeObj = pick(
-				['image', 'description', 'displayName', 'username', 'accepted'],
+				['image', 'description', 'displayName', 'username', 'accepted', 'amountRequested'],
 				projectPart,
 			)
 			return overAssignees(

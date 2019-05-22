@@ -41,7 +41,7 @@ export default {
 		submits: [
 			{
 				label: 'Confirm',
-				buttonType: 'primarySquareButton',
+				buttonType: 'primaryButton',
 			},
 		],
 		backButton: {

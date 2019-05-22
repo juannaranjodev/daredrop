@@ -1,11 +1,13 @@
 import React, { memo, useState } from 'react'
+import { identical } from 'ramda'
 
-import { orNull } from 'root/src/shared/util/ramdaPlus'
+import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
 import { secondaryColor } from 'root/src/client/web/commonStyles'
 import { universalForm } from 'root/src/client/web/componentTypes'
 
 import Fields from 'root/src/client/web/form/Fields'
 import Submits from 'root/src/client/web/form/Submits'
+import CustomSubmits from 'root/src/client/web/form/CustomSubmits'
 import Header from 'root/src/client/web/typography/Header'
 import Body from 'root/src/client/web/typography/Body'
 import Link from 'root/src/client/web/base/Link'
@@ -13,6 +15,8 @@ import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
 import FormTitle from 'root/src/client/web/typography/FormTitle'
 import formModuleConnector from 'root/src/client/logic/form/connectors/formModuleConnector'
 import Handlers from 'root/src/client/web/form/Handlers'
+
+import PayoutField from 'root/src/client/web/form/PayoutField'
 
 import backToPrevHandler from 'root/src/client/logic/form/handlers/backToPrevHandler'
 import goToViewProjectHandler from 'root/src/client/logic/project/handlers/goToViewProjectHandler'
@@ -73,7 +77,8 @@ const styles = {
 export const FormModuleUnconnected = memo(({
 	formFieldTypes, formTitle, formSubmits, moduleId, moduleKey, submitForm,
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
-	classes, subTitle, formType, backButton, formHandlers, handleAction,
+	classes, subTitle, formType, backButton, formHandlers, handleAction, customSubmits,
+	customSubmitsData, payPalCreateOrder, payPalOnApprove,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
@@ -106,13 +111,23 @@ export const FormModuleUnconnected = memo(({
 					onSubmit={submitFormHandler(submitForm, moduleKey, null, setWasSubmitted)}
 					className={classNames({ 'layout-column layout-align-center-stretch': (formType !== universalForm) })}
 				>
-					<Fields
-						moduleKey={moduleKey}
-						moduleId={moduleId}
-						formFieldTypes={formFieldTypes}
-						formType={formType}
-						wasSubmitted={wasSubmitted}
-					/>
+					{ternary(
+						identical(formType, 'payout'),
+						<PayoutField
+							moduleKey={moduleKey}
+							moduleId={moduleId}
+							formFieldTypes={formFieldTypes}
+							formType={formType}
+							wasSubmitted={wasSubmitted}
+						/>,
+						<Fields
+							moduleKey={moduleKey}
+							moduleId={moduleId}
+							formFieldTypes={formFieldTypes}
+							formType={formType}
+							wasSubmitted={wasSubmitted}
+						/>,
+					)}
 					{orNull(
 						preSubmitText,
 						<div
@@ -147,6 +162,14 @@ export const FormModuleUnconnected = memo(({
 							formType={formType}
 							setWasSubmitted={setWasSubmitted}
 						/>
+						{orNull(customSubmits,
+							<CustomSubmits
+								moduleKey={moduleKey}
+								customSubmits={customSubmits}
+								customSubmitsData={customSubmitsData}
+								payPalCreateOrder={payPalCreateOrder}
+								payPalOnApprove={payPalOnApprove}
+							/>)}
 						{orNull(formHandlers, <Handlers
 							moduleKey={moduleKey}
 							formHandlers={formHandlers}

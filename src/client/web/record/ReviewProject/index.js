@@ -38,7 +38,7 @@ export const ViewProjectModule = memo(({
 						<div className={classes.iframeContainer}>
 							<iframe
 								className={classes.iframe}
-								src={prop('videoURL', propOr(null, 0, projectDeliveries))}
+								src={prop('deliveryURL', projectDeliveries)}
 								frameBorder="0"
 								scrolling="no"
 								allowFullScreen
@@ -72,7 +72,7 @@ export const ViewProjectModule = memo(({
 						>
 							<div className={classNames('flex-40', 'flex-gt-sm-100', classes.sidebarItem, classes.totalPledge)}>
 								<SubHeader>Time Dare Started:</SubHeader>
-								<div className={classNames(classes.text)}>{prop('timeStamp', propOr(null, 0, projectDeliveries))}</div>
+								<div className={classNames(classes.text)}>{prop('timestamp', projectDeliveries)}</div>
 							</div>
 							<div className={classes.sidebarItem}>
 								<RecordClickActionButton

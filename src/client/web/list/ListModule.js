@@ -3,12 +3,10 @@ import React, { memo, useState } from 'react'
 
 import classNames from 'classnames'
 import InfiniteScroll from 'react-infinite-scroller'
-import { ternary } from 'root/src/shared/util/ramdaPlus'
 import PaymentMethod from 'root/src/client/web/list/PaymentMethod'
 import ProjectCard from 'root/src/client/web/list/ProjectCard'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import withModuleContext from 'root/src/client/util/withModuleContext'
-
 import { listStyle } from 'root/src/client/web/list/style'
 import Title from 'root/src/client/web/typography/Title'
 import SubTitle from 'root/src/client/web/typography/SubTitle'
@@ -89,7 +87,7 @@ const UniversalList = ({
 				/>
 			), last(list))}
 			<div className={classes.buttons}>
-				{map(({ title, routeId, buttonType }) => (
+				{map(({ title, routeId, buttonType, subTitle }) => (
 					<LinkButton
 						type="button"
 						key={title}
@@ -98,9 +96,13 @@ const UniversalList = ({
 						isStyled
 						disableRipple={buttonType === 'noBackgroundButton'}
 					>
-						{title}
+						<div>
+							<div>{title}</div>
+							<span className="button-subtitle">{subTitle}</span>
+						</div>
 					</LinkButton>
-				), listControls)}
+				),
+				listControls)}
 			</div>
 		</List>
 	)

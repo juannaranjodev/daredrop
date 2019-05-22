@@ -2,7 +2,7 @@ import { equals } from 'ramda'
 import { idProp } from 'root/src/client/logic/api/lenses'
 import currentRouteParamsRecordId from 'root/src/client/logic/route/selectors/currentRouteParamsRecordId'
 import createRecordStoreKey from 'root/src/client/logic/api/util/createRecordStoreKey'
-import { ADD_TO_FAVORITES } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { AUDIT_FAVORITES } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { project } from 'root/src/shared/descriptions/endpoints/recordTypes'
 import invokeApiLambda from 'root/src/client/logic/api/util/invokeApiLambda'
 
@@ -30,7 +30,7 @@ export default () => async (dispatch, getState) => {
 		const recordStoreKey = createRecordStoreKey(recordType, recordId)
 		dispatch(initApiRecordRequest(recordStoreKey))
 	}
-	const lambdaRes = await invokeApiLambda(ADD_TO_FAVORITES, payload, state)
+	const lambdaRes = await invokeApiLambda(AUDIT_FAVORITES, payload, state)
 	const { statusCode, body, statusError, generalError } = lambdaRes
 	if (equals(statusCode, 200)) {
 		dispatch(apiRecordRequestSuccess(recordType, body))

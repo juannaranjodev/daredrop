@@ -146,7 +146,21 @@ export const formModuleSchema = {
 							additionalThunk: { type: 'function' },
 							onSuccess: { type: 'function' },
 							label: { type: 'string' },
+							buttonType: { type: 'string' }
 						},
+					},
+				},
+				customSubmits: {
+					type: 'array',
+					items: {
+						type: 'object',
+					},
+				},
+				customSubmitsData: {
+					type: 'array',
+					items: {
+						type: 'array',
+						items: { type: 'string' },
 					},
 				},
 				backButton: {

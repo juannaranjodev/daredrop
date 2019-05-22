@@ -23,6 +23,7 @@ import { APPROVE_PROJECT, REJECT_PROJECT, REJECT_ACTIVE_PROJECT } from 'root/src
 
 import { VIEW_PROJECT_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 
+// import goToDeliveryDareFormHandler from 'root/src/client/logic/project/handlers/goToDeliveryDareFormHandler'
 import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import goToSignInHandler from 'root/src/client/logic/project/handlers/goToSignInHandler'
@@ -130,7 +131,7 @@ const styles = {
 		marginBottom: 18.5,
 	},
 	progressInner: {
-		width: '25%',
+		width: '5%',
 		height: 12,
 		borderRadius: 8,
 		backgroundColor: '#800080',
@@ -186,11 +187,40 @@ const styles = {
 	},
 	totalPledge: {
 		marginTop: 14,
+		smallText: {
+			fontSize: 12,
+			fontFamily: 'Roboto',
+			textTransform: 'none',
+		},
+		bigText: {
+			fontSize: 18,
+			textTransform: 'none',
+			fontFamily: 'Roboto',
+		},
+		deliveryDareButton: {
+			'& span': {
+				height: 24,
+			},
+			'& button': {
+				color: '#800080',
+				height: 48,
+				borderRadius: 50,
+				border: '1px solid #800080',
+				background: 'white',
+				'& div': {
+					display: 'flex',
+					flexDirection: 'column',
+				},
+			},
+			'& button:hover': {
+				background: 'white',
+			},
+		},
 	},
 }
 
 export const ViewProjectModule = memo(({
-	addToFavorites, removeToFavorites, favoritesAmount, myFavorites,
+	auditFavorites, removeToFavorites, favoritesAmount, myFavorites,
 	projectId, projectDescription, projectTitle, pledgeAmount, assignees,
 	gameImage, canApproveProject, canRejectProject, pushRoute, canPledgeProject,
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
@@ -231,7 +261,7 @@ export const ViewProjectModule = memo(({
 							<div className={classes.iframeContainer}>
 								<iframe
 									className={classes.iframe}
-									src={prop('videoURL', propOr(null, 0, projectDeliveries))}
+									src={prop('deliveryURL', projectDeliveries)}
 									frameBorder="0"
 									scrolling="no"
 									allowFullScreen
@@ -373,44 +403,25 @@ export const ViewProjectModule = memo(({
 								pushRoute,
 								isAuthenticated,
 							})}
-							{
-								isNil(myFavorites) || myFavorites === 0
-									? (
-										<div className={classes.sidebarItem}>
-											<LoadingButton
-												buttonType="noBackgroundButton"
-												loading={favoritesProcessing}
-												onClick={
-													ternary(
-														isAuthenticated,
-														addToFavorites,
-														goToSignInHandler(pushRoute),
-													)
-												}
-											>
-												<FavoriteBorderIcon className={classes.leftIcon} />
-												Add to Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
-											</LoadingButton>
-										</div>
-									)
-									: (
-										<div className={classes.sidebarItem}>
-											<LoadingButton
-												buttonType="noBackgroundButton"
-												loading={favoritesProcessing}
-												onClick={
-													ternary(
-														isAuthenticated,
-														removeToFavorites,
-														goToSignInHandler(pushRoute),
-													)
-												}
-											>
-												Added to your Favorites({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
-											</LoadingButton>
-										</div>
-									)
-							}
+
+							<div className={classes.sidebarItem}>
+								<LoadingButton
+									buttonType="noBackgroundButton"
+									loading={favoritesProcessing}
+									onClick={
+										ternary(
+											isAuthenticated,
+											auditFavorites,
+											goToSignInHandler(pushRoute),
+										)
+									}
+								>
+									<FavoriteBorderIcon className={classes.leftIcon} />
+									{ternary(myFavorites,
+										'Added to your Favorites',
+										'Add to Favorites')}({favoritesAmount === 'undefined' ? 0 : favoritesAmount})
+								</LoadingButton>
+							</div>
 						</div>
 					</div>
 				</div>

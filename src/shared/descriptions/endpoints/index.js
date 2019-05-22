@@ -14,6 +14,11 @@ import getPaymentMethods from 'root/src/shared/descriptions/endpoints/getPayment
 import getPaymentMethod from 'root/src/shared/descriptions/endpoints/getPaymentMethod'
 import addPaymentMethod from 'root/src/shared/descriptions/endpoints/addPaymentMethod'
 import deletePaymentMethod from 'root/src/shared/descriptions/endpoints/deletePaymentMethod'
+
+import addPayoutMethod from 'root/src/shared/descriptions/endpoints/addPayoutMethod'
+import getPayoutMethod from 'root/src/shared/descriptions/endpoints/getPayoutMethod'
+import updatePayoutMethod from 'root/src/shared/descriptions/endpoints/updatePayoutMethod'
+
 import acceptProject from 'root/src/shared/descriptions/endpoints/acceptProject'
 import rejectProject from 'root/src/shared/descriptions/endpoints/rejectProject'
 
@@ -27,7 +32,7 @@ import getFavoritesList from 'root/src/shared/descriptions/endpoints/getFavorite
 import getMyProjects from 'root/src/shared/descriptions/endpoints/getMyProjects'
 import getPendingDeliveries from 'root/src/shared/descriptions/endpoints/getPendingDeliveries'
 
-import addToFavorites from 'root/src/shared/descriptions/endpoints/addToFavorites'
+import auditFavorites from 'root/src/shared/descriptions/endpoints/auditFavorites'
 import removeToFavorites from 'root/src/shared/descriptions/endpoints/removeToFavorites'
 import deliveryDareInit from 'root/src/shared/descriptions/endpoints/deliveryDareInit'
 import deliveryDare from 'root/src/shared/descriptions/endpoints/deliveryDare'
@@ -55,7 +60,7 @@ const allEndpoints = {
 	...updateProject,
 	...acceptProject,
 	...rejectProject,
-	...addToFavorites,
+	...auditFavorites,
 	...removeToFavorites,
 	...getMyProjects,
 	...getPendingDeliveries,
@@ -63,6 +68,9 @@ const allEndpoints = {
 	...deliveryDare,
 	...getAcceptedProjects,
 	...approveOrRejectDelivery,
+	...addPayoutMethod,
+	...getPayoutMethod,
+	...updatePayoutMethod,
 }
 
 export default map(

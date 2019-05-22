@@ -14,8 +14,6 @@ import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 
 describe('getAcceptedProjects', () => {
 	test('Successfully get accepted projects', async () => {
-		// this won't work with actual implementation. there is a need to change acceptProject.js
-		// and getAcceptProject.js
 		const project = await createProject({
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),
@@ -51,7 +49,7 @@ describe('getAcceptedProjects', () => {
 		// So this kinda sucks, but there is no way to ConsistenRead on a GSI.
 		// This test will fail because of a race condition occasionally. Should
 		// figure out a better solution to this at some point...maybe a retry?
-		await wait(750)
+		await wait(1000)
 		const event = {
 			endpointId: GET_ACCEPTED_PROJECTS,
 			payload: {
@@ -60,6 +58,7 @@ describe('getAcceptedProjects', () => {
 		}
 
 		const res = await apiFn(event, contextMock)
+
 		expect(res.statusCode).toEqual(200)
 		expect(res.body.items.length).toEqual(1)
 	})

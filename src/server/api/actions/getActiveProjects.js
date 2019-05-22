@@ -1,6 +1,6 @@
 import getProjectsByStatus from 'root/src/server/api/actionUtil/getProjectsByStatus'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
-import { descendingApproved } from 'root/src/server/api/actionUtil/sortUtil'
+import { SORT_BY_NEWEST } from 'root/src/shared/constants/sortTypesOfProject'
 
-export default async payload => getProjectsByStatus(projectApprovedKey, descendingApproved, payload)
+export default async payload => getProjectsByStatus(projectApprovedKey, SORT_BY_NEWEST, payload)
 	.then(projects => projects)

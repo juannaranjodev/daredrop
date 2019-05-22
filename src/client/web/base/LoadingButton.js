@@ -29,7 +29,6 @@ const wrapperStyles = {
 	wrapper: {
 		position: 'relative',
 		width: '100%',
-		marginBottom: 12,
 	},
 }
 

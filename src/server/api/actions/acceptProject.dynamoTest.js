@@ -67,11 +67,8 @@ describe('getAcceptedProjects', () => {
 				projectId: project.id,
 			},
 		}
-
 		const res = await apiFn(event)
-
 		expect(res.body.status).toBe(projectAcceptedKey)
-
 		const event2 = {
 			endpointId: GET_ACTIVE_PROJECTS,
 			payload: { currentPage: 1 },

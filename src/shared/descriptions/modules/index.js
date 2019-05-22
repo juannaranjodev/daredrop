@@ -49,6 +49,7 @@ import pendingDeliveriesList from 'root/src/shared/descriptions/modules/pendingD
 import titleHeaderPendingDeliveries from 'root/src/shared/descriptions/modules/titleHeaderPendingDeliveries'
 import deliveryDareForm from 'root/src/shared/descriptions/modules/deliveryDareForm'
 import dareDeliveryDetail from 'root/src/shared/descriptions/modules/dareDeliveryDetail'
+import payoutMethodForm from 'root/src/shared/descriptions/modules/payoutMethod'
 
 const allModules = {
 	...loginForm,
@@ -101,6 +102,7 @@ const allModules = {
 	...deliveryDareForm,
 	...titleHeaderPendingDeliveries,
 	...dareDeliveryDetail,
+	...payoutMethodForm
 }
 
 export default allModules
