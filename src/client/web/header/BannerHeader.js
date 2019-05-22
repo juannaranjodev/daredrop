@@ -11,6 +11,8 @@ import SubTitle from 'root/src/client/web/typography/SubTitle'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import Select from '@material-ui/core/Select'
+import AsyncSelect from 'react-select/lib/Async'
+
 import OutlinedInput from '@material-ui/core/OutlinedInput'
 import MenuItem from '@material-ui/core/MenuItem'
 
@@ -83,14 +85,36 @@ const styles = {
 	},
 	label: {
 		fontSize: 14,
+		marginLeft: 25,
+		marginBottom: 8,
+	},
+	input: {
+		height: 29,
+		width: 159,
+		borderRadius: 5,
+		boxShadow: '0 0 26px 0 rgba(0, 0, 0, 0.16)',
+		'& fieldset': {
+			borderColor: 'white',
+		},
+		marginLeft: 25,
+	},
+	filterBclock: {
+		display: 'flex',
+	},
+	autoSelect: {
+		width: 152,
+		height: 29,
+		marginLeft: 25,
+		boxShadow: '0 0 26px 0 rgba(0, 0, 0, 0.16)',
 	},
 }
 
 export const BannerHeaderUnconnected = memo(({
 	bannerImage, bannerImageText, bannerImageSubText, textWithBg, bannerSubText, linkLabel, linkRouteId,
-	classes, createNewDareActive,
+	classes, createNewDareActive, loadOptionsPromise,
 }) => (
 	<div className={classNames(classes.bottomMargin, 'layout-column')}>
+		{/* loadOptionsPromise('twitchChannels') */}
 		{orNull(bannerImage,
 			(<div
 				className={classNames(classes.banner, 'layout-row')}
@@ -106,7 +130,7 @@ export const BannerHeaderUnconnected = memo(({
 						<SubTitle>{bannerImageSubText}</SubTitle>
 					</div>
 				</div>
-    </div>
+			</div>
 			))
 		}
 		<div className="layout-row layout-align-center">
@@ -129,12 +153,14 @@ export const BannerHeaderUnconnected = memo(({
 							<div className={classes.sort}>
 								<div className={classes.label}>Sort By:</div>
 								<Select
-									label="Sort By:"
 									value="Newest"
 									input={(
 										<OutlinedInput
+											labelWith="Sort By:"
 											name="age"
+											value="Newest"
 											id="outlined-age-simple"
+											className={classes.input}
 										/>
 									)}
 								>
@@ -143,6 +169,31 @@ export const BannerHeaderUnconnected = memo(({
 									<MenuItem value="Bounty Amount">Bounty Amount</MenuItem>
 									<MenuItem value="Time Left">Time Left</MenuItem>
 								</Select>
+							</div>
+							<div className={classes.filter}>
+								<div className={classes.label}>Filter By:</div>
+								<div className={classes.filterBclock}>
+									<AsyncSelect
+										cacheOptions
+										loadOptions={loadOptionsPromise('twitchChannels')}
+										defaultOptions
+										styles={{ control: () => ({
+											border: 'none',
+										}) }}
+										className={classes.autoSelect}
+										onInputChange={() => {}}
+									/>
+									<AsyncSelect
+										cacheOptions
+										loadOptions={loadOptionsPromise('twitchGames')}
+										defaultOptions
+										styles={{ control: () => ({
+											border: 'none',
+										}) }}
+										className={classes.autoSelect}
+										onInputChange={() => {}}
+									/>
+								</div>
 							</div>
 						</div>,
 					)}
