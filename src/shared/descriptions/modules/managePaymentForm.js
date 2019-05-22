@@ -43,7 +43,7 @@ export default {
 			{
 				label: 'Confirm',
 				endpointId: ADD_PAYMENT_METHOD,
-				buttonType: 'primarySquareButton',
+				buttonType: 'primaryButton',
 			},
 		],
 		backButton: {

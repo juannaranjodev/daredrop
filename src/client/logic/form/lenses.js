@@ -150,6 +150,19 @@ export const formModuleSchema = {
 						},
 					},
 				},
+				customSubmits: {
+					type: 'array',
+					items: {
+						type: 'object',
+					},
+				},
+				customSubmitsData: {
+					type: 'array',
+					items: {
+						type: 'array',
+						items: { type: 'string' },
+					},
+				},
 				backButton: {
 					type: 'object',
 					properties: {

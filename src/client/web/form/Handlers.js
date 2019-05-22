@@ -1,19 +1,12 @@
 import React, { memo } from 'react'
 
-import { withStyles } from '@material-ui/core/styles'
 import Button from 'root/src/client/web/base/Button'
 import formActionHandler from 'root/src/client/logic/form/handlers/formActionHandler'
 
-const styles = {
-	container: {
-		marginTop: 10,
-	},
-}
-
 export const Handlers = memo(({
-	formHandlers, moduleKey, handlerFn, formType, classes,
+	formHandlers, moduleKey, handlerFn, formType,
 }) => (
-	<div className={classes.container}>
+	<div>
 		{formHandlers.map(([label, submitIndex, buttonType]) => (
 			<Button
 				key={submitIndex}
@@ -27,4 +20,4 @@ export const Handlers = memo(({
 	</div>
 ))
 
-export default withStyles(styles)(Handlers)
+export default Handlers

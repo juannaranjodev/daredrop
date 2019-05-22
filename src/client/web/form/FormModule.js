@@ -7,6 +7,7 @@ import { universalForm } from 'root/src/client/web/componentTypes'
 
 import Fields from 'root/src/client/web/form/Fields'
 import Submits from 'root/src/client/web/form/Submits'
+import CustomSubmits from 'root/src/client/web/form/CustomSubmits'
 import Header from 'root/src/client/web/typography/Header'
 import Body from 'root/src/client/web/typography/Body'
 import Link from 'root/src/client/web/base/Link'
@@ -76,7 +77,8 @@ const styles = {
 export const FormModuleUnconnected = memo(({
 	formFieldTypes, formTitle, formSubmits, moduleId, moduleKey, submitForm,
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
-	classes, subTitle, formType, backButton, formHandlers, handleAction,
+	classes, subTitle, formType, backButton, formHandlers, handleAction, customSubmits,
+	customSubmitsData, payPalCreateOrder, payPalOnApprove,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
@@ -124,7 +126,7 @@ export const FormModuleUnconnected = memo(({
 							formFieldTypes={formFieldTypes}
 							formType={formType}
 							wasSubmitted={wasSubmitted}
-						/>						
+						/>,
 					)}
 					{orNull(
 						preSubmitText,
@@ -160,6 +162,14 @@ export const FormModuleUnconnected = memo(({
 							formType={formType}
 							setWasSubmitted={setWasSubmitted}
 						/>
+						{orNull(customSubmits,
+							<CustomSubmits
+								moduleKey={moduleKey}
+								customSubmits={customSubmits}
+								customSubmitsData={customSubmitsData}
+								payPalCreateOrder={payPalCreateOrder}
+								payPalOnApprove={payPalOnApprove}
+							/>)}
 						{orNull(formHandlers, <Handlers
 							moduleKey={moduleKey}
 							formHandlers={formHandlers}
