@@ -9,7 +9,13 @@ import ButtonSubtitle from 'root/src/client/web/base/CustomButton/buttonWithSubt
 import { notConnected, connectedNotClaimed, accepted, notEligible } from 'root/src/shared/constants/projectAcceptanceStatuses'
 import goToClaimProjectHandler from 'root/src/client/logic/project/handlers/goToClaimProjectHandler'
 
-const ClaimButton = ({ projectAcceptanceStatus, pushRoute, assignees, projectId, isAuthenticated }) => {
+const ClaimButton = ({
+	projectAcceptanceStatus,
+	pushRoute,
+	assignees,
+	projectId,
+	isAuthenticated,
+}) => {
 	switch (projectAcceptanceStatus || undefined) {
 		case (notConnected):
 			return (
@@ -32,7 +38,7 @@ const ClaimButton = ({ projectAcceptanceStatus, pushRoute, assignees, projectId,
 		case (connectedNotClaimed):
 			return (
 				<TwitchButton
-	title="Accept or reject Dare"
+					title="Accept or reject Dare"
 					onClick={goToClaimProjectHandler(
 						projectId, pushRoute,
 					)}

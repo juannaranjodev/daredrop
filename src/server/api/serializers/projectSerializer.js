@@ -25,7 +25,7 @@ export default projectArr => reduce(
 				return
 			}
 			const assigneeObj = pick(
-				['image', 'description', 'displayName', 'username', 'accepted'],
+				['image', 'description', 'displayName', 'username', 'accepted', 'amountRequested'],
 				projectPart,
 			)
 			return overAssignees(

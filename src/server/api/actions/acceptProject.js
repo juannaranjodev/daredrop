@@ -1,4 +1,4 @@
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -14,6 +14,7 @@ import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoInde
 import randomNumber from 'root/src/shared/util/randomNumber'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
@@ -34,6 +35,7 @@ export default async ({ payload, userId }) => {
 	])
 
 	const userTokensInProject = userTokensInProjectSelector(userTokens, projectToAccept)
+
 	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
@@ -42,6 +44,11 @@ export default async ({ payload, userId }) => {
 		throw generalError('Project or assignee doesn\'t exist')
 	}
 
+	const assigneesInProject = prop('assignees', projectToAccept)
+
+	let projectAcceptedRecord = []
+
+	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesInProject)
 	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
 
 	const userAssigneeArrNested = await Promise.all(map(
@@ -51,20 +58,25 @@ export default async ({ payload, userId }) => {
 
 	const userAssigneeArr = unnest(unnest(userAssigneeArrNested))
 
-	const assigneesToWrite = map(assignee => ({
-		PutRequest: {
-			Item: {
-				...assignee,
-				amountRequested,
-				accepted: streamerAcceptedKey,
-				modified: getTimestamp(),
+	const assigneesToWrite = unnest(map((assignee) => {
+		const updateProjectParam = {
+			TableName: TABLE_NAME,
+			Key: {
+				[PARTITION_KEY]: assignee[PARTITION_KEY],
+				[SORT_KEY]: assignee[SORT_KEY],
 			},
-		},
-	}), userAssigneeArr)
+			UpdateExpression: 'SET amountRequested = :amountRequested, accepted = :newAccepted, modified = :newModified',
+			ExpressionAttributeValues: {
+				':amountRequested': amountRequested,
+				':newAccepted': streamerAcceptedKey,
+				':newModified': getTimestamp(),
+			},
+		}
+		return documentClient.update(updateProjectParam).promise()
+	}, userAssigneeArr))
 
-	let projectAcceptedRecord = []
+	Promise.all(assigneesToWrite)
 
-	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesDdb)
 
 	if (equals(length(acceptedAssigneesInProject), 0)) {
 		projectAcceptedRecord = [{
@@ -76,18 +88,31 @@ export default async ({ payload, userId }) => {
 				},
 			},
 		}]
+
+		const acceptationParams = {
+			RequestItems: {
+				[TABLE_NAME]: [
+					...projectAcceptedRecord,
+				],
+			},
+		}
+
+		await documentClient.batchWrite(acceptationParams).promise()
 	}
 
-	const acceptationParams = {
-		RequestItems: {
-			[TABLE_NAME]: [
-				...projectAcceptedRecord,
-				...assigneesToWrite,
-			],
+	const updateProjectParam = {
+		TableName: TABLE_NAME,
+		Key: {
+			[PARTITION_KEY]: prop('id', projectToAccept),
+			[SORT_KEY]: head(projectToAcceptDdb)[SORT_KEY],
+		},
+		UpdateExpression: 'SET assignees = :newAssignees',
+		ExpressionAttributeValues: {
+			':newAssignees': assigneesInProject,
 		},
 	}
 
-	await documentClient.batchWrite(acceptationParams).promise()
+	await documentClient.update(updateProjectParam).promise()
 
 	return omit([PARTITION_KEY, SORT_KEY],
 		{

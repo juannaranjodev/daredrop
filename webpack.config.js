@@ -21,6 +21,10 @@ const envVars = Object.assign(
 	appConstants(env),
 )
 
+if (module.hot) {
+	module.hot.accept()
+}
+
 module.exports = {
 	mode: env,
 	devtool: isProd ? false : 'source-map',

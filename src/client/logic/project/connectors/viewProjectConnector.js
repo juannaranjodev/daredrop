@@ -64,5 +64,8 @@ export default reduxConnector(
 		['pushRoute', pushRoute],
 		['removeToFavorites', removeToFavorites],
 		['updateProject', updateProject],
+		['isAuthenticated', isAuthenticatedSelector],
+		['canApproveProject', canApproveProjectSelector],
+		['canPledgeProject', canPledgeProjectSelector],
 	],
 )
