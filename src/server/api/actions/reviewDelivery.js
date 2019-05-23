@@ -1,7 +1,7 @@
 import { prop, propEq, map, filter, equals, and, not } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
-import { APPROVE_OR_REJECT_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
@@ -14,7 +14,7 @@ import getTimestamp from 'root/src/shared/util/getTimestamp'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 import { payloadSchemaError } from 'root/src/server/api/errors'
 
-const payloadLenses = getPayloadLenses(APPROVE_OR_REJECT_DELIVERY)
+const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
 
 

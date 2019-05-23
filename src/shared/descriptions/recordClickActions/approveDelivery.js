@@ -1,11 +1,11 @@
 import { projectDeliveredKey } from 'root/src/server/api/lenses'
 
 import { APPROVE_DELIVERY } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
-import { APPROVE_OR_REJECT_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 export default {
 	[APPROVE_DELIVERY]: {
-		endpointId: APPROVE_OR_REJECT_DELIVERY,
+		endpointId: REVIEW_DELIVERY,
 		payloadMap: [
 			['projectId', ':recordId'],
 			['audit', projectDeliveredKey],

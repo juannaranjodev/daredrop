@@ -36,7 +36,7 @@ import auditFavorites from 'root/src/shared/descriptions/endpoints/auditFavorite
 import removeToFavorites from 'root/src/shared/descriptions/endpoints/removeToFavorites'
 import deliveryDareInit from 'root/src/shared/descriptions/endpoints/deliveryDareInit'
 import deliveryDare from 'root/src/shared/descriptions/endpoints/deliveryDare'
-import approveOrRejectDelivery from 'root/src/shared/descriptions/endpoints/approveOrRejectDelivery'
+import reviewDelivery from 'root/src/shared/descriptions/endpoints/reviewDelivery'
 
 import getAcceptedProjects from 'root/src/shared/descriptions/endpoints/getAcceptedProject'
 
@@ -67,7 +67,7 @@ const allEndpoints = {
 	...deliveryDareInit,
 	...deliveryDare,
 	...getAcceptedProjects,
-	...approveOrRejectDelivery,
+	...reviewDelivery,
 	...addPayoutMethod,
 	...getPayoutMethod,
 	...updatePayoutMethod,

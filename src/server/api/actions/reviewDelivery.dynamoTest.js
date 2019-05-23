@@ -1,6 +1,6 @@
 import { apiFn } from 'root/src/server/api'
 
-import { APPROVE_OR_REJECT_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import createProject from 'root/src/server/api/actions/createProject'
 
@@ -67,7 +67,7 @@ describe('approveDelivery', async () => {
 
 		const event = {
 			userId: mockUserId,
-			endpointId: APPROVE_OR_REJECT_DELIVERY,
+			endpointId: REVIEW_DELIVERY,
 			payload: {
 				projectId: project.id,
 				audit: projectDeliveredKey,
@@ -81,7 +81,7 @@ describe('approveDelivery', async () => {
 	test('can\' reject delivery without message', async () => {
 		const event = {
 			userId: mockUserId,
-			endpointId: APPROVE_OR_REJECT_DELIVERY,
+			endpointId: REVIEW_DELIVERY,
 			payload: {
 				projectId: project.id,
 				audit: projectDeliveryRejectedKey,
@@ -94,7 +94,7 @@ describe('approveDelivery', async () => {
 	test('can reject delivery', async () => {
 		const event = {
 			userId: mockUserId,
-			endpointId: APPROVE_OR_REJECT_DELIVERY,
+			endpointId: REVIEW_DELIVERY,
 			payload: {
 				projectId: project.id,
 				audit: projectDeliveryRejectedKey,
