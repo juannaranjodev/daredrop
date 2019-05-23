@@ -4,18 +4,22 @@ import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 import dynamoQueryShardedProjects from 'root/src/server/api/actionUtil/dynamoQueryShardedProjects'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-
+import adminProjectSerializer from 'root/src/server/api/serializers/adminProjectSerializer'
+import { ternary } from 'root/src/shared/util/ramdaPlus'
 import { sortByType } from 'root/src/server/api/actionUtil/sortUtil'
 
 import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredProjectIds'
 
 const PageItemLength = 8
 
-export default async (status, defaultSortType, payload) => {
+export default async (status, defaultSortType, payload, isAdminEndpoint) => {
 	const realPayload = payload.payload
 	const projectsDdb = await dynamoQueryShardedProjects(status)
 
-	const serializedProjects = map(compose(dissoc('myPledge'), projectSerializer), projectsDdb)
+	const serializedProjects = ternary(isAdminEndpoint,
+		map(compose(dissoc('myPledge'), adminProjectSerializer), projectsDdb),
+		map(compose(dissoc('myPledge'), projectSerializer), projectsDdb),
+		) 
 
 	// Filter expired projects
 	const filterExpired = (dare) => {

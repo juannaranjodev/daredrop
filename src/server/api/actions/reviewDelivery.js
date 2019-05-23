@@ -6,13 +6,17 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import { streamerAcceptedKey, streamerDeliveryApprovedKey, streamerDeliveryRejectedKey, projectDeliveredKey } from 'root/src/server/api/lenses'
+import {
+	streamerAcceptedKey, streamerDeliveryApprovedKey,
+	projectDeliveredKey, projectDeliveryPendingKey,
+} from 'root/src/server/api/lenses'
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
-import archiveProject from 'root/src/server/api/actionUtil/archiveProject'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
-import { ternary } from 'root/src/shared/util/ramdaPlus'
+import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
 import { payloadSchemaError } from 'root/src/server/api/errors'
+import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
+import dynamoQueryRecordToArchive from 'root/src/server/api/actionUtil/dynamoQueryRecordToArchive'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
@@ -50,23 +54,27 @@ export default async ({ payload }) => {
 		},
 	}), projectAcceptedAssignees), [])
 
-	const projectDataToArchive = ternary(equals(audit, projectDeliveredKey),
-		archiveProject(projectToApproveDdb), [])
+	const recordToArchive = await dynamoQueryRecordToArchive(projectId, `project|${projectDeliveryPendingKey}`)
 
-	const projectDelivered = {
-		PutRequest: {
-			Item: {
-				[PARTITION_KEY]: prop('id', projectSerialized),
-				[SORT_KEY]: await generateUniqueSortKey(prop('id', projectSerialized), `project|${audit}`, 1, 10),
-				created: getTimestamp(),
-				message,
-			},
-		},
-	}
+	const projectDataToWrite = [
+		orNull(equals(audit, projectDeliveredKey),
+			{
+				PutRequest: {
+					Item: {
+						...recordToArchive,
+						[PARTITION_KEY]: prop('id', projectSerialized),
+						[SORT_KEY]: await generateUniqueSortKey(prop('id', projectSerialized), `project|${audit}`, 1, 10),
+						created: getTimestamp(),
+						message,
+					},
+				},
+			}),
+		...archiveProjectRecord(recordToArchive),
+	]
 
 	const writeParams = {
 		RequestItems: {
-			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToArchive, projectDelivered],
+			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],
 		},
 	}
 

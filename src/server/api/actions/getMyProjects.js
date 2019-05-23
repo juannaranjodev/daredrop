@@ -10,7 +10,7 @@ import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPendingOrAcceptedAssignees'
+import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
 
 const PageItemLedngth = 8
 
@@ -43,7 +43,7 @@ export default async ({ userId, payload }) => {
 
 	const myProjectsSerialized = map(([project, assignees]) => projectSerializer([
 		...project,
-		...getPendingOrAcceptedAssignees(assignees),
+		...getActiveAssignees(assignees),
 	]), myProjects)
 
 	const filterExpired = (dare) => {

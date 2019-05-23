@@ -9,7 +9,7 @@ import {
 	DELIVERY_DARE_INIT, DELIVERY_DARE, GET_FILTERED_PROJECTS_BY_GAME,
 	GET_FILTERED_PROJECTS_BY_STREAMER, GET_FILTERED_PROJECTS,
 	ADD_PAYOUT_METHOD, GET_PAYOUT_METHOD, UPDATE_PAYOUT_METHOD,
-	GET_PENDING_DELIVERIES, REVIEW_DELIVERY,
+	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -38,6 +38,7 @@ import getAcceptProject from 'root/src/server/api/actions/getAcceptProject'
 import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
 import reviewDelivery from 'root/src/server/api/actions/reviewDelivery'
+import getProjectAdmin from 'root/src/server/api/actions/getProjectAdmin'
 
 import addPayoutMethod from 'root/src/server/api/actions/addPayoutMethod'
 import getPayoutMethod from 'root/src/server/api/actions/getPayoutMethod'
@@ -46,6 +47,7 @@ import updatePayoutMethod from 'root/src/server/api/actions/updatePayoutMethod'
 export default {
 	[CREATE_PROJECT]: createProject,
 	[GET_PROJECT]: getProject,
+	[GET_PROJECT_ADMIN]: getProjectAdmin,
 	[UPDATE_PROJECT]: updateProject,
 
 	[PLEDGE_PROJECT]: pledgeProject,

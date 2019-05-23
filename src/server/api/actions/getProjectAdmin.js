@@ -1,6 +1,6 @@
 import { prop } from 'ramda'
 
-import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import adminProjectSerializer from 'root/src/server/api/serializers/adminProjectSerializer'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import moment from 'moment'
@@ -14,7 +14,7 @@ export default async ({ userId, payload }) => {
 	)
 	const respons = {
 		userId,
-		...projectSerializer([
+		...adminProjectSerializer([
 			...project,
 			...getActiveAssignees(assignees),
 			...myPledge,

@@ -1,6 +1,6 @@
 import { reduce, pick, append, prepend, startsWith, split, prop, propEq } from 'ramda'
 
-import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey } from 'root/src/server/api/lenses'
+import { skProp, pkProp, projectDeliveryPendingKey, streamerRejectedKey } from 'root/src/server/api/lenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
@@ -40,7 +40,7 @@ export default projectArr => reduce(
 			)
 			return overGames(prepend(game), result)
 		}
-		if (startsWith(`project|${projectDeliveredKey}`, sk)) {
+		if (startsWith(`project|${projectDeliveryPendingKey}`, sk)) {
 			const deliveryObj = pick(
 				[
 					'videoURL', 'timeStamp', 's3ObjectURL',

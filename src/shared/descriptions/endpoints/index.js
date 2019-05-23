@@ -9,6 +9,7 @@ import pledgeProject from 'root/src/shared/descriptions/endpoints/pledgeProject'
 import getPledgedProjects from 'root/src/shared/descriptions/endpoints/getPledgedProjects'
 import auditProject from 'root/src/shared/descriptions/endpoints/auditProject'
 import updateProject from 'root/src/shared/descriptions/endpoints/updateProject'
+import getProjectAdmin from 'root/src/shared/descriptions/endpoints/getProjectAdmin'
 
 import getPaymentMethods from 'root/src/shared/descriptions/endpoints/getPaymentMethods'
 import getPaymentMethod from 'root/src/shared/descriptions/endpoints/getPaymentMethod'
@@ -71,6 +72,7 @@ const allEndpoints = {
 	...addPayoutMethod,
 	...getPayoutMethod,
 	...updatePayoutMethod,
+	...getProjectAdmin,
 }
 
 export default map(
