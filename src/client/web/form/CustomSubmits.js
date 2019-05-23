@@ -14,6 +14,7 @@ export const SubmitsUnstyled = memo(({
 						payPalOnApprove={payPalOnApprove}
 						payPalCreateOrder={payPalCreateOrder}
 						customSubmitsData={customSubmitsData}
+						submitIndex={submitIndex}
 					/>
 				)
 			default:

@@ -3,11 +3,11 @@ import React, { memo } from 'react'
 
 const PayPalButtonUnconnected = memo(({
 	payPalCreateOrder, payPalOnApprove,
-	customSubmitsData,
+	customSubmitsData, submitIndex,
 }) => (
 	<PayPalButton
-		createOrder={(data, actions) => payPalCreateOrder(data, actions, customSubmitsData)}
-		onApprove={(data, actions) => payPalOnApprove(data, actions, customSubmitsData)}
+		createOrder={(data, actions) => payPalCreateOrder(data, actions, { ...customSubmitsData, submitIndex })}
+		onApprove={(data, actions) => payPalOnApprove(data, actions, { ...customSubmitsData, submitIndex })}
 		options={{
 			clientId: PAYPAL_CLIENT_ID,
 			intent: 'authorize',
