@@ -1,5 +1,5 @@
 import getRecordSelector from 'root/src/client/logic/api/selectors/getRecordSelector'
-import { reduce, isNil, equals, prop } from 'ramda'
+import { reduce, isNil, equals, propOr, prop } from 'ramda'
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
 import {
@@ -16,23 +16,20 @@ const {
 } = responseLenses
 
 export default (state, props) => {
-	const { acceptedList } = props
 	const record = getRecordSelector(state, props)
-	let accepted = false
-	if (!isNil(acceptedList)) {
-		accepted = acceptedList.includes(viewId(record))
-	} else {
-		accepted = equals(projectAcceptedKey, viewStatus(record))
-	}
+	const accepted = equals(projectAcceptedKey, viewStatus(record))
 
 	if (accepted) {
 		const assignees = viewAssignees(record)
 		const pledgeRequest = reduce(
-			(accum, assignee) => accum + prop('amountRequested', assignee),
+			(accum, assignee) => {
+				const amountRequest = prop('amountRequested', assignee)
+				return isNil(amountRequest) ? accum + 0 : accum + amountRequest
+			},
 			0,
 			assignees,
 		)
-		const pledgeAmount = viewPledgeAmount(record)
+		const pledgeAmount = prop('pledgeAmount', record)
 		const onePersent = pledgeRequest / 95
 		const answer = (pledgeAmount / onePersent) + 5
 		return answer > 100 ? 100 : answer
