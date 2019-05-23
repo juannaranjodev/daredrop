@@ -36,8 +36,8 @@ export default {
 		},
 	},
 	sidebarItem: {
-		marginTop: 10,
-		marginBottom: 10,
+		marginTop: 8,
+		marginBottom: 8,
 		'& button': {
 			borderRadius: 20,
 			marginTop: 0,
@@ -54,8 +54,8 @@ export default {
 		fontWeight: '400',
 	},
 	descriptionContainer: {
-		marginTop: 19,
-		marginBottom: 18.5,
+		marginTop: 22,
+		marginBottom: 11,
 		'@media (min-width: 768px)': {
 			marginBottom: 10.5,
 		},

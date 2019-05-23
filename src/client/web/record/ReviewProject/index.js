@@ -45,20 +45,6 @@ export const ViewProjectModule = memo(({
 								title={projectTitle}
 							/>
 						</div>
-						<div className={classNames(
-							'flex-100', 'flex-order-1', 'flex-order-gt-sm-3', 'flex-gt-sm-100',
-							classes.descriptionContainer,
-						)}
-						>
-							<div className={classNames(classes.descriptionTitle)}>Description</div>
-							<div className={classNames('flex-100', 'layout-row')}>
-								<div className={classNames('flex-100')}>
-									<div className={classes.description}>
-										{projectDescription}
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 					<div
 						className={classNames(
@@ -80,32 +66,50 @@ export const ViewProjectModule = memo(({
 									recordId={projectId}
 									buttonType={primarySquareButton}
 								/>
-								<SubHeader>
-									Reject Reason<span className={classes.red}>*</span>:
-								</SubHeader>
-								<div className={classes.rejectionContainer}>
-									<textarea
-										className={classNames(classes.rejectDescription, classes['mb-10'])}
-										placeholder="Reject reason"
-										value={rejectDescription}
-										onChange={e => setRejectDescription(e.target.value)}
-									/>
-									<span className={classNames(classes.red, classes.rejectMessage)}>
-										{orNull(
-											prop('message', recordClickActionError),
-											prop('message', recordClickActionError),
-										)}
-									</span>
-								</div>
+							</div>
+							<SubHeader>
+								Reject Reason<span className={classes.red}>*</span>:
+							</SubHeader>
+							<div className={classes.rejectionContainer}>
+								<textarea
+									className={classNames(classes.rejectDescription, classes['mb-10'])}
+									placeholder="Reject reason"
+									value={rejectDescription}
+									onChange={e => setRejectDescription(e.target.value)}
+								/>
+								<span className={classNames(classes.red, classes.rejectMessage)}>
+									{orNull(
+										prop('message', recordClickActionError),
+										prop('message', recordClickActionError),
+									)}
+								</span>
+							</div>
+							<div className={classes.sidebarItem}>
 								<RecordClickActionButton
 									recordClickActionId={REJECT_DELIVERY}
 									recordId={projectId}
 									buttonType={outlinedButton}
 									payload={{ message: rejectDescription }}
 								/>
+							</div>
+							<div className={classes.sidebarItem}>
 								<SubHeader>
 									If you can't decide what to do please email your supervisor with the URL of the Dare.
 								</SubHeader>
+							</div>
+						</div>
+					</div>
+					<div className={classNames(
+						'flex-100', 'flex-order-1', 'flex-order-gt-sm-3', 'flex-gt-sm-100',
+						classes.descriptionContainer,
+					)}
+					>
+						<div className={classNames(classes.descriptionTitle)}>Description</div>
+						<div className={classNames('flex-100', 'layout-row')}>
+							<div className={classNames('flex-100')}>
+								<div className={classes.description}>
+									{projectDescription}
+								</div>
 							</div>
 						</div>
 					</div>
