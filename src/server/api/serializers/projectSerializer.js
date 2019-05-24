@@ -1,6 +1,6 @@
-import { reduce, pick, append, prepend, startsWith, split, prop, propEq } from 'ramda'
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and } from 'ramda'
 
-import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey } from 'root/src/server/api/lenses'
+import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
@@ -10,7 +10,7 @@ const {
 	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewFavoritesAmount, overDeliveries,
 } = responseLenses
 
-export default projectArr => reduce(
+export default (projectArr, isAdminEndpoint) => reduce(
 	(result, projectPart) => {
 		const sk = skProp(projectPart)
 		if (startsWith('pledge', sk)) {
@@ -39,6 +39,15 @@ export default projectArr => reduce(
 				projectPart,
 			)
 			return overGames(prepend(game), result)
+		}
+		if (and(startsWith(`project|${projectDeliveryPendingKey}`, sk), isAdminEndpoint)) {
+			const deliveryObj = pick(
+				[
+					'videoURL', 'timeStamp', 's3ObjectURL',
+				],
+				projectPart,
+			)
+			return overDeliveries(append(deliveryObj), result)
 		}
 		if (startsWith(`project|${projectDeliveredKey}`, sk)) {
 			const deliveryObj = pick(

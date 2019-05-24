@@ -1,6 +1,6 @@
 import { prop } from 'ramda'
 
-import adminProjectSerializer from 'root/src/server/api/serializers/adminProjectSerializer'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import moment from 'moment'
@@ -14,12 +14,12 @@ export default async ({ userId, payload }) => {
 	)
 	const respons = {
 		userId,
-		...adminProjectSerializer([
+		...projectSerializer([
 			...project,
 			...getActiveAssignees(assignees),
 			...myPledge,
 			...myFavorites,
-		]),
+		], true),
 	}
 
 	const diff = moment().diff(respons.created, 'days')

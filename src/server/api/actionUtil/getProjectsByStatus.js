@@ -1,10 +1,9 @@
-import { sort, map, filter, dissoc, compose, contains, prop } from 'ramda'
+import { sort, map, filter, dissoc, compose, contains, prop, __ } from 'ramda'
 
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 import dynamoQueryShardedProjects from 'root/src/server/api/actionUtil/dynamoQueryShardedProjects'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import adminProjectSerializer from 'root/src/server/api/serializers/adminProjectSerializer'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 import { sortByType } from 'root/src/server/api/actionUtil/sortUtil'
 
@@ -17,9 +16,8 @@ export default async (status, defaultSortType, payload, isAdminEndpoint) => {
 	const projectsDdb = await dynamoQueryShardedProjects(status)
 
 	const serializedProjects = ternary(isAdminEndpoint,
-		map(compose(dissoc('myPledge'), adminProjectSerializer), projectsDdb),
-		map(compose(dissoc('myPledge'), projectSerializer), projectsDdb),
-		) 
+		map(compose(dissoc('myPledge'), projectSerializer(__, true)), projectsDdb),
+		map(compose(dissoc('myPledge'), projectSerializer), projectsDdb))
 
 	// Filter expired projects
 	const filterExpired = (dare) => {
