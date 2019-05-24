@@ -9,6 +9,7 @@ import pledgeProject from 'root/src/shared/descriptions/endpoints/pledgeProject'
 import getPledgedProjects from 'root/src/shared/descriptions/endpoints/getPledgedProjects'
 import auditProject from 'root/src/shared/descriptions/endpoints/auditProject'
 import updateProject from 'root/src/shared/descriptions/endpoints/updateProject'
+import getProjectAdmin from 'root/src/shared/descriptions/endpoints/getProjectAdmin'
 
 import getPaymentMethods from 'root/src/shared/descriptions/endpoints/getPaymentMethods'
 import getPaymentMethod from 'root/src/shared/descriptions/endpoints/getPaymentMethod'
@@ -36,6 +37,7 @@ import auditFavorites from 'root/src/shared/descriptions/endpoints/auditFavorite
 import removeToFavorites from 'root/src/shared/descriptions/endpoints/removeToFavorites'
 import deliveryDareInit from 'root/src/shared/descriptions/endpoints/deliveryDareInit'
 import deliveryDare from 'root/src/shared/descriptions/endpoints/deliveryDare'
+import reviewDelivery from 'root/src/shared/descriptions/endpoints/reviewDelivery'
 
 import getAcceptedProjects from 'root/src/shared/descriptions/endpoints/getAcceptedProject'
 
@@ -66,9 +68,11 @@ const allEndpoints = {
 	...deliveryDareInit,
 	...deliveryDare,
 	...getAcceptedProjects,
+	...reviewDelivery,
 	...addPayoutMethod,
 	...getPayoutMethod,
-	...updatePayoutMethod
+	...updatePayoutMethod,
+	...getProjectAdmin,
 }
 
 export default map(

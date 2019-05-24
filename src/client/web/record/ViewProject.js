@@ -261,7 +261,7 @@ export const ViewProjectModule = memo(({
 							<div className={classes.iframeContainer}>
 								<iframe
 									className={classes.iframe}
-									src={projectDeliveries}
+									src={prop('deliveryURL', projectDeliveries)}
 									frameBorder="0"
 									scrolling="no"
 									allowFullScreen

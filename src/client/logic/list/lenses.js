@@ -28,6 +28,7 @@ export const listModuleSchema = {
 				listSubtitle: { type: 'string' },
 				listControls: { type: 'array' },
 				listSubmits: { type: 'array' },
+				listRouteHandler: { type: 'function' },
 			},
 		},
 	},

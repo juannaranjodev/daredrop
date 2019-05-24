@@ -10,13 +10,18 @@ const responseLenses = getResponseLenses(GET_PROJECT)
 const { viewDeliveries } = responseLenses
 
 export default (state, props) => {
-	const approvedVideoUrl = prop('videoURL', propOr({}, 0, viewDeliveries(getRecordSelector(state, props))))
+	const delivery = propOr({}, 0, viewDeliveries(getRecordSelector(state, props)))
+	const approvedVideoUrl = prop('videoURL', delivery)
+	const timestamp = prop('timeStamp', delivery)
 	const parsedUrl = urlParser.parse(approvedVideoUrl)
 	// at the moment selector returns simply url of first delivery in deliveries array
 	if (parsedUrl) {
-		return urlParser.create({
-			videoInfo: parsedUrl,
-			format: 'embed',
-		})
+		return {
+			timestamp,
+			deliveryURL: urlParser.create({
+				videoInfo: parsedUrl,
+				format: 'embed',
+			}),
+		}
 	}
 }

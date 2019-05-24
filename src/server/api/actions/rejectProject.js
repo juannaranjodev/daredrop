@@ -10,7 +10,7 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 import { streamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
-import getPendingOrAcceptedAssignees from 'root/src/server/api/actionUtil/getPendingOrAcceptedAssignees'
+import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectByStatus'
@@ -72,7 +72,7 @@ export default async ({ payload, userId }) => {
 		},
 	}
 
-	const activeAssigneesInProject = getPendingOrAcceptedAssignees(assigneesDdb)
+	const activeAssigneesInProject = getActiveAssignees(assigneesDdb)
 
 	// here also for the future rejection of project needs to be separate action contained here (instead of auditProject) to handle transactWrite properly
 	await documentClient.batchWrite(rejectionParams).promise()

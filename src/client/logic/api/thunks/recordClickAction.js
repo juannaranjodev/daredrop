@@ -1,5 +1,5 @@
 
-import { prop, reduce, contains, equals } from 'ramda'
+import { prop, reduce, contains, equals, not, isEmpty } from 'ramda'
 
 import createRecordClickActionStoreKey from 'root/src/client/logic/api/util/createRecordClickActionStoreKey'
 
@@ -12,10 +12,12 @@ import recordClickActionDescriptions from 'root/src/shared/descriptions/recordCl
 import recordTypeSelector from 'root/src/client/logic/api/selectors/recordTypeSelector'
 import createRecordStoreKey from 'root/src/client/logic/api/util/createRecordStoreKey'
 
+import recordClickActionValidation from 'root/src/client/logic/api/util/recordClickActionValidation'
+
 import invokeApiLambda from 'root/src/client/logic/api/util/invokeApiLambda'
 
 export default (
-	recordClickActionId, recordId,
+	recordClickActionId, recordId, actionPayload,
 ) => async (dispatch, getState) => {
 	try {
 		const recordClickActionStoreKey = createRecordClickActionStoreKey(
@@ -24,9 +26,10 @@ export default (
 		dispatch(initApiRecordClickActionRequest(recordClickActionStoreKey))
 		const state = getState()
 		const {
-			endpointId, payloadMap, onSuccessRecordUpdates,
+			endpointId, payloadMap, onSuccessRecordUpdates, validation,
 		} = prop(recordClickActionId, recordClickActionDescriptions)
 		const payloadSubs = { recordId }
+
 		// @TODO replace this with util/subObj (also in recordModuleOnEnter)
 		const payload = reduce(
 			(result, [key, value]) => {
@@ -35,9 +38,23 @@ export default (
 				}
 				return { ...result, [key]: value }
 			},
-			{},
+			actionPayload,
 			payloadMap,
 		)
+
+		if (validation) {
+			const validationErrors = reduce((result, validationObj) => {
+				const nextErr = recordClickActionValidation(validationObj, payload)
+				return { ...result, ...nextErr }
+			}, {}, validation)
+			if (not(isEmpty(validationErrors))) {
+				return dispatch(
+					apiRecordClickActionRequestError(
+						recordClickActionStoreKey, validationErrors,
+					),
+				)
+			}
+		}
 		const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 		const { statusCode, body, statusError, generalError } = lambdaRes
 		if (equals(statusCode, 200)) {

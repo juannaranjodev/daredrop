@@ -13,6 +13,7 @@ import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import projectAssigneNameSelector from 'root/src/client/logic/project/selectors/projectAssigneNameSelector'
 import projectDeliveriesSelector from 'root/src/client/logic/project/selectors/projectDeliveriesSelector'
 import projectAcceptedSelector from 'root/src/client/logic/project/selectors/projectAcceptedSelector'
+import listRouteHandlerSelector from 'root/src/client/logic/project/selectors/listRouteHandlerSelector'
 import goalProgressSelector from 'root/src/client/logic/project/selectors/goalProgressSelector'
 
 export default reduxConnector(
@@ -30,6 +31,9 @@ export default reduxConnector(
 		['projectAccepted', projectAcceptedSelector],
 		['isAuthenticated', isAuthenticated],
 		['projectDeliveries', projectDeliveriesSelector],
+		['listRouteHandler', listRouteHandlerSelector],
 	],
-	[['pushRoute', pushRoute]],
+	[
+		['pushRoute', pushRoute],
+	],
 )
