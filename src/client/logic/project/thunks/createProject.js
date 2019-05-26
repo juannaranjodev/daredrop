@@ -1,4 +1,4 @@
-import { omit } from 'ramda'
+import { omit, prop } from 'ramda'
 
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
 
@@ -26,6 +26,7 @@ export default formData => async (dispatch) => {
 		paymentInfo: {
 			paymentType: stripeCard,
 			paymentId: stripeCardId,
+			paymentAmount: prop('pledgeAmount', formData),
 		},
 	})
 	return dispatch(apiRequest(CREATE_PROJECT, apiPayload))
