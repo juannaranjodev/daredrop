@@ -1,23 +1,23 @@
-import { reduce, pick, append, prepend, startsWith, split, prop, propEq } from 'ramda'
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and } from 'ramda'
 
-import { skProp, pkProp, projectDeliveryPendingKey, streamerRejectedKey } from 'root/src/server/api/lenses'
+import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {
-	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewMyFavorites, overDeliveries,
+	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewFavoritesAmount, overDeliveries,
 } = responseLenses
 
-export default projectArr => reduce(
+export default (projectArr, isAdminEndpoint) => reduce(
 	(result, projectPart) => {
 		const sk = skProp(projectPart)
 		if (startsWith('pledge', sk)) {
 			return setMyPledge(viewPledgeAmount(projectPart), result)
 		}
 		if (startsWith('favorites', sk)) {
-			return setMyFavorites(viewMyFavorites(projectPart), result)
+			return setMyFavorites(viewFavoritesAmount(projectPart), result)
 		}
 		if (startsWith('assignee', sk)) {
 			const [, platform, platformId] = split('|', sk)
@@ -40,10 +40,19 @@ export default projectArr => reduce(
 			)
 			return overGames(prepend(game), result)
 		}
-		if (startsWith(`project|${projectDeliveryPendingKey}`, sk)) {
+		if (and(startsWith(`project|${projectDeliveryPendingKey}`, sk), isAdminEndpoint)) {
 			const deliveryObj = pick(
 				[
-					'videoURL', 'timestamp', 's3ObjectURL',
+					'videoURL', 'timeStamp', 's3ObjectURL',
+				],
+				projectPart,
+			)
+			return overDeliveries(append(deliveryObj), result)
+		}
+		if (startsWith(`project|${projectDeliveredKey}`, sk)) {
+			const deliveryObj = pick(
+				[
+					'videoURL', 'timeStamp', 's3ObjectURL',
 				],
 				projectPart,
 			)

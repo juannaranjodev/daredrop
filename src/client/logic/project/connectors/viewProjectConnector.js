@@ -24,6 +24,7 @@ import statusSelector from 'root/src/client/logic/project/selectors/statusSelect
 import projectDeliveriesSelector from 'root/src/client/logic/project/selectors/projectDeliveriesSelector'
 import isOneOfAssignesSelector from 'root/src/client/logic/project/selectors/isOneOfAssigneesSelector'
 import projectAcceptanceStatusSelector from 'root/src/client/logic/project/selectors/projectAcceptanceStatusSelector'
+import recordClickActionErrorSelector from 'root/src/client/logic/project/selectors/recordClickActionErrorSelector'
 import goalProgressSelector from 'root/src/client/logic/project/selectors/goalProgressSelector'
 import isAuthenticatedSelector from 'root/src/client/logic/auth/selectors/isAuthenticated'
 
@@ -59,6 +60,7 @@ export default reduxConnector(
 		['projectDeliveries', projectDeliveriesSelector],
 		['isOneOfAssignees', isOneOfAssignesSelector],
 		['projectAcceptanceStatus', projectAcceptanceStatusSelector],
+		['recordClickActionError', recordClickActionErrorSelector],
 	],
 	[
 		['auditFavorites', auditFavorites],

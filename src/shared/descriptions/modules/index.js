@@ -47,8 +47,8 @@ import deliverDareSuccessPage from 'root/src/shared/descriptions/modules/deliver
 import myProjectsList from 'root/src/shared/descriptions/modules/myProjectsList'
 import pendingDeliveriesList from 'root/src/shared/descriptions/modules/pendingDeliveriesList'
 import titleHeaderPendingDeliveries from 'root/src/shared/descriptions/modules/titleHeaderPendingDeliveries'
-
 import deliveryDareForm from 'root/src/shared/descriptions/modules/deliveryDareForm'
+import dareDeliveryDetail from 'root/src/shared/descriptions/modules/dareDeliveryDetail'
 import payoutMethodForm from 'root/src/shared/descriptions/modules/payoutMethod'
 
 const allModules = {
@@ -101,6 +101,7 @@ const allModules = {
 	...pendingDeliveriesList,
 	...deliveryDareForm,
 	...titleHeaderPendingDeliveries,
+	...dareDeliveryDetail,
 	...payoutMethodForm,
 }
 

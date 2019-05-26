@@ -1,5 +1,5 @@
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-
+import projectDenormalizeFields from 'root/src/server/api/actionUtil/projectDenormalizeFields'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 
 export default (

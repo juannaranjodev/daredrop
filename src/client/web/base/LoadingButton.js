@@ -5,13 +5,12 @@ import Button from 'root/src/client/web/base/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { withStyles } from '@material-ui/core/styles'
 
-
 const buttonProgressStyles = {
 	buttonProgress: {
 		position: 'absolute',
 		top: '50%',
 		left: '50%',
-		marginTop: -12,
+		marginTop: -22,
 		marginLeft: -12,
 	},
 }

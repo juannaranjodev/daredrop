@@ -1,3 +1,3 @@
-export default (recordId, recordClickActionId, recordClickAction) => () => (
-	recordClickAction(recordClickActionId, recordId)
+export default (recordId, recordClickActionId, recordClickAction, payload) => () => (
+	recordClickAction(recordClickActionId, recordId, payload)
 )
