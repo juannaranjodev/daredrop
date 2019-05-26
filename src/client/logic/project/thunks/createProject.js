@@ -1,8 +1,9 @@
-import { set, lensProp, path } from 'ramda'
+import { omit } from 'ramda'
 
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
 
 import { CREATE_PROJECT, ADD_PAYMENT_METHOD } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { stripeCard } from 'root/src/shared/constants/paymentTypes'
 
 export default formData => async (dispatch) => {
 	let { stripeCardId } = formData
@@ -20,10 +21,12 @@ export default formData => async (dispatch) => {
 		dispatch(apiRequest(ADD_PAYMENT_METHOD, addPaymentPayload))
 		stripeCardId = stripeRes.source.id
 	}
-	const apiPayload = set(
-		lensProp('stripeCardId'),
-		path(['source', 'id'], stripeCardId),
-		formData,
-	)
+	const apiPayload = omit(['stripeCardId'], {
+		...formData,
+		paymentInfo: {
+			paymentType: stripeCard,
+			paymentId: stripeCardId,
+		},
+	})
 	return dispatch(apiRequest(CREATE_PROJECT, apiPayload))
 }

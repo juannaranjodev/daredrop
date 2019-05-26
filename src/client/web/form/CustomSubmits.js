@@ -18,7 +18,6 @@ export const SubmitsUnstyled = memo(({
 					/>
 				)
 			default:
-				return <button type="button">{submit}</button>
 		}
 	}, customSubmits)}
 	</div>

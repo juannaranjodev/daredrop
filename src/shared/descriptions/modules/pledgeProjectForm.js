@@ -13,12 +13,12 @@ import {
 export const formCommon = {
 	schema: compose(
 		dissocPath(['properties', 'projectId']),
-		dissocPath(['properties', 'stripeCardId']),
+		dissocPath(['properties', 'paymentInfo', 'paymentType']),
 		dissocPath(['additionalProperties']),
 		set(
 			lensProp('required'),
 			without(
-				['stripeCardId', 'projectId'],
+				['paymentInfo', 'projectId'],
 				view(lensProp('required'), pledgeProjectPayloadSchema),
 			),
 		),
