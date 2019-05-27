@@ -1,4 +1,4 @@
-import { map, addIndex, isNil, propOr, prop } from 'ramda'
+import { map, addIndex, isNil, propOr, prop, gt } from 'ramda'
 import React, { memo, useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
@@ -328,10 +328,14 @@ export const ViewProjectModule = memo(({
 									<SubHeader>Pledgers</SubHeader>
 									<div className={classNames(classes.text)}>{pledgers}</div>
 								</div>
-								<div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
-									<SubHeader>Days to go</SubHeader>
-									<div className={classNames(classes.text)}>{daysToGo}</div>
-								</div>
+								{ gt(daysToGo, 0) 
+                  && (
+                    <div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
+    									<SubHeader>Days to go</SubHeader>
+    									<div className={classNames(classes.text)}>{daysToGo}</div>
+								    </div>
+                  )
+                }
 							</div>
 							<div className={classNames(classes.sidebarItem, classes.streamerTitle)}>
 								<SubHeader>Streamer challenged: </SubHeader>
