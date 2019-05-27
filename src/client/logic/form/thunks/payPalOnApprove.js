@@ -27,9 +27,6 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 		const successPage = successPageSelector(moduleId, submitIndex)
 		const endpointId = endpointIdSelector(moduleId, submitIndex)
 
-		dispatch(apiRequest(endpointId, apiPayload)).then((res) => {
-			console.log(res)
-			return dispatch(pushRoute(successPage))
-		}).catch(err => dispatch(setFormErrors(moduleKey, err)))
+		dispatch(apiRequest(endpointId, apiPayload)).then(() => dispatch(pushRoute(successPage))).catch(err => dispatch(setFormErrors(moduleKey, err)))
 	}).catch(err => dispatch(setFormErrors(moduleKey, err)))
 }
