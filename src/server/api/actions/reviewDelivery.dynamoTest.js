@@ -13,11 +13,13 @@ import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
 import getPendingDeliveries from 'root/src/server/api/actions/getPendingDeliveries'
+import dynamoQueryProjectPledges from 'root/src/server/api/actionUtil/dynamoQueryProjectPledges'
 
 describe('approveDelivery', async () => {
+	let project
 	test('Correctly approves delivery', async () => {
 		// TODO test suites for admin verification
-		const project = await createProject({
+		project = await createProject({
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),
 		})
@@ -76,7 +78,6 @@ describe('approveDelivery', async () => {
 				audit: projectDeliveredKey,
 			},
 		}
-
 		const res = await apiFn(event)
 
 		expect(res.body.status).toEqual(projectDeliveredKey)
@@ -159,7 +160,14 @@ describe('approveDelivery', async () => {
 				currentPage: 1,
 			},
 		})
-
 		expect(deliveries.items.length).toEqual(0)
 	})
+
+	test(
+		`paypal capture is being launched and returns 404 because we don't have 
+		mocked that fn (everything goes fine anyways, request is being sent)`, async () => {
+			const projectPledges = await dynamoQueryProjectPledges(project.id)
+			expect(projectPledges[0].paymentInfo[0].captured).toEqual(404)
+		},
+	)
 })

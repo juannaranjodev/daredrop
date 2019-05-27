@@ -26,6 +26,7 @@ describe('createProject', () => {
 		// This fails to create the right filter for the test
 		// const card = tableScan.Items.filter(item => item.pk === res.body.id);
 
+		console.log(res)
 		expect(res.statusCode).toEqual(200)
 	})
 })

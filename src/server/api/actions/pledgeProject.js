@@ -1,4 +1,4 @@
-import { head, add, prop, compose, map, not, length, gt, assoc, assocPath, append } from 'ramda'
+import { head, add, prop, compose, map, not, length, gt, assoc, omit, append } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -12,12 +12,13 @@ import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilde
 import { PLEDGE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import pledgeDynamoObj from 'root/src/server/api/actionUtil/pledgeDynamoObj'
-import { generalError } from 'root/src/server/api/errors'
+import { generalError, payloadSchemaError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
-import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
+import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
+
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
@@ -39,8 +40,10 @@ export default async ({ userId, payload }) => {
 	const newPledgeAmount = viewPledgeAmount(payload)
 	const paymentInfo = viewPaymentInfo(payload)
 
-	if (paymentInfo.paymentType === 'stripeCard' && !validateStripeSourceId(paymentInfo.paymentId)) {
+	if (paymentInfo.paymentType === 'stripeCard' && await !validateStripeSourceId(paymentInfo.paymentId)) {
 		throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+	} else if (paymentInfo.paymentType === 'paypalAuthorize' && await !validatePaypalAuthorize(paymentInfo.orderID, newPledgeAmount)) {
+		throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
 	}
 
 	let myPledge = head(dynamoItemsProp(await documentClient.query({
@@ -61,7 +64,10 @@ export default async ({ userId, payload }) => {
 		)
 	}
 
-	const newMyPledge = assoc('paymentInfo', append(paymentInfo, prop('paymentInfo', myPledge)), myPledge)
+	const newMyPledge = assoc('paymentInfo', append(
+		assoc('captured', 0, omit(['orderID'], paymentInfo)),
+		prop('paymentInfo', myPledge),
+	), myPledge)
 	const updatedPledgeAmount = assoc('pledgeAmount', add(newPledgeAmount, prop('pledgeAmount', myPledge)), newMyPledge)
 
 	const { pledgeAmount } = projectToPledge
