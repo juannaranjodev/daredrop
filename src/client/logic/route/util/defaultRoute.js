@@ -3,10 +3,8 @@ import {
 	ACTIVE_PROJECTS_ROUTE_ID, LOGIN_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
 
-export default state => {
-  console.log(state)
-  return (
+export default state => (
 	isAuthenticated(state)
 		? { routeId: ACTIVE_PROJECTS_ROUTE_ID, routeParams: {} }
 		: { routeId: LOGIN_ROUTE_ID, routeParams: {} }
-)}
+)
