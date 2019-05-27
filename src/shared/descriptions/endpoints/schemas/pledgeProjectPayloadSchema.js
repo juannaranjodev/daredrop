@@ -23,6 +23,6 @@ export default {
 			},
 		},
 	},
-	required: ['pledgeAmount'],
+	required: ['pledgeAmount', 'paymentInfo'],
 	additionalProperties: false,
 }
