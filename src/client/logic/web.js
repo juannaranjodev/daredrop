@@ -66,7 +66,7 @@ import displayModal from 'root/src/client/logic/modal/reducers/displayModal'
 
 const store = createStore(
 	{
-    ...initAppReducer,
+		...initAppReducer,
 		...authDetermined,
 		...setMediaBreakpoints,
 		...changeRoute,
