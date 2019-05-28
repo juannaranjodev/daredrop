@@ -84,7 +84,7 @@ export default async ({ userId, payload }) => {
 		...assigneesDdb,
 		...myPledgeDdb,
 	])
-
+	console.log("send email for dare approved")
 	try {
 		const email = await getUserEmail(userId)
 
