@@ -12,13 +12,6 @@ const isAcceptedDare = propEq('status',projectAccepted)
 const diffDescending = function(a,b,prp){
     const aV = prop(prp,a) ? prop(prp,a) : 0
     const bV = prop(prp,b) ? prop(prp,b) : 0
-    return parseInt(bV) - parseInt(aV)
-}
-const diffAscending = function(a,b,prp){
-    const aV = prop(prp,a) ? prop(prp,a) : 0
-    const bV = prop(prp,b) ? prop(prp,b) : 0
-    return parseInt(aV) - parseInt(bV)
-}
 const descendingAccepted = function(a,b){
 	if ( isAcceptedDare(a) && isAcceptedDare(b) ){
 		return descendingCreated(a,b)
@@ -27,7 +20,6 @@ const descendingAccepted = function(a,b){
 	if ( isAcceptedDare(b) ) return 1
 	return descendingCreated( a, b )
 }
-
 
 
 export const sortByType = {

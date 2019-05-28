@@ -1,8 +1,9 @@
 import React, { memo, Fragment } from 'react'
+import { identity } from 'ramda'
 import classNames from 'classnames'
+import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST, SORT_BY_CREATED_ASC } from 'root/src/shared/constants/sortTypesOfProject'
 
 import { orNull } from 'root/src/shared/util/ramdaPlus'
-import search from 'root/src/client/assets/icons/search.svg'
 import Link from 'root/src/client/web/base/Link'
 import Header from 'root/src/client/web/typography/Header'
 import Title from 'root/src/client/web/typography/Title'
@@ -131,6 +132,8 @@ export const BannerHeaderUnconnected = memo(({
 	bannerImage, bannerImageText, bannerImageSubText,
 	textWithBg, bannerSubText, linkLabel, linkRouteId,
 	classes, createNewDareActive, loadOptionsPromise,
+	filterProjectByGame, filterProjectByStreamer, sortProject,
+	gameFilterValue, streamerFilterValue,
 }) => (
 	<div className={classNames(classes.bottomMargin, 'layout-column')}>
 		{orNull(bannerImage,
@@ -176,25 +179,26 @@ export const BannerHeaderUnconnected = memo(({
 										defaultValue={{
 											label: 'Newest',
 											id: 0,
-											value: 0,
+											value: SORT_BY_NEWEST,
 										}}
+										onChange={sortProject}
 										className={classes.autoSelect}
 										options={[
 											{ 	label: 'Newest',
 												id: 0,
-												value: 0,
+												value: SORT_BY_NEWEST,
 											},
 											{ 	label: 'Accepted',
 												id: 1,
-												value: 1,
+												value: SORT_BY_CREATED_ASC,
 											},
 											{ 	label: 'Bounty Amount',
 												id: 2,
-												value: 2,
+												value: SORT_BY_BOUNTY,
 											},
 											{ 	label: 'Time Left',
 												id: 3,
-												value: 3,
+												value: SORT_BY_TIME_LEFT,
 											},
 										]}
 										styles={{
@@ -208,6 +212,13 @@ export const BannerHeaderUnconnected = memo(({
 												top: 5,
 												right: 0,
 												fontWeight: 400,
+											}),
+											menu: () => ({
+												position: 'absolute',
+												zIndex: 1000,
+												background: 'white',
+												width: 152,
+												boxShadow: '0 9px 13px 0 rgba(0, 0, 0, 0.26)',
 											}),
 										}}
 									/>
@@ -230,9 +241,21 @@ export const BannerHeaderUnconnected = memo(({
 													right: 0,
 													fontWeight: 400,
 												}),
+												menu: () => ({
+													position: 'absolute',
+													zIndex: 1000,
+													background: 'white',
+													marginTop: -16,
+													width: 152,
+													boxShadow: '0 9px 13px 0 rgba(0, 0, 0, 0.26)',
+												}),
 											}}
 											className={classes.autoSelect}
-											onInputChange={() => {}}
+											onInputChange={filterProjectByGame}
+											getOptionLabel={option => option.label}
+											getOptionValue={option => option.value}
+											onChange={filterProjectByGame}
+											value={gameFilterValue}
 											components={{
 												DropdownIndicator,
 											}}
@@ -242,6 +265,7 @@ export const BannerHeaderUnconnected = memo(({
 											loadOptions={loadOptionsPromise('twitchChannels')}
 											defaultOptions
 											placeholder="Filter streamer"
+											backspaceRemovesValue
 											styles={{
 												control: () => ({
 													border: 'none',
@@ -251,9 +275,21 @@ export const BannerHeaderUnconnected = memo(({
 													top: 7,
 													right: 0,
 												}),
+												menu: () => ({
+													position: 'absolute',
+													zIndex: 1000,
+													background: 'white',
+													marginTop: -16,
+													width: 152,
+													boxShadow: '0 9px 13px 0 rgba(0, 0, 0, 0.26)',
+												}),
 											}}
 											className={classes.autoSelect}
-											onInputChange={() => {}}
+											onChange={filterProjectByStreamer}
+											getOptionLabel={option => option.label}
+											getOptionValue={option => option.value}
+											onInputChange={filterProjectByStreamer}
+											value={streamerFilterValue}
 											components={{
 												DropdownIndicator,
 											}}
