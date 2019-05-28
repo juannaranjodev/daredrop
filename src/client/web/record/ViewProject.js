@@ -1,4 +1,4 @@
-import { map, addIndex, isNil, propOr, prop } from 'ramda'
+import { map, addIndex, isNil, propOr, prop, replace } from 'ramda'
 import React, { memo, useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
@@ -218,6 +218,10 @@ const styles = {
 	},
 }
 
+const getDescriptionHtmlContent = description => {
+  return !isNil(description) && replace(/-/g, '<br/> -', description)
+}
+
 export const ViewProjectModule = memo(({
 	auditFavorites, removeToFavorites, favoritesAmount, myFavorites,
 	projectId, projectDescription, projectTitle, pledgeAmount, assignees,
@@ -285,9 +289,8 @@ export const ViewProjectModule = memo(({
 											variant="outlined"
 											fullWidth
 										/>,
-										<div className={classes.description}>
-											{projectDescription}
-										</div>)}
+                    <div className={classes.description} dangerouslySetInnerHTML={{__html: getDescriptionHtmlContent(description)}} />
+									)}
 								</div>
 								{orNull(canEditProjectDetails,
 									<Button
