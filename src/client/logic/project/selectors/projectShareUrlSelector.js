@@ -6,6 +6,7 @@ import {
 } from 'root/src/shared/descriptions/routes/routeIds'
 
 export default (state, { recordId }) => {
+	if (recordId == undefined) return;
 	const localUrl = urlFromRouteObj({
 		routeId: VIEW_PROJECT_ROUTE_ID,
 		routeParams: { recordId },
