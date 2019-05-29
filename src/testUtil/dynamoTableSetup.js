@@ -24,6 +24,9 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 	}
 })
 
+jest.mock('root/src/server/api/actionUtil/validatePaypalAuthorize', () => () => true)
+
+jest.mock('root/src/server/api/actionUtil/validateStripeSourceId', () => () => true)
 
 jest.mock('root/src/server/api/twitchApi', () => {
 	/* eslint-disable global-require */
