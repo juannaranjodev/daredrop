@@ -8,6 +8,6 @@ import {
 export default ({ body }) => async (dispatch) => {
 	analyticsSendItem(body, 'Pledge')
 	return dispatch(
-		pushRoute(PLEDGE_SUCCESS_PAGE_ROUTE_ID),
+		pushRoute(PLEDGE_SUCCESS_PAGE_ROUTE_ID, { recordId: body.id }),
 	)
 }
