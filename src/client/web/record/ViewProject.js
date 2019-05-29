@@ -218,8 +218,6 @@ const styles = {
 	},
 }
 
-const getDescriptionHtmlContent = (description) => !isNil(description) && replace(/-/g, '<br/> -', description)
-
 export const ViewProjectModule = memo(({
 	auditFavorites, removeToFavorites, favoritesAmount, myFavorites,
 	projectId, projectDescription, projectTitle, pledgeAmount, assignees,
@@ -287,7 +285,7 @@ export const ViewProjectModule = memo(({
 											variant="outlined"
 											fullWidth
 										/>,
-										<div className={classes.description} dangerouslySetInnerHTML={{ __html: getDescriptionHtmlContent(description) }} />,)}
+										<div className={classes.description}>{description}</div>)}
 								</div>
 								{orNull(canEditProjectDetails,
 									<Button
