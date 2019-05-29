@@ -3,15 +3,15 @@ import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoInde
 import projectDenormalizeFields from 'root/src/server/api/actionUtil/projectDenormalizeFields'
 
 export default (
-	projectId, project, userId, pledgeAmount, stripeCardId, created = false,
+	projectId, project, userId, created = false,
 ) => {
 	const data = {
 		...projectDenormalizeFields(project),
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: `pledge|${userId}`,
-		stripeCardId,
+		paymentInfo: [],
 		...(created ? { created: true } : {}),
-		pledgeAmount,
+		pledgeAmount: 0,
 	}
 	return data
 }

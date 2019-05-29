@@ -1,3 +1,5 @@
+import { paypalAuthorize, stripeCard } from 'root/src/shared/constants/paymentTypes'
+
 export default {
 	type: 'object',
 	properties: {
@@ -10,8 +12,17 @@ export default {
 				minimum: 'Pledge amount must be at least $5.',
 			},
 		},
-		stripeCardId: { type: 'string' },
+		paymentInfo: {
+			type: 'object',
+			properties: {
+				paymentType: {
+					type: 'string',
+					enum: [stripeCard, paypalAuthorize],
+				},
+				paymentId: { type: 'string' },
+			},
+		},
 	},
-	required: ['pledgeAmount', 'stripeCardId'],
+	required: ['pledgeAmount', 'paymentInfo'],
 	additionalProperties: false,
 }

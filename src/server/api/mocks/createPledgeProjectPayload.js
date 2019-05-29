@@ -1,5 +1,8 @@
 export default projectId => ({
 	projectId,
 	pledgeAmount: 1234,
-	stripeCardId: 'mockStripeCardId',
+	paymentInfo: {
+		paymentType: 'stripeCard',
+		paymentId: 'mockStripeCardId',
+	},
 })
