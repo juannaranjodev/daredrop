@@ -1,7 +1,7 @@
-import { uniq, prop, sort, filter, map } from 'ramda'
+import { uniq, prop, sort, filter, map, equals, anyPass } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
-import { dynamoItemsProp } from 'root/src/server/api/lenses'
+import { dynamoItemsProp, projectDeliveredKey } from 'root/src/server/api/lenses'
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
@@ -50,7 +50,10 @@ export default async ({ userId, payload }) => {
 		const diff = moment().diff(dare.approved, 'days')
 		return diff <= daysToExpire
 	}
-	const filteredProjects = filter(filterExpired, myProjectsSerialized)
+
+	const dontFilterDelivered = dare => equals(prop('delivered', dare), projectDeliveredKey)
+
+	const filteredProjects = filter(anyPass([filterExpired, dontFilterDelivered]), myProjectsSerialized)
 
 	const sortedProjects = sort(descendingApproved, filteredProjects)
 
