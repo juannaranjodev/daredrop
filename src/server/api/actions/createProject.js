@@ -1,5 +1,5 @@
 import uuid from 'uuid/v1'
-import { map, pick, omit, prop, join } from 'ramda'
+import { map, pick, omit, prop, join, add, assoc, append } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -21,7 +21,7 @@ import moment from 'moment'
 
 const payloadLenses = getPayloadLenses(CREATE_PROJECT)
 const {
-	viewStripeCardId, viewPledgeAmount, viewAssignees, viewGames,
+	viewPaymentInfo, viewPledgeAmount, viewAssignees, viewGames,
 } = payloadLenses
 
 export default async ({ userId, payload }) => {
@@ -29,7 +29,7 @@ export default async ({ userId, payload }) => {
 		project: payload, payloadLenses,
 	})
 	const projectId = `project-${uuid()}`
-
+	const paymentInfo = viewPaymentInfo(payload)
 	const projectCommon = projectDenormalizeFields(serializedProject)
 
 	const created = moment().format()
@@ -43,7 +43,6 @@ export default async ({ userId, payload }) => {
 		pledgers: 1,
 		favoritesAmount: 0,
 	}
-
 
 	const projectAssignees = map(assignee => ({
 		[PARTITION_KEY]: projectId,
@@ -66,15 +65,17 @@ export default async ({ userId, payload }) => {
 	}), viewGames(serializedProject))
 
 	const pledge = pledgeDynamoObj(
-		projectId, serializedProject, userId, pledgeAmount,
-		viewStripeCardId(serializedProject), true,
+		projectId, serializedProject, userId, true,
 	)
+
+	const newMyPledge = assoc('paymentInfo', append(paymentInfo, prop('paymentInfo', pledge)), pledge)
+	const updatedPledgeAmount = assoc('pledgeAmount', add(pledgeAmount, prop('pledgeAmount', pledge)), newMyPledge)
 
 	const params = {
 		RequestItems: {
 			[TABLE_NAME]: map(
 				Item => ({ PutRequest: { Item } }),
-				[project, ...projectAssignees, ...projectGames, pledge],
+				[project, ...projectAssignees, ...projectGames, updatedPledgeAmount],
 			),
 		},
 	}

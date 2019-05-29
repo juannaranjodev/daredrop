@@ -1,4 +1,4 @@
-import { head, add, prop, compose, map } from 'ramda'
+import { head, add, prop, compose, map, not, length, gt, assoc, assocPath, append } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -17,9 +17,11 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
+import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
+import { dynamoItemsProp } from 'root/src/server/api/lenses'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
-const { viewPledgeAmount, viewStripeCardId } = payloadLenses
+const { viewPledgeAmount, viewPaymentInfo } = payloadLenses
 
 export default async ({ userId, payload }) => {
 	const { projectId } = payload
@@ -35,17 +37,13 @@ export default async ({ userId, payload }) => {
 	}
 
 	const newPledgeAmount = viewPledgeAmount(payload)
-	const sourceId = viewStripeCardId(payload)
-	if (!validateStripeSourceId(sourceId)) {
+	const paymentInfo = viewPaymentInfo(payload)
+
+	if (paymentInfo.paymentType === 'stripeCard' && !validateStripeSourceId(paymentInfo.paymentId)) {
 		throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
 	}
 
-	const newPledge = pledgeDynamoObj(
-		projectId, projectToPledge, userId,
-		newPledgeAmount, sourceId,
-	)
-
-	const myPledge = await documentClient.query({
+	let myPledge = head(dynamoItemsProp(await documentClient.query({
 		TableName: TABLE_NAME,
 		KeyConditionExpression: `${PARTITION_KEY} = :pk and ${SORT_KEY} = :pledgeUserId`,
 		ExpressionAttributeValues: {
@@ -53,19 +51,27 @@ export default async ({ userId, payload }) => {
 			':pledgeUserId': `pledge|${userId}`,
 		},
 		ConsistentRead: true,
-	}).promise()
+	}).promise()))
+
+	const addPledgers = myPledge ? 0 : 1
+
+	if (not(myPledge)) {
+		myPledge = pledgeDynamoObj(
+			projectId, projectToPledge, userId,
+		)
+	}
+
+	const newMyPledge = assoc('paymentInfo', append(paymentInfo, prop('paymentInfo', myPledge)), myPledge)
+	const updatedPledgeAmount = assoc('pledgeAmount', add(newPledgeAmount, prop('pledgeAmount', myPledge)), newMyPledge)
 
 	const { pledgeAmount } = projectToPledge
 
-	// TODO: Check pledge amount
 	const pledgeParams = {
 		TableName: TABLE_NAME,
-		Item: newPledge,
+		Item: updatedPledgeAmount,
 	}
 
 	await documentClient.put(pledgeParams).promise()
-
-	const addPledgers = myPledge.Count > 0 ? 0 : 1
 
 	const updateProjectParams = {
 		TableName: TABLE_NAME,
@@ -85,7 +91,7 @@ export default async ({ userId, payload }) => {
 	const newProject = projectSerializer([
 		...projectToPledgeDdb,
 		...assigneesDdb,
-		newPledge,
+		myPledge,
 	])
 
 	try {
