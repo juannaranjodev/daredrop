@@ -20,6 +20,14 @@ const descendingAccepted = function(a,b){
 	if ( isAcceptedDare(b) ) return 1
 	return descendingCreated( a, b )
 }
+const descendingAccepted = function (a, b) {
+	if (isAcceptedDare(a) && isAcceptedDare(b)) {
+		return descendingCreated(a, b)
+	}
+	if (isAcceptedDare(a)) return -1
+	if (isAcceptedDare(b)) return 1
+	return descendingCreated(a, b)
+}
 
 
 export const sortByType = {

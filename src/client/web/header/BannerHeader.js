@@ -1,7 +1,7 @@
 import React, { memo, Fragment } from 'react'
 import { identity } from 'ramda'
 import classNames from 'classnames'
-import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST, SORT_BY_CREATED_ASC } from 'root/src/shared/constants/sortTypesOfProject'
+import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST, SORT_BY_CREATED_ASC, SORT_BY_ACCEPTED } from 'root/src/shared/constants/sortTypesOfProject'
 
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 import Link from 'root/src/client/web/base/Link'
@@ -190,7 +190,7 @@ export const BannerHeaderUnconnected = memo(({
 											},
 											{ 	label: 'Accepted',
 												id: 1,
-												value: SORT_BY_CREATED_ASC,
+												value: SORT_BY_ACCEPTED,
 											},
 											{ 	label: 'Bounty Amount',
 												id: 2,
@@ -199,6 +199,11 @@ export const BannerHeaderUnconnected = memo(({
 											{ 	label: 'Time Left',
 												id: 3,
 												value: SORT_BY_TIME_LEFT,
+											},
+											{
+												label: 'Create asc',
+												id: 4,
+												value: SORT_BY_CREATED_ASC,
 											},
 										]}
 										styles={{
