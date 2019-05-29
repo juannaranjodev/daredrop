@@ -30,13 +30,15 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 		param = { param: 'game', value: '' }
 		dispatch(setGameFilterValue(null))
 		dispatch(addFilterParams(param))
-		// dispatch(clearFilterParam({ type: 'game' }))
 		dispatch(setCurrentPage(1))
 		dispatch(clearProjectArray())
+	}
+
+	if (action === 'input-change' && valueInput === '') {
+		dispatch(clearFilterParam({ type: 'game' }))
 		dispatch(apiRequest(GET_ACTIVE_PROJECTS, {
 			currentPage: 1,
 			sortType: state.list.sortType,
 		}))
-		dispatch(clearFilterParam({ type: 'game' }))
 	}
 }

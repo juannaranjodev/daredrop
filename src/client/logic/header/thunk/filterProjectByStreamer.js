@@ -31,6 +31,9 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 		dispatch(addFilterParams(param))
 		dispatch(setCurrentPage(1))
 		dispatch(clearProjectArray())
+	}
+
+	if (action === 'input-change' && valueInput === '') {
 		dispatch(clearFilterParam({ type: 'assignee|twitch' }))
 		dispatch(apiRequest(GET_ACTIVE_PROJECTS, {
 			currentPage: 1,

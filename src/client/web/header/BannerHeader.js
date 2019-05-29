@@ -207,18 +207,45 @@ export const BannerHeaderUnconnected = memo(({
 												height: 29,
 												border: 'none',
 											}),
-											dropdownIndicator: () => ({
-												position: 'absolute',
-												top: 5,
-												right: 0,
-												fontWeight: 400,
-											}),
+											dropdownIndicator: (provided, state) => {
+												const rotate = state.isFocused ? '180' : '0'
+												return {
+													position: 'absolute',
+													top: !state.isFocused ? 5 : 2,
+													right: 4,
+													fontWeight: 400,
+													transform: `rotate(${rotate}deg)`,
+												}
+											},
 											menu: () => ({
 												position: 'absolute',
 												zIndex: 1000,
 												background: 'white',
 												width: 152,
 												boxShadow: '0 9px 13px 0 rgba(0, 0, 0, 0.26)',
+											}),
+											option: () => ({
+												width: 123,
+												height: 26,
+												fontSize: 16,
+												paddingLeft: 29,
+												paddingTop: 6,
+												fontWeight: 'normal',
+												fontStyle: 'normal',
+												lineHeight: 1.19,
+												textAlign: 'left',
+												color: '#000000',
+												'&:hover': {
+													background: '#eeeeee',
+													cursor: 'pointer',
+												},
+											}),
+											singleValue: () => ({
+												paddingBottom: 3,
+												paddingLeft: 20,
+												fontWeight: 'normal',
+												fontStyle: 'normal',
+												color: '#000000',
 											}),
 										}}
 									/>
@@ -234,6 +261,7 @@ export const BannerHeaderUnconnected = memo(({
 											styles={{
 												control: () => ({
 													border: 'none',
+													width: 125,
 												}),
 												dropdownIndicator: () => ({
 													position: 'absolute',
@@ -248,6 +276,29 @@ export const BannerHeaderUnconnected = memo(({
 													marginTop: -16,
 													width: 152,
 													boxShadow: '0 9px 13px 0 rgba(0, 0, 0, 0.26)',
+												}),
+												option: () => ({
+													width: 142,
+													height: 40,
+													fontSize: 16,
+													paddingLeft: 10,
+													paddingTop: 6,
+													overflow: 'hidden',
+													fontWeight: 'normal',
+													fontStyle: 'normal',
+													lineHeight: 1.19,
+													textAlign: 'left',
+													color: '#000000',
+													'&:hover': {
+														background: '#eeeeee',
+														cursor: 'pointer',
+													},
+												}),
+												placeholder: (provided, state) => ({
+													marginTop: -2,
+													marginLeft: 20,
+													display: state.isFocused ? 'none' : 'inherit',
+													color: '#cccccc',
 												}),
 											}}
 											className={classes.autoSelect}
@@ -269,6 +320,7 @@ export const BannerHeaderUnconnected = memo(({
 											styles={{
 												control: () => ({
 													border: 'none',
+													width: 125,
 												}),
 												dropdownIndicator: () => ({
 													position: 'absolute',
@@ -282,6 +334,29 @@ export const BannerHeaderUnconnected = memo(({
 													marginTop: -16,
 													width: 152,
 													boxShadow: '0 9px 13px 0 rgba(0, 0, 0, 0.26)',
+												}),
+												option: () => ({
+													width: 142,
+													height: 40,
+													fontSize: 16,
+													overflow: 'hidden',
+													paddingLeft: 10,
+													paddingTop: 6,
+													fontWeight: 'normal',
+													fontStyle: 'normal',
+													lineHeight: 1.19,
+													textAlign: 'left',
+													color: '#000000',
+													'&:hover': {
+														background: '#eeeeee',
+														cursor: 'pointer',
+													},
+												}),
+												placeholder: (provided, state) => ({
+													marginTop: 3,
+													marginLeft: 5,
+													display: state.isFocused ? 'none' : 'inherit',
+													color: '#cccccc',
 												}),
 											}}
 											className={classes.autoSelect}

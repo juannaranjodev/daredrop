@@ -32,26 +32,30 @@ export const CardList = ({
 						loadMore={() => getNextPage(currentPage, hasMore)}
 						hasMore={hasMore}
 					>
-						<div
-							className={classNames(
-								classes.paddingOffset,
-								'layout-row layout-wrap',
-							)}
-						>
+						{ head(list).length > 0 ? (
+							<div
+								className={classNames(
+									classes.paddingOffset,
+									'layout-row layout-wrap',
+								)}
+							>
+								{map(recordId => (
+									<ProjectCard
+										timeouts={timeouts}
+										setTimeouts={setTimeouts}
+										key={recordId}
+										recordId={recordId}
+										filterList={list[1]}
+										acceptedList={list[2]}
+									/>
+								), head(list))}
 
-							{map((recordId, index) => (
-								<ProjectCard
-									timeouts={timeouts}
-									setTimeouts={setTimeouts}
-									key={recordId || `id-${index}`}
-									recordId={recordId}
-									filterList={list[1]}
-									acceptedList={list[2]}
-								/>
-							),
-							head(list))}
-
-						</div>
+							</div>
+						) : (
+							<div>
+								Nothing found
+							</div>
+						) }
 					</InfiniteScroll>
 					<div className={classes.goTopContainer} onClick={scrollTopHandler}>
 						<div>
