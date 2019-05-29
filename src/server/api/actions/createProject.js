@@ -1,5 +1,5 @@
 import uuid from 'uuid/v1'
-import { map, compose, omit, prop, join, add, assoc, append } from 'ramda'
+import { map, omit, prop, join, add, assoc, append } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -16,7 +16,7 @@ import projectDenormalizeFields from 'root/src/server/api/actionUtil/projectDeno
 import pledgeDynamoObj from 'root/src/server/api/actionUtil/pledgeDynamoObj'
 import randomNumber from 'root/src/shared/util/randomNumber'
 import { payloadSchemaError } from 'root/src/server/api/errors'
-import { projectPendingKey, projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectPendingKey } from 'root/src/server/api/lenses'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import moment from 'moment'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
@@ -39,10 +39,16 @@ export default async ({ userId, payload }) => {
 
 	const pledgeAmount = viewPledgeAmount(serializedProject)
 
-	if (paymentInfo.paymentType === 'stripeCard' && await !validateStripeSourceId(paymentInfo.paymentId)) {
-		throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
-	} else if (paymentInfo.paymentType === 'paypalAuthorize' && await !validatePaypalAuthorize(paymentInfo.orderID, pledgeAmount)) {
-		throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
+	if (paymentInfo.paymentType === 'stripeCard') {
+		const validation = await validateStripeSourceId(paymentInfo.paymentId)
+		if (!validation) {
+			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+		}
+	} else if (paymentInfo.paymentType === 'paypalAuthorize') {
+		const validation = await validatePaypalAuthorize(paymentInfo.orderID, pledgeAmount)
+		if (!validation) {
+			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
+		}
 	}
 
 	const project = {

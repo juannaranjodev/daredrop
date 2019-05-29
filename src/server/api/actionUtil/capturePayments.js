@@ -14,6 +14,7 @@ export default paymentsArr => Promise.all(map(async (payment) => {
 				console.log(paymentType)
 				return 'x'
 			case paypalAuthorize:
+				console.log(paymentId)
 				const authorization = await capturePaypalAuthorize(paymentId)
 				return { ...payment, captured: authorization.statusCode }
 			default:

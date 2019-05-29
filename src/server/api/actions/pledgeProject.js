@@ -40,10 +40,17 @@ export default async ({ userId, payload }) => {
 	const newPledgeAmount = viewPledgeAmount(payload)
 	const paymentInfo = viewPaymentInfo(payload)
 
-	if (paymentInfo.paymentType === 'stripeCard' && await !validateStripeSourceId(paymentInfo.paymentId)) {
-		throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
-	} else if (paymentInfo.paymentType === 'paypalAuthorize' && await !validatePaypalAuthorize(paymentInfo.orderID, newPledgeAmount)) {
-		throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
+
+	if (paymentInfo.paymentType === 'stripeCard') {
+		const validation = await validateStripeSourceId(paymentInfo.paymentId)
+		if (!validation) {
+			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+		}
+	} else if (paymentInfo.paymentType === 'paypalAuthorize') {
+		const validation = await validatePaypalAuthorize(paymentInfo.orderID, newPledgeAmount)
+		if (!validation) {
+			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
+		}
 	}
 
 	let myPledge = head(dynamoItemsProp(await documentClient.query({
