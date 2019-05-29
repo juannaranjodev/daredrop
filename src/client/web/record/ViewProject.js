@@ -218,9 +218,7 @@ const styles = {
 	},
 }
 
-const getDescriptionHtmlContent = description => {
-  return !isNil(description) && replace(/-/g, '<br/> -', description)
-}
+const getDescriptionHtmlContent = (description) => !isNil(description) && replace(/-/g, '<br/> -', description)
 
 export const ViewProjectModule = memo(({
 	auditFavorites, removeToFavorites, favoritesAmount, myFavorites,
@@ -283,14 +281,13 @@ export const ViewProjectModule = memo(({
 								<div className={classNames('flex-100')}>
 									{ternary(canEditProjectDetails,
 										<TextField
-											type="textarea"
+											multiline
 											value={description || ''}
 											onChange={e => setDescription(e.target.value)}
 											variant="outlined"
 											fullWidth
 										/>,
-                    <div className={classes.description} dangerouslySetInnerHTML={{__html: getDescriptionHtmlContent(description)}} />
-									)}
+										<div className={classes.description} dangerouslySetInnerHTML={{ __html: getDescriptionHtmlContent(description) }} />,)}
 								</div>
 								{orNull(canEditProjectDetails,
 									<Button
@@ -314,7 +311,7 @@ export const ViewProjectModule = memo(({
 						>
 							<div className={classNames(classes.progressOuter)}>
 								<div className={classNames(classes.progressInner)} style={{ width: `${goalProgress}%` }} />
-								{ !isNil(myPledge)
+								{!isNil(myPledge)
 									&& (
 										<div className={classNames(classes.youPledge)}>
 											You Pledged: <span>${myPledge}</span>
