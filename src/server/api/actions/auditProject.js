@@ -76,18 +76,22 @@ export default async ({ userId, payload }) => {
 			],
 		},
 	}
+	console.log(JSON.stringify(auditParams, null, 4))
+	const email = await getUserEmail(userId)
+	console.log("----------user email ---------",email)
 
 	await documentClient.batchWrite(auditParams).promise()
+	console.log("send email for dare approved")
 
 	const newProject = projectSerializer([
 		auditedProject,
 		...assigneesDdb,
 		...myPledgeDdb,
 	])
-	console.log("send email for dare approved")
+
 	try {
 		const email = await getUserEmail(userId)
-
+		console.log("----------user email ---------",email)
 		if (equals(viewAudit(payload), projectApprovedKey)) {
 			const emailData = {
 				title: dareApprovedTitle,

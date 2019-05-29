@@ -19,7 +19,6 @@ describe('auditProject', () => {
 			payload: createProjectPayload(),
 		})
 		expect(newProject.status).toEqual(projectPendingKey)
-
 		const event = {
 			endpointId: AUDIT_PROJECT,
 			payload: {
