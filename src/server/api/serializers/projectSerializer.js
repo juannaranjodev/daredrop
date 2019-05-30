@@ -53,11 +53,14 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 		if (startsWith(`project|${projectDeliveredKey}`, sk)) {
 			const deliveryObj = pick(
 				[
-					'videoURL', 'timeStamp', 's3ObjectURL',
+					'videoURL', 'timeStamp', 's3ObjectURL', 'status',
 				],
 				projectPart,
 			)
-			return overDeliveries(append(deliveryObj), result)
+			return {
+				...overDeliveries(append(deliveryObj), result),
+				status: prop(1, split('|', skProp(projectPart))),
+			}
 		}
 		if (startsWith('project', sk)) {
 			const projectObj = pick(
@@ -67,6 +70,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 				],
 				projectPart,
 			)
+
 			if (isDenormalized) {
 				return {
 					...result,
@@ -80,7 +84,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 				...result,
 				...projectObj,
 				id: pkProp(projectPart),
-				status: prop(1, split('|', skProp(projectPart))),
+				status: propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart),
 			}
 		}
 		return result
