@@ -47,7 +47,10 @@ export default (projectArr, isAdminEndpoint) => reduce(
 				],
 				projectPart,
 			)
-			return overDeliveries(append(deliveryObj), result)
+			return {
+				...overDeliveries(append(deliveryObj), result),
+				status: prop(1, split('|', skProp(projectPart))),
+			}
 		}
 		if (startsWith(`project|${projectDeliveredKey}`, sk)) {
 			const deliveryObj = pick(
