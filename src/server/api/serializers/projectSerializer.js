@@ -1,4 +1,4 @@
-import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and } from 'ramda'
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, propOr } from 'ramda'
 
 import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
 
@@ -72,7 +72,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 					...result,
 					...projectObj,
 					id: pkProp(projectPart),
-					status: prop('status', projectPart),
+					status: propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart),
 					assignees: getActiveAssignees(prop('assignees', projectPart)),
 				}
 			}
