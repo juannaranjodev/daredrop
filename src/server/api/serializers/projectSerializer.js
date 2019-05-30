@@ -4,13 +4,14 @@ import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDelive
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
+import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {
 	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewFavoritesAmount, overDeliveries,
 } = responseLenses
 
-export default (projectArr, isAdminEndpoint) => reduce(
+export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 	(result, projectPart) => {
 		const sk = skProp(projectPart)
 		if (startsWith('pledge', sk)) {
@@ -61,12 +62,20 @@ export default (projectArr, isAdminEndpoint) => reduce(
 		if (startsWith('project', sk)) {
 			const projectObj = pick(
 				[
-					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl',
-					'games', 'pledgers', 'created', 'approved', 'favoritesAmount',
+					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl', 'status',
+					'games', 'pledgers', 'created', 'approved', 'favoritesAmount', isDenormalized ? 'assignees' : '',
 				],
 				projectPart,
 			)
-
+			if (isDenormalized) {
+				return {
+					...result,
+					...projectObj,
+					id: pkProp(projectPart),
+					status: prop('status', projectPart),
+					assignees: getActiveAssignees(prop('assignees', projectPart)),
+				}
+			}
 			return {
 				...result,
 				...projectObj,
