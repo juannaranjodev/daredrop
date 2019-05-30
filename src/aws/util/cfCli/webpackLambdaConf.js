@@ -1,7 +1,7 @@
 import ZipPlugin from 'zip-webpack-plugin'
 
 // const env = slsConstants.env || 'dev'
-const env = 'development'
+const env = process.env.stage || 'development'
 const isProd = env === 'production'
 
 module.exports = {
