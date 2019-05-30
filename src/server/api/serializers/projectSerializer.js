@@ -4,7 +4,6 @@ import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDelive
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
-import projectStatusOverwrite from 'root/src/server/api/actionUtil/projectStatusOverwrite'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {
@@ -57,7 +56,11 @@ export default (projectArr, isAdminEndpoint) => reduce(
 				],
 				projectPart,
 			)
-			return overDeliveries(append(deliveryObj), result)
+			return {
+				...overDeliveries(append(deliveryObj), result),
+				status: prop(1, split('|', skProp(projectPart))),
+				deliveryApproved: prop('approved', projectPart),
+			}
 		}
 		if (startsWith('project', sk)) {
 			const projectObj = pick(
@@ -67,12 +70,11 @@ export default (projectArr, isAdminEndpoint) => reduce(
 				],
 				projectPart,
 			)
-
 			return {
 				...result,
 				...projectObj,
 				id: pkProp(projectPart),
-				status: projectStatusOverwrite(prop(1, split('|', skProp(projectPart))), prop('status', result)),
+				status: prop(1, split('|', skProp(projectPart))),
 			}
 		}
 		return result

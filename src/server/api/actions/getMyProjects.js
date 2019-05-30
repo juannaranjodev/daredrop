@@ -1,4 +1,4 @@
-import { uniq, prop, sort, filter, map, equals, anyPass } from 'ramda'
+import { uniq, prop, sort, filter, map, startsWith, anyPass } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp, projectDeliveredKey } from 'root/src/server/api/lenses'
@@ -51,7 +51,7 @@ export default async ({ userId, payload }) => {
 		return diff <= daysToExpire
 	}
 
-	const dontFilterDelivered = dare => equals(prop('delivered', dare), projectDeliveredKey)
+	const dontFilterDelivered = dare => startsWith(prop('status', dare), projectDeliveredKey)
 
 	const filteredProjects = filter(anyPass([filterExpired, dontFilterDelivered]), myProjectsSerialized)
 

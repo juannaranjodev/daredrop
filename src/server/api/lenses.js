@@ -39,15 +39,3 @@ export const streamerRejectedKey = 'streamerRejected'
 export const streamerDeliveredKey = 'streamerDelivered'
 export const streamerDeliveryApprovedKey = 'streamerDeliveryApproved'
 export const streamerDeliveryRejectedKey = 'streamerDeliveryRejected'
-
-export const projectStatusWeights = {
-	[projectPendingKey]: 1,
-	[projectApprovedKey]: 2,
-	[projectRejectedKey]: 2,
-	[projectAcceptedKey]: 3,
-	[projectStreamerRejectedKey]: 3,
-	[projectDeliveryPendingKey]: 4,
-	[projectDeliveryRejectedKey]: 5,
-	[projectDeliveredKey]: 6,
-	[projectAllStreamersRejectedKey]: 10,
-}
