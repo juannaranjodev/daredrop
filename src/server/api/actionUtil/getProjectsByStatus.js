@@ -11,9 +11,9 @@ import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredPro
 
 const PageItemLength = 8
 
-export default async (statuses, defaultSortType, payload, isAdminEndpoint, noExpirationFilter) => {
+export default async (status, defaultSortType, payload, isAdminEndpoint, noExpirationFilter) => {
 	const realPayload = payload.payload
-	const projectsDdb = await dynamoQueryShardedProjects(statuses)
+	const projectsDdb = await dynamoQueryShardedProjects(status)
 
 	const serializedProjects = ternary(isAdminEndpoint,
 		map(compose(dissoc('myPledge'), projectSerializer(__, true)), projectsDdb),
