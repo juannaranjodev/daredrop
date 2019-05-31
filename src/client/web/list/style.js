@@ -287,6 +287,23 @@ export const projectCardStyle = {
 
 
 export const listStyle = {
+	listModuleContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+	},
+	iconContainer: {
+		display: 'flex',
+		justifyContent: 'center',
+	},
+	goTopContainer: {
+		cursor: 'pointer',
+		display: 'flex',
+		justifyContent: 'center',
+		marginTop: 20,
+		marginBottom: 20,
+		fontWeight: 'bold',
+		fontSize: 18,
+	},
 	paddingOffset: {
 		justifyContent: 'center',
 		borderRadius: 5,
