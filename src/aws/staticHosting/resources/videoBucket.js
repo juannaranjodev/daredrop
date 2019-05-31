@@ -9,7 +9,9 @@ export default {
 			AccessControl: 'PublicRead',
 			CorsConfiguration: {
 				CorsRules: [{
-					AllowedOrigins: ['localhost:8585', 'http://localhost:8585', 'https://daredrop.com', 'https://dev.watt.tv', 'https://www.daredrop.com', 'https://www.dev.watt.tv'],
+					AllowedOrigins: process.env.stage === 'production'
+						? ['https://daredrop.com', 'https://www.daredrop.com']
+						: ['localhost:8585', 'http://localhost:8585', 'https://dev.watt.tv', 'https://www.dev.watt.tv'],
 					AllowedMethods: ['GET', 'PUT'],
 					AllowedHeaders: ['*'],
 				}],

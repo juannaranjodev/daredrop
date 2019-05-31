@@ -1,8 +1,13 @@
 import ZipPlugin from 'zip-webpack-plugin'
+import { map } from 'ramda'
+import webpack from 'webpack'
+import appConstants from 'root/src/shared/constants/app'
 
-// const env = slsConstants.env || 'dev'
 const env = process.env.stage || 'development'
 const isProd = env === 'production'
+const envVars = Object.assign(
+	appConstants(env),
+)
 
 module.exports = {
 	mode: env,
@@ -38,5 +43,8 @@ module.exports = {
 		new ZipPlugin({
 			// pathPrefix: 'test',
 		}),
+		new webpack.DefinePlugin(
+			map(JSON.stringify, envVars),
+		),
 	],
 }
