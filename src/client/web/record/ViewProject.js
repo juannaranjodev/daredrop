@@ -185,7 +185,7 @@ const styles = {
 		},
 	},
 	totalPledge: {
-		marginTop: 14,
+		marginTop: 10,
 		smallText: {
 			fontSize: 12,
 			fontFamily: 'Roboto',
