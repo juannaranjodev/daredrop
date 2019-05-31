@@ -11,7 +11,7 @@ import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredPro
 
 const PageItemLength = 8
 
-export default async (status, defaultSortType, payload, isAdminEndpoint) => {
+export default async (status, defaultSortType, payload, isAdminEndpoint, noExpirationFilter) => {
 	const realPayload = payload.payload
 	const projectsDdb = await dynamoQueryShardedProjects(status)
 
@@ -24,7 +24,9 @@ export default async (status, defaultSortType, payload, isAdminEndpoint) => {
 		const diff = moment().diff(dare.approved, 'days')
 		return diff <= daysToExpire
 	}
-	let filteredProjects = filter(filterExpired, serializedProjects)
+	let filteredProjects = ternary(noExpirationFilter,
+		serializedProjects,
+		filter(filterExpired, serializedProjects))
 
 	// Start Filter with filter items
 	const filteredProjectIds = await getFilteredProjectIds(prop('filter', realPayload))
