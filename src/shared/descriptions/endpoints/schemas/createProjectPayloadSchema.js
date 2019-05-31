@@ -1,3 +1,5 @@
+import { paypalAuthorize, stripeCard } from 'root/src/shared/constants/paymentTypes'
+
 export default {
 	type: 'object',
 	properties: {
@@ -44,11 +46,20 @@ export default {
 				maxItems: 'You may only add 10 streamers.',
 			},
 		},
-		stripeCardId: { type: 'string' },
+		paymentInfo: {
+			type: 'object',
+			properties: {
+				paymentType: {
+					type: 'string',
+					enum: [stripeCard, paypalAuthorize],
+				},
+				paymentId: { type: 'string' },
+			},
+		},
 		pledgeAmount: { type: 'integer', minimum: 5, maximum: 999999 },
 		favoritesAmount: { type: 'integer' },
 		partialFormId: { type: 'string' },
 	},
-	required: ['title', 'games'],
+	required: ['title', 'games', 'paymentInfo'],
 	additionalProperties: false,
 }

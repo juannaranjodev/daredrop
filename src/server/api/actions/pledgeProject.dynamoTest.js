@@ -24,7 +24,10 @@ describe('pledgeProject', () => {
 			payload: {
 				projectId: newProject.id,
 				pledgeAmount,
-				stripeCardId: 'mockStripeCardId',
+				paymentInfo: {
+					paymentType: 'stripeCard',
+					paymentId: 'mockStripeCardId',
+				},
 			},
 			authentication: mockUserId,
 		}
@@ -48,11 +51,15 @@ describe('pledgeProject', () => {
 			payload: {
 				projectId: newProject.id,
 				pledgeAmount,
-				stripeCardId: 'mockStripeCardId',
+				paymentInfo: {
+					paymentType: 'stripeCard',
+					paymentId: 'mockStripeCardId',
+				},
 			},
 			authentication: mockUserId,
 		}
 		const res = await apiFn(event)
+
 		expect(res).toEqual({
 			statusCode: 200,
 			body: {

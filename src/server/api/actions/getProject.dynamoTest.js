@@ -19,6 +19,7 @@ describe('getProject', () => {
 			authentication: mockUserId,
 		}
 		const res = await apiFn(event)
+
 		expect(res).toEqual({
 			statusCode: 200,
 			body: {

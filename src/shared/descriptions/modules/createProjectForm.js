@@ -20,12 +20,12 @@ export default {
 		endpointId: GET_PAYMENT_METHODS,
 		schema: compose(
 			dissocPath(['properties', 'projectId']),
-			dissocPath(['properties', 'stripeCardId']),
+			dissocPath(['properties', 'paymentInfo', 'paymentType']),
 			dissocPath(['additionalProperties']),
 			set(
 				lensProp('required'),
 				without(
-					['stripeCardId'],
+					['paymentInfo'],
 					view(lensProp('required'), createProjectPayloadSchema),
 				),
 			),
@@ -91,11 +91,6 @@ export default {
 			formCommon,
 		],
 		preSubmitCaption: '*We take no responsibility for resolving discrepancies between intended project content and content which meet the requirement as stated.',
-		customSubmits: [
-			{
-				submit: 'payPalButton',
-			},
-		],
 		successPage: DARE_CREATE_SUCCESS_ROUTE_ID,
 		submits: [
 			{
@@ -107,6 +102,7 @@ export default {
 						['recordId', { $sub: ['res', 'body', 'id'] }],
 					],
 				},
+				customSubmit: 'payPalButton',
 			},
 		],
 	},

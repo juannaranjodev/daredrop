@@ -37,16 +37,18 @@ export const CardList = ({
 								'layout-row layout-wrap',
 							)}
 						>
-							{map(recordId => (
+
+							{map((recordId, index) => (
 								<ProjectCard
 									timeouts={timeouts}
 									setTimeouts={setTimeouts}
-									key={recordId}
+									key={recordId || `id-${index}`}
 									recordId={recordId}
 									filterList={list[1]}
 									acceptedList={list[2]}
 								/>
-							), head(list))}
+							),
+							head(list))}
 
 						</div>
 					</InfiniteScroll>
