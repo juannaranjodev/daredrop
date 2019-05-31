@@ -1,4 +1,4 @@
-import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and } from 'ramda'
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath } from 'ramda'
 
 import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
 
@@ -13,6 +13,9 @@ const {
 export default (projectArr, isAdminEndpoint) => reduce(
 	(result, projectPart) => {
 		const sk = skProp(projectPart)
+		if ( hasPath(['creator'],projectPart)){
+			result = {...result,creator:prop('creator',projectPart)}
+		}
 		if (startsWith('pledge', sk)) {
 			return setMyPledge(viewPledgeAmount(projectPart), result)
 		}

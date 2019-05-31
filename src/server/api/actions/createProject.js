@@ -42,9 +42,8 @@ export default async ({ userId, payload }) => {
 		...projectCommon,
 		pledgers: 1,
 		favoritesAmount: 0,
+		creator: userId
 	}
-
-
 	const projectAssignees = map(assignee => ({
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: join('|', [

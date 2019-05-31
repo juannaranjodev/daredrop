@@ -30,6 +30,23 @@ export default async ({ userId, payload }) => {
 	] = await dynamoQueryProject(
 		userId, projectId,
 	)
+
+
+	const [project, assignees, myPledge, myFavorites] = await dynamoQueryProject(
+		userId, projectId,
+	)
+	const respons = {
+		userId,
+		...projectSerializer([
+			...project,
+			...myPledge,
+			...myFavorites,
+		]),
+	}
+
+
+
+
 	const projectToPledge = head(projectToPledgeDdb)
 	if (!projectToPledge) {
 		throw generalError('Project doesn\'t exist')
@@ -76,12 +93,7 @@ export default async ({ userId, payload }) => {
 			],
 		},
 	}
-	console.log(JSON.stringify(auditParams, null, 4))
-	const email = await getUserEmail(userId)
-	console.log("----------user email ---------",email)
-
 	await documentClient.batchWrite(auditParams).promise()
-	console.log("send email for dare approved")
 
 	const newProject = projectSerializer([
 		auditedProject,
@@ -90,7 +102,7 @@ export default async ({ userId, payload }) => {
 	])
 
 	try {
-		const email = await getUserEmail(userId)
+		const email = await getUserEmail((prop('creator',respons)))
 		console.log("----------user email ---------",email)
 		if (equals(viewAudit(payload), projectApprovedKey)) {
 			const emailData = {
