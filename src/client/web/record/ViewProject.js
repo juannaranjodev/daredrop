@@ -326,10 +326,13 @@ export const ViewProjectModule = memo(({
 									<SubHeader>Pledgers</SubHeader>
 									<div className={classNames(classes.text)}>{pledgers}</div>
 								</div>
-								<div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
-									<SubHeader>Days to go</SubHeader>
-									<div className={classNames(classes.text)}>{daysToGo}</div>
-								</div>
+								{ orNull(
+                  daysToGo,
+                  <div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
+  									<SubHeader>Days to go</SubHeader>
+  									<div className={classNames(classes.text)}>{daysToGo}</div>
+							    </div>,
+                )}
 							</div>
 							<div className={classNames(classes.sidebarItem, classes.streamerTitle)}>
 								<SubHeader>Streamer challenged: </SubHeader>
