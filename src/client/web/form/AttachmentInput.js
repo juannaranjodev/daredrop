@@ -44,7 +44,7 @@ const styles = {
 	},
 }
 
-export const AtachmentInputUnconected = memo(({
+export const AttachmentInputUnconected = memo(({
 	moduleKey, fieldPath, setInput, classes,
 }) => {
 	const [fileName, setFileName] = useState('')
@@ -102,5 +102,5 @@ export const AtachmentInputUnconected = memo(({
 })
 
 export default withModuleContext(
-	fieldInputConnector(AtachmentInputUnconected, styles),
+	fieldInputConnector(AttachmentInputUnconected, styles),
 )

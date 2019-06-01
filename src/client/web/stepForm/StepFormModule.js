@@ -68,7 +68,7 @@ export const StepFormModuleUnconnected = memo(({
 					'layout-row layout-align-center',
 				)}
 			>
-				<Header>{ternary(onFirstStep, 'Dare a Streamer', 'Payement Information')}</Header>
+				<Header>{ternary(onFirstStep, 'Dare a Streamer', 'Payment Information')}</Header>
 			</div>
 			<Form
 				formIndex={stepFormCurrentPage}

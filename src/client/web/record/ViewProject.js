@@ -1,4 +1,4 @@
-import { map, addIndex, isNil, propOr, prop } from 'ramda'
+import { map, addIndex, isNil, propOr, prop, replace } from 'ramda'
 import React, { memo, useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
@@ -185,7 +185,7 @@ const styles = {
 		},
 	},
 	totalPledge: {
-		marginTop: 14,
+		marginTop: 10,
 		smallText: {
 			fontSize: 12,
 			fontFamily: 'Roboto',
@@ -279,15 +279,13 @@ export const ViewProjectModule = memo(({
 								<div className={classNames('flex-100')}>
 									{ternary(canEditProjectDetails,
 										<TextField
-											type="textarea"
+											multiline
 											value={description || ''}
 											onChange={e => setDescription(e.target.value)}
 											variant="outlined"
 											fullWidth
 										/>,
-										<div className={classes.description}>
-											{projectDescription}
-										</div>)}
+										<div className={classes.description}>{description}</div>)}
 								</div>
 								{orNull(canEditProjectDetails,
 									<Button
@@ -311,7 +309,7 @@ export const ViewProjectModule = memo(({
 						>
 							<div className={classNames(classes.progressOuter)}>
 								<div className={classNames(classes.progressInner)} style={{ width: `${goalProgress}%` }} />
-								{ !isNil(myPledge)
+								{!isNil(myPledge)
 									&& (
 										<div className={classNames(classes.youPledge)}>
 											You Pledged: <span>${myPledge}</span>
@@ -328,10 +326,13 @@ export const ViewProjectModule = memo(({
 									<SubHeader>Pledgers</SubHeader>
 									<div className={classNames(classes.text)}>{pledgers}</div>
 								</div>
-								<div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
-									<SubHeader>Days to go</SubHeader>
-									<div className={classNames(classes.text)}>{daysToGo}</div>
-								</div>
+								{ orNull(
+                  daysToGo,
+                  <div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
+  									<SubHeader>Days to go</SubHeader>
+  									<div className={classNames(classes.text)}>{daysToGo}</div>
+							    </div>,
+                )}
 							</div>
 							<div className={classNames(classes.sidebarItem, classes.streamerTitle)}>
 								<SubHeader>Streamer challenged: </SubHeader>

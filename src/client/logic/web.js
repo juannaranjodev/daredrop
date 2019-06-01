@@ -4,6 +4,7 @@ import initApp from 'root/src/client/logic/app/thunks/initApp'
 import testMediaBreakpoints from 'root/src/client/logic/app/thunks/testMediaBreakpoints'
 
 // reducers
+import initAppReducer from 'root/src/client/logic/app/reducers/initAppReducer'
 import authDetermined from 'root/src/client/logic/app/reducers/authDetermined'
 import setMediaBreakpoints from 'root/src/client/logic/app/reducers/setMediaBreakpoints'
 import changeRoute from 'root/src/client/logic/route/reducers/changeRoute'
@@ -65,6 +66,7 @@ import displayModal from 'root/src/client/logic/modal/reducers/displayModal'
 
 const store = createStore(
 	{
+		...initAppReducer,
 		...authDetermined,
 		...setMediaBreakpoints,
 		...changeRoute,
