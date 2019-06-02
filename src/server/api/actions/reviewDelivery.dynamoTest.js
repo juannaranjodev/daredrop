@@ -163,11 +163,8 @@ describe('approveDelivery', async () => {
 		expect(deliveries.items.length).toEqual(0)
 	})
 
-	test(
-		`paypal capture is being launched and returns 404 because we don't have 
-		mocked that fn (everything goes fine anyways, request is being sent)`, async () => {
-			const projectPledges = await dynamoQueryProjectPledges(project.id)
-			expect(projectPledges[0].paymentInfo[0].captured).toEqual(404)
-		},
-	)
+	test('paypal capture payment', async () => {
+		const projectPledges = await dynamoQueryProjectPledges(project.id)
+		expect(projectPledges[0].paymentInfo[0].captured).toEqual(200)
+	})
 })
