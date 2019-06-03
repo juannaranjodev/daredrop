@@ -1,4 +1,4 @@
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, gte } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -15,6 +15,13 @@ import randomNumber from 'root/src/shared/util/randomNumber'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
+import dareAcceptedPledgerMail from 'root/src/server/email/templates/dareAcceptedPledger'
+import goalMetStreamerEmail from 'root/src/server/email/templates/goalMetStreamer'
+import { dareAcceptedTitle, goalMetTitle } from 'root/src/server/email/util/emailTitles'
+import sendEmail from 'root/src/server/email/actions/sendEmail'
+import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
+import moment from 'moment'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
@@ -34,6 +41,7 @@ export default async ({ payload, userId }) => {
 		...assigneesDdb,
 	])
 
+	console.log(JSON.stringify(projectToAccept, null, 4))
 	const userTokensInProject = userTokensInProjectSelector(userTokens, projectToAccept)
 
 	if (not(gt(length(userTokensInProject), 0))) {
@@ -72,7 +80,7 @@ export default async ({ payload, userId }) => {
 				':newModified': getTimestamp(),
 			},
 		}
-		return documentClient.update(updateProjectParam).promise()
+		// return documentClient.update(updateProjectParam).promise()
 	}, userAssigneeArr))
 
 	Promise.all(assigneesToWrite)
@@ -96,7 +104,7 @@ export default async ({ payload, userId }) => {
 			},
 		}
 
-		await documentClient.batchWrite(acceptationParams).promise()
+		// await documentClient.batchWrite(acceptationParams).promise()
 	}
 
 	const updateProjectParam = {
@@ -111,7 +119,34 @@ export default async ({ payload, userId }) => {
 		},
 	}
 
-	await documentClient.update(updateProjectParam).promise()
+	// await documentClient.update(updateProjectParam).promise()
+	const email = await getUserEmail((prop('creator', projectToAccept)))
+
+	const emailData = {
+		title: dareAcceptedTitle,
+		dareTitle: prop('title', projectToAccept),
+		recipients: [email],
+		streamer: prop('displayName', head(userTokens)),
+		goal: amountRequested,
+		expiryTime: prop('created', projectToAccept)
+	}
+	sendEmail(emailData, dareAcceptedPledgerMail)
+	if (gte(prop('pledgeAmount', projectToAccept), amountRequested)) {
+		const emailData = {
+			title: goalMetTitle,
+			dareTitle: prop('title', projectToAccept),
+			recipients: [email],
+			dareDescription : prop('description', projectToAccept),
+			bountyAmount : prop('pledgeAmount', projectToAccept),
+			dareHref : projectHrefBuilder(prop('id', projectToAccept)),
+			streamer: prop('displayName', head(userTokens)),
+			goal: amountRequested,
+			expiryTime: prop('created', projectToAccept)
+		}
+		console.log(JSON.stringify(emailData, null, 4))
+
+		sendEmail(emailData, goalMetStreamerEmail)
+	}
 
 	return omit([PARTITION_KEY, SORT_KEY],
 		{

@@ -20,6 +20,7 @@ export default async ({ payload }) => {
 	const deliverySortKey = viewDeliverySortKey(payload)
 	const projectId = viewProjectId(payload)
 
+	console.log('DeliveryDare')
 	const deliveryQueryParams = {
 		TableName: TABLE_NAME,
 		KeyConditionExpression: `${PARTITION_KEY} = :projectId and ${SORT_KEY} = :deliveryDareSk`,
@@ -44,7 +45,7 @@ export default async ({ payload }) => {
 		},
 	}
 
-	await documentClient.update(s3UpdateParams).promise()
+	// await documentClient.update(s3UpdateParams).promise()
 
 	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)
 
@@ -98,7 +99,7 @@ export default async ({ payload }) => {
 		},
 	}
 
-	await documentClient.update(ytUpdateParams).promise()
+	// await documentClient.update(ytUpdateParams).promise()
 
 	return { youtubeUpload }
 }

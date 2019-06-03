@@ -5,7 +5,8 @@ import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 
 import dareApprovedMail from 'root/src/server/email/templates/dareApproved'
-import { dareApprovedTitle } from 'root/src/server/email/util/emailTitles'
+import dareRejectedByToSMail from 'root/src/server/email/templates/dareRejected'
+import { dareApprovedTitle, dareRejectedByToSTitle } from 'root/src/server/email/util/emailTitles'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 
 import { AUDIT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -43,10 +44,6 @@ export default async ({ userId, payload }) => {
 			...myFavorites,
 		]),
 	}
-
-
-
-
 	const projectToPledge = head(projectToPledgeDdb)
 	if (!projectToPledge) {
 		throw generalError('Project doesn\'t exist')
@@ -103,7 +100,6 @@ export default async ({ userId, payload }) => {
 
 	try {
 		const email = await getUserEmail((prop('creator',respons)))
-		console.log("----------user email ---------",email)
 		if (equals(viewAudit(payload), projectApprovedKey)) {
 			const emailData = {
 				title: dareApprovedTitle,
@@ -112,6 +108,15 @@ export default async ({ userId, payload }) => {
 				streamers: compose(map(prop('username')), prop('assignees'))(newProject),
 			}
 			sendEmail(emailData, dareApprovedMail)
+		}
+
+		if (equals(viewAudit(payload), projectRejectedKey)) {
+			const emailData = {
+				title: dareRejectedByToSTitle,
+				dareTitle: prop('title', newProject),
+				recipients: [email]
+			}
+			sendEmail(emailData, dareRejectedByToSMail)
 		}
 	} catch (err) { }
 

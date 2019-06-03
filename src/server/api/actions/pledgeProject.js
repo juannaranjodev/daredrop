@@ -17,6 +17,7 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
+import moment from 'moment'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
 const { viewPledgeAmount, viewStripeCardId } = payloadLenses
@@ -44,6 +45,7 @@ export default async ({ userId, payload }) => {
 		projectId, projectToPledge, userId,
 		newPledgeAmount, sourceId,
 	)
+
 
 	const myPledge = await documentClient.query({
 		TableName: TABLE_NAME,
@@ -97,12 +99,13 @@ export default async ({ userId, payload }) => {
 			recipients: [email],
 			// TODO EMAIL
 			// expiry time in seconds
+			notClaimedAlready : addPledgers,
 			dareHref: projectHrefBuilder(prop('id', newProject)),
 			streamers: compose(map(prop('username')), prop('assignees'))(newProject),
+			expiryTime: prop('created',projectToPledge)
 			// TODO EMAIL
 			// notClaimedAlready
 		}
-
 		sendEmail(emailData, pledgeMadeMail)
 	} catch (err) { }
 

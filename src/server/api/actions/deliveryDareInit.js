@@ -19,6 +19,11 @@ import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUnique
 import dynamoQueryProjectDeliveries from 'root/src/server/api/actionUtil/dynamoQueryProjectDeliveries'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
+import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
+import {videoSubmittedTitle} from 'root/src/server/email/util/emailTitles'
+import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
+import sendEmail from 'root/src/server/email/actions/sendEmail'
+
 const payloadLenses = getPayloadLenses(DELIVERY_DARE_INIT)
 
 const { viewVideoURL, viewTimeStamp, viewVideoName, viewProjectId } = payloadLenses
@@ -29,13 +34,28 @@ export default async ({ payload, userId }) => {
 	const videoURL = viewVideoURL(payload)
 	const projectId = viewProjectId(payload)
 	const timeStamp = viewTimeStamp(payload)
-
 	// verifications
 	const projectDeliveries = await dynamoQueryProjectDeliveries(projectId)
 	const filterByUploader = filter(propEq('uploader', userId))
 	const filterUploadedByUploader = filter(and(propEq('uploader', userId), propEq('s3Uploaded', true)))
 	const userDeliveries = filterByUploader(projectDeliveries)
 	let deliverySortKey
+	const email = await getUserEmail(userId)
+	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
+	const project = projectSerializer([
+		...projectDdb,
+		...assigneesDdb,
+	])
+	const userTokensInProject = userTokensInProjectSelector(userTokens, project)
+	if (not(gt(length(userTokensInProject), 0))) {
+		throw authorizationError('Assignee is not listed on this dare')
+	}
+	const emailData = {
+		title: videoSubmittedTitle,
+		dareTitle: prop('title', project),
+		recipients: [email],
+	}
+	sendEmail(emailData, videoSubmittedEmail)
 
 	if (gt(length(userDeliveries), 0)) {
 		const uploadedUserDeliveries = filterUploadedByUploader(projectDeliveries)
@@ -43,17 +63,6 @@ export default async ({ payload, userId }) => {
 			throw actionForbiddenError('User has already submitted video for this dare')
 		}
 		deliverySortKey = prop('sk', head(userDeliveries))
-	}
-
-	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
-	const project = projectSerializer([
-		...projectDdb,
-		...assigneesDdb,
-	])
-
-	const userTokensInProject = userTokensInProjectSelector(userTokens, project)
-	if (not(gt(length(userTokensInProject), 0))) {
-		throw authorizationError('Assignee is not listed on this dare')
 	}
 
 	// action
@@ -86,7 +95,7 @@ export default async ({ payload, userId }) => {
 		TableName: TABLE_NAME,
 		Item: dareDeliveryObject,
 	}
-
-	await documentClient.put(deliveryParams).promise()
+	console.log(JSON.stringify(deliveryParams, null, 4))
+	// await documentClient.put(deliveryParams).promise()
 	return { url, deliverySortKey }
 }
