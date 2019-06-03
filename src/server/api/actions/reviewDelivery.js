@@ -9,6 +9,7 @@ import projectSerializer from 'root/src/server/api/serializers/projectSerializer
 import {
 	streamerAcceptedKey, streamerDeliveryApprovedKey,
 	projectDeliveredKey, projectDeliveryPendingKey,
+	projectDeliveryRejectedKey,
 } from 'root/src/server/api/lenses'
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
@@ -17,6 +18,13 @@ import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
 import { payloadSchemaError } from 'root/src/server/api/errors'
 import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
 import dynamoQueryRecordToArchive from 'root/src/server/api/actionUtil/dynamoQueryRecordToArchive'
+
+
+import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
+import {videoRejectedTitle, videoApprovedTitle} from 'root/src/server/email/util/emailTitles'
+import videoApprovedEmail from 'root/src/server/email/templates/videoApproved'
+import videoDeliveredEmail from 'root/src/server/email/templates/videoDelivered'
+import sendEmail from 'root/src/server/email/actions/sendEmail'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
@@ -53,8 +61,8 @@ export default async ({ payload }) => {
 			},
 		},
 	}), projectAcceptedAssignees), [])
-
 	const recordToArchive = await dynamoQueryRecordToArchive(projectId, `project|${projectDeliveryPendingKey}`)
+
 
 	const projectDataToWrite = [
 		orNull(equals(audit, projectDeliveredKey),
@@ -77,6 +85,9 @@ export default async ({ payload }) => {
 			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],
 		},
 	}
+
+	console.log( JSON.stringify( projectAcceptedAssignees, null, 4),await generateUniqueSortKey(prop('id', projectSerialized), `project|${audit}`, 1, 10))
+	return
 
 	await documentClient.batchWrite(writeParams).promise()
 
