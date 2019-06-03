@@ -32,16 +32,22 @@ export default async ({ payload, userId }) => {
 
 	// verifications
 	const projectDeliveries = await dynamoQueryProjectDeliveries(projectId)
-	const filterByUploader = filter(propEq('uploader', userId))
-	const filterUploadedByUploader = filter(and(propEq('uploader', userId), propEq('s3Uploaded', true)))
-	const userDeliveries = filterByUploader(projectDeliveries)
 	let deliverySortKey
 
-	if (gt(length(userDeliveries), 0)) {
-		const uploadedUserDeliveries = filterUploadedByUploader(projectDeliveries)
-		if (gt(length(uploadedUserDeliveries), 0)) {
+	const projectDeliveries = await dynamoQueryProjectDeliveries(projectId)
+	// const filterUploadedByUploader = filter(and(propEq('uploader', userId), propEq('s3Uploaded', true)))
+	const filterUploaded = filter(propEq('s3Uploaded', true))
+	let deliverySortKey
+
+	if (gt(length(projectDeliveries), 0)) {
+		// const uploadedUserDeliveries = filterUploadedByUploader(projectDeliveries)
+		const uploadedProjectDeliveries = filterUploaded(projectDeliveries)
+		if (gt(length(uploadedProjectDeliveries), 0)) {
 			throw actionForbiddenError('User has already submitted video for this dare')
 		}
+		// here we need anyways to get userDeliveries to check if user can resume
+		const filterByUploader = filter(propEq('uploader', userId))
+		const userDeliveries = filterByUploader(projectDeliveries)
 		deliverySortKey = prop('sk', head(userDeliveries))
 	}
 
