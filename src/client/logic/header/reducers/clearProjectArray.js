@@ -1,4 +1,4 @@
-import { startsWith, dissoc } from 'ramda'
+import { startsWith, reduce, assoc } from 'ramda'
 import { CLEAR_PROJECT_ARRAY } from 'root/src/client/logic/header/actionsIds'
 import { apiStoreLenses } from 'root/src/client/logic/api/lenses'
 
@@ -7,21 +7,21 @@ const { viewRecords, setRecords, viewLists, setLists } = apiStoreLenses
 export const clearProject = (state) => {
 	const records = viewRecords(state)
 	const list = viewLists(state)
-	let newRecords = records
-	Object.keys(records).forEach((record) => {
-		if (startsWith('project-project', record)) {
-			newRecords = dissoc(record, newRecords)
+	const newRecords = reduce((accum, record) => {
+		if (!startsWith('project-project', record)) {
+			assoc(record, records[record], accum)
 		}
-	})
+		return accum
+	}, {}, Object.keys(records))
 
 	const newRecordsState = setRecords(newRecords, state)
 
-	let newList = list
-	Object.keys(list).forEach((item) => {
-		if (startsWith('GET_ACTIVE_PROJECTS', item)) {
-			newList = dissoc(item, newList)
+	const newList = reduce((accum, item) => {
+		if (!startsWith('GET_ACTIVE_PROJECTS', item)) {
+			assoc(item, list[item], accum)
 		}
-	})
+		return accum
+	}, {}, Object.keys(list))
 
 	return setLists(newList, newRecordsState)
 }

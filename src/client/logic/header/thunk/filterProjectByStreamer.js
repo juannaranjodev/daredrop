@@ -1,4 +1,4 @@
-import { propOr, isNil } from 'ramda'
+import { propOr, isNil, path } from 'ramda'
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
 import addFilterParams from 'root/src/client/logic/header/actions/addFilterParams'
 import clearProjectArray from 'root/src/client/logic/header/actions/clearProjectArray'
@@ -23,7 +23,7 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 		dispatch(apiRequest(GET_ACTIVE_PROJECTS, {
 			currentPage: 1,
 			filter: isNil(filterParam) ? [param] : [...filterParam, param],
-			sortType: state.list.sortType,
+			sortType: path(['list', 'sortType'], state),
 		}))
 	} else if (action !== 'input-blur' && action !== 'menu-close' && action !== 'set-value') {
 		param = { param: 'assignee|twitch', value: '' }
@@ -37,7 +37,7 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 		dispatch(clearFilterParam({ type: 'assignee|twitch' }))
 		dispatch(apiRequest(GET_ACTIVE_PROJECTS, {
 			currentPage: 1,
-			sortType: state.list.sortType,
+			sortType: path(['list', 'sortType'], state),
 		}))
 	}
 }
