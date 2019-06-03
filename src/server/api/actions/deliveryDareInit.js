@@ -30,10 +30,6 @@ export default async ({ payload, userId }) => {
 	const projectId = viewProjectId(payload)
 	const timeStamp = viewTimeStamp(payload)
 
-	// verifications
-	const projectDeliveries = await dynamoQueryProjectDeliveries(projectId)
-	let deliverySortKey
-
 	const projectDeliveries = await dynamoQueryProjectDeliveries(projectId)
 	// const filterUploadedByUploader = filter(and(propEq('uploader', userId), propEq('s3Uploaded', true)))
 	const filterUploaded = filter(propEq('s3Uploaded', true))
