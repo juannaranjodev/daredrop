@@ -1,5 +1,5 @@
-import { reduce, append, compose, or } from 'ramda'
-
+import { reduce, append, compose, or, isNil } from 'ramda'
+import { ternary } from 'root/src/shared/util/ramdaPlus'
 import { API_LIST_REQUEST_SUCCESS } from 'root/src/client/logic/api/actionIds'
 import createRecordStoreKey from 'root/src/client/logic/api/util/createRecordStoreKey'
 import {
@@ -7,7 +7,7 @@ import {
 } from 'root/src/client/logic/api/lenses'
 
 const {
-	setNext, setItems, setRecordsChild, setListProcessingChild,
+	setNext, setItems, setRecordsChild, setListProcessingChild, viewRecordsChild
 } = apiStoreLenses
 
 export const apiListRequestSuccess = (
@@ -20,7 +20,9 @@ export const apiListRequestSuccess = (
 		const recordId = or(idProp(record), projectIdProp(record))
 		const recordStoreId = createRecordStoreKey(recordType, recordId)
 		listIds = append(recordId, listIds)
-		return setRecordsChild(recordStoreId, record, result)
+		let lastRecord = viewRecordsChild(recordStoreId, result)
+		lastRecord = ternary(isNil(lastRecord), {}, lastRecord)
+		return setRecordsChild(recordStoreId, {...lastRecord, ...record}, result)
 	}, state, listItems)
 	return compose(
 		setNext(listStoreKey, nextKeyProp(list)),

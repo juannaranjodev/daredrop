@@ -30,7 +30,6 @@ export const projectDeliveryRejectedKey = 'deliveryRejected'
 export const projectAcceptedKey = 'projectAccepted'
 export const projectStreamerRejectedKey = 'projectStreamerRejected'
 export const projectAllStreamersRejectedKey = 'allStreamersRejected'
-export const projectExpiredKey = 'expired'
 export const projectDeliveryPendingKey = 'deliveryPending'
 export const projectDeliveredKey = 'projectDelivered'
 

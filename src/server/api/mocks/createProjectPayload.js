@@ -20,7 +20,10 @@ const gameIds = [
 export default ({ assigneeCount = 1 } = {}) => ({
 	title: name.title(), // Changing this one because is generates a title more than 60 char.
 	description: lorem.paragraph(),
-	stripeCardId: random.uuid(),
+	paymentInfo: {
+		paymentType: 'stripeCard',
+		paymentId: random.uuid(),
+	},
 	pledgeAmount: random.number(),
 	assignees: twitchStreamerIds,
 	games: gameIds,

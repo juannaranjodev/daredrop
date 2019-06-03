@@ -64,7 +64,7 @@ export default async ({ payload }) => {
 						...recordToArchive,
 						[PARTITION_KEY]: prop('id', projectSerialized),
 						[SORT_KEY]: await generateUniqueSortKey(prop('id', projectSerialized), `project|${audit}`, 1, 10),
-						created: getTimestamp(),
+						approved: getTimestamp(),
 						message,
 					},
 				},

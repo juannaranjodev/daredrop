@@ -8,7 +8,7 @@ import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 
 
 export default (
-	{ videoAtach: { file, name } },
+	{ videoAttach: { file, name } },
 	{ body: { url, deliverySortKey } },
 ) => async (dispatch, getState) => {
 	const state = getState()

@@ -1,6 +1,8 @@
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
 import currentRouteParamsRecordId from 'root/src/client/logic/route/selectors/currentRouteParamsRecordId'
 import { PLEDGE_PROJECT, ADD_PAYMENT_METHOD } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { stripeCard } from 'root/src/shared/constants/paymentTypes'
+import { omit, prop } from 'ramda'
 
 export default formData => async (dispatch, getState) => {
 	const state = getState()
@@ -20,10 +22,14 @@ export default formData => async (dispatch, getState) => {
 		dispatch(apiRequest(ADD_PAYMENT_METHOD, addPaymentPayload))
 		stripeCardId = stripeRes.source.id
 	}
-	const apiPayload = {
+	const apiPayload = omit(['stripeCardId'], {
 		...formData,
 		projectId,
-		stripeCardId,
-	}
+		paymentInfo: {
+			paymentType: stripeCard,
+			paymentId: stripeCardId,
+			paymentAmount: prop('pledgeAmount', formData),
+		},
+	})
 	return dispatch(apiRequest(PLEDGE_PROJECT, apiPayload))
 }
