@@ -27,6 +27,7 @@ describe('pledgeProject', () => {
 				paymentInfo: {
 					paymentType: 'stripeCard',
 					paymentId: 'mockStripeCardId',
+					paymentAmount: 20,
 				},
 			},
 			authentication: mockUserId,
@@ -54,6 +55,7 @@ describe('pledgeProject', () => {
 				paymentInfo: {
 					paymentType: 'stripeCard',
 					paymentId: 'mockStripeCardId',
+					paymentAmount: 20,
 				},
 			},
 			authentication: mockUserId,

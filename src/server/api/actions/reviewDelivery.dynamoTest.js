@@ -13,12 +13,14 @@ import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
 import getPendingDeliveries from 'root/src/server/api/actions/getPendingDeliveries'
+import dynamoQueryProjectPledges from 'root/src/server/api/actionUtil/dynamoQueryProjectPledges'
 import wait from 'root/src/testUtil/wait'
 
 describe('approveDelivery', async () => {
+	let project
 	test('Correctly approves delivery', async () => {
 		// TODO test suites for admin verification
-		const project = await createProject({
+		project = await createProject({
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),
 		})
@@ -164,5 +166,10 @@ describe('approveDelivery', async () => {
 			},
 		})
 		expect(deliveries.items.length).toEqual(0)
+	})
+
+	test('paypal capture payment', async () => {
+		const projectPledges = await dynamoQueryProjectPledges(project.id)
+		expect(projectPledges[0].paymentInfo[0].captured).toEqual(200)
 	})
 })
