@@ -5,7 +5,7 @@ export default {
 			type: 'string',
 			format: 'url',
 		},
-		videoAtach: {
+		videoAttach: {
 			type: 'object',
 			properties: {
 				data: {
@@ -21,6 +21,6 @@ export default {
 			format: 'time',
 		},
 	},
-	required: ['videoURL', 'videoAtach', 'timeStamp'],
+	required: ['videoURL', 'videoAttach', 'timeStamp'],
 	additionalProperties: false,
 }

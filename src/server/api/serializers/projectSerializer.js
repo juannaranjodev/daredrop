@@ -8,7 +8,7 @@ import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignee
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {
-	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewFavoritesAmount, overDeliveries,
+	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewMyFavorites, overDeliveries,
 } = responseLenses
 
 export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
@@ -18,7 +18,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 			return setMyPledge(viewPledgeAmount(projectPart), result)
 		}
 		if (startsWith('favorites', sk)) {
-			return setMyFavorites(viewFavoritesAmount(projectPart), result)
+			return setMyFavorites(viewMyFavorites(projectPart), result)
 		}
 		if (startsWith('assignee', sk)) {
 			const [, platform, platformId] = split('|', sk)
@@ -48,7 +48,10 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 				],
 				projectPart,
 			)
-			return overDeliveries(append(deliveryObj), result)
+			return {
+				...overDeliveries(append(deliveryObj), result),
+				status: prop(1, split('|', skProp(projectPart))),
+			}
 		}
 		if (startsWith(`project|${projectDeliveredKey}`, sk)) {
 			const deliveryObj = pick(
@@ -60,6 +63,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 			return {
 				...overDeliveries(append(deliveryObj), result),
 				status: prop(1, split('|', skProp(projectPart))),
+				deliveryApproved: prop('approved', projectPart),
 			}
 		}
 		if (startsWith('project', sk)) {

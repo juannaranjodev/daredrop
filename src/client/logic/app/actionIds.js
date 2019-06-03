@@ -1,3 +1,5 @@
 export const AUTH_DETERMINED = 'app/AUTH_DETERMINED'
 
 export const SET_MEDIA_BREAKPOINTS = 'app/SET_MEDIA_BREAKPOINTS'
+
+export const INIT_APP = '@@INIT'
