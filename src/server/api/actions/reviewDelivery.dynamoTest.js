@@ -13,6 +13,7 @@ import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
 import getPendingDeliveries from 'root/src/server/api/actions/getPendingDeliveries'
+import wait from 'root/src/testUtil/wait'
 
 describe('approveDelivery', async () => {
 	test('Correctly approves delivery', async () => {
@@ -77,6 +78,7 @@ describe('approveDelivery', async () => {
 			},
 		}
 
+		await wait(500)
 		const res = await apiFn(event)
 
 		expect(res.body.status).toEqual(projectDeliveredKey)
@@ -128,6 +130,7 @@ describe('approveDelivery', async () => {
 		expect(res.statusCode).toEqual(400)
 	})
 	test('there is 1 pending delivery', async () => {
+		await wait(500)
 		const deliveries = await getPendingDeliveries({
 			userId: mockUserId,
 			payload: {
@@ -153,13 +156,13 @@ describe('approveDelivery', async () => {
 		expect(res.body.status).toEqual(projectDeliveryRejectedKey)
 	})
 	test('there are no pending deliveries', async () => {
+		await wait(500)
 		const deliveries = await getPendingDeliveries({
 			userId: mockUserId,
 			payload: {
 				currentPage: 1,
 			},
 		})
-
 		expect(deliveries.items.length).toEqual(0)
 	})
 })
