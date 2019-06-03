@@ -44,45 +44,51 @@ import addPayoutMethod from 'root/src/server/api/actions/addPayoutMethod'
 import getPayoutMethod from 'root/src/server/api/actions/getPayoutMethod'
 import updatePayoutMethod from 'root/src/server/api/actions/updatePayoutMethod'
 
+import { apiFunctionArn, apiLongTaskFunctionArn } from 'root/cfOutput'
+
 export default {
-	[CREATE_PROJECT]: createProject,
-	[GET_PROJECT]: getProject,
-	[GET_PROJECT_ADMIN]: getProjectAdmin,
-	[UPDATE_PROJECT]: updateProject,
+	[apiFunctionArn]: {
+		[CREATE_PROJECT]: createProject,
+		[GET_PROJECT]: getProject,
+		[GET_PROJECT_ADMIN]: getProjectAdmin,
+		[UPDATE_PROJECT]: updateProject,
 
-	[PLEDGE_PROJECT]: pledgeProject,
-	[GET_PLEDGED_PROJECTS]: getPledgedProjects,
-	[GET_MY_PROJECTS]: getMyProjects,
+		[PLEDGE_PROJECT]: pledgeProject,
+		[GET_PLEDGED_PROJECTS]: getPledgedProjects,
+		[GET_MY_PROJECTS]: getMyProjects,
 
-	[AUDIT_FAVORITES]: auditFavorites,
+		[AUDIT_FAVORITES]: auditFavorites,
 
-	[AUDIT_PROJECT]: auditProject,
+		[AUDIT_PROJECT]: auditProject,
 
-	[GET_ACTIVE_PROJECTS]: getActiveProjects,
-	[GET_PENDING_PROJECTS]: getPendingProjects,
-	[GET_PENDING_DELIVERIES]: getPendingDeliveries,
+		[GET_ACTIVE_PROJECTS]: getActiveProjects,
+		[GET_PENDING_PROJECTS]: getPendingProjects,
+		[GET_PENDING_DELIVERIES]: getPendingDeliveries,
 
-	[GET_OAUTH_TOKENS]: getOAuthTokens,
-	[ADD_OAUTH_TOKEN]: addOAuthToken,
-	[GET_FAVORITES_LIST]: getFavoritesList,
-	[SAVE_PARTIAL_DARE_FORM]: savePartialDareForm,
-	[CLEAR_PARTIAL_FORM_KEYS]: clearPartialFormKeys,
+		[GET_OAUTH_TOKENS]: getOAuthTokens,
+		[ADD_OAUTH_TOKEN]: addOAuthToken,
+		[GET_FAVORITES_LIST]: getFavoritesList,
+		[SAVE_PARTIAL_DARE_FORM]: savePartialDareForm,
+		[CLEAR_PARTIAL_FORM_KEYS]: clearPartialFormKeys,
 
-	[GET_PAYMENT_METHODS]: getPaymentMethods,
-	[ADD_PAYMENT_METHOD]: addPaymentMethod,
-	[DELETE_PAYMENT_METHOD]: deletePaymentMethod,
+		[GET_PAYMENT_METHODS]: getPaymentMethods,
+		[ADD_PAYMENT_METHOD]: addPaymentMethod,
+		[DELETE_PAYMENT_METHOD]: deletePaymentMethod,
 
-	[ACCEPT_PROJECT]: acceptProject,
-	[REJECT_PROJECT]: rejectProject,
-	[SET_DEFAULT_PAYMENT_METHOD]: setDafaultPaymentMethod,
+		[ACCEPT_PROJECT]: acceptProject,
+		[REJECT_PROJECT]: rejectProject,
+		[SET_DEFAULT_PAYMENT_METHOD]: setDafaultPaymentMethod,
 
-	[DELIVERY_DARE_INIT]: deliveryDareInit,
-	[DELIVERY_DARE]: deliveryDare,
-	[REVIEW_DELIVERY]: reviewDelivery,
+		[DELIVERY_DARE_INIT]: deliveryDareInit,
+		[REVIEW_DELIVERY]: reviewDelivery,
 
-	[GET_ACCEPTED_PROJECTS]: getAcceptProject,
+		[GET_ACCEPTED_PROJECTS]: getAcceptProject,
 
-	[ADD_PAYOUT_METHOD]: addPayoutMethod,
-	[GET_PAYOUT_METHOD]: getPayoutMethod,
-	[UPDATE_PAYOUT_METHOD]: updatePayoutMethod,
+		[ADD_PAYOUT_METHOD]: addPayoutMethod,
+		[GET_PAYOUT_METHOD]: getPayoutMethod,
+		[UPDATE_PAYOUT_METHOD]: updatePayoutMethod,
+	},
+	[apiLongTaskFunctionArn]: {
+		[DELIVERY_DARE]: deliveryDare,
+	},
 }

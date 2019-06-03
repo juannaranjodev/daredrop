@@ -1,4 +1,4 @@
-import { prop, pick } from 'ramda'
+import { prop, pick, path } from 'ramda'
 
 import validateSchema from 'root/src/shared/util/validateSchema'
 import {
@@ -33,15 +33,15 @@ const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 export const apiHof = (
 	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn,
 	authorizeRequestFn, testEndpointExistsFn,
-) => async (event) => {
+) => async (event, context) => {
 	try {
+		const { invokedFunctionArn } = context
 		const { endpointId, payload, authentication } = event
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (!endpointExists) {
 			throw notFoundError(endpointId)
 		}
-
-		const action = prop(endpointId, serverEndpointsObj)
+		const action = path([invokedFunctionArn, endpointId], serverEndpointsObj)
 		const payloadSchema = getPayloadSchemaFn(endpointId)
 		const resultSchema = getResultSchemaFn(endpointId)
 		const userId = await authorizeRequestFn(endpointId, authentication)
