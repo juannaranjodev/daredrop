@@ -39,3 +39,5 @@ export const streamerRejectedKey = 'streamerRejected'
 export const streamerDeliveredKey = 'streamerDelivered'
 export const streamerDeliveryApprovedKey = 'streamerDeliveryApproved'
 export const streamerDeliveryRejectedKey = 'streamerDeliveryRejected'
+
+export const projectToCaptureKey = 'projectToCapture'

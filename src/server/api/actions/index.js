@@ -10,6 +10,7 @@ import {
 	GET_FILTERED_PROJECTS_BY_STREAMER, GET_FILTERED_PROJECTS,
 	ADD_PAYOUT_METHOD, GET_PAYOUT_METHOD, UPDATE_PAYOUT_METHOD,
 	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN,
+	CAPTURE_PROJECT_PAYMENTS,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -43,11 +44,10 @@ import getProjectAdmin from 'root/src/server/api/actions/getProjectAdmin'
 import addPayoutMethod from 'root/src/server/api/actions/addPayoutMethod'
 import getPayoutMethod from 'root/src/server/api/actions/getPayoutMethod'
 import updatePayoutMethod from 'root/src/server/api/actions/updatePayoutMethod'
-
-import { apiFunctionArn, apiLongTaskFunctionArn } from 'root/cfOutput'
+import captureProjectPayments from 'root/src/server/api/actions/captureProjectPayments'
 
 export default {
-	[apiFunctionArn]: {
+	shortRunningTask: {
 		[CREATE_PROJECT]: createProject,
 		[GET_PROJECT]: getProject,
 		[GET_PROJECT_ADMIN]: getProjectAdmin,
@@ -88,7 +88,8 @@ export default {
 		[GET_PAYOUT_METHOD]: getPayoutMethod,
 		[UPDATE_PAYOUT_METHOD]: updatePayoutMethod,
 	},
-	[apiLongTaskFunctionArn]: {
+	longRunningTask: {
 		[DELIVERY_DARE]: deliveryDare,
+		[CAPTURE_PROJECT_PAYMENTS]: captureProjectPayments,
 	},
 }
