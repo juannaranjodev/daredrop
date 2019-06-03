@@ -33,7 +33,7 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 		dispatch(clearProjectArray())
 	}
 
-	if (action === 'input-change' && valueInput === '') {
+	if ((action === 'input-change' && valueInput === '') || action === 'clear') {
 		dispatch(clearFilterParam({ type: 'assignee|twitch' }))
 		dispatch(apiRequest(GET_ACTIVE_PROJECTS, {
 			currentPage: 1,

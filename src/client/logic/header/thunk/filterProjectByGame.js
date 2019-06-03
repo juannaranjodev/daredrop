@@ -26,7 +26,6 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 			sortType: state.list.sortType,
 		}))
 	} else if (action !== 'input-blur' && action !== 'menu-close' && action !== 'set-value') {
-		console.log(action)
 		param = { param: 'game', value: '' }
 		dispatch(setGameFilterValue(null))
 		dispatch(addFilterParams(param))
@@ -34,7 +33,7 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 		dispatch(clearProjectArray())
 	}
 
-	if (action === 'input-change' && valueInput === '') {
+	if ((action === 'input-change' && valueInput === '') || action === 'clear') {
 		dispatch(clearFilterParam({ type: 'game' }))
 		dispatch(apiRequest(GET_ACTIVE_PROJECTS, {
 			currentPage: 1,

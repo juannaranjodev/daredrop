@@ -1,8 +1,9 @@
-import { map, head, last } from 'ramda'
+import { map, head, last, length, gt, compose, __ } from 'ramda'
 import React, { memo, useState } from 'react'
-
 import classNames from 'classnames'
 import InfiniteScroll from 'react-infinite-scroller'
+
+import { ternary } from 'root/src/shared/util/ramdaPlus'
 import PaymentMethod from 'root/src/client/web/list/PaymentMethod'
 import ProjectCard from 'root/src/client/web/list/ProjectCard'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
@@ -32,29 +33,33 @@ export const CardList = ({
 						loadMore={() => getNextPage(currentPage, hasMore)}
 						hasMore={hasMore}
 					>
-						{ head(list).length > 0 ? (
-							<div
-								className={classNames(
-									classes.paddingOffset,
-									'layout-row layout-wrap',
-								)}
-							>
-								{map(recordId => (
-									<ProjectCard
-										timeouts={timeouts}
-										setTimeouts={setTimeouts}
-										key={recordId}
-										recordId={recordId}
-										filterList={list[1]}
-										acceptedList={list[2]}
-									/>
-								), head(list))}
+						{ternary(
+							compose(gt(__, 0), length, head),
+							(
+								<div
+									className={classNames(
+										classes.paddingOffset,
+										'layout-row layout-wrap',
+									)}
+								>
+									{map(recordId => (
+										<ProjectCard
+											timeouts={timeouts}
+											setTimeouts={setTimeouts}
+											key={recordId}
+											recordId={recordId}
+											filterList={list[1]}
+											acceptedList={list[2]}
+										/>
+									), head(list))}
 
-							</div>
-						) : (
-							<div>
+								</div>
+							),
+							(
+								<div>
 								Nothing found
-							</div>
+								</div>
+							),
 						) }
 					</InfiniteScroll>
 					<div className={classes.goTopContainer} onClick={scrollTopHandler}>

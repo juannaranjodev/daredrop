@@ -1,6 +1,7 @@
 import React, { memo, Fragment } from 'react'
 import { identity } from 'ramda'
 import classNames from 'classnames'
+import { withStyles } from '@material-ui/core/styles'
 import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST, SORT_BY_CREATED_ASC, SORT_BY_ACCEPTED } from 'root/src/shared/constants/sortTypesOfProject'
 
 import { orNull } from 'root/src/shared/util/ramdaPlus'
@@ -11,11 +12,16 @@ import SubTitle from 'root/src/client/web/typography/SubTitle'
 
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import withModuleContext from 'root/src/client/util/withModuleContext'
+
 import SvgIcon from '@material-ui/core/SvgIcon'
+import Chip from '@material-ui/core/Chip'
+import CancelIcon from '@material-ui/icons/Cancel'
+
 import Select, { components } from 'react-select'
 import AsyncSelect from 'react-select/lib/Async'
 
 import bannerHeaderConnector from 'root/src/client/logic/header/connectors/bannerHeaderConnector'
+import getValueChip from 'root/src/client/logic/header/handlers/getValueChip'
 
 import { primaryColor, secondaryColor } from 'root/src/client/web/commonStyles'
 
@@ -127,6 +133,33 @@ const DropdownIndicator = props => (
 	</components.DropdownIndicator>
 )
 
+const singleStyle = {
+	chip: {
+		width: 115,
+		height: 22,
+		overflow: 'hidden',
+		marginBottom: 2,
+		display: 'flex',
+		justifyContent: 'space-between',
+		'& svg': {
+			marginRight: 0,
+		},
+	},
+}
+
+const SingleValue = withStyles(singleStyle)(({ classes, children, label, removeProps, clearValue, getValue, ...props }) => (
+	<components.SingleValue {...props}>
+		<Chip
+			className={classes.chip}
+			tabIndex={-1}
+			label={getValueChip(getValue())}
+			onDelete={clearValue}
+			deleteIcon={
+				<CancelIcon {...removeProps} />
+			}
+		/>
+	</components.SingleValue>
+))
 
 export const BannerHeaderUnconnected = memo(({
 	bannerImage, bannerImageText, bannerImageSubText,
@@ -305,6 +338,9 @@ export const BannerHeaderUnconnected = memo(({
 													display: state.isFocused ? 'none' : 'inherit',
 													color: '#cccccc',
 												}),
+												singleValue: () => ({
+													width: 100,
+												}),
 											}}
 											className={classes.autoSelect}
 											onInputChange={filterProjectByGame}
@@ -314,6 +350,7 @@ export const BannerHeaderUnconnected = memo(({
 											value={gameFilterValue}
 											components={{
 												DropdownIndicator,
+												SingleValue,
 											}}
 										/>
 										<AsyncSelect
@@ -372,6 +409,7 @@ export const BannerHeaderUnconnected = memo(({
 											value={streamerFilterValue}
 											components={{
 												DropdownIndicator,
+												SingleValue,
 											}}
 										/>
 									</div>
