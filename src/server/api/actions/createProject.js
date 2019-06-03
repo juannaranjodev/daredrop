@@ -112,13 +112,11 @@ export default async ({ userId, payload }) => {
 		sendEmail(emailData, dareCreatedEmail)
 	} catch (err) { }
 
-
 	return {
 		id: projectId,
 		userId,
 		status: projectPendingKey,
 		...projectCommon,
-		assignees: viewAssignees(serializedProject),
 		pledgers: 1,
 		favoritesAmount: 0,
 		created,

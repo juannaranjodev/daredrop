@@ -6,7 +6,7 @@ import { assoc, compose, path, dissoc } from 'ramda'
 export default formData => async (dispatch, getState) => {
 	const state = getState()
 	const projectId = currentRouteParamsRecordId(state)
-	const formDataWithoutVideo = compose(dissoc('videoAtach'), assoc('videoName', path(['videoAtach', 'name'], formData)))(formData)
+	const formDataWithoutVideo = compose(dissoc('videoAttach'), assoc('videoName', path(['videoAttach', 'name'], formData)))(formData)
 	const apiPayload = {
 		...formDataWithoutVideo,
 		projectId,

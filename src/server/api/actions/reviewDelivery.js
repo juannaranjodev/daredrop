@@ -1,4 +1,4 @@
-import { prop, propEq, map, filter, equals, and, not, reduce, assoc } from 'ramda'
+import { prop, propEq, map, filter, equals, and, not, reduce, assoc, startsWith } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -7,7 +7,9 @@ import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoInde
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import {
-	streamerAcceptedKey, streamerDeliveryApprovedKey, projectDeliveredKey, projectDeliveryPendingKey,
+	streamerAcceptedKey, streamerDeliveryApprovedKey,
+	projectDeliveredKey, projectDeliveryPendingKey,
+	projectApprovedKey,
 } from 'root/src/server/api/lenses'
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
@@ -15,7 +17,6 @@ import getTimestamp from 'root/src/shared/util/getTimestamp'
 import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
 import { payloadSchemaError } from 'root/src/server/api/errors'
 import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
-import dynamoQueryRecordToArchive from 'root/src/server/api/actionUtil/dynamoQueryRecordToArchive'
 import dynamoQueryProjectPledges from 'root/src/server/api/actionUtil/dynamoQueryProjectPledges'
 import capturePayments from 'root/src/server/api/actionUtil/capturePayments'
 
@@ -55,7 +56,8 @@ export default async ({ payload }) => {
 		},
 	}), projectAcceptedAssignees), [])
 
-	const recordToArchive = await dynamoQueryRecordToArchive(projectId, `project|${projectDeliveryPendingKey}`)
+	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
+	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
 
 	if (equals(audit, projectDeliveredKey)) {
 		const projectPledges = await dynamoQueryProjectPledges(projectId)
@@ -73,21 +75,27 @@ export default async ({ payload }) => {
 	}
 
 	const projectDataToWrite = [
-		orNull(equals(audit, projectDeliveredKey),
-			{
+		...ternary(equals(audit, projectDeliveredKey),
+			[{
 				PutRequest: {
 					Item: {
 						...recordToArchive,
 						[PARTITION_KEY]: prop('id', projectSerialized),
 						[SORT_KEY]: await generateUniqueSortKey(prop('id', projectSerialized), `project|${audit}`, 1, 10),
 						created: getTimestamp(),
-						message,
 					},
 				},
-			}),
+			},
+			{
+				PutRequest: {
+					Item: {
+						...recordToUpdate,
+						status: projectDeliveredKey,
+					},
+				},
+			}], []),
 		...archiveProjectRecord(recordToArchive),
 	]
-
 	const writeParams = {
 		RequestItems: {
 			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],

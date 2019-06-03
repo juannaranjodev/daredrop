@@ -1,23 +1,24 @@
-import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and } from 'ramda'
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, propOr } from 'ramda'
 
 import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
+import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {
-	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewFavoritesAmount, overDeliveries,
+	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewMyFavorites, overDeliveries,
 } = responseLenses
 
-export default (projectArr, isAdminEndpoint) => reduce(
+export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 	(result, projectPart) => {
 		const sk = skProp(projectPart)
 		if (startsWith('pledge', sk)) {
 			return setMyPledge(viewPledgeAmount(projectPart), result)
 		}
 		if (startsWith('favorites', sk)) {
-			return setMyFavorites(viewFavoritesAmount(projectPart), result)
+			return setMyFavorites(viewMyFavorites(projectPart), result)
 		}
 		if (startsWith('assignee', sk)) {
 			const [, platform, platformId] = split('|', sk)
@@ -47,31 +48,47 @@ export default (projectArr, isAdminEndpoint) => reduce(
 				],
 				projectPart,
 			)
-			return overDeliveries(append(deliveryObj), result)
+			return {
+				...overDeliveries(append(deliveryObj), result),
+				status: prop(1, split('|', skProp(projectPart))),
+			}
 		}
 		if (startsWith(`project|${projectDeliveredKey}`, sk)) {
 			const deliveryObj = pick(
 				[
-					'videoURL', 'timeStamp', 's3ObjectURL',
+					'videoURL', 'timeStamp', 's3ObjectURL', 'status',
 				],
 				projectPart,
 			)
-			return overDeliveries(append(deliveryObj), result)
+			return {
+				...overDeliveries(append(deliveryObj), result),
+				status: prop(1, split('|', skProp(projectPart))),
+				deliveryApproved: prop('approved', projectPart),
+			}
 		}
 		if (startsWith('project', sk)) {
 			const projectObj = pick(
 				[
-					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl',
-					'games', 'pledgers', 'created', 'approved', 'favoritesAmount',
+					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl', 'status',
+					'games', 'pledgers', 'created', 'approved', 'favoritesAmount', isDenormalized ? 'assignees' : '',
 				],
 				projectPart,
 			)
 
+			if (isDenormalized) {
+				return {
+					...result,
+					...projectObj,
+					id: pkProp(projectPart),
+					status: propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart),
+					assignees: getActiveAssignees(prop('assignees', projectPart)),
+				}
+			}
 			return {
 				...result,
 				...projectObj,
 				id: pkProp(projectPart),
-				status: prop(1, split('|', skProp(projectPart))),
+				status: propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart),
 			}
 		}
 		return result
