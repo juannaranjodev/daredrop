@@ -1,4 +1,5 @@
 import apiLambda from 'root/src/aws/api/resources/apiLambda'
+import apiLambdaLongTask from 'root/src/aws/api/resources/apiLambdaLongTask'
 import apiLambdaExecutionRole from 'root/src/aws/api/resources/apiLambdaExecutionRole'
 import apiDynamoDbTable from 'root/src/aws/api/resources/apiDynamoDbTable'
 
@@ -11,6 +12,7 @@ export const apiResources = {
 	...apiLambda,
 	...apiLambdaExecutionRole,
 	...apiDynamoDbTable,
+	...apiLambdaLongTask,
 }
 
 export const apiOutputs = outputs

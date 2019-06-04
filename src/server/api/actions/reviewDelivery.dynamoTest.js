@@ -1,6 +1,6 @@
 import { apiFn } from 'root/src/server/api'
 
-import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { REVIEW_DELIVERY, CAPTURE_PROJECT_PAYMENTS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import createProject from 'root/src/server/api/actions/createProject'
 
@@ -168,8 +168,19 @@ describe('approveDelivery', async () => {
 		expect(deliveries.items.length).toEqual(0)
 	})
 
-	test('paypal capture payment', async () => {
-		const projectPledges = await dynamoQueryProjectPledges(project.id)
+	test('capture project payments', async () => {
+		const event = {
+			userId: mockUserId,
+			endpointId: CAPTURE_PROJECT_PAYMENTS,
+			payload: {
+				projectId: project.id,
+			},
+		}
+		let projectPledges = await dynamoQueryProjectPledges(project.id)
+		expect(projectPledges[0].paymentInfo[0].captured).toEqual(0)
+		const res = await apiFn(event)
+		projectPledges = await dynamoQueryProjectPledges(project.id)
 		expect(projectPledges[0].paymentInfo[0].captured).toEqual(200)
+		expect(res.body.message).toEqual('success')
 	})
 })
