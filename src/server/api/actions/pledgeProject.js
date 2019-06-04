@@ -17,7 +17,7 @@ import projectSerializer from 'root/src/server/api/serializers/projectSerializer
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
-import authorizeCaptureAmount from 'root/src/server/api/actionUtil/authorizeCAptureStripe'
+import validateStripeAuthorize from 'root/src/server/api/actionUtil/validateStripeAuthorize'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
 import { payloadSchemaError, authorizationError, generalError } from 'root/src/server/api/errors'
 
@@ -44,7 +44,7 @@ export default async ({ userId, payload }) => {
     const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
     if (!validationCardId)
   		throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
-    captureCharge = await authorizeCaptureAmount(newPledgeAmount, paymentInfo.paymentId)
+    captureCharge = await validateStripeAuthorize(newPledgeAmount, paymentInfo.paymentId)
     if (!captureCharge.authorized)
       throw payloadSchemaError(captureCharge.error)
 	}
