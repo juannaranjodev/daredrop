@@ -10,7 +10,7 @@ import { GET_ACTIVE_PROJECTS } from 'root/src/shared/descriptions/endpoints/endp
 
 export default (valueInput, { action }) => async (dispatch, getState) => {
 	const state = getState()
-	const { filterParam } = state.list
+	const { filterParams } = state.list
 	const value = propOr(valueInput, 'value', valueInput)
 	let param = {}
 
@@ -22,21 +22,25 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 		dispatch(clearProjectArray())
 		dispatch(apiRequest(GET_ACTIVE_PROJECTS, {
 			currentPage: 1,
-			filter: isNil(filterParam) ? [param] : [...filterParam, param],
+			filter: isNil(filterParams) ? [param] : [...filterParams, param],
 			sortType: path(['list', 'sortType'], state),
 		}))
 	} else if (action !== 'input-blur' && action !== 'menu-close' && action !== 'set-value') {
 		param = { param: 'assignee|twitch', value: '' }
 		dispatch(setStreamerFilterValue(null))
 		dispatch(addFilterParams(param))
+		dispatch(clearFilterParam({ type: 'assignee|twitch' }))
 		dispatch(setCurrentPage(1))
 		dispatch(clearProjectArray())
 	}
 
 	if ((action === 'input-change' && valueInput === '') || action === 'clear') {
 		dispatch(clearFilterParam({ type: 'assignee|twitch' }))
+		const newState = getState()
+		const newFilterParam = path(['list', 'filterParams'], newState)
 		dispatch(apiRequest(GET_ACTIVE_PROJECTS, {
 			currentPage: 1,
+			filter: isNil(newFilterParam) ? [] : [...newFilterParam],
 			sortType: path(['list', 'sortType'], state),
 		}))
 	}
