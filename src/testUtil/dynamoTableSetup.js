@@ -24,6 +24,9 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 	}
 })
 
+jest.mock('root/src/server/api/actionUtil/validatePaypalAuthorize', () => () => true)
+
+jest.mock('root/src/server/api/actionUtil/validateStripeSourceId', () => () => true)
 
 jest.mock('root/src/server/api/twitchApi', () => {
 	/* eslint-disable global-require */
@@ -54,6 +57,10 @@ jest.mock('root/src/server/api/googleClient', () => {
 		},
 	}
 })
+
+jest.mock('root/src/server/api/paypalClient', () => ({
+	execute: jest.fn(() => Promise.resolve({ statusCode: 200 })),
+}))
 
 // Normally authentication is a JWT that gets decoded and returns a user id.
 // For tests I'm mocking the authorizeRequest which does the jwt decoding and

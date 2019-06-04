@@ -1,4 +1,4 @@
-import { head, replace, equals, prop, compose, map, set, lensProp } from 'ramda'
+import { head, replace, equals, prop, compose, map, set, lensProp, omit } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -79,8 +79,9 @@ export default async ({ userId, payload }) => {
 
 	await documentClient.batchWrite(auditParams).promise()
 
+
 	const newProject = projectSerializer([
-		auditedProject,
+		omit(['assignees'], auditedProject),
 		...assigneesDdb,
 		...myPledgeDdb,
 	])
