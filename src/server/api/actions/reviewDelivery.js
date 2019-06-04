@@ -33,7 +33,7 @@ export default async ({ payload }) => {
 
 	const [projectToApproveDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
 
-	const projectSerialized = projectSerializer([...projectToApproveDdb, ...assigneesDdb])
+	const projectSerialized = projectSerializer([...projectToApproveDdb, ...assigneesDdb], true)
 
 	const projectAssignees = prop('assignees', projectSerializer([
 		...assigneesDdb,
@@ -49,7 +49,7 @@ export default async ({ payload }) => {
 					accepted: ternary(equals(audit, projectDeliveredKey),
 						streamerDeliveryApprovedKey, prop('accepted', assignee)),
 				},
-					projectId),
+				projectId),
 			},
 		},
 	}), projectAcceptedAssignees), [])
@@ -75,6 +75,7 @@ export default async ({ payload }) => {
 					Item: {
 						...recordToUpdate,
 						status: projectDeliveredKey,
+						deliveries: prop('deliveries', projectSerialized),
 					},
 				},
 			},
