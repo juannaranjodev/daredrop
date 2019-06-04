@@ -44,6 +44,8 @@ export default async ({ userId, payload }) => {
 			...myFavorites,
 		]),
 	}
+	console.log(userId, JSON.stringify(respons, null, 4))
+
 	const projectToPledge = head(projectToPledgeDdb)
 	if (!projectToPledge) {
 		throw generalError('Project doesn\'t exist')

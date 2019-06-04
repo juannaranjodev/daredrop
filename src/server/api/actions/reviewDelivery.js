@@ -35,7 +35,6 @@ export default async ({ payload }) => {
 	const projectId = viewProjectId(payload)
 	const audit = viewAudit(payload)
 	const message = viewMessage(payload)
-
 	if (and(not(equals(audit, projectDeliveredKey)), not(message))) {
 		throw payloadSchemaError('Message is required')
 	}

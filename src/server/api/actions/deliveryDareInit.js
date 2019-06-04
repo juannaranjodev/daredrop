@@ -34,13 +34,23 @@ export default async ({ payload, userId }) => {
 	const videoURL = viewVideoURL(payload)
 	const projectId = viewProjectId(payload)
 	const timeStamp = viewTimeStamp(payload)
-	// verifications
 	const projectDeliveries = await dynamoQueryProjectDeliveries(projectId)
-	const filterByUploader = filter(propEq('uploader', userId))
-	const filterUploadedByUploader = filter(and(propEq('uploader', userId), propEq('s3Uploaded', true)))
-	const userDeliveries = filterByUploader(projectDeliveries)
+	// const filterUploadedByUploader = filter(and(propEq('uploader', userId), propEq('s3Uploaded', true)))
+	const filterUploaded = filter(propEq('s3Uploaded', true))
 	let deliverySortKey
-	const email = await getUserEmail(userId)
+
+	if (gt(length(projectDeliveries), 0)) {
+		// const uploadedUserDeliveries = filterUploadedByUploader(projectDeliveries)
+		const uploadedProjectDeliveries = filterUploaded(projectDeliveries)
+		if (gt(length(uploadedProjectDeliveries), 0)) {
+			throw actionForbiddenError('User has already submitted video for this dare')
+		}
+		// here we need anyways to get userDeliveries to check if user can resume
+		const filterByUploader = filter(propEq('uploader', userId))
+		const userDeliveries = filterByUploader(projectDeliveries)
+		deliverySortKey = prop('sk', head(userDeliveries))
+	}
+
 	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
 
 	const project = projectSerializer([
@@ -97,7 +107,6 @@ export default async ({ payload, userId }) => {
 		TableName: TABLE_NAME,
 		Item: dareDeliveryObject,
 	}
-	console.log(JSON.stringify(deliveryParams, null, 4))
-	// await documentClient.put(deliveryParams).promise()
+	await documentClient.put(deliveryParams).promise()
 	return { url, deliverySortKey }
 }
