@@ -41,7 +41,7 @@ export default async ({ payload }) => {
 		PutRequest: {
 			Item: {
 				[PARTITION_KEY]: projectId,
-				[SORT_KEY]: await generateUniqueSortKey(projectId, `project|${projectCapturedKey}`, 1, 10),
+				[SORT_KEY]: await generateUniqueSortKey(projectId, projectCapturedKey, 1, 10),
 			},
 		},
 	},
@@ -53,6 +53,11 @@ export default async ({ payload }) => {
 			},
 		},
 	}]
-	await documentClient.batchWrite(captureToWrite)
+	const writeParams = {
+		RequestItems: {
+			[TABLE_NAME]: captureToWrite,
+		},
+	}
+	await documentClient.batchWrite(writeParams).promise()
 	return { message: 'success' }
 }
