@@ -31,8 +31,13 @@ export default async ({ payload, userId }) => {
 	const timeStamp = viewTimeStamp(payload)
 
 	const projectDeliveries = await dynamoQueryProjectDeliveries(projectId)
+	const approvedProjectDeliveries = await dynamoQueryProjectDeliveries(projectId, true)
 	const filterUploaded = filter(propEq('s3Uploaded', true))
 	let deliverySortKey
+
+	if (gt(length(approvedProjectDeliveries), 0)) {
+		throw actionForbiddenError('This project have already dare approved')
+	}
 
 	if (gt(length(projectDeliveries), 0)) {
 		const uploadedProjectDeliveries = filterUploaded(projectDeliveries)
