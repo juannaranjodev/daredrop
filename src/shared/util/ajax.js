@@ -1,44 +1,10 @@
 import { forEach, toPairs } from 'ramda'
 import { stringify } from 'qs'
-
-// export default ({
-// 	url, method, body, queryParams, headers,
-// }) => new Promise((resolve, reject) => {
-// 	let status = 0
-// 	const queryString = queryParams
-// 		? `?${stringify(queryParams, { indices: false })}` : ''
-// 	return fetch(
-// 		`${url}${queryString}`,
-// 		{
-// 			method: method || 'GET',
-// 			headers: {
-// 				...headers,
-// 				'Content-Type': headers['Content-Type'] || 'application/json',
-// 			},
-// 			body: JSON.stringify(body),
-// 		},
-// 	).then((jsonResponse) => {
-// 		status = jsonResponse.status
-// 		return jsonResponse.text()
-// 	}).then((textResponse) => {
-// 		let parsed = textResponse
-// 		try {
-// 			parsed = JSON.parse(textResponse)
-// 		} catch (e) {
-// 			// response not json, leave parsed as text and continue
-// 		}
-// 		if (status >= 200 && status < 300) {
-// 			resolve(parsed)
-// 		} else {
-// 			reject(parsed)
-// 		}
-// 	})
-// })
-
+import uploadProgress from 'root/src/client/logic/project/actions/uploadProgress'
 
 export default ({
 	url, method, body, queryParams, headers, file,
-}) => new Promise((resolve, reject) => {
+}, dispatch, state) => new Promise((resolve, reject) => {
 	const queryString = queryParams
 		? `?${stringify(queryParams, { indices: false })}` : ''
 	const xhr = new XMLHttpRequest()
@@ -71,6 +37,7 @@ export default ({
 	xhr.onerror = () => {
 		reject(new Error('Network Error'))
 	}
+	xhr.upload.addEventListener('progress', e => dispatch(uploadProgress(e)))
 	if (file) {
 		xhr.send(file)
 	} else {

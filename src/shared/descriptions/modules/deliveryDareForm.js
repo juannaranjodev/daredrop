@@ -44,7 +44,7 @@ export default {
 		submits: [
 			{
 				label: 'Confirm',
-
+				uploadProgress: true,
 			},
 		],
 	},
