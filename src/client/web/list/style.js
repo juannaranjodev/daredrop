@@ -193,6 +193,7 @@ export const projectCardStyle = {
 	projectUnsetJustify: {
 		justifyContent: 'start !important',
 		marginLeft: 18,
+		marginRight: 18,
 	},
 	hoveredName: {
 		fontSize: 14,

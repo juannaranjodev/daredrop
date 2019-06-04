@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/home/domo/Documents/Workspace/DareDrop/node_modules/@babel/generator/node_modules/source-map/CHANGELOG.md'
+  Error: EACCES: permission denied, mkdir '/home/domo/Documents/Workspace/DareDrop/node_modules/babel-loader/node_modules/make-dir'
 
 npm manifest: 
   {
@@ -40,7 +40,7 @@ npm manifest:
       "build": "webpack --config webpack.config.js -p",
       "bundleLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda",
       "genAWSCreds": "./node_modules/.bin/babel-node --presets=env ./customScripts/generateAWSCredentials.js",
-      "runLambda": "docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default",
+      "runLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default",
       "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmbz dareMeZDevApiLambdaFunction.default"
     },
     "dependencies": {
@@ -97,6 +97,7 @@ npm manifest:
       "jwk-to-pem": "^2.0.0",
       "lodash": "^4.17.11",
       "mime-types": "^2.1.21",
+      "mockdate": "^2.0.2",
       "moment": "^2.24.0",
       "node-emoji": "^1.8.1",
       "object-hash": "^1.3.1",

@@ -11,13 +11,11 @@ import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredPro
 
 const PageItemLength = 8
 
-export default async (status, defaultSortType, payload, isAdminEndpoint, noExpirationFilter) => {
+export default async (status, defaultSortType, payload, isAdminEndpoint, noExpirationFilter, isDenormalized) => {
 	const realPayload = payload.payload
-	const projectsDdb = await dynamoQueryShardedProjects(status)
+	const projectsDdb = await dynamoQueryShardedProjects(status, isDenormalized)
 
-	const serializedProjects = ternary(isAdminEndpoint,
-		map(compose(dissoc('myPledge'), projectSerializer(__, true)), projectsDdb),
-		map(compose(dissoc('myPledge'), projectSerializer), projectsDdb))
+	const serializedProjects = map(compose(dissoc('myPledge'), projectSerializer(__, isAdminEndpoint, isDenormalized)), projectsDdb)
 
 	// Filter expired projects
 	const filterExpired = (dare) => {
@@ -45,6 +43,7 @@ export default async (status, defaultSortType, payload, isAdminEndpoint, noExpir
 		? Math.round(sortedProjects.length / PageItemLength) + 1
 		: Math.round(sortedProjects.length / PageItemLength)
 
+
 	let { currentPage } = realPayload
 	if (currentPage === undefined) {
 		currentPage = 1
@@ -53,6 +52,7 @@ export default async (status, defaultSortType, payload, isAdminEndpoint, noExpir
 		(currentPage - 1) * PageItemLength,
 		currentPage * PageItemLength,
 	)
+
 	return {
 		allPage,
 		currentPage: realPayload.currentPage,

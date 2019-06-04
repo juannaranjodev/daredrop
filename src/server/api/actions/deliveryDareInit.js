@@ -42,11 +42,13 @@ export default async ({ payload, userId }) => {
 	let deliverySortKey
 	const email = await getUserEmail(userId)
 	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
+
 	const project = projectSerializer([
 		...projectDdb,
 		...assigneesDdb,
 	])
 	const userTokensInProject = userTokensInProjectSelector(userTokens, project)
+
 	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
