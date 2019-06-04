@@ -1,4 +1,4 @@
-import { isNil, equals } from 'ramda'
+import { isNil, equals, max } from 'ramda'
 import getRecordSelector from 'root/src/client/logic/api/selectors/getRecordSelector'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -16,18 +16,9 @@ export default (state, props) => {
 		getRecordSelector(state, props),
 	)
 
-	const status = viewStatus(
-		getRecordSelector(state, props),
-	)
-
-	if (equals(status, projectApprovedKey)) {
-		if (isNil(approved)) {
-			return '-'
-		} 
-			const diff = moment().diff(approved, 'days')
-			return `${daysToExpire - diff}`
-		
-	} else {
-		return '-'
-	}
+	if (isNil(approved)) {
+		return 0
+	} 
+	const diff = moment().diff(approved, 'days')
+	return max(Math.ceil(daysToExpire - diff), 0)
 }
