@@ -78,7 +78,7 @@ export const FormModuleUnconnected = memo(({
 	formFieldTypes, formTitle, formSubmits, moduleId, moduleKey, submitForm,
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
 	classes, subTitle, formType, backButton, formHandlers, handleAction, customSubmits,
-	customSubmitsData, payPalCreateOrder, payPalOnApprove,
+	customSubmitsData, payPalCreateOrder, payPalOnApprove, uploadProgress,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
@@ -161,6 +161,7 @@ export const FormModuleUnconnected = memo(({
 							submitFormFn={submitForm}
 							formType={formType}
 							setWasSubmitted={setWasSubmitted}
+							uploadProgress={uploadProgress}
 						/>
 						{orNull(customSubmits,
 							<CustomSubmits

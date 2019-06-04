@@ -37,6 +37,7 @@ import currentListPayload from 'root/src/client/logic/api/reducers/currentListPa
 // project
 import favoritesProcessingStart from 'root/src/client/logic/project/reducers/favoritesProcessingStart'
 import favoritesProcessingEnd from 'root/src/client/logic/project/reducers/favoritesProcessingEnd'
+import uploadProgress from 'root/src/client/logic/project/reducers/uploadProgress'
 
 import apiRecordClickActionRequestError from 'root/src/client/logic/api/reducers/apiRecordClickActionRequestError'
 import apiRecordClickActionRequestSuccess from 'root/src/client/logic/api/reducers/apiRecordClickActionRequestSuccess'
@@ -110,7 +111,8 @@ const store = createStore(
 		...favoritesProcessingStart,
 		...favoritesProcessingEnd,
 		...displayModal,
-		...addPayoutMethodOnSuccess
+		...addPayoutMethodOnSuccess,
+		...uploadProgress,
 	}, // reducer object
 	// [], // sagas
 	[

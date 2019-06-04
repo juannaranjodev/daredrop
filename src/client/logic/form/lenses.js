@@ -148,6 +148,13 @@ export const formModuleSchema = {
 							label: { type: 'string' },
 							buttonType: { type: 'string' },
 							customSubmit: { type: 'string' },
+							progressBar: {
+								type: 'object',
+								properties: {
+									currentProgress: { type: 'integer' },
+									targetProgress: { type: 'integer' },
+								},
+							},
 						},
 					},
 				},

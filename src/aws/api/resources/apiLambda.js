@@ -28,7 +28,7 @@ export default {
 			// Handler: 'index.default',
 			MemorySize: 512,
 			Runtime: 'nodejs8.10',
-			Timeout: 30,
+			Timeout: 4,
 		},
 	},
 }

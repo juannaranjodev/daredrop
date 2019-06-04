@@ -6,7 +6,6 @@ import ajax from 'root/src/shared/util/ajax'
 import { lookup } from 'mime-types'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 
-
 export default (
 	{ videoAttach: { file, name } },
 	{ body: { url, deliverySortKey } },
@@ -21,7 +20,7 @@ export default (
 			'Content-Type': lookup(name),
 		},
 	}
-	await ajax(uploadParams)
+	await ajax(uploadParams, dispatch, state)
 	const apiPayload = {
 		projectId,
 		deliverySortKey,
