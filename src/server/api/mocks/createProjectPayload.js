@@ -25,7 +25,7 @@ export default ({ assigneeCount = 1 } = {}) => {
 		paymentInfo: {
 			paymentType: 'paypalAuthorize',
 			// paymentId: random.uuid(),
-      paymentId: 'src_FBgaRgsyjOqOiz',
+			paymentId: 'src_FBgaRgsyjOqOiz',
 			paymentAmount: pledgeAmount,
 		},
 		pledgeAmount,

@@ -39,15 +39,15 @@ export default async ({ userId, payload }) => {
 
 	const newPledgeAmount = viewPledgeAmount(payload)
 	let paymentInfo = viewPaymentInfo(payload)
-  let captureCharge
-	if (paymentInfo.paymentType === 'stripeCard') {    
-    const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
-    if (!validationCardId)
-  		throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
-    captureCharge = await validateStripeAuthorize(newPledgeAmount, paymentInfo.paymentId, userId)
-    if (!captureCharge.authorized)
-      throw payloadSchemaError(captureCharge.error)
-    paymentInfo = assoc('paymentId', prop('id', captureCharge), paymentInfo)
+	let captureCharge
+	if (paymentInfo.paymentType === 'stripeCard') {
+		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
+		if (!validationCardId)
+			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+		captureCharge = await validateStripeAuthorize(newPledgeAmount, paymentInfo.paymentId, userId)
+		if (!captureCharge.authorized)
+			throw payloadSchemaError(captureCharge.error)
+		paymentInfo = assoc('paymentId', prop('id', captureCharge), paymentInfo)
 	}
 
 	let myPledge = head(dynamoItemsProp(await documentClient.query({

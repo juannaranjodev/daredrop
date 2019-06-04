@@ -39,15 +39,15 @@ export default async ({ userId, payload }) => {
 	const created = moment().format()
 
 	const pledgeAmount = viewPledgeAmount(serializedProject)
-  let captureCharge
+	let captureCharge
 	if (paymentInfo.paymentType === 'stripeCard') {
-    const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
-    if (!validationCardId)
-      throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
-    captureCharge = await validateStripeAuthorize(pledgeAmount, paymentInfo.paymentId, userId)
-    if (!captureCharge.authorized)
-      throw payloadSchemaError(captureCharge.error)
-    paymentInfo = assoc('paymentId', captureCharge.id, paymentInfo)
+		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
+		if (!validationCardId)
+			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+		captureCharge = await validateStripeAuthorize(pledgeAmount, paymentInfo.paymentId, userId)
+		if (!captureCharge.authorized)
+			throw payloadSchemaError(captureCharge.error)
+		paymentInfo = assoc('paymentId', captureCharge.id, paymentInfo)
 	} else if (paymentInfo.paymentType === 'paypalAuthorize') {
 		const validation = await validatePaypalAuthorize(paymentInfo.orderID, pledgeAmount)
 		if (!validation) {
