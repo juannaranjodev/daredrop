@@ -1,4 +1,4 @@
-import { equals, head, unnest, not, length, gt, last, split, map, compose, omit } from 'ramda'
+import { equals, head, unnest, not, length, gt, last, split, map, compose, omit, prop, contains } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -17,6 +17,7 @@ import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectB
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 import getTimestamp from 'root/src/shared/util/getTimestamp'
+import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
 
 const payloadLenses = getPayloadLenses(REJECT_PROJECT)
 const { viewProjectId, viewMessage } = payloadLenses
@@ -68,7 +69,18 @@ export default async ({ payload, userId }) => {
 
 	const rejectionParams = {
 		RequestItems: {
-			[TABLE_NAME]: assigneesToWrite,
+			[TABLE_NAME]: [
+				...assigneesToWrite,
+				{
+					PutRequest: {
+						Item: {
+							[PARTITION_KEY]: prop('id', projectToReject),
+							[SORT_KEY]: head(projectToRejectDdb)[SORT_KEY],
+							...setAssigneesStatus(projectToReject, streamerRejectedKey, userTokensStr),
+						},
+					},
+				},
+			],
 		},
 	}
 

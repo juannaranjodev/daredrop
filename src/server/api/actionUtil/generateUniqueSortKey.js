@@ -15,6 +15,7 @@ export default async (partitionKey, sortKeyBeginning, numberStartRange, numberEn
 				':pk': partitionKey,
 				':sk': queriedSK,
 			},
+			ConsistentRead: true,
 		}
 		const dynamoResult = await documentClient.query(queryParams).promise()
 		if (dynamoResult.Items.length === 0) {

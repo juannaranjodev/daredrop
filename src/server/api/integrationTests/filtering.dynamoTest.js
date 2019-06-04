@@ -19,7 +19,7 @@ import moment from 'moment'
 import reviewDelivery from 'root/src/server/api/actions/reviewDelivery'
 import getMyProjects from 'root/src/server/api/actions/getMyProjects'
 
-describe('approveDelivery', async () => {
+describe('filtering tests', async () => {
 	let project
 	test('pending delivery is displayed on review page, but is not on marketplace', async () => {
 		project = await createProject({
@@ -68,7 +68,7 @@ describe('approveDelivery', async () => {
 		const pendingDeliveries = await getPendingDeliveries({ payload: {} })
 
 		expect(pendingDeliveries.items[0].deliveries.length).toEqual(1)
-		expect(projectsOnMarketplace.items[0]).toEqual(omit(['deliveries'], pendingDeliveries.items[0]))
+		expect(omit(['created'], projectsOnMarketplace.items[0])).toEqual(omit(['deliveries', 'created'], pendingDeliveries.items[0]))
 	})
 	test('doesn\'t displays expired projects but deliveries are shown', async () => {
 		const inTwoWeeks = moment().add(14, 'days').format()

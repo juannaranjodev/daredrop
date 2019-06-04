@@ -1,5 +1,5 @@
 import uuid from 'uuid/v1'
-import { map, pick, omit, prop, join, add, assoc, append } from 'ramda'
+import { map, omit, prop, join, add, assoc, append } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -15,9 +15,13 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import projectDenormalizeFields from 'root/src/server/api/actionUtil/projectDenormalizeFields'
 import pledgeDynamoObj from 'root/src/server/api/actionUtil/pledgeDynamoObj'
 import randomNumber from 'root/src/shared/util/randomNumber'
-import { projectPendingKey, projectApprovedKey } from 'root/src/server/api/lenses'
+import { payloadSchemaError } from 'root/src/server/api/errors'
+import { projectPendingKey } from 'root/src/server/api/lenses'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import moment from 'moment'
+import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
+import validateStripeAuthorize from 'root/src/server/api/actionUtil/validateStripeAuthorize'
+import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
 
 const payloadLenses = getPayloadLenses(CREATE_PROJECT)
 const {
@@ -29,12 +33,28 @@ export default async ({ userId, payload }) => {
 		project: payload, payloadLenses,
 	})
 	const projectId = `project-${uuid()}`
-	const paymentInfo = viewPaymentInfo(payload)
 	const projectCommon = projectDenormalizeFields(serializedProject)
+	let paymentInfo = viewPaymentInfo(payload)
 
 	const created = moment().format()
 
 	const pledgeAmount = viewPledgeAmount(serializedProject)
+  let captureCharge
+	if (paymentInfo.paymentType === 'stripeCard') {
+    const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
+    if (!validationCardId)
+      throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+    captureCharge = await validateStripeAuthorize(pledgeAmount, paymentInfo.paymentId, userId)
+    if (!captureCharge.authorized)
+      throw payloadSchemaError(captureCharge.error)
+    paymentInfo = assoc('paymentId', captureCharge.id, paymentInfo)
+	} else if (paymentInfo.paymentType === 'paypalAuthorize') {
+		const validation = await validatePaypalAuthorize(paymentInfo.orderID, pledgeAmount)
+		if (!validation) {
+			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
+		}
+	}
+
 	const project = {
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: `project|${projectPendingKey}|${randomNumber(1, 10)}`,
@@ -68,14 +88,17 @@ export default async ({ userId, payload }) => {
 		projectId, serializedProject, userId, true,
 	)
 
-	const newMyPledge = assoc('paymentInfo', append(paymentInfo, prop('paymentInfo', pledge)), pledge)
-	const updatedPledgeAmount = assoc('pledgeAmount', add(pledgeAmount, prop('pledgeAmount', pledge)), newMyPledge)
+	const newMyPledge = assoc('paymentInfo', append(
+		assoc('captured', 0, omit(['orderID'], paymentInfo)),
+		prop('paymentInfo', pledge),
+	), pledge)
+	const pledgeUpdated = assoc('pledgeAmount', add(pledgeAmount, prop('pledgeAmount', pledge)), newMyPledge)
 
 	const params = {
 		RequestItems: {
 			[TABLE_NAME]: map(
 				Item => ({ PutRequest: { Item } }),
-				[project, ...projectAssignees, ...projectGames, updatedPledgeAmount],
+				[project, ...projectAssignees, ...projectGames, pledgeUpdated],
 			),
 		},
 	}
@@ -93,13 +116,11 @@ export default async ({ userId, payload }) => {
 		sendEmail(emailData, dareCreatedEmail)
 	} catch (err) { }
 
-
 	return {
 		id: projectId,
 		userId,
 		status: projectPendingKey,
 		...projectCommon,
-		assignees: viewAssignees(serializedProject),
 		pledgers: 1,
 		favoritesAmount: 0,
 		created,

@@ -4,7 +4,7 @@ import { GSI1_PARTITION_KEY, PARTITION_KEY, GSI1_INDEX_NAME } from 'root/src/sha
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
 import { map, range, reduce } from 'ramda'
 
-export default async (projectStatus) => {
+export default async (projectStatus, isDenormalized) => {
 	const shardedProjects = await Promise.all(
 		map(
 			index => documentClient.query({
@@ -18,13 +18,15 @@ export default async (projectStatus) => {
 			range(1, 11),
 		),
 	)
-
 	const combinedProjects = reduce(
 		(result, projectDdb) => [...result, ...dynamoItemsProp(projectDdb)],
 		[],
 		shardedProjects,
 	)
 
+	if (isDenormalized) {
+		return map(proj => [proj], combinedProjects)
+	}
 	const projectDataDdb = await Promise.all(
 		map(
 			project => documentClient.query({

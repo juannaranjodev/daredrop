@@ -5,7 +5,7 @@ import SubForm from 'root/src/client/web/form/SubForm'
 import AmountNumber from 'root/src/client/web/form/AmountNumber'
 import StripeCard from 'root/src/client/web/form/StripeCard'
 import AutoComplete from 'root/src/client/web/form/AutoComplete'
-import AtachmentInput from 'root/src/client/web/form/AttachmentInput'
+import AttachmentInput from 'root/src/client/web/form/AttachmentInput'
 import TimeStampInput from 'root/src/client/web/form/TimeStampInput'
 import InputWrapper from 'root/src/client/web/form/InputWrapper'
 
@@ -75,10 +75,10 @@ const Fields = memo(({
 					<AutoComplete {...props} />
 				</InputWrapper>
 			)
-		case 'atachmentInput':
+		case 'attachmentInput':
 			return (
 				<InputWrapper {...wrapperProps}>
-					<AtachmentInput {...props} />
+					<AttachmentInput {...props} />
 				</InputWrapper>
 			)
 		case 'timeStamp':
