@@ -9,6 +9,7 @@ import acceptProject from 'root/src/server/api/actions/acceptProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
 import { insertVideoMock } from 'root/src/server/api/mocks/youtubeMock'
+import incrementDateCreatedInDb from 'root/src/testUtil/incrementDateCreatedInDb'
 
 describe('deliveryDare flow', async () => {
 	let project
@@ -125,6 +126,7 @@ describe('deliveryDare flow', async () => {
 			authentication: mockUserId,
 		}
 		await apiFn(deliveryEvent)
+		await incrementDateCreatedInDb([project.id, project2.id])
 
 		const res = await apiFn(event)
 
