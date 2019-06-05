@@ -77,10 +77,10 @@ export const projectCardStyle = {
 		transition: '0s',
 		margin: 0,
 		zIndex: 201,
-    overflow: 'hidden',
-    display: '-webkit-box',
-    '-webkit-line-clamp': 2,
-    '-webkit-box-orient': 'vertical'
+		overflow: 'hidden',
+		display: '-webkit-box',
+		'-webkit-line-clamp': 2,
+		'-webkit-box-orient': 'vertical'
 	},
 	cardFooter: {
 		height: 147,
