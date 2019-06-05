@@ -20,6 +20,7 @@ export default (
 	recordClickActionId, recordId, actionPayload,
 ) => async (dispatch, getState) => {
 	try {
+		console.log('e')
 		const recordClickActionStoreKey = createRecordClickActionStoreKey(
 			recordClickActionId, recordId,
 		)
