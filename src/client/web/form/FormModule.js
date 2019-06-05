@@ -190,7 +190,6 @@ export const FormModuleUnconnected = memo(({
 							<TertiaryBody>{postSubmitCaption}</TertiaryBody>
 						</div>,
 					)}
-					{console.log(backButton)}
 					{backButton && (
 						<div className={classes.backButton}>
 							<Link
