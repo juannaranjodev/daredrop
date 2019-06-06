@@ -38,6 +38,9 @@ jest.mock('root/src/server/api/stripeClient', () => ({
 			id: 'customerId',
 		})),
 		createSource: jest.fn(() => Promise.resolve()),
+		sources: {
+			retrieve: jest.fn(() => Promise.resolve('source')),
+		},
 	},
 }))
 
