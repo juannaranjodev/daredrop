@@ -1,6 +1,7 @@
 import { map, and, gte, lt } from 'ramda'
 import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 import capturePaypalAuthorize from 'root/src/server/api/actionUtil/capturePaypalAuthorize'
+import captureStripeAuthorize from 'root/src/server/api/actionUtil/captureStripeAuthorize'
 
 export default paymentsArr => Promise.all(map(async (payment) => {
 	const { paymentType, paymentId, captured } = payment
@@ -8,16 +9,18 @@ export default paymentsArr => Promise.all(map(async (payment) => {
 		return payment
 	}
 	try {
+		let captureFn
 		switch (paymentType) {
 			case stripeCard:
-				// stripe capture
-				return 'x'
+				captureFn = captureStripeAuthorize
+				break
 			case paypalAuthorize:
-				const authorization = await capturePaypalAuthorize(paymentId)
-				return { ...payment, captured: authorization.statusCode }
+				captureFn = capturePaypalAuthorize
+				break
 			default:
-				return { ...payment, message: 'Default case from capturePayments' }
 		}
+		const authorization = await captureFn(paymentId)
+		return { ...payment, captured: authorization.statusCode }
 	} catch (err) {
 		return { ...payment, captured: err.statusCode, message: err.message }
 	}
