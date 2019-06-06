@@ -79,7 +79,6 @@ const updateAssignessInformation = async (userTokensInProject, projectId, projec
 			},
 		},
 	}), userAssigneeArr)
-
 	const updateProjectParam = {
 		RequestItems: {
 			[TABLE_NAME]: [
@@ -88,7 +87,7 @@ const updateAssignessInformation = async (userTokensInProject, projectId, projec
 						Item: {
 							[PARTITION_KEY]: prop('id', project),
 							[SORT_KEY]: head(projectDdb)[SORT_KEY],
-							status: projectDeliveryPendingKey,
+							status: project.status,
 							...setDeliveryStatus(project, projectDeliveryPendingKey, userTokensStr),
 						},
 					},
@@ -109,7 +108,7 @@ export default async ({ payload, userId }) => {
 	const projectId = viewProjectId(payload)
 	const timeStamp = viewTimeStamp(payload)
 
-	let deliverySortKey = verification(projectId, userId)
+	let deliverySortKey = await verification(projectId, userId)
 
 	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
 
@@ -140,6 +139,7 @@ export default async ({ payload, userId }) => {
 		deliverySortKey = await generateUniqueSortKey(projectId, `project|${projectDeliveryPendingKey}`, 1, 10)
 	}
 
+
 	const dareDeliveryObject = {
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: deliverySortKey,
@@ -151,12 +151,10 @@ export default async ({ payload, userId }) => {
 		s3Uploaded: false,
 		uploader: userId,
 	}
-
 	const deliveryParams = {
 		TableName: TABLE_NAME,
 		Item: dareDeliveryObject,
 	}
-
 	await documentClient.put(deliveryParams).promise()
 	return { url, deliverySortKey }
 }
