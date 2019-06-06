@@ -20,8 +20,9 @@ import { projectPendingKey } from 'root/src/server/api/lenses'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import moment from 'moment'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
-import validateStripeAuthorize from 'root/src/server/api/actionUtil/validateStripeAuthorize'
+import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthorizePayment'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
+import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
 const payloadLenses = getPayloadLenses(CREATE_PROJECT)
 const {
@@ -39,16 +40,19 @@ export default async ({ userId, payload }) => {
 	const created = moment().format()
 
 	const pledgeAmount = viewPledgeAmount(serializedProject)
-	let captureCharge
-	if (paymentInfo.paymentType === 'stripeCard') {
+
+	// validations
+	if (paymentInfo.paymentType === stripeCard) {
 		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
-		if (!validationCardId)
+		if (!validationCardId) {
 			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
-		captureCharge = await validateStripeAuthorize(pledgeAmount, paymentInfo.paymentId, userId)
-		if (!captureCharge.authorized)
-			throw payloadSchemaError(captureCharge.error)
-		paymentInfo = assoc('paymentId', captureCharge.id, paymentInfo)
-	} else if (paymentInfo.paymentType === 'paypalAuthorize') {
+		}
+		const stripeAuthorization = await stripeAuthorizePayment(pledgeAmount, paymentInfo.paymentId, userId)
+		if (!stripeAuthorization.authorized) {
+			throw payloadSchemaError(stripeAuthorization.error)
+		}
+		paymentInfo = assoc('paymentId', stripeAuthorization.id, paymentInfo)
+	} else if (paymentInfo.paymentType === paypalAuthorize) {
 		const validation = await validatePaypalAuthorize(paymentInfo.orderID, pledgeAmount)
 		if (!validation) {
 			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })

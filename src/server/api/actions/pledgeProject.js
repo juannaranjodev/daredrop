@@ -16,10 +16,11 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
-import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
-import validateStripeAuthorize from 'root/src/server/api/actionUtil/validateStripeAuthorize'
+import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthorizePayment'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
-import { payloadSchemaError, authorizationError, generalError } from 'root/src/server/api/errors'
+import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
+import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
+import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
 const { viewPledgeAmount, viewPaymentInfo } = payloadLenses
@@ -39,15 +40,22 @@ export default async ({ userId, payload }) => {
 
 	const newPledgeAmount = viewPledgeAmount(payload)
 	let paymentInfo = viewPaymentInfo(payload)
-	let captureCharge
-	if (paymentInfo.paymentType === 'stripeCard') {
+
+	if (paymentInfo.paymentType === stripeCard) {
 		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
-		if (!validationCardId)
+		if (!validationCardId) {
 			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
-		captureCharge = await validateStripeAuthorize(newPledgeAmount, paymentInfo.paymentId, userId)
-		if (!captureCharge.authorized)
-			throw payloadSchemaError(captureCharge.error)
-		paymentInfo = assoc('paymentId', prop('id', captureCharge), paymentInfo)
+		}
+		const stripeAuthorization = await stripeAuthorizePayment(newPledgeAmount, paymentInfo.paymentId, userId)
+		if (!stripeAuthorization.authorized) {
+			throw payloadSchemaError(stripeAuthorization.error)
+		}
+		paymentInfo = assoc('paymentId', prop('id', stripeAuthorization), paymentInfo)
+	} else if (paymentInfo.paymentType === paypalAuthorize) {
+		const validation = await validatePaypalAuthorize(paymentInfo.orderID, newPledgeAmount)
+		if (!validation) {
+			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
+		}
 	}
 
 	let myPledge = head(dynamoItemsProp(await documentClient.query({
