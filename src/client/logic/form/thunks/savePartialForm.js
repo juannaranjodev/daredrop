@@ -24,7 +24,7 @@ export const savePartialFormHof = () => (moduleKey, stepFormAction) => async (di
 	const state = getState()
 	const formValues = (pathOrFormInputs(moduleKey, {})(state))
 	const formErrors = (pathOrFieldErrors(moduleKey, {})(state))
-	if (JSON.stringify(formErrors) === '{}') {
+	if (Object.keys(formErrors).length === 0) {
 		stepFormAction(moduleKey)
 	}
 	const id = uuid()
