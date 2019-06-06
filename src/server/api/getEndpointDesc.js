@@ -31,4 +31,9 @@ export const getAuthentication = endpointId => path(
 	clientEndpoints,
 )
 
+export const getIsLongRunningTask = endpointId => path(
+	[endpointId, 'isLongRunningTask'],
+	clientEndpoints,
+)
+
 export const getAction = endpointId => prop(endpointId, serverEndpoints)

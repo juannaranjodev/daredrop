@@ -1,4 +1,4 @@
-import { prop, propEq, map, filter, equals, and, not, reduce, assoc, startsWith } from 'ramda'
+import { prop, propEq, map, filter, equals, and, not, startsWith } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -9,7 +9,7 @@ import projectSerializer from 'root/src/server/api/serializers/projectSerializer
 import {
 	streamerAcceptedKey, streamerDeliveryApprovedKey,
 	projectDeliveredKey, projectDeliveryPendingKey,
-	projectApprovedKey,
+	projectApprovedKey, projectToCaptureKey,
 } from 'root/src/server/api/lenses'
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
@@ -17,8 +17,6 @@ import getTimestamp from 'root/src/shared/util/getTimestamp'
 import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
 import { payloadSchemaError } from 'root/src/server/api/errors'
 import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
-import dynamoQueryProjectPledges from 'root/src/server/api/actionUtil/dynamoQueryProjectPledges'
-import capturePayments from 'root/src/server/api/actionUtil/capturePayments'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
@@ -35,7 +33,7 @@ export default async ({ payload }) => {
 
 	const [projectToApproveDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
 
-	const projectSerialized = projectSerializer([...projectToApproveDdb, ...assigneesDdb])
+	const projectSerialized = projectSerializer([...projectToApproveDdb, ...assigneesDdb], true)
 
 	const projectAssignees = prop('assignees', projectSerializer([
 		...assigneesDdb,
@@ -59,20 +57,6 @@ export default async ({ payload }) => {
 	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
 	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
 
-	if (equals(audit, projectDeliveredKey)) {
-		const projectPledges = await dynamoQueryProjectPledges(projectId)
-		const pledgesToWrite = await reduce(async (result, pledge) => {
-			const payments = await capturePayments(prop('paymentInfo', pledge))
-			const paymentInfoDdb = {
-				TableName: TABLE_NAME,
-				Item: assoc('paymentInfo', payments, pledge),
-			}
-			return [...result, paymentInfoDdb]
-		}, [], projectPledges)
-		// here we can't use batchWrite or transactWrite as those support only
-		// 25(batchwrite) or 10(transactWrite) write items
-		await Promise.all(map(pledge => documentClient.put(pledge).promise(), pledgesToWrite))
-	}
 
 	const projectDataToWrite = [
 		...ternary(equals(audit, projectDeliveredKey),
@@ -91,6 +75,15 @@ export default async ({ payload }) => {
 					Item: {
 						...recordToUpdate,
 						status: projectDeliveredKey,
+						deliveries: prop('deliveries', projectSerialized),
+					},
+				},
+			},
+			{
+				PutRequest: {
+					Item: {
+						[PARTITION_KEY]: recordToArchive[PARTITION_KEY],
+						[SORT_KEY]: await generateUniqueSortKey(prop('id', projectSerialized), `${projectToCaptureKey}`, 1, 10),
 					},
 				},
 			}], []),

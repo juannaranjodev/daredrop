@@ -1,4 +1,4 @@
-import { head, add, prop, compose, map, not, length, gt, assoc, omit, append } from 'ramda'
+import { head, add, prop, compose, map, not, length, gt, assoc, omit, append, filter, equals, propEq } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -19,7 +19,7 @@ import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
 
-import { dynamoItemsProp } from 'root/src/server/api/lenses'
+import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/server/api/lenses'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
 const { viewPledgeAmount, viewPaymentInfo } = payloadLenses
@@ -115,11 +115,10 @@ export default async ({ userId, payload }) => {
 			dareTitle: prop('title', newProject),
 			recipients: [email],
 			// TODO EMAIL
-			// expiry time in seconds
+			// expiry time
 			dareHref: projectHrefBuilder(prop('id', newProject)),
 			streamers: compose(map(prop('username')), prop('assignees'))(newProject),
-			// TODO EMAIL
-			// notClaimedAlready
+			notClaimedAlready: equals(0, length(filter(propEq('accepted', streamerAcceptedKey), prop('assignees', newProject)))),
 		}
 
 		sendEmail(emailData, pledgeMadeMail)
