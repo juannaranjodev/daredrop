@@ -1,4 +1,4 @@
-import { head, add, prop, compose, map, not, length, assoc, equals, filter, propEq, append } from 'ramda'
+import { head, add, prop, compose, map, not, length, assoc, equals, filter, propEq, omit, append } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -39,7 +39,7 @@ export default async ({ userId, payload }) => {
 	}
 
 	const newPledgeAmount = viewPledgeAmount(payload)
-	let paymentInfo = assoc('captured', 0, viewPaymentInfo(payload))
+	let paymentInfo = viewPaymentInfo(payload)
 
 	if (paymentInfo.paymentType === stripeCard) {
 		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
@@ -76,7 +76,10 @@ export default async ({ userId, payload }) => {
 		)
 	}
 
-	const newMyPledge = assoc('paymentInfo', append(paymentInfo, prop('paymentInfo', myPledge)), myPledge)
+	const newMyPledge = assoc('paymentInfo', append(
+		assoc('captured', 0, omit(['orderID'], paymentInfo)),
+		prop('paymentInfo', myPledge),
+	), myPledge)
 	const updatedPledgeAmount = assoc('pledgeAmount', add(newPledgeAmount, prop('pledgeAmount', myPledge)), newMyPledge)
 
 	const { pledgeAmount } = projectToPledge
