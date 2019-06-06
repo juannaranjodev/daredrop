@@ -24,6 +24,26 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 	}
 })
 
+// jest.mock('root/src/server/api/stripeClient', () => ({
+// 	__esModule: true,
+// 	default: {
+// 		charges: {
+// 			create: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
+// 		},
+// 		customers: {
+// 			list: jest.fn(() => Promise.resolve({
+// 				data: [{
+// 					id: 'customerId',
+// 				}],
+// 			})),
+// 			create: jest.fn(() => Promise.resolve({
+// 				id: 'customerId',
+// 			})),
+// 			createSource: jest.fn(() => Promise.resolve()),
+// 		},
+// 	},
+// }))
+
 jest.mock('root/src/server/api/actionUtil/validatePaypalAuthorize', () => () => true)
 
 jest.mock('root/src/server/api/actionUtil/validateStripeSourceId', () => () => true)
@@ -61,6 +81,13 @@ jest.mock('root/src/server/api/googleClient', () => {
 jest.mock('root/src/server/api/paypalClient', () => ({
 	execute: jest.fn(() => Promise.resolve({ statusCode: 200 })),
 }))
+
+jest.mock('root/src/server/api/actionUtil/getUserEmail', () => ({
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve({ id: 'user@mail.com' })),
+}))
+
+jest.mock('root/src/server/email/actions/sendEmail', () => Promise.resolve('resolve'))
 
 // Normally authentication is a JWT that gets decoded and returns a user id.
 // For tests I'm mocking the authorizeRequest which does the jwt decoding and

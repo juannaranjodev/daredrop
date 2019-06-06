@@ -64,7 +64,7 @@ export const projectCardStyle = {
 		transition: '0s',
 		flexDirection: 'column',
 		justifyContent: 'center',
-		zIndex: 201,
+		zIndex: 201
 	},
 	headerTextH3: {
 		fontSize: '20px',
@@ -77,6 +77,10 @@ export const projectCardStyle = {
 		transition: '0s',
 		margin: 0,
 		zIndex: 201,
+		overflow: 'hidden',
+		display: '-webkit-box',
+		'-webkit-line-clamp': 2,
+		'-webkit-box-orient': 'vertical'
 	},
 	cardFooter: {
 		height: 147,
@@ -193,6 +197,7 @@ export const projectCardStyle = {
 	projectUnsetJustify: {
 		justifyContent: 'start !important',
 		marginLeft: 18,
+		marginRight: 18,
 	},
 	hoveredName: {
 		fontSize: 14,

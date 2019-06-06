@@ -56,7 +56,7 @@ export default ({ dareTitle, expiryTime, dareHref, streamers, notClaimedAlready 
                   
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
-                  </tr>` : null}
+                  </tr>` : ''}
                   
                   <tr>
                     <td style="margin:0;padding:0;" width="100%">

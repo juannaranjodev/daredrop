@@ -82,8 +82,7 @@ export const StepFormModuleUnconnected = memo(({
 					className={classes.submits}
 					loading={false}
 					onClick={() => {
-						savePartialForm(moduleKey, onStep)
-						stepFormNextPage(moduleKey)
+						savePartialForm(moduleKey, stepFormNextPage)
 					}}
 				>
 					<span className={classes.transformNone}>

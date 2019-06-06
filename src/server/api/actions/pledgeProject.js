@@ -1,8 +1,8 @@
-import { head, add, prop, compose, map, not, length, gt, assoc, assocPath, append } from 'ramda'
+import { head, add, prop, compose, map, not, length, assoc, equals, filter, propEq, append } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
-import { PARTITION_KEY, SORT_KEY, GSI1_INDEX_NAME, GSI1_PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import pledgeMadeMail from 'root/src/server/email/templates/pledgeMade'
@@ -17,7 +17,7 @@ import projectSerializer from 'root/src/server/api/serializers/projectSerializer
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
 import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthorizePayment'
-import { dynamoItemsProp } from 'root/src/server/api/lenses'
+import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/server/api/lenses'
 import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
 import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
@@ -117,11 +117,10 @@ export default async ({ userId, payload }) => {
 			dareTitle: prop('title', newProject),
 			recipients: [email],
 			// TODO EMAIL
-			// expiry time in seconds
+			// expiry time
 			dareHref: projectHrefBuilder(prop('id', newProject)),
 			streamers: compose(map(prop('username')), prop('assignees'))(newProject),
-			// TODO EMAIL
-			// notClaimedAlready
+			notClaimedAlready: equals(0, length(filter(propEq('accepted', streamerAcceptedKey), prop('assignees', newProject)))),
 		}
 
 		sendEmail(emailData, pledgeMadeMail)
