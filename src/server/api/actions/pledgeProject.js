@@ -39,7 +39,7 @@ export default async ({ userId, payload }) => {
 	}
 
 	const newPledgeAmount = viewPledgeAmount(payload)
-	let paymentInfo = viewPaymentInfo(payload)
+	let paymentInfo = assoc('captured', 0, viewPaymentInfo(payload))
 
 	if (paymentInfo.paymentType === stripeCard) {
 		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)

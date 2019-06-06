@@ -13,14 +13,14 @@ export default {
 		DependsOn: [
 			API_LAMBDA_EXECUTION_ROLE,
 			API_DYNAMO_DB_TABLE,
-			RECORD_SET,
+			//RECORD_SET,
 		],
 		Properties: {
 			Code: fnBuildPath('api'),
 			Environment: {
 				Variables: {
 					API_DYNAMO_DB_TABLE: ref(API_DYNAMO_DB_TABLE),
-					RECORD_SET: ref(RECORD_SET),
+					//RECORD_SET: ref(RECORD_SET),
 				},
 			},
 			// FunctionName: String,
