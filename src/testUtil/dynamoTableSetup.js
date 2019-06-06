@@ -24,25 +24,22 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 	}
 })
 
-// jest.mock('root/src/server/api/stripeClient', () => ({
-// 	__esModule: true,
-// 	default: {
-// 		charges: {
-// 			create: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
-// 		},
-// 		customers: {
-// 			list: jest.fn(() => Promise.resolve({
-// 				data: [{
-// 					id: 'customerId',
-// 				}],
-// 			})),
-// 			create: jest.fn(() => Promise.resolve({
-// 				id: 'customerId',
-// 			})),
-// 			createSource: jest.fn(() => Promise.resolve()),
-// 		},
-// 	},
-// }))
+jest.mock('root/src/server/api/stripeClient', () => Promise.resolve({
+	charges: {
+		create: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
+	},
+	customers: {
+		list: jest.fn(() => Promise.resolve({
+			data: [{
+				id: 'customerId',
+			}],
+		})),
+		create: jest.fn(() => Promise.resolve({
+			id: 'customerId',
+		})),
+		createSource: jest.fn(() => Promise.resolve()),
+	},
+}))
 
 jest.mock('root/src/server/api/actionUtil/validatePaypalAuthorize', () => () => true)
 
