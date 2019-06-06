@@ -135,7 +135,7 @@ const DropdownIndicator = props => (
 
 const singleStyle = {
 	chip: {
-		width: 115,
+		width: 100,
 		height: 22,
 		overflow: 'hidden',
 		marginBottom: 2,
@@ -221,10 +221,6 @@ export const BannerHeaderUnconnected = memo(({
 												id: 0,
 												value: SORT_BY_NEWEST,
 											},
-											{ 	label: 'Accepted',
-												id: 1,
-												value: SORT_BY_ACCEPTED,
-											},
 											{ 	label: 'Bounty Amount',
 												id: 2,
 												value: SORT_BY_BOUNTY,
@@ -232,11 +228,6 @@ export const BannerHeaderUnconnected = memo(({
 											{ 	label: 'Time Left',
 												id: 3,
 												value: SORT_BY_TIME_LEFT,
-											},
-											{
-												label: 'Create asc',
-												id: 4,
-												value: SORT_BY_CREATED_ASC,
 											},
 										]}
 										styles={{
@@ -284,6 +275,7 @@ export const BannerHeaderUnconnected = memo(({
 												fontWeight: 'normal',
 												fontStyle: 'normal',
 												color: '#000000',
+												zIndex: 1000,
 											}),
 										}}
 									/>
