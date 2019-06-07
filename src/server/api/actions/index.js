@@ -9,12 +9,8 @@ import {
 	DELIVERY_DARE_INIT, DELIVERY_DARE, GET_FILTERED_PROJECTS_BY_GAME,
 	GET_FILTERED_PROJECTS_BY_STREAMER, GET_FILTERED_PROJECTS,
 	ADD_PAYOUT_METHOD, GET_PAYOUT_METHOD, UPDATE_PAYOUT_METHOD,
-<<<<<<< HEAD
-	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN,SUCCESS_VERIFY
-=======
-	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN,
+	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN, SUCCESS_VERIFY,
 	CAPTURE_PROJECT_PAYMENTS,
->>>>>>> release/0.1.0
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -90,13 +86,8 @@ export default {
 
 		[GET_ACCEPTED_PROJECTS]: getAcceptProject,
 
-<<<<<<< HEAD
-	[ADD_PAYOUT_METHOD]: addPayoutMethod,
-	[GET_PAYOUT_METHOD]: getPayoutMethod,
-	[UPDATE_PAYOUT_METHOD]: updatePayoutMethod,
 
-	[SUCCESS_VERIFY] : success_verify
-=======
+		[SUCCESS_VERIFY]: success_verify,
 		[ADD_PAYOUT_METHOD]: addPayoutMethod,
 		[GET_PAYOUT_METHOD]: getPayoutMethod,
 		[UPDATE_PAYOUT_METHOD]: updatePayoutMethod,
@@ -105,5 +96,4 @@ export default {
 		[DELIVERY_DARE]: deliveryDare,
 		[CAPTURE_PROJECT_PAYMENTS]: captureProjectPayments,
 	},
->>>>>>> release/0.1.0
 }
