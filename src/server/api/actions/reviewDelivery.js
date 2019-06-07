@@ -111,6 +111,7 @@ export default async ({ payload }) => {
 
 	const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
 	const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
+	await documentClient.batchWrite(writeParams).promise()
 	map( streamerEmail => {
 		const emailData = {
 			title : emailTitle,
@@ -121,7 +122,6 @@ export default async ({ payload }) => {
 		}
 		sendEmail(emailData, emailTemplate)
 	}, streamerEmails)
-	await documentClient.batchWrite(writeParams).promise()
 
 	return {
 		...projectSerialized,

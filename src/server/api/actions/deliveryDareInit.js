@@ -63,16 +63,6 @@ export default async ({ payload, userId }) => {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
 
-	try {
-
-		const email = await getUserEmail(userId)
-		const emailData = {
-			title: videoSubmittedTitle,
-			dareTitle: prop('title', project),
-			recipients: [email],
-		}
-		sendEmail(emailData, videoSubmittedEmail)
-	} catch (err) { }
 
 	// action
 	const fileName = `${uuid()}.${extension(lookup(videoName))}`
@@ -105,5 +95,15 @@ export default async ({ payload, userId }) => {
 		Item: dareDeliveryObject,
 	}
 	await documentClient.put(deliveryParams).promise()
+	try {
+
+		const email = await getUserEmail(userId)
+		const emailData = {
+			title: videoSubmittedTitle,
+			dareTitle: prop('title', project),
+			recipients: [email],
+		}
+		sendEmail(emailData, videoSubmittedEmail)
+	} catch (err) { }
 	return { url, deliverySortKey }
 }
