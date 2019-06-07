@@ -20,9 +20,8 @@ export default paymentsArr => Promise.all(map(async (payment) => {
 			default:
 		}
 		const authorization = await captureFn(paymentId)
-		return authorization
-		return { ...payment, captured: authorization.statusCode }
+		return { ...payment, captured: authorization.statusCode || 200 }
 	} catch (err) {
-		return { ...payment, captured: err.statusCode, message: err.message }
+		return { ...payment, captured: err.raw.statusCode, message: err.message }
 	}
 }, paymentsArr))

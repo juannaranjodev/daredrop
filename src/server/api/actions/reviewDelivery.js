@@ -97,18 +97,18 @@ export default async ({ payload }) => {
 	}
 
 	// await documentClient.batchWrite(writeParams).promise()
+
 	if (equals(audit, projectDeliveredKey)) {
 		// const projectToCapture = await dynamoQueryProjectToCapture(projectId)
 
-		const x = await captureProjectPledges(projectId)
-		return x
-		const captureToWrite = await capturePaymentsWrite(projectToCapture)
+		await captureProjectPledges(projectId)
+		// const captureToWrite = await capturePaymentsWrite(projectToCapture)
 
-		await documentClient.batchWrite({
-			RequestItems: {
-				[TABLE_NAME]: captureToWrite,
-			},
-		}).promise()
+		// await documentClient.batchWrite({
+		// 	RequestItems: {
+		// 		[TABLE_NAME]: captureToWrite,
+		// 	},
+		// }).promise()
 	}
 
 	return {
