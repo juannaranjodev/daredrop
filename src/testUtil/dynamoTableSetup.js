@@ -27,6 +27,7 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 jest.mock('root/src/server/api/stripeClient', () => ({
 	charges: {
 		create: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
+		capture: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
 	},
 	customers: {
 		list: jest.fn(() => Promise.resolve({

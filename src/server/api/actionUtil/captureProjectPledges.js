@@ -18,7 +18,7 @@ export default async (projectId) => {
 	await Promise.all(map(pledge => documentClient.put(pledge).promise(), pledgesToWrite))
 	const captures = unnest(map(path(['Item', 'paymentInfo']), pledgesToWrite))
 	const captureCodes = map(prop('captured'), captures)
-	const badCodeFilter = filter(anyPass([gte(300), lt(200)]))
+	const badCodeFilter = filter(anyPass([lt(__, 200), gte(__, 300)]))
 	const badCodeCaptures = badCodeFilter(captureCodes)
 	if (gt(badCodeCaptures, 0)) {
 		return false
