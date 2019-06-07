@@ -7,9 +7,9 @@ import findOrCreateStripeCustomer from 'root/src/server/api/actionUtil/findOrCre
 export default async (amount, sourceId, userId) => {
 	const stripe = await stripeClient
 	const email = await getUserEmail(userId)
-	const customerId = await findOrCreateStripeCustomer(email, sourceId)
 	let result
 	try {
+		const customerId = await findOrCreateStripeCustomer(email, sourceId)
 		const charge = await stripe.charges.create({
 			capture: false,
 			currency: 'usd',
@@ -23,7 +23,7 @@ export default async (amount, sourceId, userId) => {
 		}
 	} catch (error) {
 		result = {
-			authorized: true,
+			authorized: false,
 			error,
 		}
 	}
