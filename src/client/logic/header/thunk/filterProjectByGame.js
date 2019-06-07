@@ -13,7 +13,6 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 	const { filterParams } = state.list
 	const value = propOr(valueInput, 'value', valueInput)
 	let param = {}
-
 	if (typeof value === 'number') {
 		param = { param: 'game', value: String(value) }
 		dispatch(setGameFilterValue(valueInput))
@@ -30,12 +29,12 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 		dispatch(setGameFilterValue(null))
 		dispatch(addFilterParams(param))
 		dispatch(clearFilterParam({ type: 'game' }))
-		dispatch(setCurrentPage(1))
-		dispatch(clearProjectArray())
 	}
 
 	if ((action === 'input-change' && valueInput === '') || action === 'clear') {
 		dispatch(clearFilterParam({ type: 'game' }))
+		dispatch(setCurrentPage(1))
+		dispatch(clearProjectArray())
 		const newState = getState()
 		const newFilterParam = path(['list', 'filterParams'], newState)
 		dispatch(apiRequest(GET_ACTIVE_PROJECTS, {

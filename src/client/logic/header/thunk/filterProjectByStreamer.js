@@ -30,12 +30,12 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 		dispatch(setStreamerFilterValue(null))
 		dispatch(addFilterParams(param))
 		dispatch(clearFilterParam({ type: 'assignee|twitch' }))
-		dispatch(setCurrentPage(1))
-		dispatch(clearProjectArray())
 	}
 
 	if ((action === 'input-change' && valueInput === '') || action === 'clear') {
 		dispatch(clearFilterParam({ type: 'assignee|twitch' }))
+		dispatch(setCurrentPage(1))
+		dispatch(clearProjectArray())
 		const newState = getState()
 		const newFilterParam = path(['list', 'filterParams'], newState)
 		dispatch(apiRequest(GET_ACTIVE_PROJECTS, {
