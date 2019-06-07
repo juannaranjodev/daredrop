@@ -22,10 +22,14 @@ import capturePayments from 'root/src/server/api/actionUtil/capturePayments'
 
 
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
+import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
 import {videoRejectedTitle, videoApprovedTitle} from 'root/src/server/email/util/emailTitles'
 import videoApprovedEmail from 'root/src/server/email/templates/videoApproved'
+import videoRejectedEmail from 'root/src/server/email/templates/videoRejected'
 import videoDeliveredEmail from 'root/src/server/email/templates/videoDelivered'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
+import { equal } from 'assert';
+import { projectAcceptedKey } from '../lenses';
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
@@ -61,7 +65,6 @@ export default async ({ payload }) => {
 			},
 		},
 	}), projectAcceptedAssignees), [])
-
 	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
 	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
 
@@ -108,10 +111,23 @@ export default async ({ payload }) => {
 			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],
 		},
 	}
+	const streamerEmails = await Promise.all(
+		map( streamer => getUserEmailByTwitchID(prop('platformId',streamer))
+		, projectAcceptedAssignees)
+	)
 
-	console.log( JSON.stringify( projectAcceptedAssignees, null, 4),await generateUniqueSortKey(prop('id', projectSerialized), `project|${audit}`, 1, 10))
-	return
-
+	const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
+	const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
+	map( streamerEmail => {
+		const emailData = {
+			title : emailTitle,
+			dareTitle : prop('title', projectSerialized),
+			message : message,
+			recipients: [streamerEmail],
+			expiryTime : prop('created', projectSerialized)
+		}
+		sendEmail(emailData, emailTemplate)
+	}, streamerEmails)
 	await documentClient.batchWrite(writeParams).promise()
 
 	return {

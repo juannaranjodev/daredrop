@@ -34,9 +34,6 @@ export default ({
 				reject(parsed)
 			}
 		})
-		// res.on('end', () => {
-		// 	console.log('No more data in response.')
-		// })
 	})
 
 	req.on('error', (e) => {

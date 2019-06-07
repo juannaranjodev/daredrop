@@ -18,7 +18,7 @@ import projectSerializer from 'root/src/server/api/serializers/projectSerializer
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
-
+import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
@@ -114,16 +114,13 @@ export default async ({ userId, payload }) => {
 			title: pledgeMadeTitle,
 			dareTitle: prop('title', newProject),
 			recipients: [email],
-			// TODO EMAIL
-			// expiry time in seconds
 			notClaimedAlready : addPledgers,
 			dareHref: projectHrefBuilder(prop('id', newProject)),
 			streamers: compose(map(prop('username')), prop('assignees'))(newProject),
 			expiryTime: prop('created',projectToPledge)
-			// TODO EMAIL
-			// notClaimedAlready
 		}
 		sendEmail(emailData, pledgeMadeMail)
+		await checkPledgedAmount(projectId)
 	} catch (err) { }
 
 

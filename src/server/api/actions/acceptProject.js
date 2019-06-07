@@ -24,6 +24,8 @@ import moment from 'moment'
 import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
 
+import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
+
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
 
@@ -36,13 +38,10 @@ export default async ({ payload, userId }) => {
 		null,
 		projectId,
 	)
-
-	const projectToAccept = projectSerializer([
+		const projectToAccept = projectSerializer([
 		...projectToAcceptDdb,
 		...assigneesDdb,
 	])
-
-	console.log(JSON.stringify(projectToAccept, null, 4))
 	const userTokensInProject = userTokensInProjectSelector(userTokens, projectToAccept)
 
 	if (not(gt(length(userTokensInProject), 0))) {
@@ -132,23 +131,7 @@ export default async ({ payload, userId }) => {
 		expiryTime: prop('created', projectToAccept)
 	}
 	sendEmail(emailData, dareAcceptedPledgerMail)
-	if (gte(prop('pledgeAmount', projectToAccept), amountRequested)) {
-		const emailData = {
-			title: goalMetTitle,
-			dareTitle: prop('title', projectToAccept),
-			recipients: [email],
-			dareDescription : prop('description', projectToAccept),
-			bountyAmount : prop('pledgeAmount', projectToAccept),
-			dareHref : projectHrefBuilder(prop('id', projectToAccept)),
-			streamer: prop('displayName', head(userTokens)),
-			goal: amountRequested,
-			expiryTime: prop('created', projectToAccept)
-		}
-		console.log(JSON.stringify(emailData, null, 4))
-
-		sendEmail(emailData, goalMetStreamerEmail)
-	}
-
+	await checkPledgedAmount(projectId)
 	await documentClient.batchWrite(updateProjectParam).promise()
 
 	return omit([PARTITION_KEY, SORT_KEY],

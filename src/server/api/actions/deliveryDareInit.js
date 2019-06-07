@@ -62,20 +62,13 @@ export default async ({ payload, userId }) => {
 	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
+	const email = await getUserEmail(userId)
 	const emailData = {
 		title: videoSubmittedTitle,
 		dareTitle: prop('title', project),
 		recipients: [email],
 	}
 	sendEmail(emailData, videoSubmittedEmail)
-
-	if (gt(length(userDeliveries), 0)) {
-		const uploadedUserDeliveries = filterUploadedByUploader(projectDeliveries)
-		if (gt(length(uploadedUserDeliveries), 0)) {
-			throw actionForbiddenError('User has already submitted video for this dare')
-		}
-		deliverySortKey = prop('sk', head(userDeliveries))
-	}
 
 	// action
 	const fileName = `${uuid()}.${extension(lookup(videoName))}`
