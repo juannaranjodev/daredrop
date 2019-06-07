@@ -1,8 +1,8 @@
-import { head, add, prop, compose, map, not, length, gt, assoc, omit, append } from 'ramda'
+import { head, add, prop, compose, map, not, length, assoc, equals, filter, propEq, omit, append } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
-import { PARTITION_KEY, SORT_KEY, GSI1_INDEX_NAME, GSI1_PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import pledgeMadeMail from 'root/src/server/email/templates/pledgeMade'
@@ -12,14 +12,17 @@ import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilde
 import { PLEDGE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import pledgeDynamoObj from 'root/src/server/api/actionUtil/pledgeDynamoObj'
-import { generalError, payloadSchemaError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
+import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthorizePayment'
+import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/server/api/lenses'
+import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
 import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
+import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
 const { viewPledgeAmount, viewPaymentInfo } = payloadLenses
@@ -38,15 +41,19 @@ export default async ({ userId, payload }) => {
 	}
 
 	const newPledgeAmount = viewPledgeAmount(payload)
-	const paymentInfo = viewPaymentInfo(payload)
+	let paymentInfo = viewPaymentInfo(payload)
 
-
-	if (paymentInfo.paymentType === 'stripeCard') {
-		const validation = await validateStripeSourceId(paymentInfo.paymentId)
-		if (!validation) {
+	if (paymentInfo.paymentType === stripeCard) {
+		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
+		if (!validationCardId) {
 			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
 		}
-	} else if (paymentInfo.paymentType === 'paypalAuthorize') {
+		const stripeAuthorization = await stripeAuthorizePayment(newPledgeAmount, paymentInfo.paymentId, userId)
+		if (!stripeAuthorization.authorized) {
+			throw payloadSchemaError(stripeAuthorization.error)
+		}
+		paymentInfo = assoc('paymentId', prop('id', stripeAuthorization), paymentInfo)
+	} else if (paymentInfo.paymentType === paypalAuthorize) {
 		const validation = await validatePaypalAuthorize(paymentInfo.orderID, newPledgeAmount)
 		if (!validation) {
 			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })

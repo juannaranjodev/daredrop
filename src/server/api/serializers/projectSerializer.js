@@ -73,7 +73,8 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 			const projectObj = pick(
 				[
 					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl', 'status',
-					'games', 'pledgers', 'created', 'approved', 'favoritesAmount', isDenormalized ? 'assignees' : '',
+					'games', 'pledgers', 'created', 'approved', 'favoritesAmount', 'deliveries',
+					isDenormalized ? 'assignees' : '',
 				],
 				projectPart,
 			)

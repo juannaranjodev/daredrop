@@ -4,10 +4,10 @@ import payoutMethodSerializer from 'root/src/server/api/serializers/payoutMethod
 import dynamoQueryPayoutMethod from 'root/src/server/api/actionUtil/dynamoQueryPayoutMethod'
 
 export default async ({ userId }) => {
-  const dynamoResult = await dynamoQueryPayoutMethod(userId)
-  // get only first element
-  return {
-    userId,
-    ...head(dynamoResult)
-  }
+	const dynamoResult = await dynamoQueryPayoutMethod(userId)
+	// get only first element
+	return {
+		userId,
+		...head(dynamoResult)
+	}
 }

@@ -13,36 +13,36 @@ import dynamoQueryPayoutMethod from 'root/src/server/api/actionUtil/dynamoQueryP
  * @returns {Promise<void>}
  */
 export default async ({ userId, payload }) => {
-  const { email } = payload
+	const { email } = payload
 
-  const dynamoResult = await dynamoQueryPayoutMethod(userId)
-  const payout = head(dynamoResult)
+	const dynamoResult = await dynamoQueryPayoutMethod(userId)
+	const payout = head(dynamoResult)
 
-  if (!payout) {
-    throw generalError('Payout doesn\'t exist')
-  }
+	if (!payout) {
+		throw generalError('Payout doesn\'t exist')
+	}
 
-  const updateProjectParams = {
-    TableName: TABLE_NAME,
-    Key: {
-      [PARTITION_KEY]: payout[PARTITION_KEY],
-      [SORT_KEY]: payout[SORT_KEY],
-    },
-    UpdateExpression: 'SET #email = :email',
-    ExpressionAttributeValues: {
-      ':email': email,
-    },
-    ExpressionAttributeNames: {
-      '#email': 'email'
-    }
-  }
+	const updateProjectParams = {
+		TableName: TABLE_NAME,
+		Key: {
+			[PARTITION_KEY]: payout[PARTITION_KEY],
+			[SORT_KEY]: payout[SORT_KEY],
+		},
+		UpdateExpression: 'SET #email = :email',
+		ExpressionAttributeValues: {
+			':email': email,
+		},
+		ExpressionAttributeNames: {
+			'#email': 'email'
+		}
+	}
 
-  await documentClient.update(updateProjectParams).promise()
+	await documentClient.update(updateProjectParams).promise()
 
-  const newPayout = {
-    ...payout,
-    email: email,
-  }
+	const newPayout = {
+		...payout,
+		email: email,
+	}
 
-  return newPayout
+	return newPayout
 }

@@ -9,7 +9,12 @@ import {
 	DELIVERY_DARE_INIT, DELIVERY_DARE, GET_FILTERED_PROJECTS_BY_GAME,
 	GET_FILTERED_PROJECTS_BY_STREAMER, GET_FILTERED_PROJECTS,
 	ADD_PAYOUT_METHOD, GET_PAYOUT_METHOD, UPDATE_PAYOUT_METHOD,
+<<<<<<< HEAD
 	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN,SUCCESS_VERIFY
+=======
+	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN,
+	CAPTURE_PROJECT_PAYMENTS,
+>>>>>>> release/0.1.0
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -43,50 +48,62 @@ import getProjectAdmin from 'root/src/server/api/actions/getProjectAdmin'
 import addPayoutMethod from 'root/src/server/api/actions/addPayoutMethod'
 import getPayoutMethod from 'root/src/server/api/actions/getPayoutMethod'
 import updatePayoutMethod from 'root/src/server/api/actions/updatePayoutMethod'
+import captureProjectPayments from 'root/src/server/api/actions/captureProjectPayments'
 
 import success_verify from 'root/src/server/api/actions/success_verify'
 
 export default {
-	[CREATE_PROJECT]: createProject,
-	[GET_PROJECT]: getProject,
-	[GET_PROJECT_ADMIN]: getProjectAdmin,
-	[UPDATE_PROJECT]: updateProject,
+	shortRunningTask: {
+		[CREATE_PROJECT]: createProject,
+		[GET_PROJECT]: getProject,
+		[GET_PROJECT_ADMIN]: getProjectAdmin,
+		[UPDATE_PROJECT]: updateProject,
 
-	[PLEDGE_PROJECT]: pledgeProject,
-	[GET_PLEDGED_PROJECTS]: getPledgedProjects,
-	[GET_MY_PROJECTS]: getMyProjects,
+		[PLEDGE_PROJECT]: pledgeProject,
+		[GET_PLEDGED_PROJECTS]: getPledgedProjects,
+		[GET_MY_PROJECTS]: getMyProjects,
 
-	[AUDIT_FAVORITES]: auditFavorites,
+		[AUDIT_FAVORITES]: auditFavorites,
 
-	[AUDIT_PROJECT]: auditProject,
+		[AUDIT_PROJECT]: auditProject,
 
-	[GET_ACTIVE_PROJECTS]: getActiveProjects,
-	[GET_PENDING_PROJECTS]: getPendingProjects,
-	[GET_PENDING_DELIVERIES]: getPendingDeliveries,
+		[GET_ACTIVE_PROJECTS]: getActiveProjects,
+		[GET_PENDING_PROJECTS]: getPendingProjects,
+		[GET_PENDING_DELIVERIES]: getPendingDeliveries,
 
-	[GET_OAUTH_TOKENS]: getOAuthTokens,
-	[ADD_OAUTH_TOKEN]: addOAuthToken,
-	[GET_FAVORITES_LIST]: getFavoritesList,
-	[SAVE_PARTIAL_DARE_FORM]: savePartialDareForm,
-	[CLEAR_PARTIAL_FORM_KEYS]: clearPartialFormKeys,
+		[GET_OAUTH_TOKENS]: getOAuthTokens,
+		[ADD_OAUTH_TOKEN]: addOAuthToken,
+		[GET_FAVORITES_LIST]: getFavoritesList,
+		[SAVE_PARTIAL_DARE_FORM]: savePartialDareForm,
+		[CLEAR_PARTIAL_FORM_KEYS]: clearPartialFormKeys,
 
-	[GET_PAYMENT_METHODS]: getPaymentMethods,
-	[ADD_PAYMENT_METHOD]: addPaymentMethod,
-	[DELETE_PAYMENT_METHOD]: deletePaymentMethod,
+		[GET_PAYMENT_METHODS]: getPaymentMethods,
+		[ADD_PAYMENT_METHOD]: addPaymentMethod,
+		[DELETE_PAYMENT_METHOD]: deletePaymentMethod,
 
-	[ACCEPT_PROJECT]: acceptProject,
-	[REJECT_PROJECT]: rejectProject,
-	[SET_DEFAULT_PAYMENT_METHOD]: setDafaultPaymentMethod,
+		[ACCEPT_PROJECT]: acceptProject,
+		[REJECT_PROJECT]: rejectProject,
+		[SET_DEFAULT_PAYMENT_METHOD]: setDafaultPaymentMethod,
 
-	[DELIVERY_DARE_INIT]: deliveryDareInit,
-	[DELIVERY_DARE]: deliveryDare,
-	[REVIEW_DELIVERY]: reviewDelivery,
+		[DELIVERY_DARE_INIT]: deliveryDareInit,
+		[REVIEW_DELIVERY]: reviewDelivery,
 
-	[GET_ACCEPTED_PROJECTS]: getAcceptProject,
+		[GET_ACCEPTED_PROJECTS]: getAcceptProject,
 
+<<<<<<< HEAD
 	[ADD_PAYOUT_METHOD]: addPayoutMethod,
 	[GET_PAYOUT_METHOD]: getPayoutMethod,
 	[UPDATE_PAYOUT_METHOD]: updatePayoutMethod,
 
 	[SUCCESS_VERIFY] : success_verify
+=======
+		[ADD_PAYOUT_METHOD]: addPayoutMethod,
+		[GET_PAYOUT_METHOD]: getPayoutMethod,
+		[UPDATE_PAYOUT_METHOD]: updatePayoutMethod,
+	},
+	longRunningTask: {
+		[DELIVERY_DARE]: deliveryDare,
+		[CAPTURE_PROJECT_PAYMENTS]: captureProjectPayments,
+	},
+>>>>>>> release/0.1.0
 }

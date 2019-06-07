@@ -1,4 +1,5 @@
 import lensesFromSchema from 'root/src/shared/util/lensesFromSchema'
+import { variableSchemaKey } from 'root/src/shared/util/commonLenses'
 
 const appSchema = {
 	type: 'object',
@@ -38,6 +39,18 @@ const appSchema = {
 						lg: { type: 'boolean' },
 						gtLg: { type: 'boolean' },
 						xl: { type: 'boolean' },
+					},
+				},
+				uploadProgress: {
+					type: 'object',
+					patternProperties: {
+						[variableSchemaKey]: {
+							type: 'object',
+							properties: {
+								currentProgress: { type: 'integer' },
+								targetProgress: { type: 'integer' },
+							},
+						},
 					},
 				},
 			},

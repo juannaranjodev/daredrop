@@ -24,7 +24,8 @@ export default ({ assigneeCount = 1 } = {}) => {
 		description: lorem.paragraph(),
 		paymentInfo: {
 			paymentType: 'paypalAuthorize',
-			paymentId: random.uuid(),
+			// paymentId: random.uuid(),
+			paymentId: 'src_FBgaRgsyjOqOiz',
 			paymentAmount: pledgeAmount,
 		},
 		pledgeAmount,

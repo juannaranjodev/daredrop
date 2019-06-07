@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react'
-import { identical } from 'ramda'
+import { identical, isNil } from 'ramda'
 
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
 import { secondaryColor } from 'root/src/client/web/commonStyles'
@@ -78,7 +78,7 @@ export const FormModuleUnconnected = memo(({
 	formFieldTypes, formTitle, formSubmits, moduleId, moduleKey, submitForm,
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
 	classes, subTitle, formType, backButton, formHandlers, handleAction, customSubmits,
-	customSubmitsData, payPalCreateOrder, payPalOnApprove,
+	customSubmitsData, payPalCreateOrder, payPalOnApprove, uploadProgress,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
@@ -161,6 +161,7 @@ export const FormModuleUnconnected = memo(({
 							submitFormFn={submitForm}
 							formType={formType}
 							setWasSubmitted={setWasSubmitted}
+							uploadProgress={uploadProgress}
 						/>
 						{orNull(customSubmits,
 							<CustomSubmits
@@ -193,7 +194,7 @@ export const FormModuleUnconnected = memo(({
 						<div className={classes.backButton}>
 							<Link
 								routeId={backButton.routeId}
-								routeParams={{ recordId: 'project-870959a0-6fed-11e9-9960-c1885a4a6db5' }}
+								routeParams={{ recordId: backButton.routeParams.recordId }}
 							>
 								<span className={classes.backButtonText}>{backButton.label}</span>
 							</Link>

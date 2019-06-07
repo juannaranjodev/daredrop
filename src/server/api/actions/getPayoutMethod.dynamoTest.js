@@ -11,17 +11,17 @@ import addPayoutMethod from 'root/src/server/api/actions/addPayoutMethod'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 
 describe('getPayoutMethod', () => {
-  test('Successfully get payout method', async () => {
-    const payload = addPayoutMethodPayload()
-    await addPayoutMethod({
-      userId: mockUserId,
-      payload,
-    })
-    const event = {
-      endpointId: GET_PAYOUT_METHOD,
-      authentication: mockUserId,
-    }
-    const res = await apiFn(event)
-    expect(res.body.email).toEqual(payload.email)
-  })
+	test('Successfully get payout method', async () => {
+		const payload = addPayoutMethodPayload()
+		await addPayoutMethod({
+			userId: mockUserId,
+			payload,
+		})
+		const event = {
+			endpointId: GET_PAYOUT_METHOD,
+			authentication: mockUserId,
+		}
+		const res = await apiFn(event)
+		expect(res.body.email).toEqual(payload.email)
+	})
 })
