@@ -62,13 +62,17 @@ export default async ({ payload, userId }) => {
 	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
-	const email = await getUserEmail(userId)
-	const emailData = {
-		title: videoSubmittedTitle,
-		dareTitle: prop('title', project),
-		recipients: [email],
-	}
-	sendEmail(emailData, videoSubmittedEmail)
+
+	try {
+
+		const email = await getUserEmail(userId)
+		const emailData = {
+			title: videoSubmittedTitle,
+			dareTitle: prop('title', project),
+			recipients: [email],
+		}
+		sendEmail(emailData, videoSubmittedEmail)
+	} catch (err) { }
 
 	// action
 	const fileName = `${uuid()}.${extension(lookup(videoName))}`

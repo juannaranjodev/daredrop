@@ -120,19 +120,24 @@ export default async ({ payload, userId }) => {
 	}
 
 	// await documentClient.update(updateProjectParam).promise()
-	const email = await getUserEmail((prop('creator', projectToAccept)))
 
-	const emailData = {
-		title: dareAcceptedTitle,
-		dareTitle: prop('title', projectToAccept),
-		recipients: [email],
-		streamer: prop('displayName', head(userTokens)),
-		goal: amountRequested,
-		expiryTime: prop('created', projectToAccept)
-	}
-	console.log(JSON.stringify(emailData, null, 4))
-	sendEmail(emailData, dareAcceptedPledgerMail)
-	await checkPledgedAmount(projectId)
+	try {
+
+		const email = await getUserEmail((prop('creator', projectToAccept)))
+
+		const emailData = {
+			title: dareAcceptedTitle,
+			dareTitle: prop('title', projectToAccept),
+			recipients: [email],
+			streamer: prop('displayName', head(userTokens)),
+			goal: amountRequested,
+			expiryTime: prop('created', projectToAccept)
+		}
+		console.log(JSON.stringify(emailData, null, 4))
+		sendEmail(emailData, dareAcceptedPledgerMail)
+		await checkPledgedAmount(projectId)
+	} catch (err) { }
+
 	await documentClient.batchWrite(updateProjectParam).promise()
 
 	return omit([PARTITION_KEY, SORT_KEY],

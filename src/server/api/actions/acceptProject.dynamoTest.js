@@ -68,6 +68,7 @@ describe('getAcceptedProjects', () => {
 			},
 		}
 		const res = await apiFn(event)
+		console.log(JSON.stringify(res, null, 4))
 		expect(res.body.status).toBe(projectAcceptedKey)
 		const event2 = {
 			endpointId: GET_ACTIVE_PROJECTS,

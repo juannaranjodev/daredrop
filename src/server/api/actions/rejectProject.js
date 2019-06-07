@@ -106,14 +106,18 @@ export default async ({ payload, userId }) => {
 		await auditProject(payload)
 		await rejectProjectByStatus(projectId, ['favorites', 'pledge'])
 	}
-	const emailData = {
-		title: dareRejectedByStreamerTitle,
-		dareTitle: prop('title', projectToReject),
-		recipients: [email],
-		streamer: prop('displayName', head(userTokens)),
-		textFromStreamersReject: message
-	}
-	sendEmail(emailData, dareRejectedByStreamerMail)
+
+	try {
+
+		const emailData = {
+			title: dareRejectedByStreamerTitle,
+			dareTitle: prop('title', projectToReject),
+			recipients: [email],
+			streamer: prop('displayName', head(userTokens)),
+			textFromStreamersReject: message
+		}
+		sendEmail(emailData, dareRejectedByStreamerMail)
+	} catch (err) { }
 
 
 
