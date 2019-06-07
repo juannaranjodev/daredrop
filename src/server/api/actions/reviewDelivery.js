@@ -15,7 +15,7 @@ import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
-import { payloadSchemaError } from 'root/src/server/api/errors'
+import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
 import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
 import capturePaymentsWrite from 'root/src/server/api/actionUtil/capturePaymentsWrite'
 import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
@@ -96,19 +96,22 @@ export default async ({ payload }) => {
 		},
 	}
 
-	// await documentClient.batchWrite(writeParams).promise()
+	await documentClient.batchWrite(writeParams).promise()
 
 	if (equals(audit, projectDeliveredKey)) {
-		// const projectToCapture = await dynamoQueryProjectToCapture(projectId)
+		const isCaptured = await captureProjectPledges(projectId)
 
-		await captureProjectPledges(projectId)
-		// const captureToWrite = await capturePaymentsWrite(projectToCapture)
+		if (!isCaptured) {
+			throw generalError('something gone wrong...')
+		}
+		const projectToCapture = await dynamoQueryProjectToCapture(projectId)
+		const captureToWrite = await capturePaymentsWrite(projectToCapture)
 
-		// await documentClient.batchWrite({
-		// 	RequestItems: {
-		// 		[TABLE_NAME]: captureToWrite,
-		// 	},
-		// }).promise()
+		await documentClient.batchWrite({
+			RequestItems: {
+				[TABLE_NAME]: captureToWrite,
+			},
+		}).promise()
 	}
 
 	return {
