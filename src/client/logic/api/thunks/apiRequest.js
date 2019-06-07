@@ -32,13 +32,14 @@ import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 
 import endpointMappings from 'root/src/client/logic/api/util/endpointMappings'
 import determineToken from 'root/src/client/logic/api/util/determineToken'
-
+import checkTokenExpire from 'root/src/client/logic/api/util/checkTokenExpire'
 import { TWITCH_OAUTH_FAILURE_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 
 export const fetchList = async (dispatch, state, endpointId, payload) => {
 	const recordType = recordTypeSelector(endpointId)
 	const listStoreKey = createListStoreKey(endpointId, payload)
 	dispatch(initApiListRequest(listStoreKey))
+	checkTokenExpire(state, dispatch)
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	const { statusCode, body, statusError, generalError } = lambdaRes
 	if (equals(statusCode, 200)) {
@@ -63,6 +64,7 @@ export const fetchRecord = async (dispatch, state, endpointId, payload) => {
 		const recordStoreKey = createRecordStoreKey(recordType, recordId)
 		dispatch(initApiRecordRequest(recordStoreKey))
 	}
+	checkTokenExpire(state, dispatch)
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	const { statusCode, body, statusError, generalError } = lambdaRes
 	if (equals(statusCode, 200)) {
@@ -80,6 +82,7 @@ export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 		const externalRes = await invokeApiExternal(endpointId, payload)
 		externalRes.tokenId = determineToken(endpointId)
 		const lambdaEndpoint = endpointMappings(endpointId, payload)
+		checkTokenExpire(state, dispatch)
 		const lambdaRes = await invokeApiLambda(lambdaEndpoint, externalRes, state)
 		const { status, displayName } = externalRes
 
@@ -113,6 +116,7 @@ export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 
 export const fetchUserData = async (dispatch, state, endpointId, payload) => {
 	const recordType = recordTypeSelector(endpointId)
+	checkTokenExpire(state, dispatch)
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	if (lambdaRes.body.length > 0) {
 		forEach((res) => {
