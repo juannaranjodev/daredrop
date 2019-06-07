@@ -1,4 +1,7 @@
-import { equals, head, unnest, not, length, gt, last, split, map, compose, omit, prop, contains } from 'ramda'
+/* eslint-disable no-console */
+/* eslint-disable no-shadow */
+/* eslint-disable max-len */
+import { equals, head, unnest, not, length, gt, last, split, map, compose, omit, prop } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
@@ -108,19 +111,17 @@ export default async ({ payload, userId }) => {
 	}
 
 	try {
-
 		const emailData = {
 			title: dareRejectedByStreamerTitle,
 			dareTitle: prop('title', projectToReject),
 			recipients: [email],
 			streamer: prop('displayName', head(userTokens)),
-			textFromStreamersReject: message
+			textFromStreamersReject: message,
 		}
 		sendEmail(emailData, dareRejectedByStreamerMail)
-	} catch (err) { }
-
-
-
+	} catch (err) {
+		console.log('ses error')
+	}
 	return omit([PARTITION_KEY, SORT_KEY],
 		{
 			...projectToReject,

@@ -6,8 +6,7 @@ import {
 	SAVE_PARTIAL_DARE_FORM, ACCEPT_PROJECT, REJECT_PROJECT,
 	SET_DEFAULT_PAYMENT_METHOD, AUDIT_FAVORITES,
 	GET_FAVORITES_LIST, GET_MY_PROJECTS, GET_ACCEPTED_PROJECTS,
-	DELIVERY_DARE_INIT, DELIVERY_DARE, GET_FILTERED_PROJECTS_BY_GAME,
-	GET_FILTERED_PROJECTS_BY_STREAMER, GET_FILTERED_PROJECTS,
+	DELIVERY_DARE_INIT, DELIVERY_DARE,
 	ADD_PAYOUT_METHOD, GET_PAYOUT_METHOD, UPDATE_PAYOUT_METHOD,
 	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN, SUCCESS_VERIFY,
 	CAPTURE_PROJECT_PAYMENTS,
@@ -46,7 +45,7 @@ import getPayoutMethod from 'root/src/server/api/actions/getPayoutMethod'
 import updatePayoutMethod from 'root/src/server/api/actions/updatePayoutMethod'
 import captureProjectPayments from 'root/src/server/api/actions/captureProjectPayments'
 
-import success_verify from 'root/src/server/api/actions/success_verify'
+import successVerify from 'root/src/server/api/actions/successVerify'
 
 export default {
 	shortRunningTask: {
@@ -87,7 +86,7 @@ export default {
 		[GET_ACCEPTED_PROJECTS]: getAcceptProject,
 
 
-		[SUCCESS_VERIFY]: success_verify,
+		[SUCCESS_VERIFY]: successVerify,
 		[ADD_PAYOUT_METHOD]: addPayoutMethod,
 		[GET_PAYOUT_METHOD]: getPayoutMethod,
 		[UPDATE_PAYOUT_METHOD]: updatePayoutMethod,

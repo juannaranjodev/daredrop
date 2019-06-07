@@ -1,4 +1,6 @@
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, contains, join, tail } from 'ramda'
+/* eslint-disable no-console */
+/* eslint-disable max-len */
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -16,12 +18,9 @@ import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssi
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 import dareAcceptedPledgerMail from 'root/src/server/email/templates/dareAcceptedPledger'
-import goalMetStreamerEmail from 'root/src/server/email/templates/goalMetStreamer'
-import { dareAcceptedTitle, goalMetTitle } from 'root/src/server/email/util/emailTitles'
+import { dareAcceptedTitle } from 'root/src/server/email/util/emailTitles'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import moment from 'moment'
-import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
 
 import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
@@ -38,7 +37,7 @@ export default async ({ payload, userId }) => {
 		null,
 		projectId,
 	)
-		const projectToAccept = projectSerializer([
+	const projectToAccept = projectSerializer([
 		...projectToAcceptDdb,
 		...assigneesDdb,
 	])
@@ -122,7 +121,6 @@ export default async ({ payload, userId }) => {
 	await documentClient.batchWrite(updateProjectParam).promise()
 
 	try {
-
 		const email = await getUserEmail((prop('creator', projectToAccept)))
 
 		const emailData = {
@@ -131,11 +129,13 @@ export default async ({ payload, userId }) => {
 			recipients: [email],
 			streamer: prop('displayName', head(userTokens)),
 			goal: amountRequested,
-			expiryTime: prop('created', projectToAccept)
+			expiryTime: prop('created', projectToAccept),
 		}
 		sendEmail(emailData, dareAcceptedPledgerMail)
 		await checkPledgedAmount(projectId)
-	} catch (err) { }
+	} catch (err) {
+		console.log('ses error')
+	}
 
 
 	return omit([PARTITION_KEY, SORT_KEY],

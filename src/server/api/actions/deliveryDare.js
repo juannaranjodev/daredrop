@@ -44,7 +44,7 @@ export default async ({ payload }) => {
 		},
 	}
 
-	// await documentClient.update(s3UpdateParams).promise()
+	await documentClient.update(s3UpdateParams).promise()
 
 	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)
 

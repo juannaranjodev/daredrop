@@ -1,4 +1,5 @@
-import { head, not, gt, length, map, filter, propEq, prop, and } from 'ramda'
+/* eslint-disable no-console */
+import { head, not, gt, length, filter, propEq, prop } from 'ramda'
 import { extension, lookup } from 'mime-types'
 import uuid from 'uuid/v4'
 
@@ -20,7 +21,7 @@ import dynamoQueryProjectDeliveries from 'root/src/server/api/actionUtil/dynamoQ
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import {videoSubmittedTitle} from 'root/src/server/email/util/emailTitles'
+import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
 import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 
@@ -97,11 +98,10 @@ export default async ({ payload, userId }) => {
 		TableName: TABLE_NAME,
 		Item: dareDeliveryObject,
 	}
-	
+
 	await documentClient.put(deliveryParams).promise()
 
 	try {
-
 		const email = await getUserEmail(userId)
 		const emailData = {
 			title: videoSubmittedTitle,
@@ -109,6 +109,8 @@ export default async ({ payload, userId }) => {
 			recipients: [email],
 		}
 		sendEmail(emailData, videoSubmittedEmail)
-	} catch (err) { }
+	} catch (err) {
+		console.log('ses error')
+	}
 	return { url, deliverySortKey }
 }

@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable max-len */
 import { prop, propEq, map, filter, equals, and, not, startsWith } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
@@ -14,20 +16,16 @@ import {
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
-import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
+import { ternary } from 'root/src/shared/util/ramdaPlus'
 import { payloadSchemaError } from 'root/src/server/api/errors'
 import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
 
 
-import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
-import {videoRejectedTitle, videoApprovedTitle} from 'root/src/server/email/util/emailTitles'
+import { videoRejectedTitle, videoApprovedTitle } from 'root/src/server/email/util/emailTitles'
 import videoApprovedEmail from 'root/src/server/email/templates/videoApproved'
 import videoRejectedEmail from 'root/src/server/email/templates/videoRejected'
-import videoDeliveredEmail from 'root/src/server/email/templates/videoDelivered'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
-import { equal } from 'assert';
-import { projectAcceptedKey } from '../lenses';
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
@@ -65,9 +63,6 @@ export default async ({ payload }) => {
 	}), projectAcceptedAssignees), [])
 	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
 	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
-
-
-
 	const projectDataToWrite = [
 		...ternary(equals(audit, projectDeliveredKey),
 			[{
@@ -107,23 +102,25 @@ export default async ({ payload }) => {
 
 	try {
 		const streamerEmails = await Promise.all(
-			map( streamer => getUserEmailByTwitchID(prop('platformId',streamer))
-			, projectAcceptedAssignees)
+			map(streamer => getUserEmailByTwitchID(prop('platformId', streamer)),
+				projectAcceptedAssignees),
 		)
 		const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
 		const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
 		await documentClient.batchWrite(writeParams).promise()
-		map( streamerEmail => {
+		map((streamerEmail) => {
 			const emailData = {
-				title : emailTitle,
-				dareTitle : prop('title', projectSerialized),
-				message : message,
+				title: emailTitle,
+				dareTitle: prop('title', projectSerialized),
+				message,
 				recipients: [streamerEmail],
-				expiryTime : prop('created', projectSerialized)
+				expiryTime: prop('created', projectSerialized),
 			}
 			sendEmail(emailData, emailTemplate)
 		}, streamerEmails)
-	} catch (err) { }
+	} catch (err) {
+		console.log('ses error')
+	}
 
 	return {
 		...projectSerialized,

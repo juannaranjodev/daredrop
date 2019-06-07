@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-console */
 import { head, replace, equals, prop, compose, map, set, lensProp, omit } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
@@ -115,11 +117,13 @@ export default async ({ userId, payload }) => {
 			const emailData = {
 				title: dareRejectedByToSTitle,
 				dareTitle: prop('title', newProject),
-				recipients: [email]
+				recipients: [email],
 			}
 			sendEmail(emailData, dareRejectedByToSMail)
 		}
-	} catch (err) { }
+	} catch (err) {
+		console.log('ses error')
+	}
 
 	return {
 		...newProject,

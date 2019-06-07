@@ -6,7 +6,6 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
-import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 
 export default async ({ userId, payload }) => {
 	const projectId = prop('projectId', payload)

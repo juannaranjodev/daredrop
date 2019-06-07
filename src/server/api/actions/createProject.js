@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-console */
 import uuid from 'uuid/v1'
 import { map, omit, prop, join, add, assoc, append } from 'ramda'
 
@@ -66,7 +68,7 @@ export default async ({ userId, payload }) => {
 		...projectCommon,
 		pledgers: 1,
 		favoritesAmount: 0,
-		creator: userId
+		creator: userId,
 	}
 	const projectAssignees = map(assignee => ({
 		[PARTITION_KEY]: projectId,
@@ -118,7 +120,9 @@ export default async ({ userId, payload }) => {
 			title: dareCreatedTitle,
 		}
 		sendEmail(emailData, dareCreatedEmail)
-	} catch (err) { }
+	} catch (err) {
+		console.log('ses error')
+	}
 
 	return {
 		id: projectId,

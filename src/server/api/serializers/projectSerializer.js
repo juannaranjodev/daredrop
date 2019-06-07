@@ -1,4 +1,5 @@
-import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath,propOr } from 'ramda'
+/* eslint-disable no-param-reassign */
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath, propOr } from 'ramda'
 
 import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
 
@@ -8,14 +9,17 @@ import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignee
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {
-	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewMyFavorites, overDeliveries,
+	overAssignees, setMyPledge, viewPledgeAmount, overGames,
+	setMyFavorites, viewMyFavorites, overDeliveries,
 } = responseLenses
 
 export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 	(result, projectPart) => {
 		const sk = skProp(projectPart)
-		if ( hasPath(['creator'],projectPart)){
-			result = {...result,creator:prop('creator',projectPart)}
+		if (hasPath(['creator'], projectPart)) {
+			result = {
+				...result, creator: prop('creator', projectPart),
+			}
 		}
 		if (startsWith('pledge', sk)) {
 			return setMyPledge(viewPledgeAmount(projectPart), result)

@@ -25,9 +25,9 @@ export default (emailData, emailTemplate) => {
 		Tags: [
 			{
 				Name: 'message_type',
-				Value: 'support'
+				Value: 'support',
 			},
-		]
+		],
 	}
 
 
