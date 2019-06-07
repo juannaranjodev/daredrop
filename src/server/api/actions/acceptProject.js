@@ -99,7 +99,7 @@ export default async ({ payload, userId }) => {
 			},
 		}
 
-		// await documentClient.batchWrite(acceptationParams).promise()
+		await documentClient.batchWrite(acceptationParams).promise()
 	}
 	const updateProjectParam = {
 		RequestItems: {
@@ -119,25 +119,23 @@ export default async ({ payload, userId }) => {
 		},
 	}
 
-	// await documentClient.update(updateProjectParam).promise()
 	await documentClient.batchWrite(updateProjectParam).promise()
 
-	// try {
+	try {
 
-	// 	const email = await getUserEmail((prop('creator', projectToAccept)))
+		const email = await getUserEmail((prop('creator', projectToAccept)))
 
-	// 	const emailData = {
-	// 		title: dareAcceptedTitle,
-	// 		dareTitle: prop('title', projectToAccept),
-	// 		recipients: [email],
-	// 		streamer: prop('displayName', head(userTokens)),
-	// 		goal: amountRequested,
-	// 		expiryTime: prop('created', projectToAccept)
-	// 	}
-	// 	console.log(JSON.stringify(emailData, null, 4))
-	// 	sendEmail(emailData, dareAcceptedPledgerMail)
-	// 	await checkPledgedAmount(projectId)
-	// } catch (err) { }
+		const emailData = {
+			title: dareAcceptedTitle,
+			dareTitle: prop('title', projectToAccept),
+			recipients: [email],
+			streamer: prop('displayName', head(userTokens)),
+			goal: amountRequested,
+			expiryTime: prop('created', projectToAccept)
+		}
+		sendEmail(emailData, dareAcceptedPledgerMail)
+		await checkPledgedAmount(projectId)
+	} catch (err) { }
 
 
 	return omit([PARTITION_KEY, SORT_KEY],
