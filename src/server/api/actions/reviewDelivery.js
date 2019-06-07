@@ -96,12 +96,12 @@ export default async ({ payload }) => {
 		},
 	}
 
-	await documentClient.batchWrite(writeParams).promise()
-
+	// await documentClient.batchWrite(writeParams).promise()
 	if (equals(audit, projectDeliveredKey)) {
-		const projectToCapture = await dynamoQueryProjectToCapture(projectId)
-		await captureProjectPledges(projectId)
+		// const projectToCapture = await dynamoQueryProjectToCapture(projectId)
 
+		const x = await captureProjectPledges(projectId)
+		return x
 		const captureToWrite = await capturePaymentsWrite(projectToCapture)
 
 		await documentClient.batchWrite({

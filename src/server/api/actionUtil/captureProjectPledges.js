@@ -13,6 +13,7 @@ export default async (projectId) => {
 		}
 		return [...result, paymentInfoDdb]
 	}, [], projectPledges)
+	return pledgesToWrite
 	// here we can't use batchWrite or transactWrite as those support only
 	// 25(batchwrite) or 10(transactWrite) write items
 	await Promise.all(map(pledge => documentClient.put(pledge).promise(), pledgesToWrite))
