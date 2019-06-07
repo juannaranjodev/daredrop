@@ -102,7 +102,7 @@ export default async ({ payload }) => {
 		const isCaptured = await captureProjectPledges(projectId)
 
 		if (!isCaptured) {
-			throw generalError('something gone wrong...')
+			throw generalError('captures processing error')
 		}
 		const projectToCapture = await dynamoQueryProjectToCapture(projectId)
 		const captureToWrite = await capturePaymentsWrite(projectToCapture)
