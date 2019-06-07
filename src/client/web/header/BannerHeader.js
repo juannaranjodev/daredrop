@@ -88,6 +88,12 @@ const styles = {
 		display: 'flex',
 		justifyContent: 'flex-end',
 		width: '50%',
+		'@media (max-width: 414px)': {
+			marginTop: 40,
+		},
+		'@media (max-width: 1024px)': {
+			marginTop: 45,
+		},
 	},
 	label: {
 		fontSize: 14,
@@ -106,11 +112,15 @@ const styles = {
 	},
 	filterBclock: {
 		display: 'flex',
+		'@media (max-width: 414px)': {
+			flexDirection: 'column',
+		},
 	},
 	autoSelect: {
 		width: 152,
 		height: 29,
 		marginLeft: 25,
+		marginBottom: 12,
 		boxShadow: '0 0 26px 0 rgba(0, 0, 0, 0.16)',
 	},
 	createLinkContainer: {
@@ -119,6 +129,11 @@ const styles = {
 	linkAndFilterContainer: {
 		display: 'flex',
 		justifyContent: 'spase-between',
+	},
+	sort: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'flex-end',
 	},
 }
 
@@ -144,6 +159,10 @@ const singleStyle = {
 		'& svg': {
 			marginRight: 0,
 		},
+	},
+	filter: {
+		display: 'flex',
+		flexDirection: 'column',
 	},
 }
 
@@ -257,7 +276,7 @@ export const BannerHeaderUnconnected = memo(({
 												width: 123,
 												height: 26,
 												fontSize: 16,
-												paddingLeft: 29,
+												paddingLeft: 19,
 												paddingTop: 6,
 												fontWeight: 'normal',
 												fontStyle: 'normal',
@@ -271,7 +290,7 @@ export const BannerHeaderUnconnected = memo(({
 											}),
 											singleValue: () => ({
 												paddingBottom: 3,
-												paddingLeft: 20,
+												paddingLeft: 10,
 												fontWeight: 'normal',
 												fontStyle: 'normal',
 												color: '#000000',
