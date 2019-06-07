@@ -104,24 +104,26 @@ export default async ({ payload }) => {
 			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],
 		},
 	}
-	const streamerEmails = await Promise.all(
-		map( streamer => getUserEmailByTwitchID(prop('platformId',streamer))
-		, projectAcceptedAssignees)
-	)
 
-	const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
-	const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
-	await documentClient.batchWrite(writeParams).promise()
-	map( streamerEmail => {
-		const emailData = {
-			title : emailTitle,
-			dareTitle : prop('title', projectSerialized),
-			message : message,
-			recipients: [streamerEmail],
-			expiryTime : prop('created', projectSerialized)
-		}
-		sendEmail(emailData, emailTemplate)
-	}, streamerEmails)
+	try {
+		const streamerEmails = await Promise.all(
+			map( streamer => getUserEmailByTwitchID(prop('platformId',streamer))
+			, projectAcceptedAssignees)
+		)
+		const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
+		const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
+		await documentClient.batchWrite(writeParams).promise()
+		map( streamerEmail => {
+			const emailData = {
+				title : emailTitle,
+				dareTitle : prop('title', projectSerialized),
+				message : message,
+				recipients: [streamerEmail],
+				expiryTime : prop('created', projectSerialized)
+			}
+			sendEmail(emailData, emailTemplate)
+		}, streamerEmails)
+	} catch (err) { }
 
 	return {
 		...projectSerialized,
