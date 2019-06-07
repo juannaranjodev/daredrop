@@ -1,4 +1,4 @@
-import { isEmpty, head, prop, propEq, find } from 'ramda'
+import { isEmpty, head, prop, propEq, filter } from 'ramda'
 import stripeClient from 'root/src/server/api/stripeClient'
 
 export default async (email, sourceId) => {
@@ -11,7 +11,7 @@ export default async (email, sourceId) => {
 		} else {
 			customer = head(prop('data', customerList))
 			const sources = prop('data', prop('sources', customer))
-			if (isEmpty(find(propEq('id', sourceId))(sources))) {
+			if (isEmpty(filter(propEq('id', sourceId), sources))) {
 				await stripe.customers.createSource(prop('id', customer), { source: sourceId })
 			}
 		}
