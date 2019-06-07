@@ -127,6 +127,7 @@ export default async ({ userId, payload }) => {
 		...projectCommon,
 		pledgers: 1,
 		favoritesAmount: 0,
+		creator: userId,
 		created,
 	}
 }

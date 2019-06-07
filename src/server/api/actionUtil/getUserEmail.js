@@ -7,5 +7,6 @@ export default async (userId) => {
 	const id = compose(join('-'), tail, split('-'))(userId)
 	const userData = await provider.adminGetUser({ Username: id, UserPoolId: userPoolId }).promise()
 	const email = compose(prop('Value'), head, filter(propEq('Name', 'email')))(userData.UserAttributes)
+	console.log(JSON.stringify(userData, null, 4))
 	return email || 'not found'
 }

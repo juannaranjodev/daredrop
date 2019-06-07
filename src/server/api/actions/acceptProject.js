@@ -130,6 +130,7 @@ export default async ({ payload, userId }) => {
 		goal: amountRequested,
 		expiryTime: prop('created', projectToAccept)
 	}
+	console.log(JSON.stringify(emailData, null, 4))
 	sendEmail(emailData, dareAcceptedPledgerMail)
 	await checkPledgedAmount(projectId)
 	await documentClient.batchWrite(updateProjectParam).promise()

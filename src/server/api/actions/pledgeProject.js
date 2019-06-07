@@ -21,7 +21,6 @@ import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/server/api/lenses
 import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
 import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
-import { dynamoItemsProp } from 'root/src/server/api/lenses'
 import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)

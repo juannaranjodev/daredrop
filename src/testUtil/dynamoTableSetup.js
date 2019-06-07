@@ -84,7 +84,7 @@ jest.mock('root/src/server/api/paypalClient', () => ({
 
 jest.mock('root/src/server/api/actionUtil/getUserEmail', () => ({
 	__esModule: true,
-	default: jest.fn(() => Promise.resolve({ id: 'user@mail.com' })),
+	default: jest.fn(() => Promise.resolve('user@mail.com' )),
 }))
 
 jest.mock('root/src/server/email/actions/sendEmail', () => Promise.resolve('resolve'))
