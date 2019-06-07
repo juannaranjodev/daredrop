@@ -34,18 +34,22 @@ export default async ({ payload, userId }) => {
 	const videoURL = viewVideoURL(payload)
 	const projectId = viewProjectId(payload)
 	const timeStamp = viewTimeStamp(payload)
+
 	const projectDeliveries = await dynamoQueryProjectDeliveries(projectId)
-	// const filterUploadedByUploader = filter(and(propEq('uploader', userId), propEq('s3Uploaded', true)))
+	const approvedProjectDeliveries = await dynamoQueryProjectDeliveries(projectId, true)
 	const filterUploaded = filter(propEq('s3Uploaded', true))
 	let deliverySortKey
 
+	if (gt(length(approvedProjectDeliveries), 0)) {
+		throw actionForbiddenError('This project have already dare approved')
+	}
+
 	if (gt(length(projectDeliveries), 0)) {
-		// const uploadedUserDeliveries = filterUploadedByUploader(projectDeliveries)
 		const uploadedProjectDeliveries = filterUploaded(projectDeliveries)
+
 		if (gt(length(uploadedProjectDeliveries), 0)) {
-			throw actionForbiddenError('User has already submitted video for this dare')
+			throw actionForbiddenError('This project have already dare submitted')
 		}
-		// here we need anyways to get userDeliveries to check if user can resume
 		const filterByUploader = filter(propEq('uploader', userId))
 		const userDeliveries = filterByUploader(projectDeliveries)
 		deliverySortKey = prop('sk', head(userDeliveries))
@@ -57,14 +61,13 @@ export default async ({ payload, userId }) => {
 		...projectDdb,
 		...assigneesDdb,
 	])
+
 	const userTokensInProject = userTokensInProjectSelector(userTokens, project)
 
 	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
 
-
-	// action
 	const fileName = `${uuid()}.${extension(lookup(videoName))}`
 
 	const params = {
@@ -94,7 +97,9 @@ export default async ({ payload, userId }) => {
 		TableName: TABLE_NAME,
 		Item: dareDeliveryObject,
 	}
+	
 	await documentClient.put(deliveryParams).promise()
+
 	try {
 
 		const email = await getUserEmail(userId)
