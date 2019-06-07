@@ -22,6 +22,6 @@ export default paymentsArr => Promise.all(map(async (payment) => {
 		const authorization = await captureFn(paymentId)
 		return { ...payment, captured: authorization.statusCode || 200 }
 	} catch (err) {
-		return { ...payment, captured: err.raw.statusCode, message: err.message }
+		return { ...payment, captured: err.statusCode, message: err.message }
 	}
 }, paymentsArr))
