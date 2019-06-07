@@ -10,28 +10,28 @@ import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 
 
 describe('Update payout', () => {
-  test('Updates newly added payout method', async () => {    
-    const payload = addPayoutMethodPayload()
-    const newPayout = await addPayoutMethod({
-      userId: mockUserId,
-      payload,
-    })
+	test('Updates newly added payout method', async () => {
+		const payload = addPayoutMethodPayload()
+		const newPayout = await addPayoutMethod({
+			userId: mockUserId,
+			payload,
+		})
 
-    const email = 'update@payout.com'
-    const event = {
-      endpointId: UPDATE_PAYOUT_METHOD,
-      payload: {
-        email,
-      },
-      authentication: mockUserId,
-    }
-    const res = await apiFn(event)
-    expect(res).toEqual({
-      statusCode: 200,
-      body: {
-        ...newPayout,
-        email
-      },
-    })
-  })
+		const email = 'update@payout.com'
+		const event = {
+			endpointId: UPDATE_PAYOUT_METHOD,
+			payload: {
+				email,
+			},
+			authentication: mockUserId,
+		}
+		const res = await apiFn(event)
+		expect(res).toEqual({
+			statusCode: 200,
+			body: {
+				...newPayout,
+				email
+			},
+		})
+	})
 })

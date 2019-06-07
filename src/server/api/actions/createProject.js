@@ -20,7 +20,9 @@ import { projectPendingKey } from 'root/src/server/api/lenses'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import moment from 'moment'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
+import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthorizePayment'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
+import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
 const payloadLenses = getPayloadLenses(CREATE_PROJECT)
 const {
@@ -32,19 +34,25 @@ export default async ({ userId, payload }) => {
 		project: payload, payloadLenses,
 	})
 	const projectId = `project-${uuid()}`
-	const paymentInfo = viewPaymentInfo(payload)
 	const projectCommon = projectDenormalizeFields(serializedProject)
+	let paymentInfo = viewPaymentInfo(payload)
 
 	const created = moment().format()
 
 	const pledgeAmount = viewPledgeAmount(serializedProject)
 
-	if (paymentInfo.paymentType === 'stripeCard') {
-		const validation = await validateStripeSourceId(paymentInfo.paymentId)
-		if (!validation) {
+	// validations
+	if (paymentInfo.paymentType === stripeCard) {
+		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
+		if (!validationCardId) {
 			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
 		}
-	} else if (paymentInfo.paymentType === 'paypalAuthorize') {
+		const stripeAuthorization = await stripeAuthorizePayment(pledgeAmount, paymentInfo.paymentId, userId)
+		if (!stripeAuthorization.authorized) {
+			throw payloadSchemaError(stripeAuthorization.error)
+		}
+		paymentInfo = assoc('paymentId', stripeAuthorization.id, paymentInfo)
+	} else if (paymentInfo.paymentType === paypalAuthorize) {
 		const validation = await validatePaypalAuthorize(paymentInfo.orderID, pledgeAmount)
 		if (!validation) {
 			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })

@@ -9,7 +9,7 @@ export default async ({ userId, payload }) => {
 		TableName: TABLE_NAME,
 		Item: {
 			[PARTITION_KEY]: userId,
-      created: getTimestamp(),
+			created: getTimestamp(),
 			...paymentMethod,
 		},
 	}
