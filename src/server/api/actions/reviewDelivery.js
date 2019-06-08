@@ -14,7 +14,7 @@ import {
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
-import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
+import { ternary } from 'root/src/shared/util/ramdaPlus'
 import { payloadSchemaError } from 'root/src/server/api/errors'
 import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
 
