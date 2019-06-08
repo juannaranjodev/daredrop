@@ -80,7 +80,6 @@ export default {
 		[SET_DEFAULT_PAYMENT_METHOD]: setDafaultPaymentMethod,
 
 		[DELIVERY_DARE_INIT]: deliveryDareInit,
-		[REVIEW_DELIVERY]: reviewDelivery,
 
 		[GET_ACCEPTED_PROJECTS]: getAcceptProject,
 
@@ -91,5 +90,6 @@ export default {
 	longRunningTask: {
 		[DELIVERY_DARE]: deliveryDare,
 		[CAPTURE_PROJECT_PAYMENTS]: captureProjectPayments,
+		[REVIEW_DELIVERY]: reviewDelivery,
 	},
 }
