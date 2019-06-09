@@ -53,7 +53,7 @@ export default async ({ userId, payload }) => {
 		}
 		paymentInfo = assoc('paymentId', prop('id', stripeAuthorization), paymentInfo)
 	} else if (paymentInfo.paymentType === paypalAuthorize) {
-		const validation = await validatePaypalAuthorize(paymentInfo.orderID, newPledgeAmount)
+		const validation = await validatePaypalAuthorize(paymentInfo.paymentId, newPledgeAmount)
 		if (!validation) {
 			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
 		}

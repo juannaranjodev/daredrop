@@ -7,7 +7,6 @@ import { projectApprovedKey } from 'root/src/server/api/lenses'
 
 export default async (payoutObj, payoutsArr) => new Promise(async (resolve, reject) => {
 	const ppClientAuthorized = await paypalClient
-	const { restSDK } = ppClientAuthorized
 
 	const projectId = prop('pk', payoutObj)
 	const [projectDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)
@@ -28,7 +27,7 @@ export default async (payoutObj, payoutsArr) => new Promise(async (resolve, reje
 		}), payoutsArr),
 	}
 
-	restSDK.payout.create(createPayout, true, async (error, payout) => {
+	ppClientAuthorized.payout.create(createPayout, true, async (error, payout) => {
 		if (error) {
 			const errMessage = path(['response', 'message'], error)
 			const statusCode = path(['response', 'httpStatusCode'], error)

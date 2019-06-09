@@ -1,10 +1,14 @@
 import paypalClient from 'root/src/server/api/paypalClient'
-import checkoutNodeJssdk from '@paypal/checkout-server-sdk'
 import { path } from 'ramda'
 
-export default async (authorization) => {
-	const ppClientAuthorized = await paypalClient.checkout
-	const request = new checkoutNodeJssdk.payments.CapturesGetRequest(path(['result', 'id'], authorization))
-	const authorizationDetails = await ppClientAuthorized.execute(request)
-	return parseFloat(path(['result', 'seller_receivable_breakdown', 'net_amount', 'value'], authorizationDetails), 10) * 100
-}
+export default authorization => new Promise(async (resolve, reject) => {
+	const ppClientAuthorizedSDK = await paypalClient
+	ppClientAuthorizedSDK.authorization.capture(path(['result', 'id'], authorization), (error, order) => {
+		if (error) {
+			console.log(JSON.stringify(error, null, 2))
+			reject(error)
+		}
+		console.log(JSON.stringify(order, null, 2))
+		resolve(parseFloat(path(['result', 'seller_receivable_breakdown', 'net_amount', 'value'], order)) * 100)
+	})
+})
