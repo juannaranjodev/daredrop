@@ -109,16 +109,14 @@ export default async ({ userId, payload }) => {
 
 	await documentClient.batchWrite(params).promise()
 
-	try {
-		const email = await getUserEmail(userId)
+	const email = await getUserEmail(userId)
 
-		const emailData = {
-			dareTitle: project.title,
-			recipients: [email],
-			title: dareCreatedTitle,
-		}
-		sendEmail(emailData, dareCreatedEmail)
-	} catch (err) { }
+	const emailData = {
+		dareTitle: project.title,
+		recipients: [email],
+		title: dareCreatedTitle,
+	}
+	sendEmail(emailData, dareCreatedEmail)
 
 	return {
 		id: projectId,

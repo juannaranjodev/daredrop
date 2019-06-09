@@ -9,7 +9,7 @@ export default async (userId, projectId, projectStatus) => {
 		KeyConditionExpression: `${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :project)`,
 		ExpressionAttributeValues: {
 			':pk': projectId,
-			':project': `project${projectStatus ? `|${projectStatus}` : ''}`,
+			':project': `project|${projectStatus ? `${projectStatus}` : ''}`,
 		},
 		ConsistentRead: true,
 	}

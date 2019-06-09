@@ -52,6 +52,11 @@ jest.mock('root/src/server/api/actionUtil/validatePaypalAuthorize', () => () => 
 
 jest.mock('root/src/server/api/actionUtil/validateStripeSourceId', () => () => true)
 
+jest.mock('root/src/server/email/actions/sendEmail', () => ({
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve({ id: 'user@mail.com' })),
+}))
+
 jest.mock('root/src/server/api/twitchApi', () => {
 	/* eslint-disable global-require */
 	const { userData, gameData } = require('root/src/server/api/mocks/twitchApiMock')
@@ -83,24 +88,32 @@ jest.mock('root/src/server/api/googleClient', () => {
 })
 
 jest.mock('root/src/server/api/paypalClient', () => ({
-	execute: jest.fn(() => Promise.resolve({
-		statusCode: 200,
-		result: {
-			seller_receivable_breakdown: {
-				net_amount: {
-					value: 450000,
+	checkout: {
+		execute: jest.fn(() => Promise.resolve({
+			statusCode: 200,
+			result: {
+				seller_receivable_breakdown: {
+					net_amount: {
+						value: 450000,
+					},
 				},
 			},
+		})),
+	},
+	restSDK: {
+		payout: {
+			// any better idea on mocking callback fn? right now it
+			// returns error so I'm not sure how to approach it
+			create: jest.fn((a, b, callback) => callback(null, {})),
 		},
-	})),
+	},
 }))
+
 
 jest.mock('root/src/server/api/actionUtil/getUserEmail', () => ({
 	__esModule: true,
 	default: jest.fn(() => Promise.resolve({ id: 'user@mail.com' })),
 }))
-
-jest.mock('root/src/server/email/actions/sendEmail', () => Promise.resolve('resolve'))
 
 // Normally authentication is a JWT that gets decoded and returns a user id.
 // For tests I'm mocking the authorizeRequest which does the jwt decoding and

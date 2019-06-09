@@ -42,3 +42,4 @@ export const streamerDeliveryRejectedKey = 'streamerDeliveryRejected'
 
 export const projectToCaptureKey = 'projectToCapture'
 export const projectToPayoutKey = 'projectToPayout'
+export const payoutCompleteKey = 'payoutComplete'

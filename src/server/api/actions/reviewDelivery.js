@@ -1,4 +1,4 @@
-import { prop, propEq, map, filter, equals, and, not, startsWith, assocPath } from 'ramda'
+import { prop, propEq, map, filter, equals, and, not, startsWith } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -51,7 +51,7 @@ export default async ({ payload }) => {
 					accepted: ternary(equals(audit, projectDeliveredKey),
 						streamerDeliveryApprovedKey, prop('accepted', assignee)),
 				},
-					projectId),
+				projectId),
 			},
 		},
 	}), projectAcceptedAssignees), [])

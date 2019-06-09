@@ -9,7 +9,7 @@ import buildUserSortKeyFromAssigneeObj from 'root/src/server/api/actionUtil/buil
 import dynamoGetUserIdFromSK from 'root/src/server/api/actionUtil/dynamoGetUserIdFromSK'
 
 export default async (projectId) => {
-	const [, assigneesDdb, projectPledgesDdb, , payoutDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)
+	const [projectDdb, assigneesDdb, projectPledgesDdb, , payoutDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)
 	const payoutsObj = projectSerializer([...assigneesDdb, ...payoutDdb])
 	// here * 100 because calculating payouts with cents is more handy
 	const dareDropFee = 100 * reduce((acc, item) => add(acc, prop('pledgeAmount', item)), 0, projectPledgesDdb) * 0.1
@@ -31,9 +31,12 @@ export default async (projectId) => {
 		)(assignee)
 		return assoc('email', userEmail, assignee)
 	}, payoutsArr))
-	const payoutTotal = reduce((acc, item) => {
-		add(acc, prop('payout', item))
-	}, 0, payoutsWithPaypalEmails)
 
-	return { payouts: payoutsWithPaypalEmails, payoutTotal }
+	const payoutTotal = reduce((acc, item) => add(acc, prop('payout', item)), 0, payoutsWithPaypalEmails)
+
+	return {
+		dareTitle: prop('title', projectDdb),
+		payouts: payoutsWithPaypalEmails,
+		payoutTotal,
+	}
 }

@@ -5,7 +5,7 @@ import { pathOr, equals, not, lt, gt } from 'ramda'
 export default async (orderID, pledgeAmount) => {
 	try {
 		const request = new checkoutNodeJssdk.orders.OrdersGetRequest(orderID)
-		const ppClientAuthorized = await paypalClient
+		const ppClientAuthorized = await paypalClient.checkout
 		const order = await ppClientAuthorized.execute(request)
 		const { statusCode } = order
 		if (

@@ -157,5 +157,6 @@ describe('payoutAssignees', async () => {
 		}
 
 		const res = await apiFn(event)
+		expect(res.statusCode).toEqual(200)
 	})
 })

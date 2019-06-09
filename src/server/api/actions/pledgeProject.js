@@ -113,22 +113,20 @@ export default async ({ userId, payload }) => {
 		myPledge,
 	])
 
-	try {
-		const email = await getUserEmail(userId)
+	const email = await getUserEmail(userId)
 
-		const emailData = {
-			title: pledgeMadeTitle,
-			dareTitle: prop('title', newProject),
-			recipients: [email],
-			// TODO EMAIL
-			// expiry time
-			dareHref: projectHrefBuilder(prop('id', newProject)),
-			streamers: compose(map(prop('username')), prop('assignees'))(newProject),
-			notClaimedAlready: equals(0, length(filter(propEq('accepted', streamerAcceptedKey), prop('assignees', newProject)))),
-		}
+	const emailData = {
+		title: pledgeMadeTitle,
+		dareTitle: prop('title', newProject),
+		recipients: [email],
+		// TODO EMAIL
+		// expiry time
+		dareHref: projectHrefBuilder(prop('id', newProject)),
+		streamers: compose(map(prop('username')), prop('assignees'))(newProject),
+		notClaimedAlready: equals(0, length(filter(propEq('accepted', streamerAcceptedKey), prop('assignees', newProject)))),
+	}
 
-		sendEmail(emailData, pledgeMadeMail)
-	} catch (err) { }
+	sendEmail(emailData, pledgeMadeMail)
 
 
 	return {
