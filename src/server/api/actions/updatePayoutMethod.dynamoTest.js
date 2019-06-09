@@ -1,6 +1,6 @@
 import { apiFn } from 'root/src/server/api'
 
-import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
+import { omit } from 'ramda'
 
 import addPayoutMethodPayload from 'root/src/server/api/mocks/addPayoutMethodPayload'
 import addPayoutMethod from 'root/src/server/api/actions/addPayoutMethod'
@@ -29,8 +29,8 @@ describe('Update payout', () => {
 		expect(res).toEqual({
 			statusCode: 200,
 			body: {
-				...newPayout,
-				email
+				...omit(['pk'], newPayout),
+				email,
 			},
 		})
 	})

@@ -42,6 +42,9 @@ jest.mock('root/src/server/api/stripeClient', () => ({
 		sources: {
 			retrieve: jest.fn(() => Promise.resolve('source')),
 		},
+		balanceTransactions: {
+			retrieve: jest.fn(() => Promise.resolve({ net: 60000000 })),
+		},
 	},
 }))
 
@@ -80,7 +83,16 @@ jest.mock('root/src/server/api/googleClient', () => {
 })
 
 jest.mock('root/src/server/api/paypalClient', () => ({
-	execute: jest.fn(() => Promise.resolve({ statusCode: 200 })),
+	execute: jest.fn(() => Promise.resolve({
+		statusCode: 200,
+		result: {
+			seller_receivable_breakdown: {
+				net_amount: {
+					value: 450000,
+				},
+			},
+		},
+	})),
 }))
 
 jest.mock('root/src/server/api/actionUtil/getUserEmail', () => ({
