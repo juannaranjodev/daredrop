@@ -7,14 +7,14 @@ import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 
 const payload = addPayoutMethodPayload()
 const event = {
-  endpointId: ADD_PAYOUT_METHOD,
-  payload,
-  authentication: mockUserId,
+	endpointId: ADD_PAYOUT_METHOD,
+	payload,
+	authentication: mockUserId,
 }
 
 describe('addToPayout', () => {
-  test('successfully add a payout method', async () => {
-    const res = await apiFn(event)
-    expect(res.statusCode).toEqual(200)
-  })
+	test('successfully add a payout method', async () => {
+		const res = await apiFn(event)
+		expect(res.statusCode).toEqual(200)
+	})
 })

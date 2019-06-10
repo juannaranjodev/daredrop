@@ -18,11 +18,15 @@ import {
 
 import moduleDescriptions from 'root/src/shared/descriptions/modules'
 
-const { pathOrFormInputs } = formStoreLenses
+const { pathOrFormInputs, pathOrFieldErrors } = formStoreLenses
 
-export const savePartialFormHof = () => moduleKey => async (dispatch, getState) => {
+export const savePartialFormHof = () => (moduleKey, stepFormAction) => async (dispatch, getState) => {
 	const state = getState()
 	const formValues = (pathOrFormInputs(moduleKey, {})(state))
+	const formErrors = (pathOrFieldErrors(moduleKey, {})(state))
+	if (Object.keys(formErrors).length === 0) {
+		stepFormAction(moduleKey)
+	}
 	const id = uuid()
 	const lambdaRes = await invokeApiLambda(
 		SAVE_PARTIAL_DARE_FORM,
