@@ -159,6 +159,7 @@ describe('deliveryDare flow', async () => {
 			authentication: mockUserId,
 		}
 		const res = await apiFn(event)
+		console.log(res)
 		expect(res.statusCode).toEqual(403)
 	})
 

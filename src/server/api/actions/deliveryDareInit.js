@@ -39,17 +39,22 @@ const { viewVideoURL, viewTimeStamp, viewVideoName, viewProjectId } = payloadLen
 
 const verification = async (projectId, userId) => {
 	const projectDeliveries = await dynamoQueryProjectDeliveries(projectId)
-	const filterByUploader = filter(propEq('uploader', userId))
-	const filterUploadedByUploader = filter(and(propEq('uploader', userId), propEq('s3Uploaded', true)))
-	const userDeliveries = filterByUploader(projectDeliveries)
-	const uploadedUserDeliveries = filterUploadedByUploader(projectDeliveries)
+	const approvedProjectDeliveries = await dynamoQueryProjectDeliveries(projectId, true)
+	const filterUploaded = filter(propEq('s3Uploaded', true))
 	let deliverySortKey
 
-	if (gt(length(uploadedUserDeliveries), 0)) {
-		throw actionForbiddenError('User has already submitted video for this dare')
+	if (gt(length(approvedProjectDeliveries), 0)) {
+		throw actionForbiddenError('This project have already dare approved')
 	}
 
-	if (gt(length(userDeliveries), 0)) {
+	if (gt(length(projectDeliveries), 0)) {
+		const uploadedProjectDeliveries = filterUploaded(projectDeliveries)
+
+		if (gt(length(uploadedProjectDeliveries), 0)) {
+			throw actionForbiddenError('This project have already dare submitted')
+		}
+		const filterByUploader = filter(propEq('uploader', userId))
+		const userDeliveries = filterByUploader(projectDeliveries)
 		deliverySortKey = prop('sk', head(userDeliveries))
 	}
 
