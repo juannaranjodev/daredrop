@@ -5,4 +5,3 @@ export const marketplaceUrl = `${ourUrl}/marketplace`
 export const survey = 'forms.gle/iqnCmQurEtNRK8Xd8'
 export const ourName = 'Dare Drop'
 export const ourEmail = 'support@daredrop.com'
-export const joeEmail = 'joe@daredrop.com'

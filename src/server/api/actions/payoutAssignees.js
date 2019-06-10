@@ -1,18 +1,13 @@
 /* eslint-disable max-len */
-import { head, lt, path } from 'ramda'
+import { head, path } from 'ramda'
 import calculatePayouts from 'root/src/server/api/actionUtil/calculatePayouts'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import paypalBatchPayout from 'root/src/server/api/actionUtil/paypalBatchPayout'
 import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { dynamoItemsProp, payoutCompleteKey, projectToPayoutKey } from 'root/src/server/api/lenses'
-import sendEmail from 'root/src/server/email/actions/sendEmail'
-import notEnoughBalanceMail from 'root/src/server/email/templates/notEnoughBalance'
-import { notEnoughBalance } from 'root/src/server/email/util/emailTitles'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { joeEmail } from 'root/src/shared/constants/mail'
 import { PAYOUT_ASSIGNEES } from 'root/src/shared/descriptions/endpoints/endpointIds'
-
 
 const payloadLenses = getPayloadLenses(PAYOUT_ASSIGNEES)
 const { viewProjectId } = payloadLenses
