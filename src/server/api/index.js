@@ -32,7 +32,7 @@ const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 }
 
 export const apiHof = (
-	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, triggerActionsObj,
+	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
 ) => async (event) => {
 	try {
@@ -41,8 +41,7 @@ export const apiHof = (
 		const { endpointId, payload, authentication, triggerSource } = event
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (triggerSource) {
-			console.log(triggerSource)
-			const triggerAction = path([triggerSource], triggerActionsObj)
+			const triggerAction = path([triggerSource], getTriggerActionsObj)
 			const { request } = event
 			const res = await triggerAction(request)
 			return { statusCode: 200, body: res }
