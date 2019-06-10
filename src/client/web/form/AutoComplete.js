@@ -178,7 +178,7 @@ const Menu = withStyles(menuStyles)(
 )
 
 
-const components = {
+export const autoCompleteCmponents = {
 	Control,
 	Menu,
 	MultiValue,
@@ -205,7 +205,7 @@ export const AutoCompleteUnconnected = memo(({
 				},
 			}}
 			placeholder={fieldPlaceholder}
-			components={components}
+			components={autoCompleteCmponents}
 			value={multiFieldValue}
 			onChange={autoCompleteSetInputHandler(
 				moduleKey, fieldPath, arrayFieldMaxItems, setInput,
