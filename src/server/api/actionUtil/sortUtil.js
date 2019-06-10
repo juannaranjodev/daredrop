@@ -1,4 +1,4 @@
-import { ascend, descend, prop, propEq, path, add, reduce, propOr } from 'ramda'
+import { ascend, descend, prop, propEq, add, reduce, propOr } from 'ramda'
 import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST, SORT_BY_CREATED_ASC, SORT_BY_ACCEPTED } from 'root/src/shared/constants/sortTypesOfProject'
 import { projectAccepted } from 'root/src/shared/descriptions/endpoints/recordTypes'
 
@@ -11,8 +11,8 @@ export const descendingPledgeAmount = descend(prop('pledgeAmount'))
 const isAcceptedDare = propEq('status', projectAccepted)
 
 const diffDescending = (a, b, prp) => {
-	const assigneesA = path('assingees', a)
-	const assigneesB = path('assignees', b)
+	const assigneesA = propOr([], 'assingees', a)
+	const assigneesB = propOr([], 'assignees', b)
 	const aSum = reduce(
 		(accum, itemA) => add(propOr(0, prp, itemA), accum),
 		0,
