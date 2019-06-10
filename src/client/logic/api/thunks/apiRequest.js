@@ -48,9 +48,10 @@ export const fetchList = async (dispatch, state, endpointId, payload, getState) 
 		} else {
 			dispatch(setHasMore(true))
 		}
-		const nextPage = add(path(['list', 'currentPage'], getState()), 1)
 		if (equals(payload.currentPage, 1)) dispatch(setCurrentPage(payload.currentPage))
-		else if (equals(nextPage, payload.currentPage)) dispatch(setCurrentPage(nextPage))
+		else if (equals(add(path(['list', 'currentPage'], getState()), 1), payload.currentPage)) {
+			dispatch(setCurrentPage(add(path(['list', 'currentPage'], getState()), 1)))
+		}
 	} else {
 		const error = { ...statusError, ...generalError }
 		dispatch(apiListRequestError(listStoreKey, error))
