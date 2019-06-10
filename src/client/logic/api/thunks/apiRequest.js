@@ -1,4 +1,4 @@
-import { equals, forEach, or, propOr, isNil } from 'ramda'
+import { equals, forEach, or, propOr, isNil, path, subtract, add, eg } from 'ramda'
 
 import createListStoreKey from 'root/src/client/logic/api/util/createListStoreKey'
 import createRecordStoreKey from 'root/src/client/logic/api/util/createRecordStoreKey'
@@ -35,7 +35,7 @@ import determineToken from 'root/src/client/logic/api/util/determineToken'
 
 import { TWITCH_OAUTH_FAILURE_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 
-export const fetchList = async (dispatch, state, endpointId, payload) => {
+export const fetchList = async (dispatch, state, endpointId, payload, getState) => {
 	const recordType = recordTypeSelector(endpointId)
 	const listStoreKey = createListStoreKey(endpointId, payload)
 	dispatch(initApiListRequest(listStoreKey))
@@ -48,7 +48,9 @@ export const fetchList = async (dispatch, state, endpointId, payload) => {
 		} else {
 			dispatch(setHasMore(true))
 		}
-		dispatch(setCurrentPage(payload.currentPage))
+		const nextPage = add(path(['list', 'currentPage'], getState()), 1)
+		if (equals(payload.currentPage, 1)) dispatch(setCurrentPage(payload.currentPage))
+		else if (equals(nextPage, payload.currentPage)) dispatch(setCurrentPage(nextPage))
 	} else {
 		const error = { ...statusError, ...generalError }
 		dispatch(apiListRequestError(listStoreKey, error))
@@ -56,7 +58,7 @@ export const fetchList = async (dispatch, state, endpointId, payload) => {
 	return lambdaRes
 }
 
-export const fetchRecord = async (dispatch, state, endpointId, payload) => {
+export const fetchRecord = async (dispatch, state, endpointId, payload, getState) => {
 	const recordType = recordTypeSelector(endpointId)
 	const recordId = idProp(payload)
 	if (recordId) { // else creating, don't need record loading state
@@ -75,7 +77,7 @@ export const fetchRecord = async (dispatch, state, endpointId, payload) => {
 	return lambdaRes
 }
 
-export const fetchExternal = async (dispatch, state, endpointId, payload) => {
+export const fetchExternal = async (dispatch, state, endpointId, payload, getState) => {
 	try {
 		const externalRes = await invokeApiExternal(endpointId, payload)
 		externalRes.tokenId = determineToken(endpointId)
@@ -111,7 +113,7 @@ export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 	}
 }
 
-export const fetchUserData = async (dispatch, state, endpointId, payload) => {
+export const fetchUserData = async (dispatch, state, endpointId, payload, getState) => {
 	const recordType = recordTypeSelector(endpointId)
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	if (lambdaRes.body.length > 0) {
@@ -138,7 +140,7 @@ export default (endpointId, payload) => async (dispatch, getState) => {
 			const state = getState()
 			const endpointType = endpointTypeSelector(endpointId)
 			return endpointTypeFunctionMap[endpointType](
-				dispatch, state, endpointId, payload,
+				dispatch, state, endpointId, payload, getState,
 			)
 		} catch (e) {
 			console.warn(e)

@@ -16,7 +16,6 @@ export default (currentPage, hasMore) => async (dispatch, getState) => {
 		}
 
 		realEndpoint = endpointId[0]
-
 		return dispatch(apiRequest(realEndpoint, {
 			currentPage: add(currentPage, 1),
 			filter: path(['list', 'filterParams'], state),
