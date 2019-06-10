@@ -43,7 +43,7 @@ jest.mock('root/src/server/api/stripeClient', () => ({
 			retrieve: jest.fn(() => Promise.resolve('source')),
 		},
 		balanceTransactions: {
-			retrieve: jest.fn(() => Promise.resolve({ net: 60000000 })),
+			retrieve: jest.fn(() => Promise.resolve({ net: 600000 })),
 		},
 	},
 }))
@@ -88,24 +88,19 @@ jest.mock('root/src/server/api/googleClient', () => {
 })
 
 jest.mock('root/src/server/api/paypalClient', () => ({
-	checkout: {
-		execute: jest.fn(() => Promise.resolve({
-			statusCode: 200,
-			result: {
-				seller_receivable_breakdown: {
-					net_amount: {
-						value: 450000,
-					},
-				},
-			},
-		})),
+	payout: {
+		create: jest.fn((a, b, callback) => callback(null, {})),
 	},
-	restSDK: {
-		payout: {
-			// any better idea on mocking callback fn? right now it
-			// returns error so I'm not sure how to approach it
-			create: jest.fn((a, b, callback) => callback(null, {})),
-		},
+	authorization: {
+		capture: jest.fn((a, b, callback) => callback(null,
+			{
+				amount: {
+					total: '500000.00',
+				},
+				transaction_fee: {
+					value: '20000',
+				},
+			})),
 	},
 }))
 

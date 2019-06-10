@@ -128,11 +128,10 @@ describe('payoutAssignees', async () => {
 		})
 		const [, , projectPledgesDdb, ,] = await dynamoQueryProject(null, project.id, projectApprovedKey)
 
-		const dareDropFee = 100 * reduce((acc, item) => add(acc, prop('pledgeAmount', item)), 0, projectPledgesDdb) * 0.1
+		const dareDropFee = reduce((acc, item) => add(acc, prop('pledgeAmount', item)), 0, projectPledgesDdb) * 0.1
 
 		const payoutsCalculated = await calculatePayouts(project.id)
-
-		expect(payoutsCalculated.payouts[0].payout + payoutsCalculated.payouts[1].payout).toEqual(45000000 - dareDropFee)
+		expect(payoutsCalculated.payouts[0].payout + payoutsCalculated.payouts[1].payout).toBeCloseTo((480000 - dareDropFee), 20)
 	})
 	test('can make payout', async () => {
 		await addPayoutMethod({

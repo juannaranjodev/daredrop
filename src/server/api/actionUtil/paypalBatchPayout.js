@@ -20,7 +20,7 @@ export default async (payoutObj, payoutsArr) => new Promise(async (resolve, reje
 		items: map(({ payout, email }) => ({
 			recipient_type: 'EMAIL',
 			amount: {
-				value: payout / 100,
+				value: payout,
 				currency: 'USD',
 			},
 			receiver: email,

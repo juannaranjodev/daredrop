@@ -23,6 +23,7 @@ export default async (projectId) => {
 	if (gt(badCodeCaptures, 0)) {
 		return false
 	}
+
 	return reduce((acc, item) => add(acc, prop('transactionNet', item)),
 		0, captures)
 }

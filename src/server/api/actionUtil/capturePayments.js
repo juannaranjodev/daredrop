@@ -6,7 +6,7 @@ import calculatePaypalPayment from 'root/src/server/api/actionUtil/calculatePayp
 import calculateStripePayment from 'root/src/server/api/actionUtil/calculateStripePayment'
 
 export default paymentsArr => Promise.all(map(async (payment) => {
-	const { paymentType, paymentId, captured } = payment
+	const { paymentType, paymentId, captured, paymentAmount } = payment
 	if (and(gte(captured, 200), lt(captured, 300))) {
 		return payment
 	}
@@ -25,10 +25,10 @@ export default paymentsArr => Promise.all(map(async (payment) => {
 			default:
 				throw new Error({ message: 'Payment type not found' })
 		}
-		const authorization = await captureFn(paymentId)
+		const authorization = await captureFn(paymentId, paymentAmount)
 		const transactionNet = await calculateFn(authorization)
-		return { ...payment, transactionNet, captured: authorization.statusCode || 200 }
+		return { ...payment, transactionNet, captured: authorization.httpStatusCode || 200 }
 	} catch (err) {
-		return { ...payment, captured: err.statusCode, message: err.message }
+		return { ...payment, captured: err.statusCode || err.httpStatusCode, message: err.message }
 	}
 }, paymentsArr))

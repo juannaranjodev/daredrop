@@ -20,19 +20,7 @@ const { viewProjectId } = payloadLenses
 export default async ({ payload }) => {
 	const projectId = viewProjectId(payload)
 	const payoutsWithPaypalEmails = await calculatePayouts(projectId)
-	const { payoutTotal, payouts } = payoutsWithPaypalEmails
-	// check paypal balance
-	// const balance = 9999999999999
-
-	// if (lt(balance, payoutTotal)) {
-	// 	const emailData = {
-	// 		title: notEnoughBalance,
-	// 		recipients: [joeEmail],
-	// 		projectId,
-	// 	}
-
-	// 	sendEmail(emailData, notEnoughBalanceMail)
-	// }
+	const { payouts } = payoutsWithPaypalEmails
 
 	const payoutToSaveDdb = await documentClient.query({
 		TableName: TABLE_NAME,
