@@ -45,8 +45,6 @@ import getPayoutMethod from 'root/src/server/api/actions/getPayoutMethod'
 import updatePayoutMethod from 'root/src/server/api/actions/updatePayoutMethod'
 import captureProjectPayments from 'root/src/server/api/actions/captureProjectPayments'
 
-import successVerify from 'root/src/server/api/actions/successVerify'
-
 export default {
 	shortRunningTask: {
 		[CREATE_PROJECT]: createProject,
