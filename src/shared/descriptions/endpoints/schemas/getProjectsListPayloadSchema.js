@@ -2,15 +2,15 @@ export default {
 	type: 'object',
 	properties: {
 		currentPage: { type: 'integer' },
-		filter:{
+		filter: {
 			type: 'array',
-			items:{
-				type:'object',
+			items: {
+				type: 'object',
 				properties: {
 					param: { type: 'string' },
 					value: { type: 'string' },
 				},
-			}
+			},
 		},
 		sortType: { type: 'string' },
 	},
