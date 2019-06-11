@@ -2,7 +2,6 @@ import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourUrl, marketplaceUrl } from 'root/src/shared/constants/mail'
 
 export default () => {
-
 	const mailContent = `
               <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="480" class="content">
                 <tbody>

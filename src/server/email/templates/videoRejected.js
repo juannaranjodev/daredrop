@@ -19,7 +19,7 @@ export default ({ dareTitle, message, expiryTime }) => {
               </tr><tr>
                 <td style="margin:0;padding:0;" width="100%">
                   <p style="margin:0;padding:0;">Your video didn’t meet the requirements of ${dareTitle}. Here’s why:</p>
-                  <p style="margin:0;padding:0;">${message}</p>
+                  <p style="margin:0;padding:0;"><br><pre style="font-weight:bold;font-size:26px;line-height:1.23;" >${message}</pre></p>
                 </td>
               </tr>
 
