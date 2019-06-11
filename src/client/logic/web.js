@@ -33,6 +33,8 @@ import initApiListRequest from 'root/src/client/logic/api/reducers/initApiListRe
 import initApiRecordRequest from 'root/src/client/logic/api/reducers/initApiRecordRequest'
 import generalRecordModification from 'root/src/client/logic/api/reducers/generalRecordModification'
 import currentListPayload from 'root/src/client/logic/api/reducers/currentListPayload'
+import clearList from 'root/src/client/logic/api/reducers/clearList'
+import clearListProcessing from 'root/src/client/logic/api/reducers/clearListProcessing'
 
 // project
 import favoritesProcessingStart from 'root/src/client/logic/project/reducers/favoritesProcessingStart'
@@ -127,6 +129,8 @@ const store = createStore(
 		...setGameFilterValue,
 		...setStreamerFilterValue,
 		...clearFilterParams,
+		...clearList,
+		...clearListProcessing,
 	}, // reducer object
 	// [], // sagas
 	[
