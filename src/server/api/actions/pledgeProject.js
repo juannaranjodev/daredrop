@@ -48,6 +48,7 @@ export default async ({ userId, payload }) => {
 			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
 		}
 		const stripeAuthorization = await stripeAuthorizePayment(newPledgeAmount, paymentInfo.paymentId, userId)
+
 		if (!stripeAuthorization.authorized) {
 			throw payloadSchemaError(stripeAuthorization.error)
 		}

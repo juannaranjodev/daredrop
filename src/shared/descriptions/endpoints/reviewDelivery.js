@@ -18,5 +18,6 @@ export default {
 		endpointType: recordEndpointType,
 		recordType: project,
 		payloadSchema,
+		isLongRunningTask: true,
 	},
 }
