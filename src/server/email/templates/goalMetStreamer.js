@@ -21,7 +21,7 @@ export default ({ dareDescription, dareTitle, bountyAmount, goal, expiryTime, da
                   <tr>
                     <td style="margin:0;padding:0;" width="100%">
                       <p style="margin:0;padding:0;">Oh YEAH!</p>
-                      <p style="margin:0;padding:0;">Your fans have pledged ${bountyAmount} of your target ${goal}.</p>
+                      <p style="margin:0;padding:0;">Your fans have pledged $${bountyAmount} of your $${goal} target.</p>
                     </td>
                   </tr>
                   
@@ -50,7 +50,7 @@ export default ({ dareDescription, dareTitle, bountyAmount, goal, expiryTime, da
                   </tr>
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">Once you’ve done the deed, submit the link to the video of you delivering to ${ourName}. We’ll make sure you did what the Dare asked you to do, then we’ll charge the pledgers and pay you.</p>
+                      <p style="margin:0;padding:0;">Once you’ve done the deed, submit the link and video of you delivering to ${ourName}. We’ll make sure you did what the Dare asked you to do, then we’ll charge the pledgers and pay you.</p>
                     </td>
                   </tr>
                   
