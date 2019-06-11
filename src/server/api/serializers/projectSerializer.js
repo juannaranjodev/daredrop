@@ -26,7 +26,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 				return result
 			}
 			const assigneeObj = pick(
-				['image', 'description', 'displayName', 'username', 'accepted', 'amountRequested'],
+				['image', 'description', 'displayName', 'username', 'accepted', 'amountRequested', 'deliveryVideo'],
 				projectPart,
 			)
 			return overAssignees(
