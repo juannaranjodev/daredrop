@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, slice } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -18,7 +18,8 @@ import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssi
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 import dareAcceptedPledgerMail from 'root/src/server/email/templates/dareAcceptedPledger'
-import { dareAcceptedTitle } from 'root/src/server/email/util/emailTitles'
+import dareAcceptedStreamerMail from 'root/src/server/email/templates/dareAcceptedStreamer'
+import { dareAcceptedCreatorTitle, dareAcceptedStreamerTitle } from 'root/src/server/email/util/emailTitles'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
@@ -33,7 +34,7 @@ export default async ({ payload, userId }) => {
 	const amountRequested = viewAmountRequested(payload)
 	const userTokens = await dynamoQueryOAuth(userId)
 
-	const [projectToAcceptDdb, assigneesDdb] = await dynamoQueryProject(
+	const [projectToAcceptDdb, assigneesDdb, projectPledgesDdb, projectFavouriteDdb] = await dynamoQueryProject(
 		null,
 		projectId,
 	)
@@ -121,17 +122,71 @@ export default async ({ payload, userId }) => {
 	await documentClient.batchWrite(updateProjectParam).promise()
 
 	try {
-		const email = await getUserEmail((prop('creator', projectToAccept)))
+		// Send email for Creator
+		const emailCreator = await getUserEmail((prop('creator', projectToAccept)))
 
-		const emailData = {
-			title: dareAcceptedTitle,
+		const emailDataForCreator = {
+			title: dareAcceptedCreatorTitle,
 			dareTitle: prop('title', projectToAccept),
-			recipients: [email],
+			recipients: [emailCreator],
 			streamer: prop('displayName', head(userTokens)),
 			goal: amountRequested,
 			expiryTime: prop('created', projectToAccept),
 		}
-		sendEmail(emailData, dareAcceptedPledgerMail)
+		sendEmail(emailDataForCreator, dareAcceptedPledgerMail)
+
+		// Send email for pledgers
+		const pledgerUserIds = reduce(
+			(result, pledgedProject) => [...result, prop('sk', pledgedProject)], [], projectPledgesDdb,
+		)
+		await Promise.all(
+			map(async (pledgerUserId) => {
+				const plederEmail = await getUserEmail(slice(7, Infinity, pledgerUserId))
+				console.log(plederEmail)
+				const emailDataForPledger = {
+					title: dareAcceptedCreatorTitle,
+					dareTitle: prop('title', projectToAccept),
+					recipients: [plederEmail],
+					streamer: prop('displayName', head(userTokens)),
+					goal: amountRequested,
+					expiryTime: prop('created', projectToAccept),
+				}
+				sendEmail(emailDataForPledger, dareAcceptedPledgerMail)
+			}, pledgerUserIds),
+		)
+		// Send email for favourite
+
+		const favouriteUserIds = reduce(
+			(result, favouriteProject) => [...result, prop('sk', favouriteProject)], [], projectFavouriteDdb,
+		)
+		await Promise.all(
+			map(async (favouriteUserId) => {
+				const favouriteEmail = await getUserEmail(slice(10, Infinity, favouriteUserId))
+				console.log(favouriteEmail)
+				const emailDataForFavourite = {
+					title: dareAcceptedCreatorTitle,
+					dareTitle: prop('title', projectToAccept),
+					recipients: [favouriteEmail],
+					streamer: prop('displayName', head(userTokens)),
+					goal: amountRequested,
+					expiryTime: prop('created', projectToAccept),
+				}
+				sendEmail(emailDataForFavourite, dareAcceptedPledgerMail)
+			}, favouriteUserIds),
+		)
+
+		// Send email for Streamer
+		const emailStreamer = await getUserEmail((prop('creator', userId)))
+
+		const emailDataForStreamer = {
+			title: dareAcceptedStreamerTitle,
+			dareTitle: prop('title', projectToAccept),
+			recipients: [emailStreamer],
+			streamer: prop('displayName', head(userTokens)),
+			goal: amountRequested,
+			expiryTime: prop('created', projectToAccept),
+		}
+		sendEmail(emailDataForStreamer, dareAcceptedStreamerMail)
 		await checkPledgedAmount(projectId)
 	} catch (err) {
 		console.log('ses error')

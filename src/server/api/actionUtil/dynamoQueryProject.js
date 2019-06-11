@@ -1,7 +1,7 @@
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
-
+import { ternary } from 'root/src/shared/util/ramdaPlus'
 
 export default async (userId, projectId, projectStatus) => {
 	const projectParams = {
@@ -9,7 +9,7 @@ export default async (userId, projectId, projectStatus) => {
 		KeyConditionExpression: `${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :project)`,
 		ExpressionAttributeValues: {
 			':pk': projectId,
-			':project': `project${projectStatus ? `|${projectStatus}` : ''}`,
+			':project': `project|${projectStatus ? `${projectStatus}` : ''}`,
 		},
 		ConsistentRead: true,
 	}
@@ -33,25 +33,34 @@ export default async (userId, projectId, projectStatus) => {
 	// 	},
 	// 	ConsistentRead: true,
 	// }
+	const pledgeParamsExpression = ternary(userId,
+		`${PARTITION_KEY} = :pk and ${SORT_KEY} = :pledgeUserId`,
+		`${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :pledgeUserId)`)
+
 	const myPledgeParams = {
 		TableName: TABLE_NAME,
-		KeyConditionExpression: `${PARTITION_KEY} = :pk and ${SORT_KEY} = :pledgeUserId`,
+		KeyConditionExpression: pledgeParamsExpression,
 		ExpressionAttributeValues: {
 			':pk': projectId,
-			':pledgeUserId': `pledge|${userId}`,
+			':pledgeUserId': `pledge|${ternary(userId, userId, '')}`,
 		},
 		ConsistentRead: true,
 	}
 
+	const myFavoritesParamsExpression = ternary(userId,
+		`${PARTITION_KEY} = :pk and ${SORT_KEY} = :favoritesUserId`,
+		`${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :favoritesUserId)`)
+
 	const myFavoritesParams = {
 		TableName: TABLE_NAME,
-		KeyConditionExpression: `${PARTITION_KEY} = :pk and ${SORT_KEY} = :favoritesUserId`,
+		KeyConditionExpression: myFavoritesParamsExpression,
 		ExpressionAttributeValues: {
 			':pk': projectId,
-			':favoritesUserId': `favorites|${userId}`,
+			':favoritesUserId': `favorites|${ternary(userId, userId, '')}`,
 		},
 		ConsistentRead: true,
 	}
+
 
 	const [projectDdb, assigneesDdb, /* gamesDdb, */ myPledgeDdb, myFavoritesDdb] = await Promise.all([
 		documentClient.query(projectParams).promise(),
