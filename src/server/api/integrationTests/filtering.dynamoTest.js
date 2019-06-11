@@ -49,11 +49,13 @@ describe('filtering tests', async () => {
 				amountRequested: 1000,
 			},
 		})
+
 		const deliveryPayload = deliveryDareMock(project.id)
 		const deliveryInit = await deliveryDareInit({
 			userId: mockUserId,
 			payload: deliveryPayload,
 		})
+
 		const { deliverySortKey } = deliveryInit
 		const deliveryFinishPayload = {
 			projectId: project.id,
@@ -63,6 +65,7 @@ describe('filtering tests', async () => {
 			userId: mockUserId,
 			payload: deliveryFinishPayload,
 		})
+
 		const projectsOnMarketplace = await getActiveProjects({ payload: {} })
 
 		const pendingDeliveries = await getPendingDeliveries({ payload: {} })
