@@ -99,13 +99,13 @@ export default async ({ payload }) => {
 	await documentClient.batchWrite(writeParams).promise()
 
 	if (equals(audit, projectDeliveredKey)) {
-		const isCaptured = await captureProjectPledges(projectId)
+		const capturesAmount = await captureProjectPledges(projectId)
 
-		if (!isCaptured) {
+		if (!capturesAmount) {
 			throw generalError('captures processing error')
 		}
 		const projectToCapture = await dynamoQueryProjectToCapture(projectId)
-		const captureToWrite = await capturePaymentsWrite(projectToCapture)
+		const captureToWrite = await capturePaymentsWrite(projectToCapture, capturesAmount)
 
 		await documentClient.batchWrite({
 			RequestItems: {

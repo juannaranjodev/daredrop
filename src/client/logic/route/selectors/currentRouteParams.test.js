@@ -10,7 +10,6 @@ const mockState = {
 
 describe('currentRouteParams', () => {
 	test('works', () => {
-		console.log(currentRouteParams(mockState))
 		expect(
 			currentRouteParams(mockState),
 		).toEqual({ test: true })

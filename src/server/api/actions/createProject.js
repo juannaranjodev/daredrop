@@ -47,13 +47,13 @@ export default async ({ userId, payload }) => {
 		if (!validationCardId) {
 			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
 		}
-		const stripeAuthorization = await stripeAuthorizePayment(pledgeAmount, paymentInfo.paymentId, userId)
+		const stripeAuthorization = await stripeAuthorizePayment(pledgeAmount, paymentInfo.paymentId, userId, projectId)
 		if (!stripeAuthorization.authorized) {
 			throw payloadSchemaError(stripeAuthorization.error)
 		}
 		paymentInfo = assoc('paymentId', stripeAuthorization.id, paymentInfo)
 	} else if (paymentInfo.paymentType === paypalAuthorize) {
-		const validation = await validatePaypalAuthorize(paymentInfo.orderID, pledgeAmount)
+		const validation = await validatePaypalAuthorize(paymentInfo.paymentId, pledgeAmount)
 		if (!validation) {
 			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
 		}
@@ -109,16 +109,14 @@ export default async ({ userId, payload }) => {
 
 	await documentClient.batchWrite(params).promise()
 
-	try {
-		const email = await getUserEmail(userId)
+	const email = await getUserEmail(userId)
 
-		const emailData = {
-			dareTitle: project.title,
-			recipients: [email],
-			title: dareCreatedTitle,
-		}
-		sendEmail(emailData, dareCreatedEmail)
-	} catch (err) { }
+	const emailData = {
+		dareTitle: project.title,
+		recipients: [email],
+		title: dareCreatedTitle,
+	}
+	sendEmail(emailData, dareCreatedEmail)
 
 	return {
 		id: projectId,

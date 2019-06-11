@@ -83,22 +83,20 @@ export default async ({ userId, payload }) => {
 	const newProject = projectSerializer([
 		omit(['assignees'], auditedProject),
 		...assigneesDdb,
-		...myPledgeDdb,
+		...omit(['myPledge'], myPledgeDdb),
 	])
 
-	try {
-		const email = await getUserEmail(userId)
+	const email = await getUserEmail(userId)
 
-		if (equals(viewAudit(payload), projectApprovedKey)) {
-			const emailData = {
-				title: dareApprovedTitle,
-				dareTitle: prop('title', newProject),
-				recipients: [email],
-				streamers: compose(map(prop('username')), prop('assignees'))(newProject),
-			}
-			sendEmail(emailData, dareApprovedMail)
+	if (equals(viewAudit(payload), projectApprovedKey)) {
+		const emailData = {
+			title: dareApprovedTitle,
+			dareTitle: prop('title', newProject),
+			recipients: [email],
+			streamers: compose(map(prop('username')), prop('assignees'))(newProject),
 		}
-	} catch (err) { }
+		sendEmail(emailData, dareApprovedMail)
+	}
 
 	return {
 		...newProject,

@@ -1,13 +1,22 @@
-import checkoutNodeJssdk from '@paypal/checkout-server-sdk'
+
 import paypalClient from 'root/src/server/api/paypalClient'
 
-export default paypalAuthorizeId => new Promise(async (resolve, reject) => {
-	const request = new checkoutNodeJssdk.payments.AuthorizationsCaptureRequest(paypalAuthorizeId)
-	try {
-		const ppClientAuthorized = await paypalClient
-		const capture = await ppClientAuthorized.execute(request)
-		resolve(capture)
-	} catch (err) {
-		reject(err)
-	}
+export default (paypalAuthorizeId, paymentAmount) => new Promise(async (resolve, reject) => {
+	const ppClientAuthorized = await paypalClient
+	ppClientAuthorized.authorization.capture(
+		paypalAuthorizeId,
+		{
+			amount: {
+				currency: 'USD',
+				total: paymentAmount,
+			},
+			is_final_capture: true,
+		},
+		(error, capture) => {
+			if (error) {
+				reject(error)
+			}
+			resolve(capture)
+		},
+	)
 })

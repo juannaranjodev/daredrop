@@ -20,7 +20,6 @@ export default {
 					enum: [stripeCard, paypalAuthorize],
 				},
 				paymentId: { type: 'string' },
-				orderID: { type: 'string' },
 				paymentAmount: { type: 'number' },
 			},
 			required: ['paymentType', 'paymentId', 'paymentAmount'],
