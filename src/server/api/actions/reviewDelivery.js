@@ -14,13 +14,15 @@ import {
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
-import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
-import { payloadSchemaError } from 'root/src/server/api/errors'
+import { ternary } from 'root/src/shared/util/ramdaPlus'
+import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
 import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
+import capturePaymentsWrite from 'root/src/server/api/actionUtil/capturePaymentsWrite'
+import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
+import captureProjectPledges from 'root/src/server/api/actionUtil/captureProjectPledges'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
-
 
 export default async ({ payload }) => {
 	const projectId = viewProjectId(payload)
@@ -56,7 +58,6 @@ export default async ({ payload }) => {
 
 	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
 	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
-
 
 	const projectDataToWrite = [
 		...ternary(equals(audit, projectDeliveredKey),
@@ -96,6 +97,22 @@ export default async ({ payload }) => {
 	}
 
 	await documentClient.batchWrite(writeParams).promise()
+
+	if (equals(audit, projectDeliveredKey)) {
+		const isCaptured = await captureProjectPledges(projectId)
+
+		if (!isCaptured) {
+			throw generalError('captures processing error')
+		}
+		const projectToCapture = await dynamoQueryProjectToCapture(projectId)
+		const captureToWrite = await capturePaymentsWrite(projectToCapture)
+
+		await documentClient.batchWrite({
+			RequestItems: {
+				[TABLE_NAME]: captureToWrite,
+			},
+		}).promise()
+	}
 
 	return {
 		...projectSerialized,
