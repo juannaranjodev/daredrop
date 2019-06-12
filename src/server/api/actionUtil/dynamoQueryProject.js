@@ -1,6 +1,6 @@
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { dynamoItemsProp } from 'root/src/server/api/lenses'
+import { dynamoItemsProp, projectToPayoutKey } from 'root/src/server/api/lenses'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 
 export default async (userId, projectId, projectStatus) => {
@@ -61,13 +61,23 @@ export default async (userId, projectId, projectStatus) => {
 		ConsistentRead: true,
 	}
 
+	const payoutParams = {
+		TableName: TABLE_NAME,
+		KeyConditionExpression: `${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :payout)`,
+		ExpressionAttributeValues: {
+			':pk': projectId,
+			':payout': projectToPayoutKey,
+		},
+		ConsistentRead: true,
+	}
 
-	const [projectDdb, assigneesDdb, /* gamesDdb, */ myPledgeDdb, myFavoritesDdb] = await Promise.all([
+	const [projectDdb, assigneesDdb, /* gamesDdb, */ myPledgeDdb, myFavoritesDdb, payoutParamsDdb] = await Promise.all([
 		documentClient.query(projectParams).promise(),
 		documentClient.query(assigneeParams).promise(),
 		// documentClient.query(gameParams).promise(),
 		documentClient.query(myPledgeParams).promise(),
 		documentClient.query(myFavoritesParams).promise(),
+		documentClient.query(payoutParams).promise(),
 	])
 
 	return [
@@ -76,5 +86,6 @@ export default async (userId, projectId, projectStatus) => {
 		// dynamoItemsProp(gamesDdb),
 		dynamoItemsProp(myPledgeDdb),
 		dynamoItemsProp(myFavoritesDdb),
+		dynamoItemsProp(payoutParamsDdb),
 	]
 }

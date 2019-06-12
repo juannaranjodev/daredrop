@@ -1,4 +1,4 @@
-import { head, pick, reduce } from 'ramda'
+import { head, omit } from 'ramda'
 
 import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
 
@@ -33,16 +33,16 @@ export default async ({ userId, payload }) => {
 			':email': email,
 		},
 		ExpressionAttributeNames: {
-			'#email': 'email'
-		}
+			'#email': 'email',
+		},
 	}
 
 	await documentClient.update(updateProjectParams).promise()
 
 	const newPayout = {
 		...payout,
-		email: email,
+		email,
 	}
 
-	return newPayout
+	return omit(['pk'], newPayout)
 }

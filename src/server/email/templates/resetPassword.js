@@ -16,44 +16,44 @@ export default ({ resetPassrdLink }) => {
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>
-                  
+
                   <tr>
                     <td style="margin:0;padding:0;" width="100%">
                       <p style="margin:0;padding:0;">Use the link below to set up a new password for your account. This link will expire in 12 hours.</p>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>
-                  
+
                   <tr>
                     <td align="center" style="margin:0;padding:0;">
                       <a href="http://${resetPassrdLink}" style="display:inline-block;font-family:'Source Sans Pro',sans-serif;font-weight:700;font-size:18px;line-height:1.39;padding:11px 0;background:#800080;text-align:center;width:360px;color:#ffffff;text-decoration:none;border-radius:4px;" >Reset</a>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>
-                  
+
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
                       <p style="margin:0;padding:0;">If you did not make this request, you don’t need to do anything.</p>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>
-                  
+
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
                       <p style="margin:0;padding:0;">Game on,</p>
                       <p style="margin:0;padding:0;">The ${ourName} Team</p>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>

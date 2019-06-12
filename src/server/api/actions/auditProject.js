@@ -98,11 +98,11 @@ export default async ({ userId, payload }) => {
 	const newProject = projectSerializer([
 		omit(['assignees'], auditedProject),
 		...assigneesDdb,
-		...myPledgeDdb,
+		...omit(['myPledge'], myPledgeDdb),
 	])
 
 	try {
-		const email = await getUserEmail((prop('creator',respons)))
+		const email = await getUserEmail((prop('creator', respons)))
 		if (equals(viewAudit(payload), projectApprovedKey)) {
 			const emailData = {
 				title: dareApprovedTitle,
