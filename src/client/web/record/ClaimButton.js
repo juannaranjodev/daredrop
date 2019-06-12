@@ -6,8 +6,9 @@ import { storageSet } from 'root/src/shared/util/storage'
 import goToDeliveryFormHandler from 'root/src/client/logic/project/handlers/goToDeliveryFormHandler'
 import goToSignInHandler from 'root/src/client/logic/project/handlers/goToSignInHandler'
 import ButtonSubtitle from 'root/src/client/web/base/CustomButton/buttonWithSubtitle'
-import { notConnected, connectedNotClaimed, accepted, notEligible } from 'root/src/shared/constants/projectAcceptanceStatuses'
+import { notConnected, connectedNotClaimed, accepted, notEligible, videoPendingAproved } from 'root/src/shared/constants/projectAcceptanceStatuses'
 import goToClaimProjectHandler from 'root/src/client/logic/project/handlers/goToClaimProjectHandler'
+import SubHeader from 'root/src/client/web/typography/SubHeader'
 
 const ClaimButton = ({
 	projectAcceptanceStatus,
@@ -51,6 +52,18 @@ const ClaimButton = ({
 					subtitle="Upload to complete the Dare"
 					onClick={goToDeliveryFormHandler(pushRoute, projectId)}
 				/>
+			)
+		case (videoPendingAproved):
+			return (
+				<div style={{
+					marginTop: '10px',
+					textAlign: 'center',
+				}}
+				>
+					<SubHeader>
+					Video Under Review
+					</SubHeader>
+				</div>
 			)
 		case (notEligible):
 			return null
