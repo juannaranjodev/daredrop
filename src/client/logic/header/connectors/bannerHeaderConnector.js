@@ -14,6 +14,7 @@ import filterProjectByStreamer from 'root/src/client/logic/header/thunk/filterPr
 import gameFilterValueSelector from 'root/src/client/logic/header/selectors/gameFilterValueSelector'
 import streamerFilterValueSelector from 'root/src/client/logic/header/selectors/streamerFilterValueSelector'
 import sortProject from 'root/src/client/logic/header/thunk/sortProject'
+import sortValueSelector from 'root/src/client/logic/header/selectors/sortValueSelector'
 import bannerImageSubTextSelector from '../selectors/bannerImageSubTextSelector'
 
 export default reduxConnector(
@@ -29,6 +30,7 @@ export default reduxConnector(
 		['streamerFilterValue', streamerFilterValueSelector],
 		['linkLabel', linkLabelSelector],
 		['linkRouteId', linkRouteIdSelector],
+		['sortValue', sortValueSelector],
 	],
 	[
 		['pushRoute', pushRoute],

@@ -20,6 +20,14 @@ const listSchema = {
 						},
 					},
 				},
+				sortValue: {
+					type: 'object',
+					properties: {
+						label: { type: 'string' },
+						id: { type: 'string' },
+						value: { type: 'string' },
+					},
+				},
 				gameFilterValue: { type: 'string' },
 				streamerFilterValue: { type: 'string' },
 				sortType: { type: 'string' },

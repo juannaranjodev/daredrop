@@ -61,6 +61,7 @@ import cleareProjectArray from 'root/src/client/logic/header/reducers/clearProje
 import setGameFilterValue from 'root/src/client/logic/header/reducers/setGameFilterValue'
 import setStreamerFilterValue from 'root/src/client/logic/header/reducers/setStreamerFilterValue'
 import clearFilterParams from 'root/src/client/logic/header/reducers/clearFilterParams'
+import setSortValue from 'root/src/client/logic/header/reducers/setSortValue'
 
 import apiExternalRequestSuccess from 'root/src/client/logic/api/reducers/apiExternalRequestSuccess'
 import apiExternalRequestError from 'root/src/client/logic/api/reducers/apiExternalRequestError'
@@ -131,6 +132,7 @@ const store = createStore(
 		...clearFilterParams,
 		...clearList,
 		...clearListProcessing,
+		...setSortValue,
 	}, // reducer object
 	// [], // sagas
 	[
