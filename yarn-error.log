@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/local/bin/yarn add paypal-rest-sdk --save
+  /usr/bin/node /usr/local/bin/yarn add cron-parser --save
 
 PATH: 
   /home/domo/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/home/domo/Documents/Workspace/DareDrop/node_modules/@babel/generator/node_modules/source-map/CHANGELOG.md'
+  Error: EACCES: permission denied, mkdir '/home/domo/Documents/Workspace/DareDrop/node_modules/babel-loader/node_modules/make-dir'
 
 npm manifest: 
   {
@@ -52,7 +52,6 @@ npm manifest:
       "@material-ui/core": "^3.8.1",
       "@material-ui/icons": "^3.0.1",
       "@material-ui/styles": "^3.0.0-alpha.6",
-      "@paypal/checkout-server-sdk": "^1.0.0",
       "ajv": "^6.5.1",
       "ajv-errors": "^1.0.0",
       "amazon-cognito-identity-js": "^2.0.20",
@@ -104,6 +103,7 @@ npm manifest:
       "object-hash": "^1.3.1",
       "ora": "^3.0.0",
       "path-to-regexp": "^2.2.1",
+      "paypal-rest-sdk": "^1.8.1",
       "prop-types": "^15.6.2",
       "qs": "^6.5.2",
       "ramda": "^0.26.0",
@@ -1771,11 +1771,6 @@ Lockfile:
     dependencies:
       tweetnacl "^0.14.3"
   
-  bellajs@^7.2.2:
-    version "7.5.0"
-    resolved "https://registry.yarnpkg.com/bellajs/-/bellajs-7.5.0.tgz#797c408dc05ea13a1e01dc1ca737498e234a9099"
-    integrity sha512-1hjCZS29BGA7BuTKKVqW+iPotOz+nOU0wQAh1zDeRLXOauk2MpOUiyby6vCv2VIGygv5lKJSJcGfaOjs+9vvMg==
-  
   big.js@^3.1.3:
     version "3.2.0"
     resolved "https://registry.yarnpkg.com/big.js/-/big.js-3.2.0.tgz#a5fc298b81b9e0dca2e458824784b65c52ba588e"
@@ -1986,7 +1981,7 @@ Lockfile:
     dependencies:
       node-int64 "^0.4.0"
   
-  buffer-crc32@~0.2.3:
+  buffer-crc32@^0.2.3, buffer-crc32@~0.2.3:
     version "0.2.13"
     resolved "https://registry.yarnpkg.com/buffer-crc32/-/buffer-crc32-0.2.13.tgz#0d333e3f00eac50aa1454abd30ef8c2a5d9a7242"
   
@@ -7315,23 +7310,13 @@ Lockfile:
     dependencies:
       pify "^3.0.0"
   
-  paypal-classic-api@^1.2.1:
-    version "1.2.1"
-    resolved "https://registry.yarnpkg.com/paypal-classic-api/-/paypal-classic-api-1.2.1.tgz#0492836208bccaee6ca7afb288cc9c50f0d957fd"
-    integrity sha1-BJKDYgi8yu5sp6+yiMycUPDZV/0=
+  paypal-rest-sdk@^1.8.1:
+    version "1.8.1"
+    resolved "https://registry.yarnpkg.com/paypal-rest-sdk/-/paypal-rest-sdk-1.8.1.tgz#5023fd42f43da628d18cc00d6bd566eacba74528"
+    integrity sha512-Trj2GuPn10GqpICAxQh5wjxuDT7rq7DMOkvyatz05wI5xPGmqXN7UC0WfDSF9WSBs4YdcWZP0g+nY+sOdaFggw==
     dependencies:
-      querystring "^0.2.0"
-      request "^2.53.0"
-      underscore "^1.8.2"
-  
-  paypal-nvp-api@^1.2.5:
-    version "1.2.5"
-    resolved "https://registry.yarnpkg.com/paypal-nvp-api/-/paypal-nvp-api-1.2.5.tgz#c01510df57fb8a0b3576568494eb91188a7e1aad"
-    integrity sha512-bK351yWe4Noe+eJpZEic14SBC5ZqoC7BKmyUoeekChu7eLMnHZ6eFkrsUoL2J5BsDUQxL9zTVsYpi7XBJUEJ7Q==
-    dependencies:
-      bellajs "^7.2.2"
-      promise-wtf "^1.2.4"
-      request "^2.86.0"
+      buffer-crc32 "^0.2.3"
+      semver "^5.0.3"
   
   pbkdf2@^3.0.3:
     version "3.0.17"
@@ -7461,11 +7446,6 @@ Lockfile:
     dependencies:
       err-code "^1.0.0"
       retry "^0.10.0"
-  
-  promise-wtf@^1.2.4:
-    version "1.2.4"
-    resolved "https://registry.yarnpkg.com/promise-wtf/-/promise-wtf-1.2.4.tgz#8cbdd31ea10dee074fbb6387cbc96e413993376c"
-    integrity sha512-wOZ+ZUG0/Lsk+muOElLtteIteyvF5B1bNcVLhmlv6PDKcAAQGa5Bf0maN3rj73FWyjJE840MzeQyNE6KOKpgrg==
   
   promise@^7.1.1:
     version "7.3.1"
@@ -7601,7 +7581,7 @@ Lockfile:
     version "0.2.1"
     resolved "https://registry.yarnpkg.com/querystring-es3/-/querystring-es3-0.2.1.tgz#9ec61f79049875707d69414596fd907a4d711e73"
   
-  querystring@0.2.0, querystring@^0.2.0:
+  querystring@0.2.0:
     version "0.2.0"
     resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
   
@@ -8073,7 +8053,7 @@ Lockfile:
       stealthy-require "^1.1.1"
       tough-cookie "^2.3.3"
   
-  request@^2.53.0, request@^2.86.0, request@^2.87.0, request@^2.88.0:
+  request@^2.87.0, request@^2.88.0:
     version "2.88.0"
     resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
     dependencies:
@@ -9166,11 +9146,6 @@ Lockfile:
   underscore@1.7.0:
     version "1.7.0"
     resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.7.0.tgz#6bbaf0877500d36be34ecaa584e0db9fef035209"
-  
-  underscore@^1.8.2:
-    version "1.9.1"
-    resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
-    integrity sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==
   
   union-value@^1.0.0:
     version "1.0.0"

@@ -2,14 +2,14 @@ import getAtt from 'root/src/aws/util/getAtt'
 import join from 'root/src/aws/util/join'
 
 import {
-	API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE,
+	API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE, API_CLOUDWATCH_EVENTS_ROLE,
 } from 'root/src/aws/api/resourceIds'
 
 export default {
 	[API_LAMBDA_EXECUTION_ROLE]: {
 		Type: 'AWS::IAM::Role',
 		DependsOn: [
-			API_DYNAMO_DB_TABLE,
+			API_DYNAMO_DB_TABLE, API_CLOUDWATCH_EVENTS_ROLE,
 		],
 		Properties: {
 			AssumeRolePolicyDocument: {
@@ -19,6 +19,13 @@ export default {
 						Effect: 'Allow',
 						Principal: {
 							Service: ['lambda.amazonaws.com'],
+						},
+						Action: ['sts:AssumeRole'],
+					},
+					{
+						Effect: 'Allow',
+						Principal: {
+							Service: ['events.amazonaws.com'],
 						},
 						Action: ['sts:AssumeRole'],
 					},
@@ -87,6 +94,18 @@ export default {
 										'*',
 									],
 								),
+							},
+							{
+								Sid: 'CloudWatchEventsFullAccess',
+								Effect: 'Allow',
+								Action: ['events:*'],
+								Resource: '*',
+							},
+							{
+								Sid: 'IAMPassRoleForCloudWatchEvents',
+								Effect: 'Allow',
+								Action: 'iam:PassRole',
+								Resource: getAtt(API_CLOUDWATCH_EVENTS_ROLE, 'Arn'),
 							},
 						],
 					},
