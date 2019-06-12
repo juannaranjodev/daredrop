@@ -112,7 +112,6 @@ export default async ({ userId, payload }) => {
 			}
 			sendEmail(emailData, dareApprovedMail)
 		}
-
 		if (equals(viewAudit(payload), projectRejectedKey)) {
 			const emailData = {
 				title: dareRejectedByToSTitle,
