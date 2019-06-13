@@ -23,6 +23,7 @@ import {
 } from 'root/src/shared/descriptions/modules/moduleIds'
 
 import { authValue } from 'root/src/client/logic/route/lenses'
+import { admin } from 'root/src/shared/constants/authenticationTypes'
 
 export default {
 	[CREATE_PROJECT_ROUTE_ID]: {
@@ -34,6 +35,7 @@ export default {
 	},
 	[DARE_DELIVERY_DETAIL_ROUTE_ID]: {
 		url: '/review-project/:recordId',
+		authentication: admin,
 		modules: [
 			DARE_DELIVERY_DETAIL_MODULE_ID,
 		],
@@ -55,14 +57,14 @@ export default {
 	},
 	[PENDING_PROJECTS_ROUTE_ID]: {
 		url: '/pending-projects',
-		authentication: authValue,
+		authentication: admin,
 		modules: [
 			PENDING_PROJECTS_LIST_MODULE_ID,
 		],
 	},
 	[PENDING_DELIVERIES_ROUTE_ID]: {
 		url: '/pending-videos',
-		authentication: authValue,
+		authentication: admin,
 		modules: [
 			TITLE_HEADER_PENDING_DELIVERIES_MODULE_ID,
 			PENDING_DELIVERIES_MODULE_ID,
