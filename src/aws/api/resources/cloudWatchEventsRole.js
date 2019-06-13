@@ -20,7 +20,7 @@ export default {
 			},
 			Policies: [
 				{
-					PolicyName: 'root',
+					PolicyName: 'cloudwatchevents',
 					PolicyDocument: {
 						Version: '2012-10-17',
 						Statement: [
