@@ -87,7 +87,7 @@ jest.mock('root/src/server/api/googleClient', () => {
 	}
 })
 
-jest.mock('root/src/server/api/actionUtil/invokeCronJob', () => ({
+jest.mock('root/src/server/api/actionUtil/setupCronJob', () => ({
 	__esModule: true,
 	default: jest.fn(() => Promise.resolve()),
 }))
