@@ -87,6 +87,16 @@ jest.mock('root/src/server/api/googleClient', () => {
 	}
 })
 
+jest.mock('root/src/server/api/actionUtil/invokeCronJob', () => ({
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve()),
+}))
+
+jest.mock('root/src/server/api/actionUtil/deleteCronJob', () => ({
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve()),
+}))
+
 jest.mock('root/src/server/api/paypalClient', () => ({
 	payout: {
 		create: jest.fn((a, b, callback) => callback(null, {})),

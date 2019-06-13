@@ -82,7 +82,6 @@ describe('reviewDelivery', async () => {
 
 		await wait(500)
 		const res = await apiFn(event)
-
 		expect(res.body.status).toEqual(projectDeliveredKey)
 	})
 	let project2

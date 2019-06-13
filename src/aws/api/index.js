@@ -3,7 +3,6 @@ import apiLambdaLongTask from 'root/src/aws/api/resources/apiLambdaLongTask'
 import apiLambdaExecutionRole from 'root/src/aws/api/resources/apiLambdaExecutionRole'
 import apiDynamoDbTable from 'root/src/aws/api/resources/apiDynamoDbTable'
 import cloudWatchEventsRole from 'root/src/aws/api/resources/cloudWatchEventsRole'
-import cloudWatchEventsRule from 'root/src/aws/api/resources/cloudWatchEventsRule'
 
 import outputs from 'root/src/aws/api/outputs'
 import {
@@ -16,7 +15,6 @@ export const apiResources = {
 	...apiDynamoDbTable,
 	...apiLambdaLongTask,
 	...cloudWatchEventsRole,
-	...cloudWatchEventsRule,
 }
 
 export const apiOutputs = outputs

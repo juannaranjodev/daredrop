@@ -35,18 +35,8 @@ export const apiHof = (
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
 ) => async (event) => {
 	try {
-		let endpointId; let payload; let
-			authentication
-		if (event.detail) {
-			endpointId = event.detail.endpointId
-			payload = event.detail.payload
-			authentication = event.detail.authentication
-		} else {
-			endpointId = event.endpointId
-			payload = event.payload
-			authentication = event.authentication
-		}
-		// const { endpointId, payload, authentication } = event
+		const { endpointId, payload, authentication } = event
+
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (!endpointExists) {
 			throw notFoundError(endpointId)

@@ -1,5 +1,6 @@
 import getAtt from 'root/src/aws/util/getAtt'
 import join from 'root/src/aws/util/join'
+import ref from 'root/src/aws/util/ref'
 
 import {
 	API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE, API_CLOUDWATCH_EVENTS_ROLE,
@@ -19,13 +20,6 @@ export default {
 						Effect: 'Allow',
 						Principal: {
 							Service: ['lambda.amazonaws.com'],
-						},
-						Action: ['sts:AssumeRole'],
-					},
-					{
-						Effect: 'Allow',
-						Principal: {
-							Service: ['events.amazonaws.com'],
 						},
 						Action: ['sts:AssumeRole'],
 					},
@@ -57,6 +51,21 @@ export default {
 								Resource: [
 									'arn:aws:ses:*:*:*',
 								],
+							},
+							{
+								Effect: 'Allow',
+								Action: [
+									'lambda:AddPermission',
+									'lambda:RemovePermission',
+								],
+								Resource: join(
+									':',
+									[
+										'arn:aws:lambda:us-east-1',
+										ref('AWS::AccountId'),
+										'*:*',
+									],
+								),
 							},
 							{
 								Effect: 'Allow',

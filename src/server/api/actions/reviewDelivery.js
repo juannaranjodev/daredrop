@@ -1,29 +1,30 @@
+// libs
 import { prop, propEq, map, filter, equals, and, not, startsWith } from 'ramda'
-
+import moment from 'moment'
+import { ternary } from 'root/src/shared/util/ramdaPlus'
+// db stuff
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
-import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+// utils
+import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
+import capturePaymentsWrite from 'root/src/server/api/actionUtil/capturePaymentsWrite'
+import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
+import captureProjectPledges from 'root/src/server/api/actionUtil/captureProjectPledges'
+import setupCronJob from 'root/src/server/api/actionUtil/setupCronJob'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
+import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
+import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+// descriptions
+import { REVIEW_DELIVERY, PAYOUT_ASSIGNEES } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import {
 	streamerAcceptedKey, streamerDeliveryApprovedKey,
 	projectDeliveredKey, projectDeliveryPendingKey,
 	projectApprovedKey, projectToCaptureKey,
 } from 'root/src/server/api/lenses'
-import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
-import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
-import getTimestamp from 'root/src/shared/util/getTimestamp'
-import { ternary } from 'root/src/shared/util/ramdaPlus'
-import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
-import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
-import capturePaymentsWrite from 'root/src/server/api/actionUtil/capturePaymentsWrite'
-import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
-import captureProjectPledges from 'root/src/server/api/actionUtil/captureProjectPledges'
-import generateCrontab from 'root/src/shared/util/generateCrontab'
-import moment from 'moment'
-import { CloudWatchEvents } from 'aws-sdk'
-import { apiLongTaskFunctionArn, apiCloudWatchEventsIamRole, apiLambdaExecutionRoleArn } from 'root/cfOutput'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
@@ -40,12 +41,7 @@ export default async ({ payload }) => {
 	const [projectToApproveDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
 
 	const projectSerialized = projectSerializer([...projectToApproveDdb, ...assigneesDdb], true)
-
-	const projectAssignees = prop('assignees', projectSerializer([
-		...assigneesDdb,
-	]))
-
-	const projectAcceptedAssignees = filter(propEq('accepted', streamerAcceptedKey), projectAssignees)
+	const projectAcceptedAssignees = filter(propEq('accepted', streamerAcceptedKey), prop('assignees', projectSerialized))
 
 	const assigneesToWrite = ternary(equals(audit, projectDeliveredKey), map(assignee => ({
 		PutRequest: {
@@ -118,72 +114,17 @@ export default async ({ payload }) => {
 			},
 		}).promise()
 
+		// here I leave 5 minutes for testing purposes
 		// const eventDate = moment().add(5, 'days')
-		const eventDate = moment().add(1, 'minutes').subtract(2, 'hours')
-		const crontab = generateCrontab(eventDate)
-
-		const cloudWatchEvents = new CloudWatchEvents()
-
-		const ruleParams = {
-			Name: projectId,
-			ScheduleExpression: crontab,
-			EventPattern: JSON.stringify({
-				source: ['review.delivery.lambda'],
-			}),
-			State: 'ENABLED',
-			RoleArn: apiCloudWatchEventsIamRole,
-		}
-
-		const targetParams = {
-			Rule: projectId,
-			Targets: [
-				{
-					Arn: apiLongTaskFunctionArn,
-					Id: 'lambdaCloudWatch',
-					// InputPath: JSON.stringify({ endpointId: '$.detail.endpointId', payload: '$.detail.payload' }),
-				},
-			],
-		}
-
-
-		cloudWatchEvents.putRule(ruleParams, (err, rule) => {
-			if (err) {
-				console.log(err)
-				return err
-			}
-			cloudWatchEvents.putTargets(targetParams, (err, data) => {
-				if (err) {
-					console.log(err)
-					return (err)
-				}
-				const eventParams = {
-					Entries: [
-						{
-							Detail: JSON.stringify({ endpointId: 'PAYOUT_ASSIGNEES', payload: { projectId } }),
-							DetailType: 'Scheduled Event',
-							Resources: [
-								rule.RuleArn,
-							],
-							Source: 'review.delivery.lambda',
-						},
-					],
-				}
-				cloudWatchEvents.putEvents(eventParams, (err, data) => {
-					if (err) {
-						console.log(err)
-						return (err)
-					}
-					console.log(data)
-					return data
-					return {
-						...projectSerialized,
-						status: audit,
-					}
-				})
-			})
-		})
+		const eventDate = moment().add(5, 'minutes')
+		await setupCronJob(
+			{
+				endpointId: PAYOUT_ASSIGNEES,
+				payload: { projectId },
+			},
+			eventDate, 'projectId',
+		)
 	}
-
 
 	return {
 		...projectSerialized,
