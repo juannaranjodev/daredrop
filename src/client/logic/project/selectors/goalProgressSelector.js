@@ -29,10 +29,13 @@ export default (state, props) => {
 			0,
 			assignees,
 		)
-		const pledgeAmount = prop('pledgeAmount', record)
-		const onePersent = pledgeRequest / 95
-		const answer = (pledgeAmount / onePersent) + 5
-		return answer > 100 ? 100 : answer
+		if (equals(pledgeRequest, 0)) {
+			return 5
+		} else {
+			const pledgeAmount = prop('pledgeAmount', record)
+			const answer = pledgeAmount / pledgeRequest * 100
+			return answer < 5 ? 5 : answer > 100 ? 100 : answer
+		}
 	}
 	return 5
 }

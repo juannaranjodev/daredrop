@@ -21,7 +21,7 @@ describe('Update project', () => {
 			endpointId: UPDATE_PROJECT,
 			payload: {
 				projectId: newProject.id,
-				stripeCardId: 'mockStripeCardId',
+				stripeCardId: 'src_FBgaRgsyjOqOiz',
 				description,
 				title,
 			},

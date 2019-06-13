@@ -1,6 +1,6 @@
 import { apiFn } from 'root/src/server/api'
 
-import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { REVIEW_DELIVERY, CAPTURE_PROJECT_PAYMENTS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import createProject from 'root/src/server/api/actions/createProject'
 
@@ -13,11 +13,14 @@ import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
 import getPendingDeliveries from 'root/src/server/api/actions/getPendingDeliveries'
+import dynamoQueryProjectPledges from 'root/src/server/api/actionUtil/dynamoQueryProjectPledges'
+import wait from 'root/src/testUtil/wait'
 
-describe('approveDelivery', async () => {
+describe('reviewDelivery', async () => {
+	let project
 	test('Correctly approves delivery', async () => {
 		// TODO test suites for admin verification
-		const project = await createProject({
+		project = await createProject({
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),
 		})
@@ -77,6 +80,7 @@ describe('approveDelivery', async () => {
 			},
 		}
 
+		await wait(500)
 		const res = await apiFn(event)
 
 		expect(res.body.status).toEqual(projectDeliveredKey)
@@ -128,6 +132,7 @@ describe('approveDelivery', async () => {
 		expect(res.statusCode).toEqual(400)
 	})
 	test('there is 1 pending delivery', async () => {
+		await wait(500)
 		const deliveries = await getPendingDeliveries({
 			userId: mockUserId,
 			payload: {
@@ -149,17 +154,31 @@ describe('approveDelivery', async () => {
 		}
 
 		const res = await apiFn(event)
-
 		expect(res.body.status).toEqual(projectDeliveryRejectedKey)
 	})
 	test('there are no pending deliveries', async () => {
+		await wait(500)
 		const deliveries = await getPendingDeliveries({
 			userId: mockUserId,
 			payload: {
 				currentPage: 1,
 			},
 		})
-
 		expect(deliveries.items.length).toEqual(0)
+	})
+
+	test('capture project payments', async () => {
+		const event = {
+			userId: mockUserId,
+			endpointId: CAPTURE_PROJECT_PAYMENTS,
+			payload: {
+				projectId: project.id,
+			},
+		}
+		const res = await apiFn(event)
+		const projectPledges = await dynamoQueryProjectPledges(project.id)
+
+		expect(projectPledges[0].paymentInfo[0].captured).toEqual(200)
+		expect(res.statusCode).toEqual(500)
 	})
 })

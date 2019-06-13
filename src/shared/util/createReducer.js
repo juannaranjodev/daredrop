@@ -1,4 +1,4 @@
-import { has } from 'ramda'
+import { has, includes } from 'ramda'
 import Result from 'folktale/result'
 
 import reportError from 'root/src/shared/util/reportError'
@@ -8,6 +8,9 @@ const createReducer = (reducerObj, initialState) => (
 ) => Result.try(
 	() => {
 		const { type, payload } = action
+		if (includes('@@redux', type)) 
+			return state
+		
 		if (!has(type, reducerObj)) {
 			throw new Error(`Action ${type} not found`)
 		}

@@ -40,6 +40,8 @@ import deliveryDare from 'root/src/shared/descriptions/endpoints/deliveryDare'
 import reviewDelivery from 'root/src/shared/descriptions/endpoints/reviewDelivery'
 
 import getAcceptedProjects from 'root/src/shared/descriptions/endpoints/getAcceptedProject'
+import captureProjectPayments from 'root/src/shared/descriptions/endpoints/captureProjectPayments'
+import payoutAssignees from 'root/src/shared/descriptions/endpoints/payoutAssignees'
 
 const allEndpoints = {
 	...createProject,
@@ -73,6 +75,8 @@ const allEndpoints = {
 	...getPayoutMethod,
 	...updatePayoutMethod,
 	...getProjectAdmin,
+	...captureProjectPayments,
+	...payoutAssignees,
 }
 
 export default map(

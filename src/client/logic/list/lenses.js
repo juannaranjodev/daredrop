@@ -10,6 +10,19 @@ const listSchema = {
 			properties: {
 				currentPage: { type: 'integer' },
 				hasMore: { type: 'boolean' },
+				filterParams: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							param: { type: 'string' },
+							value: { type: 'string' },
+						},
+					},
+				},
+				gameFilterValue: { type: 'string' },
+				streamerFilterValue: { type: 'string' },
+				sortType: { type: 'string' },
 			},
 		},
 	},

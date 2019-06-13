@@ -1,4 +1,4 @@
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, contains, join, tail } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -15,6 +15,7 @@ import randomNumber from 'root/src/shared/util/randomNumber'
 import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
+import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
@@ -58,24 +59,19 @@ export default async ({ payload, userId }) => {
 
 	const userAssigneeArr = unnest(unnest(userAssigneeArrNested))
 
-	const assigneesToWrite = unnest(map((assignee) => {
-		const updateProjectParam = {
-			TableName: TABLE_NAME,
-			Key: {
+	const assigneesToWrite = map(assignee => ({
+		PutRequest: {
+			Item:
+			{
 				[PARTITION_KEY]: assignee[PARTITION_KEY],
 				[SORT_KEY]: assignee[SORT_KEY],
+				...assignee,
+				amountRequested,
+				accepted: streamerAcceptedKey,
+				modified: getTimestamp(),
 			},
-			UpdateExpression: 'SET amountRequested = :amountRequested, accepted = :newAccepted, modified = :newModified',
-			ExpressionAttributeValues: {
-				':amountRequested': amountRequested,
-				':newAccepted': streamerAcceptedKey,
-				':newModified': getTimestamp(),
-			},
-		}
-		return documentClient.update(updateProjectParam).promise()
-	}, userAssigneeArr))
-
-	Promise.all(assigneesToWrite)
+		},
+	}), userAssigneeArr)
 
 	if (equals(length(acceptedAssigneesInProject), 0)) {
 		projectAcceptedRecord = [{
@@ -98,20 +94,26 @@ export default async ({ payload, userId }) => {
 
 		await documentClient.batchWrite(acceptationParams).promise()
 	}
-
 	const updateProjectParam = {
-		TableName: TABLE_NAME,
-		Key: {
-			[PARTITION_KEY]: prop('id', projectToAccept),
-			[SORT_KEY]: head(projectToAcceptDdb)[SORT_KEY],
-		},
-		UpdateExpression: 'SET assignees = :newAssignees',
-		ExpressionAttributeValues: {
-			':newAssignees': assigneesInProject,
+		RequestItems: {
+			[TABLE_NAME]: [
+				{
+					PutRequest: {
+						Item: {
+							[PARTITION_KEY]: prop('id', projectToAccept),
+							[SORT_KEY]: head(projectToAcceptDdb)[SORT_KEY],
+							status: projectAcceptedKey,
+							...setAssigneesStatus(projectToAccept, streamerAcceptedKey, userTokensStr, amountRequested),
+						},
+					},
+				},
+				...assigneesToWrite,
+			],
 		},
 	}
 
-	await documentClient.update(updateProjectParam).promise()
+
+	await documentClient.batchWrite(updateProjectParam).promise()
 
 	return omit([PARTITION_KEY, SORT_KEY],
 		{

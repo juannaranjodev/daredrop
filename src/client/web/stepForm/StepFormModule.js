@@ -68,7 +68,7 @@ export const StepFormModuleUnconnected = memo(({
 					'layout-row layout-align-center',
 				)}
 			>
-				<Header>{ternary(onFirstStep, 'Dare a Streamer', 'Payement Information')}</Header>
+				<Header>{ternary(onFirstStep, 'Dare a Streamer', 'Payment Information')}</Header>
 			</div>
 			<Form
 				formIndex={stepFormCurrentPage}
@@ -82,8 +82,7 @@ export const StepFormModuleUnconnected = memo(({
 					className={classes.submits}
 					loading={false}
 					onClick={() => {
-						savePartialForm(moduleKey, onStep)
-						stepFormNextPage(moduleKey)
+						savePartialForm(moduleKey, stepFormNextPage)
 					}}
 				>
 					<span className={classes.transformNone}>

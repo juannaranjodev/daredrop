@@ -1,8 +1,8 @@
-import { head, add, prop, compose, map, not, length, gt, assoc, assocPath, append } from 'ramda'
+import { head, add, prop, compose, map, not, length, assoc, equals, filter, propEq, omit, append } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
-import { PARTITION_KEY, SORT_KEY, GSI1_INDEX_NAME, GSI1_PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import pledgeMadeMail from 'root/src/server/email/templates/pledgeMade'
@@ -12,13 +12,15 @@ import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilde
 import { PLEDGE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import pledgeDynamoObj from 'root/src/server/api/actionUtil/pledgeDynamoObj'
-import { generalError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
-import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
-import { dynamoItemsProp } from 'root/src/server/api/lenses'
+import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthorizePayment'
+import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/server/api/lenses'
+import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
+import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
+import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
 const { viewPledgeAmount, viewPaymentInfo } = payloadLenses
@@ -37,10 +39,24 @@ export default async ({ userId, payload }) => {
 	}
 
 	const newPledgeAmount = viewPledgeAmount(payload)
-	const paymentInfo = viewPaymentInfo(payload)
+	let paymentInfo = viewPaymentInfo(payload)
 
-	if (paymentInfo.paymentType === 'stripeCard' && !validateStripeSourceId(paymentInfo.paymentId)) {
-		throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+	if (paymentInfo.paymentType === stripeCard) {
+		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
+		if (!validationCardId) {
+			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+		}
+		const stripeAuthorization = await stripeAuthorizePayment(newPledgeAmount, paymentInfo.paymentId, userId, projectId)
+
+		if (!stripeAuthorization.authorized) {
+			throw payloadSchemaError(stripeAuthorization.error)
+		}
+		paymentInfo = assoc('paymentId', prop('id', stripeAuthorization), paymentInfo)
+	} else if (paymentInfo.paymentType === paypalAuthorize) {
+		const validation = await validatePaypalAuthorize(paymentInfo.paymentId, newPledgeAmount)
+		if (!validation) {
+			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
+		}
 	}
 
 	let myPledge = head(dynamoItemsProp(await documentClient.query({
@@ -61,7 +77,10 @@ export default async ({ userId, payload }) => {
 		)
 	}
 
-	const newMyPledge = assoc('paymentInfo', append(paymentInfo, prop('paymentInfo', myPledge)), myPledge)
+	const newMyPledge = assoc('paymentInfo', append(
+		assoc('captured', 0, omit(['orderID'], paymentInfo)),
+		prop('paymentInfo', myPledge),
+	), myPledge)
 	const updatedPledgeAmount = assoc('pledgeAmount', add(newPledgeAmount, prop('pledgeAmount', myPledge)), newMyPledge)
 
 	const { pledgeAmount } = projectToPledge
@@ -94,23 +113,20 @@ export default async ({ userId, payload }) => {
 		myPledge,
 	])
 
-	try {
-		const email = await getUserEmail(userId)
+	const email = await getUserEmail(userId)
 
-		const emailData = {
-			title: pledgeMadeTitle,
-			dareTitle: prop('title', newProject),
-			recipients: [email],
-			// TODO EMAIL
-			// expiry time in seconds
-			dareHref: projectHrefBuilder(prop('id', newProject)),
-			streamers: compose(map(prop('username')), prop('assignees'))(newProject),
-			// TODO EMAIL
-			// notClaimedAlready
-		}
+	const emailData = {
+		title: pledgeMadeTitle,
+		dareTitle: prop('title', newProject),
+		recipients: [email],
+		// TODO EMAIL
+		// expiry time
+		dareHref: projectHrefBuilder(prop('id', newProject)),
+		streamers: compose(map(prop('username')), prop('assignees'))(newProject),
+		notClaimedAlready: equals(0, length(filter(propEq('accepted', streamerAcceptedKey), prop('assignees', newProject)))),
+	}
 
-		sendEmail(emailData, pledgeMadeMail)
-	} catch (err) { }
+	sendEmail(emailData, pledgeMadeMail)
 
 
 	return {

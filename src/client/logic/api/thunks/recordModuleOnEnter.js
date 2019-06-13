@@ -25,6 +25,7 @@ export default ({ moduleId, nextRouteObj }) => async (dispatch) => {
 			{},
 			payloadItems,
 		)
+
 		return dispatch(apiRequest(endpointId, payload))
 	}
 }

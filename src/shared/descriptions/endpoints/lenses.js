@@ -16,9 +16,10 @@ const endpointDescriptionSchema = {
 						'project',
 						'projectList',
 						'paymentMethod',
-						'payoutMethod'
+						'payoutMethod',
 					],
 				},
+				isLongRunningTask: { type: 'boolean' },
 			},
 		},
 	},

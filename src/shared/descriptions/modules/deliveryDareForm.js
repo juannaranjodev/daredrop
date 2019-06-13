@@ -20,11 +20,11 @@ export default {
 				],
 			},
 			{
-				fieldId: 'videoAtach',
-				inputType: 'atachmentInput',
+				fieldId: 'videoAttach',
+				inputType: 'attachmentInput',
 				labelFieldText: [
 					{
-						text: 'Video Atachment',
+						text: 'Video Attachment',
 						required: true,
 					},
 				],
@@ -44,7 +44,7 @@ export default {
 		submits: [
 			{
 				label: 'Confirm',
-
+				uploadProgress: true,
 			},
 		],
 	},

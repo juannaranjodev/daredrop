@@ -17,14 +17,19 @@ const gameIds = [
 	{ id: 138585 }, // hearthstone
 ]
 
-export default ({ assigneeCount = 1 } = {}) => ({
-	title: name.title(), // Changing this one because is generates a title more than 60 char.
-	description: lorem.paragraph(),
-	paymentInfo: {
-		paymentType: 'stripeCard',
-		paymentId: random.uuid(),
-	},
-	pledgeAmount: random.number(),
-	assignees: twitchStreamerIds,
-	games: gameIds,
-})
+export default ({ assigneeCount = 1 } = {}) => {
+	const pledgeAmount = random.number()
+	return ({
+		title: name.title(), // Changing this one because is generates a title more than 60 char.
+		description: lorem.paragraph(),
+		paymentInfo: {
+			paymentType: 'paypalAuthorize',
+			// paymentId: random.uuid(),
+			paymentId: 'src_FBgaRgsyjOqOiz',
+			paymentAmount: pledgeAmount,
+		},
+		pledgeAmount,
+		assignees: twitchStreamerIds,
+		games: gameIds,
+	})
+}

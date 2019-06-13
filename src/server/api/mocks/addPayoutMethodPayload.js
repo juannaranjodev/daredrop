@@ -1,3 +1,3 @@
 export default () => ({
-  email: 'paypal@email.com'
+	email: 'paypal@email.com'
 })

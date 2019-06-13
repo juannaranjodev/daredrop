@@ -4,6 +4,7 @@ import initApp from 'root/src/client/logic/app/thunks/initApp'
 import testMediaBreakpoints from 'root/src/client/logic/app/thunks/testMediaBreakpoints'
 
 // reducers
+import initAppReducer from 'root/src/client/logic/app/reducers/initAppReducer'
 import authDetermined from 'root/src/client/logic/app/reducers/authDetermined'
 import setMediaBreakpoints from 'root/src/client/logic/app/reducers/setMediaBreakpoints'
 import changeRoute from 'root/src/client/logic/route/reducers/changeRoute'
@@ -36,6 +37,7 @@ import currentListPayload from 'root/src/client/logic/api/reducers/currentListPa
 // project
 import favoritesProcessingStart from 'root/src/client/logic/project/reducers/favoritesProcessingStart'
 import favoritesProcessingEnd from 'root/src/client/logic/project/reducers/favoritesProcessingEnd'
+import uploadProgress from 'root/src/client/logic/project/reducers/uploadProgress'
 
 import apiRecordClickActionRequestError from 'root/src/client/logic/api/reducers/apiRecordClickActionRequestError'
 import apiRecordClickActionRequestSuccess from 'root/src/client/logic/api/reducers/apiRecordClickActionRequestSuccess'
@@ -49,6 +51,14 @@ import addPayoutMethodOnSuccess from 'root/src/client/logic/payoutMethod/reducer
 import setFirstPage from 'root/src/client/logic/list/reducers/setFirstPage'
 import currentPage from 'root/src/client/logic/list/reducers/currentPage'
 import hasMore from 'root/src/client/logic/list/reducers/hasMore'
+
+// headers
+import addFilterParams from 'root/src/client/logic/header/reducers/addFilterParams'
+import addSortParams from 'root/src/client/logic/header/reducers/addSortParams'
+import cleareProjectArray from 'root/src/client/logic/header/reducers/clearProjectArray'
+import setGameFilterValue from 'root/src/client/logic/header/reducers/setGameFilterValue'
+import setStreamerFilterValue from 'root/src/client/logic/header/reducers/setStreamerFilterValue'
+import clearFilterParams from 'root/src/client/logic/header/reducers/clearFilterParams'
 
 import apiExternalRequestSuccess from 'root/src/client/logic/api/reducers/apiExternalRequestSuccess'
 import apiExternalRequestError from 'root/src/client/logic/api/reducers/apiExternalRequestError'
@@ -65,6 +75,7 @@ import displayModal from 'root/src/client/logic/modal/reducers/displayModal'
 
 const store = createStore(
 	{
+		...initAppReducer,
 		...authDetermined,
 		...setMediaBreakpoints,
 		...changeRoute,
@@ -108,7 +119,14 @@ const store = createStore(
 		...favoritesProcessingStart,
 		...favoritesProcessingEnd,
 		...displayModal,
-		...addPayoutMethodOnSuccess
+		...addPayoutMethodOnSuccess,
+		...uploadProgress,
+		...addFilterParams,
+		...addSortParams,
+		...cleareProjectArray,
+		...setGameFilterValue,
+		...setStreamerFilterValue,
+		...clearFilterParams,
 	}, // reducer object
 	// [], // sagas
 	[
