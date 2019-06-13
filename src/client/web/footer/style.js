@@ -149,6 +149,9 @@ const styles = {
 		backgroundSize: 'cover',
 		backgroundColor: 'black',
 	},
+	linkPointer: {
+		cursore: 'pointer',
+	},
 }
 
 export default styles
