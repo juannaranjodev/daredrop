@@ -24,8 +24,7 @@ export const ListItemUnconnected = memo(({
 	recordId, pushRoute, projectTitle, projectDescription, classes,
 	projectGameImage, projectAssigneesImages, projectShareUrl, projectGames, isAuthenticated,
 	projectAssigneesName, projectPledged, projectAccepted, timeouts, setTimeouts,
-	projectDeliveries, listRouteHandler,
-	goalProgress,
+	projectDeliveries, listRouteHandler, goalProgress,
 }) => {
 	const [hover, setHover] = useState(false)
 	const [over, setOver] = useState(false)

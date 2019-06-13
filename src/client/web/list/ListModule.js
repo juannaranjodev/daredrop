@@ -24,7 +24,6 @@ export const CardList = ({
 	list, currentPage, hasMore, classes, getNextPage,
 }) => {
 	const [timeouts, setTimeouts] = useState([])
-	console.log(timeouts);
 	return (
 		<div className="flex layout-row layout-align-center-start">
 			<MaxWidthContainer>
