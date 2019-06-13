@@ -149,8 +149,9 @@ const styles = {
 		backgroundSize: 'cover',
 		backgroundColor: 'black',
 	},
-	linkPointer: {
-		cursore: 'pointer',
+	supportLink: {
+		cursor: 'pointer',
+		textDecoration: 'none',
 	},
 }
 
