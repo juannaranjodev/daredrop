@@ -3,7 +3,7 @@ import { redirectURI } from 'root/src/shared/constants/googleOAuth'
 import { SecretsManager } from 'aws-sdk'
 
 const secretsClient = new SecretsManager()
-const secretName = process.env.stage === 'production' ? 'productionGoogleOauth' : 'google_OAuth'
+const secretName = process.env.STAGE === 'production' ? 'productionGoogleOauth' : 'google_OAuth'
 
 export default new Promise((resolve, reject) => {
 	secretsClient.getSecretValue({ SecretId: secretName }, (err, data) => {

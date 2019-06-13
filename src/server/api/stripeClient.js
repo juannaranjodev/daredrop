@@ -2,7 +2,7 @@ import Stripe from 'stripe'
 import { SecretsManager } from 'aws-sdk'
 
 const secretsClient = new SecretsManager()
-const secretName = process.env.stage === 'production' ? 'Stripe_Test_0' : 'productionStripeSecret'
+const secretName = process.env.STAGE === 'production' ? 'productionStripeSecret' : 'Stripe_Test_0'
 
 export default new Promise((resolve, reject) => {
 	try {

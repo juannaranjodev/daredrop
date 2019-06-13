@@ -3,7 +3,7 @@ import paypalRestSDK from 'paypal-rest-sdk'
 
 const secretsClient = new SecretsManager()
 
-const envConf = process.env.stage === 'production'
+const envConf = process.env.STAGE === 'production'
 	? {
 		mode: 'live',
 		secretName: 'productionPaypalSecret',
@@ -19,8 +19,7 @@ export default new Promise((resolve, reject) => {
 		if (err) {
 			reject(err)
 		}
-		const { PayPal_Test_ID: clientId, PayPal_Test_Secret: clientSecret } = JSON.parse(data.SecretString)
-
+		const { paypalClientId: clientId, paypalClientSecret: clientSecret } = JSON.parse(data.SecretString)
 		paypalRestSDK.configure({
 			mode,
 			client_id: clientId,

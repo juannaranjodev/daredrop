@@ -9,8 +9,8 @@ module.exports = (env) => {
 		case ('production'):
 			return {
 				TWITCH_CLIENT_ID: 'ruosppbybmeq0au48f4hzhzs0jfmej',
-				PAYPAL_CLIENT_ID: 'none',
-				STRIPE_CLIENT_ID: 'none',
+				PAYPAL_CLIENT_ID: 'none',// <----- need to set it here
+				STRIPE_CLIENT_ID: 'none',// <----- need to set it here
 			}
 		default:
 			return {}
