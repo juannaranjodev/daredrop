@@ -24,6 +24,7 @@ export const CardList = ({
 	list, currentPage, hasMore, classes, getNextPage,
 }) => {
 	const [timeouts, setTimeouts] = useState([])
+	console.log(timeouts);
 	return (
 		<div className="flex layout-row layout-align-center-start">
 			<MaxWidthContainer>
@@ -57,10 +58,10 @@ export const CardList = ({
 							),
 							(
 								<div>
-								Nothing found
+									Nothing found
 								</div>
 							),
-						) }
+						)}
 					</InfiniteScroll>
 					<div className={classes.goTopContainer} onClick={scrollTopHandler}>
 						<div>
@@ -73,7 +74,7 @@ export const CardList = ({
 								</SvgIcon>
 							</div>
 							<div>
-							Go to Top
+								Go to Top
 							</div>
 						</div>
 					</div>
@@ -129,7 +130,7 @@ const UniversalList = ({
 						</div>
 					</LinkButton>
 				),
-				listControls)}
+					listControls)}
 			</div>
 		</List>
 	)
