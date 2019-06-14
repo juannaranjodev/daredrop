@@ -32,9 +32,7 @@ export const ListItemUnconnected = memo(({
 	const [nameOver, setNameOver] = useState(undefined)
 
 	const onMouseLeave = func => () => {
-		const timeout = setTimeout(() => {
-			func(undefined)
-		}, 1000)
+		const timeout = setTimeout(() => func(undefined), 1000)
 		setTimeoutId(timeout)
 	}
 

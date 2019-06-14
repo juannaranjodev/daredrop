@@ -13,13 +13,13 @@ export const pushRouteHof = (
 	defaultRouteFn,
 	dispatchCommittedRouteFn,
 	runModuleMountsFn,
-) => (routeId, routeParams) => async (dispatch, getState) => {
+) => (routeId, routeParams) => (dispatch, getState) => {
 	let nextRouteObj = { routeId, routeParams }
 	const state = getState()
 
 	const timeoutId = add(viewTimeoutId(state), 1) || 0
 	const clearTimeoutFn = t => clearTimeout(t)
-	await forEach(clearTimeoutFn, range(0, timeoutId))
+	forEach(clearTimeoutFn, range(0, timeoutId))
 
 	if (nextRouteObj) {
 		nextRouteObj = auditRouteFn(nextRouteObj, state)
