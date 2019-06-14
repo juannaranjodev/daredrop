@@ -11,7 +11,7 @@ const PayPalButtonUnconnected = memo(({
 		options={{
 			clientId: PAYPAL_CLIENT_ID,
 			intent: 'authorize',
-			'disable-funding': 'card,sepa',
+			'disable-funding': 'card,credit,sepa',
 		}}
 		style={{
 			color: 'white',
