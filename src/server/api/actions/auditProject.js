@@ -98,7 +98,7 @@ export default async ({ userId, payload }) => {
 	const newProject = projectSerializer([
 		omit(['assignees'], auditedProject),
 		...assigneesDdb,
-		...myPledgeDdb,
+		...omit(['myPledge'], myPledgeDdb),
 	])
 
 	try {
@@ -122,7 +122,6 @@ export default async ({ userId, payload }) => {
 			sendEmail(emailData, dareRejectedByToSMail)
 		}
 	} catch (err) {
-		console.log('ses error')
 	}
 
 	return {

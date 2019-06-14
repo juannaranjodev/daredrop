@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath, propOr } from 'ramda'
-
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath, propOr, assoc } from 'ramda'
 import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -73,7 +72,10 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 				deliveryApproved: prop('approved', projectPart),
 			}
 		}
-		if (startsWith('project', sk)) {
+		if (startsWith('projectToPayout', sk)) {
+			return assoc('capturesAmount', prop('capturesAmount', projectPart), result)
+		}
+		if (startsWith('project|', sk)) {
 			const projectObj = pick(
 				[
 					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl', 'status',
