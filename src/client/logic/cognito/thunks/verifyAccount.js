@@ -17,9 +17,11 @@ export default ({ email, verificationCode }) => dispatch => new Promise(
 				resolve(result)
 			}
 		})
-	}
+	},
 ).then(
-	() => dispatch(pushRoute(LOGIN_ROUTE_ID))
+	() => {
+		dispatch(pushRoute(LOGIN_ROUTE_ID))
+	},
 ).catch(
-	console.warn
+	console.warn,
 )

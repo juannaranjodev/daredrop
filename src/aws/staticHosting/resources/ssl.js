@@ -1,7 +1,6 @@
-import getAtt from 'root/src/aws/util/getAtt'
 import domainName from 'root/src/aws/util/domainName'
 import {
-	SSL, STATIC_BUCKET,
+	SSL,
 } from 'root/src/aws/staticHosting/resourceIds'
 
 export default {
@@ -10,7 +9,7 @@ export default {
 		Properties: {
 			DomainName: domainName,
 			SubjectAlternativeNames: [
-				domainName
+				domainName,
 			],
 			ValidationMethod: 'DNS',
 		},

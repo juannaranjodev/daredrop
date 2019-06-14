@@ -17,9 +17,10 @@ const getResultSchemaFnMock = jest.fn()
 const getAuthenticationFnMock = jest.fn()
 const testEndpointExistsFnMock = jest.fn()
 const getIsLongRunningTask = jest.fn()
+const getTriggerActions = jest.fn()
 
 const apiFn = apiHof(
-	serverEndpointsMock, getPayloadSchemaFnMock, getResultSchemaFnMock,
+	serverEndpointsMock, getPayloadSchemaFnMock, getResultSchemaFnMock, getTriggerActions,
 	getAuthenticationFnMock, testEndpointExistsFnMock, getIsLongRunningTask,
 )
 
