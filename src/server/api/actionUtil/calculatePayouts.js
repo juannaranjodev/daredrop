@@ -2,7 +2,7 @@
 import { head, prop, map, assoc, add, reduce } from 'ramda'
 import { composeE } from 'root/src/shared/util/ramdaPlus'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import dynamoQueryPayoutMethod from 'root/src/server/api/actionUtil/dynamoQueryPayoutMethod'
 import buildUserSortKeyFromAssigneeObj from 'root/src/server/api/actionUtil/buildUserSortKeyFromAssigneeObj'

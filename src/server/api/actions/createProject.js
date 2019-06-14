@@ -13,12 +13,12 @@ import dareCreatedEmail from 'root/src/server/email/templates/dareCreated'
 import { dareCreatedTitle } from 'root/src/server/email/util/emailTitles'
 
 import { CREATE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import projectDenormalizeFields from 'root/src/server/api/actionUtil/projectDenormalizeFields'
 import pledgeDynamoObj from 'root/src/server/api/actionUtil/pledgeDynamoObj'
 import randomNumber from 'root/src/shared/util/randomNumber'
 import { payloadSchemaError } from 'root/src/server/api/errors'
-import { projectPendingKey } from 'root/src/server/api/lenses'
+import { projectPendingKey } from 'root/src/shared/descriptions/apiLenses'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import moment from 'moment'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
@@ -112,7 +112,7 @@ export default async ({ userId, payload }) => {
 	await documentClient.batchWrite(params).promise()
 
 	const email = await getUserEmail(userId)
-	try{
+	try {
 		const emailData = {
 			dareTitle: project.title,
 			recipients: [email],

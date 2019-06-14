@@ -1,4 +1,4 @@
-import { projectRejectedKey } from 'root/src/server/api/lenses'
+import { projectRejectedKey } from 'root/src/shared/descriptions/apiLenses'
 
 import { REJECT_ACTIVE_PROJECT } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 

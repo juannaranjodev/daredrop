@@ -4,7 +4,7 @@ import { prop, propEq, map, filter, equals, and, not, startsWith } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
@@ -12,7 +12,7 @@ import {
 	streamerAcceptedKey, streamerDeliveryApprovedKey,
 	projectDeliveredKey, projectDeliveryPendingKey,
 	projectApprovedKey, projectToCaptureKey,
-} from 'root/src/server/api/lenses'
+} from 'root/src/shared/descriptions/apiLenses'
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
@@ -59,7 +59,7 @@ export default async ({ payload }) => {
 					accepted: ternary(equals(audit, projectDeliveredKey),
 						streamerDeliveryApprovedKey, prop('accepted', assignee)),
 				},
-				projectId),
+					projectId),
 			},
 		},
 	}), projectAcceptedAssignees), [])

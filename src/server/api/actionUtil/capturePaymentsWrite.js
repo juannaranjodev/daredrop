@@ -1,5 +1,5 @@
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { projectToPayoutKey } from 'root/src/server/api/lenses'
+import { projectToPayoutKey } from 'root/src/shared/descriptions/apiLenses'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 
 export default async (projectToCapture, capturesAmount) => {

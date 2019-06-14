@@ -12,11 +12,11 @@ import { dareApprovedTitle, dareRejectedByToSTitle } from 'root/src/server/email
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 
 import { AUDIT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import { generalError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import { projectApprovedKey, projectRejectedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey, projectRejectedKey } from 'root/src/shared/descriptions/apiLenses'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import projectStatusKeySelector from 'root/src/server/api/actionUtil/projectStatusKeySelector'
 import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectByStatus'
@@ -102,7 +102,7 @@ export default async ({ userId, payload }) => {
 	])
 
 	try {
-		const email = await getUserEmail((prop('creator',respons)))
+		const email = await getUserEmail((prop('creator', respons)))
 		if (equals(viewAudit(payload), projectApprovedKey)) {
 			const emailData = {
 				title: dareApprovedTitle,

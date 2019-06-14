@@ -1,7 +1,7 @@
-import { config, CognitoIdentityCredentials, CognitoIdentity } from 'aws-sdk'
 import { region } from 'root/src/shared/constants/aws'
 import { identityPoolId, userPoolId } from 'root/cfOutput'
 
+const { config, CognitoIdentityCredentials, CognitoIdentity } = AWS
 const cognitoLoginKey = `cognito-idp.${region}.amazonaws.com/${userPoolId}`
 
 const cognitoidentity = new CognitoIdentity({ region })

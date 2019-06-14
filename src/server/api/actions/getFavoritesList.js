@@ -1,7 +1,7 @@
 import { filter, propEq, split, equals, addIndex, map, nth, head, last } from 'ramda'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { GSI1_INDEX_NAME, GSI1_PARTITION_KEY, PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { dynamoItemsProp, pkProp, skProp, projectApprovedKey } from 'root/src/server/api/lenses'
+import { dynamoItemsProp, pkProp, skProp, projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 import listResults from 'root/src/server/api/actionUtil/listResults'
 import favoritesSerializer from 'root/src/server/api/serializers/favoritesSerializer'
 import moment from 'moment'

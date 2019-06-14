@@ -1,10 +1,10 @@
 import getRecordSelector from 'root/src/client/logic/api/selectors/getRecordSelector'
 import { reduce, isNil, equals, propOr, prop } from 'ramda'
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
+import { getResponseLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import {
 	projectAcceptedKey,
-} from 'root/src/server/api/lenses'
+} from 'root/src/shared/descriptions/apiLenses'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {

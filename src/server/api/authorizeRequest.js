@@ -3,7 +3,7 @@ import { authorizationError } from 'root/src/server/api/errors'
 import { userPk } from 'root/src/server/api/pkMaker'
 import getCognitoUser from 'root/src/server/api/getCognitoUser'
 import { authenticated } from 'root/src/shared/constants/authenticationTypes'
-import { getAuthentication } from 'root/src/server/api/getEndpointDesc'
+import { getAuthentication } from 'root/src/shared/descriptions/getEndpointDesc'
 
 export const authorizeRequestHof = (
 	getAuthenticationFn, getCognitoUserFn,

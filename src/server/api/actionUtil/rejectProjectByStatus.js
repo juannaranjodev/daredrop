@@ -1,7 +1,7 @@
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { map, prop, assoc, unnest } from 'ramda'
-import { dynamoItemsProp } from 'root/src/server/api/lenses'
+import { dynamoItemsProp } from 'root/src/shared/descriptions/apiLenses'
 
 export default async (projectId, statusArr) => {
 	const paramsArr = await Promise.all(map(async (status) => {

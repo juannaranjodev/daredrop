@@ -1,7 +1,7 @@
 import { split, join, tail, filter, propEq, compose, prop, head } from 'ramda'
 import {TABLE_NAME, documentClient} from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY, GSI1_INDEX_NAME } from 'root/src/shared/constants/apiDynamoIndexes'
-import {dynamoItemsProp} from 'root/src/server/api/lenses'
+import {dynamoItemsProp} from 'root/src/shared/descriptions/apiLenses'
 
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 

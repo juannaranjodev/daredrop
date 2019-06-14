@@ -9,13 +9,13 @@ import { videoBucket } from 'root/cfOutput'
 import { s3BaseURL } from 'root/src/shared/constants/s3Constants'
 
 // lenses
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 // keys
 import { DELIVERY_DARE_INIT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { projectDeliveryPendingKey } from 'root/src/server/api/lenses'
+import { projectDeliveryPendingKey } from 'root/src/shared/descriptions/apiLenses'
 
 // utils
 import getTimestamp from 'root/src/shared/util/getTimestamp'

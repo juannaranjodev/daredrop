@@ -9,7 +9,7 @@ import {
 	streamerAcceptedKey,
 	streamerRejectedKey,
 	streamerDeliveredKey,
-} from 'root/src/server/api/lenses'
+} from 'root/src/shared/descriptions/apiLenses'
 
 export default (state, props) => {
 	const assignees = projectAssigneesSelector(state, props)

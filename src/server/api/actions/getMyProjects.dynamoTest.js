@@ -9,7 +9,7 @@ import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload
 import createProject from 'root/src/server/api/actions/createProject'
 
 import auditProject from 'root/src/server/api/actions/auditProject'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 import rejectProject from 'root/src/server/api/actions/rejectProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 

@@ -4,7 +4,7 @@ import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
-import { dynamoItemsProp } from 'root/src/server/api/lenses'
+import { dynamoItemsProp } from 'root/src/shared/descriptions/apiLenses'
 
 export default async (items) => {
 	if (items == undefined || equals(length(items), 0)) {

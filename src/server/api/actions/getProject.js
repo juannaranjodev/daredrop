@@ -1,7 +1,7 @@
 import { prop } from 'ramda'
 
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'

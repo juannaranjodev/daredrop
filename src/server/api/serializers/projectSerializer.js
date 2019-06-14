@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
 import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath, propOr, assoc } from 'ramda'
-import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
+import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/shared/descriptions/apiLenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
+import { getResponseLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
 
 const responseLenses = getResponseLenses(GET_PROJECT)

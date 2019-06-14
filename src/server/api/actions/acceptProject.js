@@ -4,11 +4,11 @@ import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose,
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import { generalError, authorizationError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
-import { projectAcceptedKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
+import { projectAcceptedKey, streamerAcceptedKey } from 'root/src/shared/descriptions/apiLenses'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'

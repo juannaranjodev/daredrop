@@ -6,7 +6,7 @@ import createProject from 'root/src/server/api/actions/createProject'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { UPDATE_PROJECT } from '../../../shared/descriptions/endpoints/endpointIds'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 
 describe('Update project', () => {
 	test('Updates newly created project if you are an admin', async () => {

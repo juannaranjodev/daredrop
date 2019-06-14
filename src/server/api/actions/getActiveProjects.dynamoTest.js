@@ -7,7 +7,7 @@ import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload
 import createProject from 'root/src/server/api/actions/createProject'
 
 import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import incrementDateCreatedInDb from 'root/src/testUtil/incrementDateCreatedInDb'
 import expectOmitDate from 'root/src/testUtil/expectOmitDate'
