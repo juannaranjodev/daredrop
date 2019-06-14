@@ -109,10 +109,6 @@ jest.mock('root/src/server/api/actionUtil/getUserEmail', () => ({
 	__esModule: true,
 	default: jest.fn(() => Promise.resolve({ id: 'user@mail.com' })),
 }))
-jest.mock('root/src/server/api/actionUtil/dynamoGetTokenIdFromUserId', () => ({
-	__esModule: true,
-	default: jest.fn(() => Promise.resolve('132123')),
-}))
 
 // Normally authentication is a JWT that gets decoded and returns a user id.
 // For tests I'm mocking the authorizeRequest which does the jwt decoding and
