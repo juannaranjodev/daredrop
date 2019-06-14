@@ -1,7 +1,7 @@
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { dynamoItemsProp } from 'root/src/server/api/lenses'
-import { head, prop, replace } from 'ramda'
+import { head, prop, replace, equals } from 'ramda'
 
 export default async (userId, token) => {
 	const tokenParams = {
@@ -14,6 +14,6 @@ export default async (userId, token) => {
 	}
 
 	const dynamoResult = await documentClient.query(tokenParams).promise()
-
+	if (equals(prop('Count', dynamoResult), 0)) return ''
 	return replace(`token-${token}|`, '', prop('sk', head(dynamoItemsProp(dynamoResult))))
 }
