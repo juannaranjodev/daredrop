@@ -2,6 +2,7 @@ import createStore from 'root/src/shared/util/createStore'
 
 import initApp from 'root/src/client/logic/app/thunks/initApp'
 import testMediaBreakpoints from 'root/src/client/logic/app/thunks/testMediaBreakpoints'
+import setTimeoutId from 'root/src/client/logic/project/reducers/setTimeoutId'
 
 // reducers
 import initAppReducer from 'root/src/client/logic/app/reducers/initAppReducer'
@@ -127,6 +128,7 @@ const store = createStore(
 		...setGameFilterValue,
 		...setStreamerFilterValue,
 		...clearFilterParams,
+		...setTimeoutId,
 	}, // reducer object
 	// [], // sagas
 	[
