@@ -38,8 +38,8 @@ import { TWITCH_OAUTH_FAILURE_ROUTE_ID } from 'root/src/shared/descriptions/rout
 export const fetchList = async (dispatch, state, endpointId, payload) => {
 	const recordType = recordTypeSelector(endpointId)
 	const listStoreKey = createListStoreKey(endpointId, payload)
-	dispatch(initApiListRequest(listStoreKey))
 	checkTokenExpire(state, dispatch)
+	dispatch(initApiListRequest(listStoreKey))
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	const { statusCode, body, statusError, generalError } = lambdaRes
 	if (equals(statusCode, 200)) {
@@ -60,11 +60,11 @@ export const fetchList = async (dispatch, state, endpointId, payload) => {
 export const fetchRecord = async (dispatch, state, endpointId, payload) => {
 	const recordType = recordTypeSelector(endpointId)
 	const recordId = idProp(payload)
+	checkTokenExpire(state, dispatch)
 	if (recordId) { // else creating, don't need record loading state
 		const recordStoreKey = createRecordStoreKey(recordType, recordId)
 		dispatch(initApiRecordRequest(recordStoreKey))
 	}
-	checkTokenExpire(state, dispatch)
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	const { statusCode, body, statusError, generalError } = lambdaRes
 	if (equals(statusCode, 200)) {
@@ -79,10 +79,10 @@ export const fetchRecord = async (dispatch, state, endpointId, payload) => {
 
 export const fetchExternal = async (dispatch, state, endpointId, payload) => {
 	try {
+		checkTokenExpire(state, dispatch)
 		const externalRes = await invokeApiExternal(endpointId, payload)
 		externalRes.tokenId = determineToken(endpointId)
 		const lambdaEndpoint = endpointMappings(endpointId, payload)
-		checkTokenExpire(state, dispatch)
 		const lambdaRes = await invokeApiLambda(lambdaEndpoint, externalRes, state)
 		const { status, displayName } = externalRes
 
