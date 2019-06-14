@@ -18,19 +18,19 @@ export default ({ dareTitle, expiryTime, dareHref, streamers, notClaimedAlready 
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>
-                  
+
                   <tr>
                     <td style="margin:0;padding:0;" width="100%">
                       <p style="margin:0;padding:0;">
-                        Money DOWN! You can tell ${arrayToStringParser(streamers)} they’ve been Dared! 
+                        Money DOWN! You can tell ${arrayToStringParser(streamers)} they’ve been Dared!
                       </p>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>
-                  
+
                   <tr>
                     <td style="margin:0;padding:0;" width="100%">
                       <p style="margin:0;padding:0;">
@@ -52,12 +52,12 @@ export default ({ dareTitle, expiryTime, dareHref, streamers, notClaimedAlready 
                       </p>
                     </td>
                   </tr>
-                  
-                  
+
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>` : ''}
-                  
+
                   <tr>
                     <td style="margin:0;padding:0;" width="100%">
                       <p style="margin:0;padding:0;">
@@ -65,17 +65,17 @@ export default ({ dareTitle, expiryTime, dareHref, streamers, notClaimedAlready 
                       </p>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>
-                  
+
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
                       <p style="margin:0;padding:0;">The ${ourName} Team</p>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>

@@ -17,6 +17,7 @@ describe('getAcceptedProjects', () => {
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),
 		})
+
 		await auditProject({
 			userId: mockUserId,
 			payload: {

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { uniq, prop, sort, filter, map, startsWith, anyPass } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'

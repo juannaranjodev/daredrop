@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable max-len */
 import { prop, propEq, map, filter, equals, and, not, startsWith } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
@@ -21,6 +23,13 @@ import capturePaymentsWrite from 'root/src/server/api/actionUtil/capturePayments
 import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
 import captureProjectPledges from 'root/src/server/api/actionUtil/captureProjectPledges'
 
+
+import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
+import { videoRejectedTitle, videoApprovedTitle } from 'root/src/server/email/util/emailTitles'
+import videoApprovedEmail from 'root/src/server/email/templates/videoApproved'
+import videoRejectedEmail from 'root/src/server/email/templates/videoRejected'
+import sendEmail from 'root/src/server/email/actions/sendEmail'
+
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
 
@@ -28,7 +37,6 @@ export default async ({ payload }) => {
 	const projectId = viewProjectId(payload)
 	const audit = viewAudit(payload)
 	const message = viewMessage(payload)
-
 	if (and(not(equals(audit, projectDeliveredKey)), not(message))) {
 		throw payloadSchemaError('Message is required')
 	}
@@ -55,7 +63,6 @@ export default async ({ payload }) => {
 			},
 		},
 	}), projectAcceptedAssignees), [])
-
 	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
 	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
 
@@ -96,7 +103,27 @@ export default async ({ payload }) => {
 		},
 	}
 
-	await documentClient.batchWrite(writeParams).promise()
+	try {
+		const streamerEmails = await Promise.all(
+			map(streamer => getUserEmailByTwitchID(prop('platformId', streamer)),
+				projectAcceptedAssignees),
+		)
+		const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
+		const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
+		await documentClient.batchWrite(writeParams).promise()
+		map((streamerEmail) => {
+			const emailData = {
+				title: emailTitle,
+				dareTitle: prop('title', projectSerialized),
+				message,
+				recipients: [streamerEmail],
+				expiryTime: prop('created', projectSerialized),
+			}
+			sendEmail(emailData, emailTemplate)
+		}, streamerEmails)
+	} catch (err) {
+		console.log('ses error')
+	}
 
 	if (equals(audit, projectDeliveredKey)) {
 		const capturesAmount = await captureProjectPledges(projectId)

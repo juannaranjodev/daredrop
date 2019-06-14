@@ -1,6 +1,5 @@
-import ref from 'root/src/aws/util/ref'
 import getAtt from 'root/src/aws/util/getAtt'
-import domainName, { hostedZoneId, apexDomain } from 'root/src/aws/util/domainName'
+import domainName, { hostedZoneId } from 'root/src/aws/util/domainName'
 import {
 	RECORD_SET, CLOUDFRONT_DISTRIBUTION,
 } from 'root/src/aws/staticHosting/resourceIds'
@@ -28,9 +27,9 @@ export default {
 			Name: domainName,
 			Type: 'A',
 			AliasTarget: {
-				HostedZoneId: 'Z2FDTNDATAQYW2', // specific for cloudfront? https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html 
+				HostedZoneId: 'Z2FDTNDATAQYW2', // specific for cloudfront? https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html
 				DNSName: getAtt(CLOUDFRONT_DISTRIBUTION, 'DomainName'),
-			}
+			},
 		},
 	},
 }
