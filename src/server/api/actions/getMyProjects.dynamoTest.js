@@ -36,6 +36,15 @@ describe('getMyProjects', () => {
 				range(1, 3),
 			),
 		)
+		const oAuthDetails = {
+			tokenId: 'twitch',
+			id: projectArr[0].assignees[0].platformId,
+		}
+
+		await addOAuthToken({
+			payload: oAuthDetails,
+			userId: mockUserId,
+		})
 		// So this kinda sucks, but there is no way to ConsistenRead on a GSI.
 		// This test will fail because of a race condition occasionally. Should
 		// figure out a better solution to this at some point...maybe a retry?
@@ -53,15 +62,6 @@ describe('getMyProjects', () => {
 	})
 
 	test('gets correct amount of assignees displayed after one rejects', async () => {
-		const oAuthDetails = {
-			tokenId: 'twitch',
-			id: projectArr[0].assignees[0].platformId,
-		}
-
-		await addOAuthToken({
-			payload: oAuthDetails,
-			userId: mockUserId,
-		})
 
 		await auditProject({
 			userId: mockUserId,
