@@ -15,6 +15,7 @@ import projectDeliveriesSelector from 'root/src/client/logic/project/selectors/p
 import projectAcceptedSelector from 'root/src/client/logic/project/selectors/projectAcceptedSelector'
 import listRouteHandlerSelector from 'root/src/client/logic/project/selectors/listRouteHandlerSelector'
 import goalProgressSelector from 'root/src/client/logic/project/selectors/goalProgressSelector'
+import setTimeoutIdHandler from 'root/src/client/logic/project/handlers/setTimeoutIdHandler'
 
 export default reduxConnector(
 	[
@@ -35,5 +36,6 @@ export default reduxConnector(
 	],
 	[
 		['pushRoute', pushRoute],
+		['setTimeoutId', setTimeoutIdHandler],
 	],
 )
