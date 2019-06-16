@@ -53,6 +53,9 @@ const appSchema = {
 						},
 					},
 				},
+				timeoutId: {
+					type: 'number',
+				},
 			},
 		},
 	},

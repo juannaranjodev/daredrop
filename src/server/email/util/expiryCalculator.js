@@ -1,6 +1,9 @@
+import moment from 'moment'
+
 export default (time) => {
-	if (time >= 86400) {
-		return `${Math.ceil(time / 86400)} days`
+	const timeAsStamp = moment(time).add(7, 'days').format('X') - moment().format('X')
+	if (timeAsStamp >= 86400) {
+		return `${Math.ceil(timeAsStamp / 86400)} days`
 	}
-	return `${Math.ceil(time / 3600)} hours`
+	return `${Math.ceil(timeAsStamp / 3600)} hours`
 }
