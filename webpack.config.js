@@ -3,17 +3,22 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
-const BrotliPlugin = require('brotli-webpack-plugin')
-const CompressionPlugin = require('compression-webpack-plugin')
+const BrotliGzipPlugin = require('brotli-gzip-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const appConstants = require('./src/shared/constants/app')
 const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
 
-// const env = slsConstants.env || 'dev'
-const env = process.env.STAGE || 'development'
-const isProd = env === 'production'
+const stage = process.env.STAGE
+// production is webpack production build with production variables
+// staging is webpack production build with development variables
+// development is webpack development build with development variables
+const mode = (stage === 'staging' || stage === 'production') ? 'production' : 'development'
+const env = stage || 'development'
+
+const isProd = mode === 'production'
+
 const envVars = Object.assign(
 	{ __sha__: process.env.CIRCLE_SHA1 || 'dev' },
 	colorConstants,
@@ -26,7 +31,7 @@ if (module.hot) {
 }
 
 module.exports = {
-	mode: env,
+	mode,
 	devtool: isProd ? false : 'source-map',
 	entry: [
 		'babel-polyfill',
@@ -100,21 +105,23 @@ module.exports = {
 			},
 		]),
 		(isProd
-			? new CompressionPlugin({
-				algorithm: 'gzip',
+			? new BrotliGzipPlugin({
+				asset: '[fileWithoutExt].br.[ext][query]',
+				algorithm: 'brotli',
 				test: /\.(js|css|html|svg)$/,
 				threshold: 10240,
 				minRatio: 0.8,
 			})
 			: () => ''),
 		(isProd
-			? new BrotliPlugin({
-				asset: '[path].br[query]',
+			? new BrotliGzipPlugin({
+				asset: '[fileWithoutExt].[ext][query]',
+				algorithm: 'gzip',
 				test: /\.(js|css|html|svg)$/,
 				threshold: 10240,
 				minRatio: 0.8,
-			})
-			: () => ''),
+			}) : () => ''),
+
 	],
 	optimization: {
 		minimizer: [new UglifyJsPlugin({

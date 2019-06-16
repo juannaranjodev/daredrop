@@ -5,6 +5,7 @@ import { staticHostingResources, staticHostingOutputs } from 'root/src/aws/stati
 import {
 	apiResources, apiOutputs, apiAuthPolicies, apiUnauthPolicies,
 } from 'root/src/aws/api'
+import { lambdaEdgeResources } from 'root/src/aws/lambdaEdge'
 
 const appendedCognitoResources = addCognitoPolicies(
 	cognitoResources,
@@ -21,6 +22,7 @@ export default {
 		...appendedCognitoResources,
 		...apiResources,
 		...staticHostingResources,
+		...lambdaEdgeResources,
 	},
 	Outputs: {
 		...cognitoOutputs,

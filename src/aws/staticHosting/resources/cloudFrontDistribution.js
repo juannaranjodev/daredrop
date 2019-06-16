@@ -3,15 +3,20 @@ import split from 'root/src/aws/util/split'
 import select from 'root/src/aws/util/select'
 import getAtt from 'root/src/aws/util/getAtt'
 import domainName from 'root/src/aws/util/domainName'
+import join from 'root/src/aws/util/join'
 
 import {
-	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET,
+	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET, CLOUDFRONT_IAM_ROLE,
 } from 'root/src/aws/staticHosting/resourceIds'
+import { LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER, LAMBDA_EDGE_VIEWER_REQUEST_HANDLER } from 'root/src/aws/lambdaEdge/resourceIds'
 
 export default {
 	[CLOUDFRONT_DISTRIBUTION]: {
 		Type: 'AWS::CloudFront::Distribution',
-		DependsOn: [STATIC_BUCKET],
+		DependsOn: [
+			STATIC_BUCKET, LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER,
+			LAMBDA_EDGE_VIEWER_REQUEST_HANDLER, CLOUDFRONT_IAM_ROLE,
+		],
 		Properties: {
 			DistributionConfig: {
 				Aliases: [
@@ -31,6 +36,28 @@ export default {
 							Forward: 'none',
 						},
 					},
+					// LambdaFunctionAssociations: [
+					// 	{
+					// 		EventType: 'origin-request',
+					// 		LambdaFunctionARN: join(
+					// 			':',
+					// 			[
+					// 				getAtt(LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER, 'Arn'),
+					// 				'1',
+					// 			],
+					// 		),
+					// 	},
+					// 	{
+					// 		EventType: 'viewer-request',
+					// 		LambdaFunctionARN: join(
+					// 			':',
+					// 			[
+					// 				getAtt(LAMBDA_EDGE_VIEWER_REQUEST_HANDLER, 'Arn'),
+					// 				'1',
+					// 			],
+					// 		),
+					// 	},
+					// ],
 				},
 				Origins: [
 					{
@@ -52,10 +79,10 @@ export default {
 						ErrorCachingMinTTL: '30',
 					},
 				],
-				ViewerCertificate: {
-					SslSupportMethod: 'sni-only',
-					AcmCertificateArn: ref(SSL),
-				},
+				// ViewerCertificate: {
+				// 	SslSupportMethod: 'sni-only',
+				// 	AcmCertificateArn: ref(SSL),
+				// },
 			},
 		},
 	},
