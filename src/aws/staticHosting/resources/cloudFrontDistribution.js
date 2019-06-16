@@ -79,10 +79,10 @@ export default {
 						ErrorCachingMinTTL: '30',
 					},
 				],
-				// ViewerCertificate: {
-				// 	SslSupportMethod: 'sni-only',
-				// 	AcmCertificateArn: ref(SSL),
-				// },
+				ViewerCertificate: {
+					SslSupportMethod: 'sni-only',
+					AcmCertificateArn: ref(SSL),
+				},
 			},
 		},
 	},

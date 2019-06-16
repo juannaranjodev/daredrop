@@ -12,7 +12,7 @@ import outputs from 'root/src/aws/staticHosting/outputs'
 export const staticHostingResources = {
 	...cloudFrontDistribution,
 	...recordSet,
-	// ...ssl,
+	...ssl,
 	...staticBucket,
 	...publicBucketPolicy,
 	...videoBucket,
