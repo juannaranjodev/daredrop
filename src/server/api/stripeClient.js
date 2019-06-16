@@ -12,6 +12,8 @@ export default new Promise((resolve, reject) => {
 				reject(err)
 			}
 			const { stripeSecret: clientSecret, stripeKey: clientId } = JSON.parse(data.SecretString)
+			console.log('STRIPE')
+			console.log({ clientId, clientSecret })
 			const stripe = Stripe(clientSecret)
 			resolve(stripe)
 		})
