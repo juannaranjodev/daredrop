@@ -149,6 +149,10 @@ const styles = {
 		backgroundSize: 'cover',
 		backgroundColor: 'black',
 	},
+	supportLink: {
+		cursor: 'pointer',
+		textDecoration: 'none',
+	},
 }
 
 export default styles

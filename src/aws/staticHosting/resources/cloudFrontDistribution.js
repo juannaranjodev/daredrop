@@ -50,7 +50,7 @@ export default {
 						ResponsePagePath: '/index.html',
 						ResponseCode: '200',
 						ErrorCachingMinTTL: '30',
-					}
+					},
 				],
 				ViewerCertificate: {
 					SslSupportMethod: 'sni-only',

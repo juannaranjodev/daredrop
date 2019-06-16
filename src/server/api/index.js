@@ -12,6 +12,7 @@ import {
 } from 'root/src/server/api/getEndpointDesc'
 import serverEndpoints from 'root/src/server/api/actions'
 import authorizeRequest from 'root/src/server/api/authorizeRequest'
+import triggerActions from 'root/src/server/email/actions'
 
 const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 	if (schema) {
@@ -31,13 +32,18 @@ const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 }
 
 export const apiHof = (
-	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn,
+	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
 ) => async (event) => {
 	try {
-		const { endpointId, payload, authentication } = event
-
+		const { endpointId, payload, authentication, triggerSource } = event
 		const endpointExists = testEndpointExistsFn(endpointId)
+		if (triggerSource) {
+			const triggerAction = path([triggerSource], getTriggerActionsObj)
+			const { request } = event
+			const res = await triggerAction(request)
+			return { statusCode: 200, body: res }
+		}
 		if (!endpointExists) {
 			throw notFoundError(endpointId)
 		}
@@ -70,8 +76,8 @@ export const apiHof = (
 }
 
 export const apiFn = apiHof(
-	serverEndpoints, getPayloadSchema, getResultSchema, authorizeRequest,
-	testEndpointExists, getIsLongRunningTask,
+	serverEndpoints, getPayloadSchema, getResultSchema, triggerActions,
+	authorizeRequest, testEndpointExists, getIsLongRunningTask,
 )
 
 // can't return promise?

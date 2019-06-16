@@ -4,7 +4,7 @@ import {
 	PLEDGE_PROJECT_ROUTE_ID, MY_PROJECTS_ROUTE_ID,
 	PENDING_DELIVERIES_ROUTE_ID, PLEDGE_SUCCESS_PAGE_ROUTE_ID, CLAIM_PROJECT_ROUTE_ID,
 	FAVORITES_PROJECTS_ROUTE_ID, DELIVER_DARE_SUCCESS_ROUTE_ID,
-	DELIVERY_DARE_FORM_ROUTE_ID, DARE_DELIVERY_DETAIL_ROUTE_ID,
+	DELIVERY_DARE_FORM_ROUTE_ID, DARE_DELIVERY_DETAIL_ROUTE_ID, DARE_ACCEPT_SUCCESS_ROUTE_ID
 } from 'root/src/shared/descriptions/routes/routeIds'
 
 import {
@@ -19,10 +19,11 @@ import {
 	TITLE_HEADER_PENDING_DELIVERIES_MODULE_ID,
 	CLAIM_PROJECT_MODULE_ID, CLAIM_PROJECT_FORM_MODULE_ID,
 	REJECT_PROJECT_MODAL_MODULE_ID, DELIVERY_DARE_FORM_MODULE_ID,
-	DARE_DELIVERY_DETAIL_MODULE_ID,
+	DARE_DELIVERY_DETAIL_MODULE_ID, ACCEPT_DARE_SUCCESS_MODULE_ID
 } from 'root/src/shared/descriptions/modules/moduleIds'
 
 import { authValue } from 'root/src/client/logic/route/lenses'
+import { admin } from 'root/src/shared/constants/authenticationTypes'
 
 export default {
 	[CREATE_PROJECT_ROUTE_ID]: {
@@ -34,6 +35,7 @@ export default {
 	},
 	[DARE_DELIVERY_DETAIL_ROUTE_ID]: {
 		url: '/review-project/:recordId',
+		authentication: admin,
 		modules: [
 			DARE_DELIVERY_DETAIL_MODULE_ID,
 		],
@@ -53,16 +55,22 @@ export default {
 			REJECT_PROJECT_MODAL_MODULE_ID,
 		],
 	},
+	[DARE_ACCEPT_SUCCESS_ROUTE_ID]: {
+		url: '/accept-success/:recordId',
+		modules: [
+			ACCEPT_DARE_SUCCESS_MODULE_ID,
+		],
+	},
 	[PENDING_PROJECTS_ROUTE_ID]: {
 		url: '/pending-projects',
-		authentication: authValue,
+		authentication: admin,
 		modules: [
 			PENDING_PROJECTS_LIST_MODULE_ID,
 		],
 	},
 	[PENDING_DELIVERIES_ROUTE_ID]: {
 		url: '/pending-videos',
-		authentication: authValue,
+		authentication: admin,
 		modules: [
 			TITLE_HEADER_PENDING_DELIVERIES_MODULE_ID,
 			PENDING_DELIVERIES_MODULE_ID,
