@@ -28,6 +28,7 @@ import termsOfServiceBannerHeader from 'root/src/shared/descriptions/modules/ter
 import rulesOfUseBannerHeader from 'root/src/shared/descriptions/modules/rulesOfUseBannerHeader'
 import accountSettingsBannerHeader from 'root/src/shared/descriptions/modules/accountSettingsBannerHeader'
 import dareCreateSuccess from 'root/src/shared/descriptions/modules/dareCreateSuccess'
+import dareAcceptSuccess from 'root/src/shared/descriptions/modules/dareAcceptSuccess'
 import bannerFooterDareAccepted from 'root/src/shared/descriptions/modules/bannerFooterDareAccepted'
 import bannerFooterDareRejectConfirmation from 'root/src/shared/descriptions/modules/bannerFooterDareRejectConfirmation'
 import bannerFooterDareSuccessCreate from 'root/src/shared/descriptions/modules/bannerFooterDareSuccessCreate'
@@ -79,6 +80,7 @@ const allModules = {
 	...termsOfServiceBannerHeader,
 	...rulesOfUseBannerHeader,
 	...dareCreateSuccess,
+	...dareAcceptSuccess,
 	...bannerFooterDareAccepted,
 	...bannerFooterDareRejectConfirmation,
 	...bannerFooterDareSuccessCreate,
