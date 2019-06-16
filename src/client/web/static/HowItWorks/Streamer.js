@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import classNames from 'classnames'
 import Link from 'root/src/client/web/base/Link'
 import { CREATE_PROJECT_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'

@@ -1,4 +1,4 @@
-import { CognitoUser } from 'amazon-cognito-identity-js'
+import CognitoUser from 'amazon-cognito-identity-js/es/CognitoUser'
 
 import userPool from 'root/src/client/logic/cognito/util/userPool'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'

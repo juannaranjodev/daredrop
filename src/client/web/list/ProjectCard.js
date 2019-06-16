@@ -17,7 +17,7 @@ import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
 import { ACTIVE_PROJECTS_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlayCircle } from '@fortawesome/free-regular-svg-icons'
+import { faPlayCircle } from 'fortawesome-light/fontawesome-light'
 import { projectCardStyle } from 'root/src/client/web/list/style'
 
 export const ListItemUnconnected = memo(({

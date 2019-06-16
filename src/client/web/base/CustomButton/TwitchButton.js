@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTwitch } from '@fortawesome/free-brands-svg-icons'
+import { faTwitch } from 'fortawesome-light/fontawesome-light'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 import { styledTwitchButton } from './style'
 

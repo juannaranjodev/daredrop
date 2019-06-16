@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { is, addIndex, map } from 'ramda'
 
 import { fontFamily } from 'root/src/client/web/commonStyles'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 
 const styles = {

@@ -3,7 +3,7 @@ import { orNull } from 'root/src/shared/util/ramdaPlus'
 
 import Button from 'root/src/client/web/base/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 const buttonProgressStyles = {
 	buttonProgress: {
@@ -36,18 +36,18 @@ export default withStyles(wrapperStyles)(
 	({
 		children, onClick, classes, loading, formType, buttonType,
 	}) => (
-		<div className="flex layout-row layout-align-center">
-			<div className={classes.wrapper}>
-				<Button
-					disabled={loading}
-					onClick={onClick}
-					formType={formType}
-					buttonType={buttonType}
-				>
-					{children}
-				</Button>
-				<RenderLoading loading={loading} />
+			<div className="flex layout-row layout-align-center">
+				<div className={classes.wrapper}>
+					<Button
+						disabled={loading}
+						onClick={onClick}
+						formType={formType}
+						buttonType={buttonType}
+					>
+						{children}
+					</Button>
+					<RenderLoading loading={loading} />
+				</div>
 			</div>
-		</div>
-	),
+		),
 )

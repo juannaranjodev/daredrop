@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { map } from 'ramda'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import Terms from 'root/src/client/web/base/StaticLayout'
 import Link from 'root/src/client/web/base/Link'
 import { TERMS_OF_SERVICE_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'

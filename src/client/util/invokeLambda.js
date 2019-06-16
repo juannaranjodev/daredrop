@@ -1,8 +1,7 @@
 import { prop } from 'ramda'
 import { region } from 'root/src/shared/constants/aws'
 
-// as this one is imported from minified AWS SDK, then it's not usable on /server/*
-const { Lambda } = AWS
+import Lambda from 'aws-sdk/clients/lambda'
 
 export default (fnName, payload) => {
 	const lambda = new Lambda({ region })

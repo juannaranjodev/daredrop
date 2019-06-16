@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 
 import { fontFamily } from 'root/src/client/web/commonStyles'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 import TextWithLinks from 'root/src/client/web/base/TextWithLinks'
 import classNames from 'classnames'

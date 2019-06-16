@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import ExpandMore from '@material-ui/icons/ExpandMore'
 
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 import Link from 'root/src/client/web/base/Link'
 import LabelOrIcon from 'root/src/client/web/base/LabelOrIcon'

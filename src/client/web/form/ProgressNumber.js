@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 
 const styles = {

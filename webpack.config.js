@@ -3,16 +3,16 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-
+const BrotliPlugin = require('brotli-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const appConstants = require('./src/shared/constants/app')
-// const appConstants = require('./src/shared/constants/app')
 const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
 
 // const env = slsConstants.env || 'dev'
-const env = 'development'
+const env = process.env.STAGE || 'development'
 const isProd = env === 'production'
 const envVars = Object.assign(
 	{ __sha__: process.env.CIRCLE_SHA1 || 'dev' },
@@ -43,6 +43,12 @@ module.exports = {
 		compress: true,
 		port: 8585,
 	},
+	// resolve: {
+	// 	alias: {
+	// 		react: 'preact-compat',
+	// 		'react-dom': 'preact-compat',
+	// 	},
+	// },
 	module: {
 		rules: [
 			{
@@ -93,8 +99,35 @@ module.exports = {
 				to: '',
 			},
 		]),
+		(isProd
+			? new CompressionPlugin({
+				algorithm: 'gzip',
+				test: /\.(js|css|html|svg)$/,
+				threshold: 10240,
+				minRatio: 0.8,
+			})
+			: () => ''),
+		(isProd
+			? new BrotliPlugin({
+				asset: '[path].br[query]',
+				test: /\.(js|css|html|svg)$/,
+				threshold: 10240,
+				minRatio: 0.8,
+			})
+			: () => ''),
 	],
 	optimization: {
-		minimizer: [new TerserPlugin()],
+		minimizer: [new UglifyJsPlugin({
+			sourceMap: true,
+		})],
+		splitChunks: {
+			cacheGroups: {
+				commons: {
+					test: /[\\/]node_modules[\\/]/,
+					name: 'vendors',
+					chunks: 'all',
+				},
+			},
+		},
 	},
 }

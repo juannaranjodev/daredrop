@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { SimpleButton } from 'root/src/client/web/base/CustomButton'
 import Link from 'root/src/client/web/base/Link'
 import {

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { primaryColor, primaryColorBorder } from 'root/src/client/web/commonStyles'
 
 const style = {
@@ -40,7 +40,7 @@ Button.propTypes = {
 Button.defaultProps = {
 	title: 'Button',
 	subtitle: 'subtitle',
-	onClick: () => {},
+	onClick: () => { },
 }
 
 export default withStyles(style)(Button)

@@ -1,7 +1,7 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faAngleRight } from 'fortawesome-light/fontawesome-light'
 import classNames from 'classnames'
 
 import styled from 'root/src/client/web/base/StaticLayout/style'
@@ -97,7 +97,7 @@ const SubBanner = ({ classes }) => (
 				<div className={classNames(classes.item, classes.megaphoneItem)}>
 					<img src={Megaphone} className={classes.megaphone} alt="megaphone" />
 					<div className={classNames(classes.itemText, classes.dareAStreamer)}>
-					DARE A STREAMER
+						DARE A STREAMER
 					</div>
 				</div>
 				<div className={classes.arrow}>
@@ -106,7 +106,7 @@ const SubBanner = ({ classes }) => (
 				<div className={classes.item}>
 					<img src={Bubbles} className={classes.bubbles} alt="bubbles" />
 					<div className={classNames(classes.itemText, classes.crowdfundYourDare)}>
-					CROWDFUND YOUR DARE
+						CROWDFUND YOUR DARE
 					</div>
 				</div>
 				<div className={classes.arrow}>
@@ -115,7 +115,7 @@ const SubBanner = ({ classes }) => (
 				<div className={classes.item}>
 					<img src={Player} className={classes.player} alt="player" />
 					<div className={classNames(classes.itemText, classes.enjoyAwesomeContent)}>
-					ENJOY AWESOME CONTENT
+						ENJOY AWESOME CONTENT
 					</div>
 				</div>
 			</div>

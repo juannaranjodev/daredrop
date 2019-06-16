@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
+import { faTimesCircle } from 'fortawesome-light/fontawesome-light'
 
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import RejectDareModal from 'root/src/client/web/modal/RejectDareModal'
@@ -26,7 +26,7 @@ export const ModalModuleUnconnected = memo(({
 	>
 		<div
 			onClick={e => e.stopPropagation()}
-	className={classes.modal}
+			className={classes.modal}
 		>
 			<div className={classes.closeContainer}>
 				<button
@@ -37,7 +37,7 @@ export const ModalModuleUnconnected = memo(({
 				</button>
 			</div>
 			<div className={classes.contentContainer}>
-	<div className={classes.container}>
+				<div className={classes.container}>
 					<div className={classes.content}>
 						<div className={classes.title}>{modalTitle}</div>
 						<div className={classes.text}>

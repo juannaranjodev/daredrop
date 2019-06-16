@@ -4,7 +4,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ShareIcon from '@material-ui/icons/Share'
 import clipboard from 'root/src/client/assets/icons/clipboard.png'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import AddToClipboardButton from 'root/src/client/web/base/AddToClipboardButton'
 
 import {

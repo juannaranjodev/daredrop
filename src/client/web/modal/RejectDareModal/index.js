@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { ACTIVE_PROJECTS_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 import { equals } from 'ramda'
 

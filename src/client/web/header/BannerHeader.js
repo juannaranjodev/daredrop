@@ -1,7 +1,7 @@
 import React, { memo, Fragment } from 'react'
 import { identity } from 'ramda'
 import classNames from 'classnames'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST, SORT_BY_CREATED_ASC, SORT_BY_ACCEPTED } from 'root/src/shared/constants/sortTypesOfProject'
 
 import { orNull } from 'root/src/shared/util/ramdaPlus'
@@ -17,7 +17,9 @@ import SvgIcon from '@material-ui/core/SvgIcon'
 import Chip from '@material-ui/core/Chip'
 import CancelIcon from '@material-ui/icons/Cancel'
 
-import Select, { components } from 'react-select'
+import Select from 'react-select/lib/Select'
+import SingleValue from 'react-select/lib/components/SingleValue'
+import indicators from 'react-select/lib/components/indicators'
 import AsyncSelect from 'react-select/lib/Async'
 
 import bannerHeaderConnector from 'root/src/client/logic/header/connectors/bannerHeaderConnector'
@@ -137,15 +139,15 @@ const styles = {
 	},
 }
 
-const DropdownIndicator = props => (
-	<components.DropdownIndicator {...props}>
+const DropdownIndicatorHoc = props => (
+	<indicators.DropdownIndicator {...props}>
 		<SvgIcon>
 			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
 				<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
 				<path d="M0 0h24v24H0z" fill="none" />
 			</svg>
 		</SvgIcon>
-	</components.DropdownIndicator>
+	</indicators.DropdownIndicator>
 )
 
 const singleStyle = {
@@ -166,8 +168,8 @@ const singleStyle = {
 	},
 }
 
-const SingleValue = withStyles(singleStyle)(({ classes, children, label, removeProps, clearValue, getValue, ...props }) => (
-	<components.SingleValue {...props}>
+const SingleValueHoc = withStyles(singleStyle)(({ classes, children, label, removeProps, clearValue, getValue, ...props }) => (
+	<SingleValue {...props}>
 		<Chip
 			className={classes.chip}
 			tabIndex={-1}
@@ -177,7 +179,7 @@ const SingleValue = withStyles(singleStyle)(({ classes, children, label, removeP
 				<CancelIcon {...removeProps} />
 			}
 		/>
-	</components.SingleValue>
+	</SingleValue>
 ))
 
 export const BannerHeaderUnconnected = memo(({
@@ -237,15 +239,18 @@ export const BannerHeaderUnconnected = memo(({
 										onChange={sortProject}
 										className={classes.autoSelect}
 										options={[
-											{ 	label: 'Newest',
+											{
+												label: 'Newest',
 												id: 0,
 												value: SORT_BY_NEWEST,
 											},
-											{ 	label: 'Bounty Amount',
+											{
+												label: 'Bounty Amount',
 												id: 2,
 												value: SORT_BY_BOUNTY,
 											},
-											{ 	label: 'Time Left',
+											{
+												label: 'Time Left',
 												id: 3,
 												value: SORT_BY_TIME_LEFT,
 											},
@@ -361,8 +366,8 @@ export const BannerHeaderUnconnected = memo(({
 											onChange={filterProjectByGame}
 											value={gameFilterValue}
 											components={{
-												DropdownIndicator,
-												SingleValue,
+												DropdownIndicatorHoc,
+												SingleValueHoc,
 											}}
 										/>
 										<AsyncSelect
@@ -420,8 +425,8 @@ export const BannerHeaderUnconnected = memo(({
 											onInputChange={filterProjectByStreamer}
 											value={streamerFilterValue}
 											components={{
-												DropdownIndicator,
-												SingleValue,
+												DropdownIndicatorHoc,
+												SingleValueHoc,
 											}}
 										/>
 									</div>
