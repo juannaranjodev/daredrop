@@ -35,14 +35,12 @@ export default async ({ payload, userId }) => {
 		...projectToRejectDdb,
 		...assigneesDdb,
 	])
-
 	const userTokens = await dynamoQueryOAuth(userId)
 
 	const userTokensInProject = userTokensInProjectSelector(userTokens, projectToReject)
 	if (not(gt(length(userTokensInProject), 0))) {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
-
 	if (!projectToReject) {
 		throw generalError('Project or assignee doesn\'t exist')
 	}
