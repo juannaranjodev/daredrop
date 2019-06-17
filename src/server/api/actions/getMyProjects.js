@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
-import { uniq, prop, sort, filter, map, startsWith, anyPass } from 'ramda'
+import { uniq, prop, sort, filter, map, startsWith, anyPass, equals	 } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
-import { dynamoItemsProp, projectDeliveredKey } from 'root/src/server/api/lenses'
+import { dynamoItemsProp, projectDeliveredKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
@@ -12,6 +11,7 @@ import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
+import dynamoGetTokenIdFromUserId from 'root/src/server/api/actionUtil/dynamoGetTokenIdFromUserId'
 
 const PageItemLedngth = 8
 
@@ -34,10 +34,23 @@ export default async ({ userId, payload }) => {
 		},
 	}).promise()
 
+	const twitchId = await dynamoGetTokenIdFromUserId(userId, 'twitch')
+
+	const assigneeProjectDdb = await documentClient.query({
+		TableName: TABLE_NAME,
+		IndexName: GSI1_INDEX_NAME,
+		KeyConditionExpression: `${GSI1_PARTITION_KEY} = :pk`,
+		ExpressionAttributeValues: {
+			':pk': `assignee|twitch|${twitchId}`,
+		},
+	}).promise()
+
+	const filterAccepted = dare => equals(streamerAcceptedKey, prop('accepted', dare))
+	const acceptedProjects = filter(filterAccepted, dynamoItemsProp(assigneeProjectDdb))
 	const pledgedProjects = dynamoItemsProp(pledgedProjectsDdb)
 	const favoritesProjects = dynamoItemsProp(favoritesProjectsDdb)
 
-	const myProjectsIdsArr = uniq(map(prop('pk'), [...pledgedProjects, ...favoritesProjects]))
+	const myProjectsIdsArr = uniq(map(prop('pk'), [...pledgedProjects, ...favoritesProjects, ...acceptedProjects]))
 
 	const myProjects = await Promise.all(map(projectId => dynamoQueryProject(null, projectId),
 		myProjectsIdsArr))
@@ -54,6 +67,7 @@ export default async ({ userId, payload }) => {
 
 	const dontFilterDelivered = dare => startsWith(prop('status', dare), projectDeliveredKey)
 
+	// eslint-disable-next-line max-len
 	const filteredProjects = filter(anyPass([filterExpired, dontFilterDelivered]), myProjectsSerialized)
 
 	const sortedProjects = sort(descendingApproved, filteredProjects)

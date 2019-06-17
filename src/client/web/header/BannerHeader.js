@@ -185,7 +185,7 @@ export const BannerHeaderUnconnected = memo(({
 	textWithBg, bannerSubText, linkLabel, linkRouteId,
 	classes, createNewDareActive, loadOptionsPromise,
 	filterProjectByGame, filterProjectByStreamer, sortProject,
-	gameFilterValue, streamerFilterValue,
+	gameFilterValue, streamerFilterValue, sortValue,
 }) => (
 	<div className={classNames(classes.bottomMargin, 'layout-column')}>
 		{orNull(bannerImage,
@@ -233,6 +233,7 @@ export const BannerHeaderUnconnected = memo(({
 											id: 0,
 											value: SORT_BY_NEWEST,
 										}}
+										value={sortValue}
 										onChange={sortProject}
 										className={classes.autoSelect}
 										options={[

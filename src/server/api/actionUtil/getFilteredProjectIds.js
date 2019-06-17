@@ -1,4 +1,5 @@
 import { intersection, prop, map, head, reduce, equals, length } from 'ramda'
+import { streamerRejectedKey } from 'root/src/server/api/lenses'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 import {
@@ -15,12 +16,14 @@ export default async (items) => {
 			TableName: TABLE_NAME,
 			IndexName: GSI1_INDEX_NAME,
 			KeyConditionExpression: `${GSI1_PARTITION_KEY} = :pk`,
+			FilterExpression : 'accepted <> :accepted',
 			ExpressionAttributeValues: {
 				':pk': `${item.param}|${item.value}`,
+				':accepted': streamerRejectedKey
 			},
 		}).promise(), items),
 	)
-
+	
 	const filteredIds = filteredResult => map(
 		item => (
 			{ id: prop('pk', item) }

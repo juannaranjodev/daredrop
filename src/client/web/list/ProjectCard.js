@@ -23,21 +23,17 @@ import { projectCardStyle } from 'root/src/client/web/list/style'
 export const ListItemUnconnected = memo(({
 	recordId, pushRoute, projectTitle, projectDescription, classes,
 	projectGameImage, projectAssigneesImages, projectShareUrl, projectGames, isAuthenticated,
-	projectAssigneesName, projectPledged, projectAccepted, timeouts, setTimeouts,
-	projectDeliveries, listRouteHandler,
-	goalProgress,
+	projectAssigneesName, projectPledged, projectAccepted,
+	projectDeliveries, listRouteHandler, goalProgress, setTimeoutId,
 }) => {
 	const [hover, setHover] = useState(false)
 	const [over, setOver] = useState(false)
 	const [nameHover, setNameHover] = useState(undefined)
 	const [nameOver, setNameOver] = useState(undefined)
-	const timeoutFilter = filter(timeout => t => not(equals(timeout, t)))
+
 	const onMouseLeave = func => () => {
-		const timeout = setTimeout(() => {
-			setTimeouts(timeoutFilter)
-			func(undefined)
-		}, 1000)
-		setTimeouts([...timeouts, timeout])
+		const timeout = setTimeout(() => func(undefined), 1000)
+		setTimeoutId(timeout)
 	}
 
 	return (
@@ -49,7 +45,7 @@ export const ListItemUnconnected = memo(({
 		>
 			{orNull(projectDeliveries, <div
 				className={classes.videoOverlay}
-				onClick={listRouteHandler(recordId, pushRoute, timeouts)}
+				onClick={listRouteHandler(recordId, pushRoute)}
 			/>)}
 			<div
 				className={classNames(
@@ -87,7 +83,7 @@ export const ListItemUnconnected = memo(({
 						<div className={classes.headerContainer}>
 							<div
 								className={classNames(classes.headerText, 'flex')}
-								onClick={listRouteHandler(recordId, pushRoute, timeouts)}
+								onClick={listRouteHandler(recordId, pushRoute)}
 							>
 								<h3 className={classNames(classes.headerTextH3)}>{projectTitle}</h3>
 							</div>
@@ -102,7 +98,7 @@ export const ListItemUnconnected = memo(({
 					</div>
 				</div>
 				<div
-					onClick={listRouteHandler(recordId, pushRoute, timeouts)}
+					onClick={listRouteHandler(recordId, pushRoute)}
 					className={classes.bodyCard}
 				>
 					<div className={classNames(

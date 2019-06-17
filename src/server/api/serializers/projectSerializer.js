@@ -1,6 +1,4 @@
-/* eslint-disable no-param-reassign */
-import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, propOr, assoc, hasPath } from 'ramda'
-
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath, propOr, assoc } from 'ramda'
 import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
