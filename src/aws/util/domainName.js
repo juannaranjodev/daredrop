@@ -1,10 +1,10 @@
 import { stage } from 'root/src/aws/util/resourcePrefix'
 
-export const apexDomain = 'watt.tv'
+export const apexDomain = process.env.stage === 'production' ? 'daredrop.com' : 'watt.tv'
 
-export const hostedZoneId = 'Z1Y1YRSE1A6N3N'
+export const hostedZoneId = process.env.stage === 'production' ? 'Z10DS6P5G65S82' : 'Z1Y1YRSE1A6N3N'
 
-export default `${stage.toLowerCase()}.${apexDomain}`
+export default process.env.stage === 'production' ? apexDomain : `${stage.toLowerCase()}.${apexDomain}`
 
 // i leave those for my own convenience of use -Dominik Piekarski
 // export const apexDomain = 'lambdatestt.co.uk'

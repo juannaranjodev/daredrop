@@ -1,0 +1,6 @@
+export const productionGoogle = 'productionGoogleOauth'
+export const developmentGoogle = 'google_OAuth'
+export const productionPaypal = 'productionPaypalSecret'
+export const developmentPaypal = 'PayPal_Test'
+export const productionStripe = 'productionStripeSecret'
+export const developmentStripe = 'Stripe_Test_0'

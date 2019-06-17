@@ -2,7 +2,7 @@ import ReactGA from 'react-ga'
 import { developmentGoogleTag, productionGoogleTag } from 'root/src/shared/constants/pageData'
 
 export default () => {
-	if (window.location.host === 'daredrop.com') {
+	if (process.env.stage === 'production') {
 		ReactGA.initialize(productionGoogleTag)
 	} else {
 		ReactGA.initialize(developmentGoogleTag)
