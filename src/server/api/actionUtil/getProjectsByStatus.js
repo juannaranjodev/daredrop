@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { sort, map, filter, dissoc, compose, contains, prop, __ } from 'ramda'
 
 import moment from 'moment'

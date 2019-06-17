@@ -51,7 +51,7 @@ export const runModuleMountsHof = (
 					const action = moduleTypeActionFn(moduleType)
 					if (action) {
 						const args = { currentRouteObj, nextRouteObj, moduleId }
-						return result.concat(dispatch(action(args)))
+						return result.concat(dispatch(action(args, state)))
 					}
 					return result
 				},
