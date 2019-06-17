@@ -4,7 +4,6 @@ import {
 	StripeProvider, Elements,
 } from 'react-stripe-elements'
 
-import { stripeClientId } from 'root/src/shared/constants/stripeClient'
 import fieldInputConnector from 'root/src/client/logic/form/connectors/fieldInputConnector'
 import StripeFields from 'root/src/client/web/form/StripeFields'
 import StripeList from 'root/src/client/web/form/StripeFields/StripeLists'
@@ -16,7 +15,7 @@ export const StripeCardUnconnected = memo(({
 }) => {
 	const [listView = cardList.length > 0, setListView] = useState()
 	return (
-		<StripeProvider apiKey={stripeClientId}>
+		<StripeProvider apiKey={STRIPE_CLIENT_ID}>
 			<div>
 				{ternary(
 					listView,

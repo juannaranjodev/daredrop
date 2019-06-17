@@ -1,9 +1,10 @@
 import { google } from 'googleapis'
 import { redirectURI } from 'root/src/shared/constants/googleOAuth'
 import { SecretsManager } from 'aws-sdk'
+import { productionGoogle, developmentGoogle } from 'root/src/shared/constants/secretNames'
 
 const secretsClient = new SecretsManager()
-const secretName = 'google_OAuth'
+const secretName = process.env.STAGE === 'production' ? productionGoogle : developmentGoogle
 
 export default new Promise((resolve, reject) => {
 	secretsClient.getSecretValue({ SecretId: secretName }, (err, data) => {
@@ -11,6 +12,8 @@ export default new Promise((resolve, reject) => {
 			reject(err)
 		}
 		const { clientSecret, refreshToken, clientId } = JSON.parse(data.SecretString)
+		console.log('GOOGLE')
+		console.log({ clientId, clientSecret, redirectURI })
 		const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectURI)
 
 		oauth2Client.setCredentials({
