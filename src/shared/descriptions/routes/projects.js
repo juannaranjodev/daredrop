@@ -48,7 +48,7 @@ export default {
 	},
 	[CLAIM_PROJECT_ROUTE_ID]: {
 		url: '/claim-project/:recordId',
-		// authentication: authValue,
+		authentication: authValue,
 		modules: [
 			CLAIM_PROJECT_FORM_MODULE_ID,
 			CLAIM_PROJECT_MODULE_ID,
@@ -87,6 +87,7 @@ export default {
 	},
 	[FAVORITES_PROJECTS_ROUTE_ID]: {
 		url: '/favorites-projects',
+		authentication: authValue,
 		modules: [
 			MY_PROJECT_BANNER_HEADER_MODULE_ID,
 			FAVORITES_PROJECTS_LIST_MODULE_ID,
@@ -94,6 +95,7 @@ export default {
 	},
 	[MY_PROJECTS_ROUTE_ID]: {
 		url: '/my-projects',
+		authentication: authValue,
 		modules: [
 			MY_PROJECT_BANNER_HEADER_MODULE_ID,
 			MY_PROJECTS_LIST_MODULE_ID,
@@ -101,24 +103,28 @@ export default {
 	},
 	[PLEDGE_PROJECT_ROUTE_ID]: {
 		url: '/pledge-project/:recordId',
+		authentication: authValue,
 		modules: [
 			PLEDGE_PROJECT_FORM_MODULE_ID,
 		],
 	},
 	[PLEDGE_SUCCESS_PAGE_ROUTE_ID]: {
 		url: '/pledge-success/:recordId',
+		authentication: authValue,
 		modules: [
 			PLEDGE_SUCCESS_PAGE_MODULE_ID,
 		],
 	},
 	[DELIVER_DARE_SUCCESS_ROUTE_ID]: {
 		url: '/deliver-success',
+		authentication: authValue,
 		modules: [
 			DELIVER_DARE_SUCCESS_MODULE_ID,
 		],
 	},
 	[DELIVERY_DARE_FORM_ROUTE_ID]: {
 		url: '/delivery-dare/:recordId',
+		authentication: authValue,
 		modules: [
 			DELIVERY_DARE_FORM_MODULE_ID,
 		],
