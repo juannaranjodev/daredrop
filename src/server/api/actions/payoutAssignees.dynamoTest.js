@@ -131,7 +131,7 @@ describe('payoutAssignees', async () => {
 		const dareDropFee = reduce((acc, item) => add(acc, prop('pledgeAmount', item)), 0, projectPledgesDdb) * 0.1
 
 		const payoutsCalculated = await calculatePayouts(project.id)
-		expect(payoutsCalculated.payouts[0].payout + payoutsCalculated.payouts[1].payout).toBeCloseTo((480000 - dareDropFee), 7)
+		expect(payoutsCalculated.payouts[0].payout + payoutsCalculated.payouts[1].payout).toBeCloseTo((479960 - dareDropFee), 7)
 	})
 	test('can make payout', async () => {
 		await addPayoutMethod({
