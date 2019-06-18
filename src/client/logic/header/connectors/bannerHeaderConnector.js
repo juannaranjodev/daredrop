@@ -6,8 +6,15 @@ import bannerSubTextSelector from 'root/src/client/logic/header/selectors/banner
 import textWithBg from 'root/src/client/logic/header/selectors/textWithBg'
 import createNewDareActive from 'root/src/client/logic/header/selectors/createNewDareActive'
 import linkLabelSelector from 'root/src/client/logic/header/selectors/linkLabelSelector'
+import loadOptionsPromise from 'root/src/client/logic/header/selectors/loadOptionsPromise'
 import linkRouteIdSelector from 'root/src/client/logic/header/selectors/linkRouteIdSelector'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
+import filterProjectByGame from 'root/src/client/logic/header/thunk/filterProjectByGame'
+import filterProjectByStreamer from 'root/src/client/logic/header/thunk/filterProjectByStreamer'
+import gameFilterValueSelector from 'root/src/client/logic/header/selectors/gameFilterValueSelector'
+import streamerFilterValueSelector from 'root/src/client/logic/header/selectors/streamerFilterValueSelector'
+import sortProject from 'root/src/client/logic/header/thunk/sortProject'
+import sortValueSelector from 'root/src/client/logic/header/selectors/sortValueSelector'
 import bannerImageSubTextSelector from '../selectors/bannerImageSubTextSelector'
 
 export default reduxConnector(
@@ -17,11 +24,18 @@ export default reduxConnector(
 		['bannerImageSubText', bannerImageSubTextSelector],
 		['bannerSubText', bannerSubTextSelector],
 		['textWithBg', textWithBg],
+		['loadOptionsPromise', loadOptionsPromise],
 		['createNewDareActive', createNewDareActive],
+		['gameFilterValue', gameFilterValueSelector],
+		['streamerFilterValue', streamerFilterValueSelector],
 		['linkLabel', linkLabelSelector],
 		['linkRouteId', linkRouteIdSelector],
+		['sortValue', sortValueSelector],
 	],
 	[
 		['pushRoute', pushRoute],
+		['filterProjectByGame', filterProjectByGame],
+		['filterProjectByStreamer', filterProjectByStreamer],
+		['sortProject', sortProject],
 	],
 )

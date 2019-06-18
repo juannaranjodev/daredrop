@@ -5,14 +5,14 @@ import ajax from 'root/src/shared/util/ajax'
 import moduleDescriptions from 'root/src/shared/descriptions/modules'
 import moduleIdFromKey from 'root/src/client/logic/route/util/moduleIdFromKey'
 
-import { clientId, baseUrlV5 } from 'root/src/shared/constants/twitch'
+import { baseUrlV5 } from 'root/src/shared/constants/twitch'
 
 const promiseTypeMap = {
 	twitchChannels: async (input) => {
 		try {
 			const searchResults = await ajax({
 				url: `${baseUrlV5}search/channels`,
-				headers: { 'Client-ID': clientId },
+				headers: { 'Client-ID': TWITCH_CLIENT_ID },
 				queryParams: { query: input, type: 'suggest' },
 			})
 			return map(
@@ -33,7 +33,7 @@ const promiseTypeMap = {
 		try {
 			const searchResults = await ajax({
 				url: `${baseUrlV5}search/games`,
-				headers: { 'Client-ID': clientId },
+				headers: { 'Client-ID': TWITCH_CLIENT_ID },
 				queryParams: { query: input, type: 'suggest' },
 			})
 			return map(

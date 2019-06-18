@@ -7,12 +7,11 @@ const TerserPlugin = require('terser-webpack-plugin')
 
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const appConstants = require('./src/shared/constants/app')
-// const appConstants = require('./src/shared/constants/app')
 const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
 
 // const env = slsConstants.env || 'dev'
-const env = 'development'
+const env = process.env.stage || 'development'
 const isProd = env === 'production'
 const envVars = Object.assign(
 	{ __sha__: process.env.CIRCLE_SHA1 || 'dev' },

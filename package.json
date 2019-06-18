@@ -22,7 +22,9 @@
     "bundleLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda",
     "genAWSCreds": "./node_modules/.bin/babel-node --presets=env ./customScripts/generateAWSCredentials.js",
     "runLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default",
-    "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmbz dareMeZDevApiLambdaFunction.default"
+    "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmbz dareMeZDevApiLambdaFunction.default",
+    "deployProduction": "stage=production ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli deploy -s production",
+    "updateProduction": "stage=production ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli update -s production"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
@@ -33,7 +35,6 @@
     "@material-ui/core": "^3.8.1",
     "@material-ui/icons": "^3.0.1",
     "@material-ui/styles": "^3.0.0-alpha.6",
-    "@paypal/checkout-server-sdk": "^1.0.0",
     "ajv": "^6.5.1",
     "ajv-errors": "^1.0.0",
     "amazon-cognito-identity-js": "^2.0.20",
@@ -85,6 +86,7 @@
     "object-hash": "^1.3.1",
     "ora": "^3.0.0",
     "path-to-regexp": "^2.2.1",
+    "paypal-rest-sdk": "^1.8.1",
     "prop-types": "^15.6.2",
     "qs": "^6.5.2",
     "ramda": "^0.26.0",
@@ -103,7 +105,7 @@
     "redux-thunk": "^2.3.0",
     "s3-stream-upload": "^2.0.2",
     "string-format": "^2.0.0",
-    "stripe": "^6.19.0",
+    "stripe": "^7.1.0",
     "uuid": "^3.3.2",
     "webpack": "^4.12.2",
     "webpack-cli": "^3.0.8",

@@ -10,7 +10,7 @@ import {
 
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import NavigationLinks from 'root/src/client/web/base/NavigationLinks'
-
+import DareDropLogo from 'root/src/client/assets/DareDropLogo.svg'
 import Link from 'root/src/client/web/base/Link'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -20,15 +20,18 @@ const styles = {
 		color: 'white',
 		backgroundColor: navigationColor,
 		height: 75,
-		zIndex: 1
+		zIndex: 1,
 	},
 	logo: {
 		fontSize: 25,
 		fontFamily: 'Impact',
 	},
 	navContainer: {
-		margin: 0
-	}
+		margin: 0,
+	},
+	logoImg: {
+		height: 60,
+	},
 }
 
 export const NavigationUnstyled = memo(({ classes }) => (
@@ -38,7 +41,7 @@ export const NavigationUnstyled = memo(({ classes }) => (
 			classes.root,
 		)}
 	>
-		<MaxWidthContainer isNavigation={true}>
+		<MaxWidthContainer isNavigation>
 			<Link navStyle routeId={ACTIVE_PROJECTS_ROUTE_ID}>
 				<div
 					className={classNames(
@@ -46,7 +49,7 @@ export const NavigationUnstyled = memo(({ classes }) => (
 						classes.logo,
 					)}
 				>
-					Dare Drop
+					<img src={DareDropLogo} className={classes.logoImg} alt="Dare Drop Logo" />
 				</div>
 			</Link>
 

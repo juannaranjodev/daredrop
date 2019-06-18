@@ -1,5 +1,5 @@
-import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, propOr } from 'ramda'
-
+/* eslint-disable no-param-reassign */
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath, propOr, assoc } from 'ramda'
 import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -8,12 +8,18 @@ import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignee
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const {
-	overAssignees, setMyPledge, viewPledgeAmount, overGames, setMyFavorites, viewMyFavorites, overDeliveries,
+	overAssignees, setMyPledge, viewPledgeAmount, overGames,
+	setMyFavorites, viewMyFavorites, overDeliveries,
 } = responseLenses
 
 export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 	(result, projectPart) => {
 		const sk = skProp(projectPart)
+		if (hasPath(['creator'], projectPart)) {
+			result = {
+				...result, creator: prop('creator', projectPart),
+			}
+		}
 		if (startsWith('pledge', sk)) {
 			return setMyPledge(viewPledgeAmount(projectPart), result)
 		}
@@ -26,7 +32,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 				return result
 			}
 			const assigneeObj = pick(
-				['image', 'description', 'displayName', 'username', 'accepted', 'amountRequested'],
+				['image', 'description', 'displayName', 'username', 'accepted', 'amountRequested', 'deliveryVideo'],
 				projectPart,
 			)
 			return overAssignees(
@@ -66,7 +72,10 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 				deliveryApproved: prop('approved', projectPart),
 			}
 		}
-		if (startsWith('project', sk)) {
+		if (startsWith('projectToPayout', sk)) {
+			return assoc('capturesAmount', prop('capturesAmount', projectPart), result)
+		}
+		if (startsWith('project|', sk)) {
 			const projectObj = pick(
 				[
 					'title', 'image', 'description', 'pledgeAmount', 'approvedVideoUrl', 'status',

@@ -1,8 +1,9 @@
-import { map, head, last } from 'ramda'
+import { map, head, last, length, gt, compose, __ } from 'ramda'
 import React, { memo, useState } from 'react'
-
 import classNames from 'classnames'
 import InfiniteScroll from 'react-infinite-scroller'
+
+import { ternary } from 'root/src/shared/util/ramdaPlus'
 import PaymentMethod from 'root/src/client/web/list/PaymentMethod'
 import ProjectCard from 'root/src/client/web/list/ProjectCard'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
@@ -21,58 +22,61 @@ import { DeletePaymentModal } from './DeletePaymentModal'
 
 export const CardList = ({
 	list, currentPage, hasMore, classes, getNextPage,
-}) => {
-	const [timeouts, setTimeouts] = useState([])
-	return (
-		<div className="flex layout-row layout-align-center-start">
-			<MaxWidthContainer>
-				<div className={classNames(classes.listModuleContainer, 'flex', 'layout-row', 'layout-align-center')}>
-					<InfiniteScroll
-						pageStart={0}
-						loadMore={() => getNextPage(currentPage, hasMore)}
-						hasMore={hasMore}
-					>
-						<div
-							className={classNames(
-								classes.paddingOffset,
-								'layout-row layout-wrap',
-							)}
-						>
+}) => (
+	<div className="flex layout-row layout-align-center-start">
+		<MaxWidthContainer>
+			<div className={classNames(classes.listModuleContainer, 'flex', 'layout-row', 'layout-align-center')}>
+				<InfiniteScroll
+					pageStart={0}
+					loadMore={() => getNextPage(currentPage, hasMore)}
+					hasMore={hasMore}
+				>
+					{ternary(
+						compose(gt(__, 0), length, head),
+						(
+							<div
+								className={classNames(
+									classes.paddingOffset,
+									'layout-row layout-wrap',
+								)}
+							>
+								{map(recordId => (
+									<ProjectCard
+										key={recordId}
+										recordId={recordId}
+										filterList={list[1]}
+										acceptedList={list[2]}
+									/>
+								), head(list))}
 
-							{map((recordId, index) => (
-								<ProjectCard
-									timeouts={timeouts}
-									setTimeouts={setTimeouts}
-									key={recordId || `id-${index}`}
-									recordId={recordId}
-									filterList={list[1]}
-									acceptedList={list[2]}
-								/>
-							),
-							head(list))}
-
-						</div>
-					</InfiniteScroll>
-					<div className={classes.goTopContainer} onClick={scrollTopHandler}>
-						<div>
-							<div className={classes.iconContainer}>
-								<SvgIcon>
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-										<path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
-										<path d="M0 0h24v24H0z" fill="none" />
-									</svg>
-								</SvgIcon>
 							</div>
+						),
+						(
 							<div>
-							Go to Top
+									Nothing found
 							</div>
+						),
+					)}
+				</InfiniteScroll>
+				<div className={classes.goTopContainer} onClick={scrollTopHandler}>
+					<div>
+						<div className={classes.iconContainer}>
+							<SvgIcon>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+									<path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+									<path d="M0 0h24v24H0z" fill="none" />
+								</svg>
+							</SvgIcon>
+						</div>
+						<div>
+								Go to Top
 						</div>
 					</div>
 				</div>
-			</MaxWidthContainer>
-		</div>
-	)
-}
+			</div>
+		</MaxWidthContainer>
+	</div>
+)
 
 const UniversalList = ({
 	list, classes, listTitle, listSubtitle, listControls, deletePaymentMethod, setDefaultPaymentMethod,

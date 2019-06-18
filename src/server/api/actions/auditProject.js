@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-console */
 import { head, replace, equals, prop, compose, map, set, lensProp, omit } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
@@ -5,7 +7,8 @@ import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 
 import dareApprovedMail from 'root/src/server/email/templates/dareApproved'
-import { dareApprovedTitle } from 'root/src/server/email/util/emailTitles'
+import dareRejectedByToSMail from 'root/src/server/email/templates/dareRejected'
+import { dareApprovedTitle, dareRejectedByToSTitle } from 'root/src/server/email/util/emailTitles'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 
 import { AUDIT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -30,6 +33,19 @@ export default async ({ userId, payload }) => {
 	] = await dynamoQueryProject(
 		userId, projectId,
 	)
+
+
+	const [project, assignees, myPledge, myFavorites] = await dynamoQueryProject(
+		userId, projectId,
+	)
+	const respons = {
+		userId,
+		...projectSerializer([
+			...project,
+			...myPledge,
+			...myFavorites,
+		]),
+	}
 	const projectToPledge = head(projectToPledgeDdb)
 	if (!projectToPledge) {
 		throw generalError('Project doesn\'t exist')
@@ -76,19 +92,17 @@ export default async ({ userId, payload }) => {
 			],
 		},
 	}
-
 	await documentClient.batchWrite(auditParams).promise()
 
 
 	const newProject = projectSerializer([
 		omit(['assignees'], auditedProject),
 		...assigneesDdb,
-		...myPledgeDdb,
+		...omit(['myPledge'], myPledgeDdb),
 	])
 
 	try {
-		const email = await getUserEmail(userId)
-
+		const email = await getUserEmail((prop('creator',respons)))
 		if (equals(viewAudit(payload), projectApprovedKey)) {
 			const emailData = {
 				title: dareApprovedTitle,
@@ -98,7 +112,17 @@ export default async ({ userId, payload }) => {
 			}
 			sendEmail(emailData, dareApprovedMail)
 		}
-	} catch (err) { }
+
+		if (equals(viewAudit(payload), projectRejectedKey)) {
+			const emailData = {
+				title: dareRejectedByToSTitle,
+				dareTitle: prop('title', newProject),
+				recipients: [email],
+			}
+			sendEmail(emailData, dareRejectedByToSMail)
+		}
+	} catch (err) {
+	}
 
 	return {
 		...newProject,

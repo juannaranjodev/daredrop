@@ -3,13 +3,14 @@ import { apiFn } from 'root/src/server/api'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import createProject from 'root/src/server/api/actions/createProject'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
-import { projectApprovedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey, projectDeliveryPendingKey, projectDeliveryRejectedKey, projectDeliveredKey } from 'root/src/server/api/lenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
 import { insertVideoMock } from 'root/src/server/api/mocks/youtubeMock'
 import incrementDateCreatedInDb from 'root/src/testUtil/incrementDateCreatedInDb'
+import reviewDelivery from 'root/src/server/api/actions/reviewDelivery'
 
 describe('deliveryDare flow', async () => {
 	let project
@@ -80,7 +81,77 @@ describe('deliveryDare flow', async () => {
 		expect(res.body.youtubeUpload).toBe(insertVideoMock)
 	})
 
+	test('another user can\'t deliver to the same dare', async () => {
+		const oAuthDetails = {
+			tokenId: 'twitch',
+			id: project.assignees[1].platformId,
+		}
+
+		await addOAuthToken({
+			payload: oAuthDetails,
+			userId: `${mockUserId}2`,
+		})
+
+		await acceptProject({
+			userId: `${mockUserId}2`,
+			payload: {
+				projectId: project.id,
+				assigneeId: `twitch|${project.assignees[1].platformId}`,
+				amountRequested: 1000,
+			},
+		})
+
+		const payload = deliveryDareMock(project.id)
+
+		const event = {
+			endpointId: DELIVERY_DARE_INIT,
+			payload,
+			authentication: `${mockUserId}2`,
+		}
+		const res = await apiFn(event)
+		expect(res.statusCode).toEqual(403)
+	})
+
+
 	test("can't submit video again after succesful submission", async () => {
+		const payload = deliveryDareMock(project.id)
+		const event = {
+			endpointId: DELIVERY_DARE_INIT,
+			payload,
+			authentication: mockUserId,
+		}
+		const res = await apiFn(event)
+		expect(res.statusCode).toEqual(403)
+	})
+
+	test('can submit video after rejection', async () => {
+		await reviewDelivery({
+			userId: mockUserId,
+			payload: {
+				projectId: project.id,
+				audit: projectDeliveryRejectedKey,
+				message: 'asdasda',
+			},
+		})
+		const payload = deliveryDareMock(project.id)
+		const event = {
+			endpointId: DELIVERY_DARE_INIT,
+			payload,
+			authentication: mockUserId,
+		}
+		const res = await apiFn(event)
+
+		expect(res.statusCode).toEqual(200)
+	})
+
+	test("can't submit video after succesful review", async () => {
+		await reviewDelivery({
+			userId: mockUserId,
+			payload: {
+				projectId: project.id,
+				audit: projectDeliveredKey,
+			},
+		})
 		const payload = deliveryDareMock(project.id)
 		const event = {
 			endpointId: DELIVERY_DARE_INIT,
@@ -130,8 +201,7 @@ describe('deliveryDare flow', async () => {
 
 		const res = await apiFn(event)
 
-		expect(res.body.items.length).toEqual(2)
-		expect(res.body.items[0].id).toEqual(project.id)
-		expect(res.body.items[1].id).toEqual(project2.id)
+		expect(res.body.items.length).toEqual(1)
+		expect(res.body.items[0].id).toEqual(project2.id)
 	})
 })

@@ -21,6 +21,13 @@ export default (emailData, emailTemplate) => {
 			},
 		},
 		Source: ourEmail,
+		ConfigurationSetName: 'Dare_Drop_Event_Based_Emails',
+		Tags: [
+			{
+				Name: 'message_type',
+				Value: 'support',
+			},
+		],
 	}
 
 
