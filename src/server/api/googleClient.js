@@ -12,8 +12,6 @@ export default new Promise((resolve, reject) => {
 			reject(err)
 		}
 		const { clientSecret, refreshToken, clientId } = JSON.parse(data.SecretString)
-		console.log('GOOGLE')
-		console.log({ clientId, clientSecret, redirectURI })
 		const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectURI)
 
 		oauth2Client.setCredentials({
