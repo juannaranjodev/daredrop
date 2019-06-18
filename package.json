@@ -22,7 +22,9 @@
     "bundleLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda",
     "genAWSCreds": "./node_modules/.bin/babel-node --presets=env ./customScripts/generateAWSCredentials.js",
     "runLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default",
-    "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmbz dareMeZDevApiLambdaFunction.default"
+    "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmbz dareMeZDevApiLambdaFunction.default",
+    "deployProduction": "stage=production ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli deploy -s production",
+    "updateProduction": "stage=production ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli update -s production"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.15",

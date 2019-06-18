@@ -1,11 +1,21 @@
 import { SecretsManager } from 'aws-sdk'
 import paypalRestSDK from 'paypal-rest-sdk'
+import { productionPaypal, developmentPaypal } from 'root/src/shared/constants/secretNames'
 
 const secretsClient = new SecretsManager()
-const secretName = 'PayPal_Test'
-const mode = 'sandbox'
+
+const envConf = process.env.STAGE === 'production'
+	? {
+		mode: 'live',
+		secretName: productionPaypal,
+	}
+	: {
+		mode: 'sandbox',
+		secretName: developmentPaypal,
+	}
 
 export default new Promise((resolve, reject) => {
+	const { mode, secretName } = envConf
 	secretsClient.getSecretValue({ SecretId: secretName }, (err, data) => {
 		if (err) {
 			reject(err)

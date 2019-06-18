@@ -51,7 +51,7 @@ describe('getAcceptedProjects', () => {
 				message: 'asdasdas',
 			},
 		})
-
+		
 		const event = {
 			endpointId: GET_PROJECT,
 			payload: {
