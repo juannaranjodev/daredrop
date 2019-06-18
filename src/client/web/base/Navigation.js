@@ -30,7 +30,11 @@ const styles = {
 		margin: 0,
 	},
 	logoImg: {
-		height: 60,
+		height: 55,
+		'@media (max-width: 375px)': {
+			height: 45,
+			marginBottom: 9,
+		},
 	},
 }
 
