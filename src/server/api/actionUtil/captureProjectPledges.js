@@ -5,14 +5,14 @@ import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 export default async (projectId) => {
 	const projectPledges = await dynamoQueryProjectPledges(projectId)
-	const pledgesToWrite = await reduce(async (result, pledge) => {
+	const pledgesToWrite = await Promise.all(map(async (pledge) => {
 		const payments = await capturePayments(prop('paymentInfo', pledge))
 		const paymentInfoDdb = {
 			TableName: TABLE_NAME,
 			Item: assoc('paymentInfo', payments, pledge),
 		}
-		return [...result, paymentInfoDdb]
-	}, [], projectPledges)
+		return paymentInfoDdb
+	}, projectPledges))
 	// here we can't use batchWrite or transactWrite as those support only
 	// 25(batchwrite) or 10(transactWrite) write items
 	await Promise.all(map(pledge => documentClient.put(pledge).promise(), pledgesToWrite))

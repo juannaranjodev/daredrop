@@ -39,12 +39,12 @@ jest.mock('root/src/server/api/stripeClient', () => ({
 			id: 'customerId',
 		})),
 		createSource: jest.fn(() => Promise.resolve()),
-		sources: {
-			retrieve: jest.fn(() => Promise.resolve('source')),
-		},
-		balanceTransactions: {
-			retrieve: jest.fn(() => Promise.resolve({ net: 600000 })),
-		},
+	},
+	sources: {
+		retrieve: jest.fn(() => Promise.resolve('source')),
+	},
+	balanceTransactions: {
+		retrieve: jest.fn(() => Promise.resolve({ net: 600000 })),
 	},
 }))
 
