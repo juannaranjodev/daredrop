@@ -11,11 +11,13 @@ import dynamoGetUserIdFromSK from 'root/src/server/api/actionUtil/dynamoGetUserI
 export default async (projectId) => {
 	const [projectDdb, assigneesDdb, projectPledgesDdb, , payoutDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)
 	const payoutsObj = projectSerializer([...assigneesDdb, ...payoutDdb])
-
 	const dareDropFee = reduce((acc, item) => add(acc, prop('pledgeAmount', item)), 0, projectPledgesDdb) * 0.1
-
-	const requestedTotal = reduce((acc, assignee) => add(acc, prop('amountRequested', assignee)),
-		0, prop('assignees', payoutsObj))
+	const requestedTotal = reduce((acc, assignee) => {
+		if (!prop('amountRequested', assignee)) {
+			return acc
+		}
+		return add(acc, prop('amountRequested', assignee))
+	},	0, prop('assignees', payoutsObj))
 
 	const payoutsArr = map(
 		(assignee) => {
