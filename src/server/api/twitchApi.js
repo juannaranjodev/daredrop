@@ -13,3 +13,8 @@ export const getGameData = gameIds => nodeAjax({
 	headers: { 'Client-ID': TWITCH_CLIENT_ID },
 	queryParams: { id: gameIds },
 })
+
+export const getUserByToken = token => nodeAjax({
+	url: `${baseUrlNewApi}users`,
+	headers: { 'Client-ID': TWITCH_CLIENT_ID, Authorization: token },
+})
