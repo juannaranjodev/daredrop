@@ -113,6 +113,17 @@ describe('payoutAssignees', async () => {
 		const res = await apiFn(event)
 		expect(res.statusCode).toEqual(404)
 	})
+	test('can\'t make payout without apiKey specified (protection for cron invoked actions)', async () => {
+		const event = {
+			endpointId: PAYOUT_ASSIGNEES,
+			payload: {
+				projectId: project.id,
+			},
+		}
+
+		const res = await apiFn(event)
+		expect(res.statusCode).toEqual(401)
+	})
 	test('payouts are calculated properly', async () => {
 		await addPayoutMethod({
 			userId: mockUserId,
