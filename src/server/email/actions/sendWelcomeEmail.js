@@ -8,5 +8,5 @@ export default (request) => {
 		title: welcomeEmailTitle,
 		recipients: [path(['userAttributes', 'email'], request)],
 	}
-	sendEmail(emailData, welcomeEmail)
+	return sendEmail(emailData, welcomeEmail)
 }
