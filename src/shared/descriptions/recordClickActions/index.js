@@ -3,6 +3,7 @@ import rejectProject from 'root/src/shared/descriptions/recordClickActions/rejec
 import rejectActiveProject from 'root/src/shared/descriptions/recordClickActions/rejectActiveProject'
 import approveDelivery from 'root/src/shared/descriptions/recordClickActions/approveDelivery'
 import rejectDelivery from 'root/src/shared/descriptions/recordClickActions/rejectDelivery'
+import payoutAssignees from 'root/src/shared/descriptions/recordClickActions/payoutAssignees'
 
 export default {
 	...approveProject,
@@ -10,4 +11,5 @@ export default {
 	...rejectActiveProject,
 	...approveDelivery,
 	...rejectDelivery,
+	...payoutAssignees,
 }

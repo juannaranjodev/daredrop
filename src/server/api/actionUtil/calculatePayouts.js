@@ -19,10 +19,11 @@ export default async (projectId) => {
 
 	const payoutsArr = map(
 		(assignee) => {
+			// here all Math.rounds and x100 /100 are for nice rounding to 2 decimal places
 			const ourCost = Math.round(100 * (prop('capturesAmount', payoutsObj) - dareDropFee) * prop('amountRequested', assignee) / requestedTotal) / 100
 			const payoutFeeFromPercentage = Math.round(100 * (ourCost * (1 - 1 / 1.02))) / 100
 			const payoutFee = payoutFeeFromPercentage >= 20 ? 20 : payoutFeeFromPercentage
-			const assigneeReceives = ourCost - payoutFee
+			const assigneeReceives = Math.round(100 * (ourCost - payoutFee)) / 100
 			return assoc('payout', assigneeReceives, assignee)
 		},
 		prop('assignees', payoutsObj),

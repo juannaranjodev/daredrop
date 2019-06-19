@@ -27,13 +27,14 @@ import {
 	projectDeliveredKey, projectDeliveryPendingKey,
 	projectApprovedKey, projectToCaptureKey,
 } from 'root/src/server/api/lenses'
-
-
+// emails
 import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
 import { videoRejectedTitle, videoApprovedTitle } from 'root/src/server/email/util/emailTitles'
 import videoApprovedEmail from 'root/src/server/email/templates/videoApproved'
 import videoRejectedEmail from 'root/src/server/email/templates/videoRejected'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
+// rest
+import keyProtectedClient from 'root/src/server/api/keyProtectedClient'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
@@ -148,6 +149,7 @@ export default async ({ payload }) => {
 			{
 				endpointId: PAYOUT_ASSIGNEES,
 				payload: { projectId },
+				apiKey: prop('secretKey', await keyProtectedClient),
 			},
 			eventDate, 'projectId',
 		)
