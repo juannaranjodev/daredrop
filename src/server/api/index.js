@@ -44,6 +44,7 @@ export const apiHof = (
 			const triggerAction = path([triggerSource], getTriggerActionsObj)
 			const { request } = event
 			const res = await triggerAction(request)
+			console.log(res)
 			return { statusCode: 200, body: res }
 		}
 		if (!endpointExists) {
@@ -87,5 +88,4 @@ export default (event, context, callback) => {
 	apiFn(event, context, callback).then((res) => {
 		callback(null, res)
 	})
-	context.succeed(event)
 }

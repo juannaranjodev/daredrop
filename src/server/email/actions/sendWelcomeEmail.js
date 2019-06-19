@@ -3,10 +3,13 @@ import sendEmail from 'root/src/server/email/actions/sendEmail'
 import { welcomeEmailTitle } from 'root/src/server/email/util/emailTitles'
 import welcomeEmail from 'root/src/server/email/templates/welcome'
 
-export default (request) => {
+export default request => new Promise(async (resolve) => {
 	const emailData = {
 		title: welcomeEmailTitle,
 		recipients: [path(['userAttributes', 'email'], request)],
 	}
-	sendEmail(emailData, welcomeEmail)
-}
+	const res = await sendEmail(emailData, welcomeEmail)
+	console.log('SWM')
+	console.log(res)
+	resolve(res)
+})
