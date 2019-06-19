@@ -86,6 +86,6 @@ export const apiFn = apiHof(
 export default (event, context, callback) => {
 	apiFn(event, context, callback).then((res) => {
 		callback(null, res)
-		context.succeed(event)
 	})
+	context.succeed(event)
 }
