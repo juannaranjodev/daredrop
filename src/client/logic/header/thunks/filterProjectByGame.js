@@ -12,6 +12,7 @@ export default (valueInput, { action }) => async (dispatch, getState) => {
 	const state = getState()
 	const { filterParams } = state.list
 	const value = propOr(valueInput, 'value', valueInput)
+
 	let param = {}
 	if (typeof value === 'number') {
 		param = { param: 'game', value: String(value) }
