@@ -107,6 +107,7 @@ describe('payoutAssignees', async () => {
 			payload: {
 				projectId: project.id,
 			},
+			apiKey: 'asdsadas',
 		}
 
 		const res = await apiFn(event)
@@ -153,6 +154,7 @@ describe('payoutAssignees', async () => {
 			payload: {
 				projectId: project.id,
 			},
+			apiKey: 'asdsadas',
 		}
 
 		const res = await apiFn(event)
