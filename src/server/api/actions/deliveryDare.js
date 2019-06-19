@@ -5,9 +5,9 @@ import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoInde
 import S3 from 'root/src/server/api/s3Client'
 import { videoBucket } from 'root/cfOutput'
 import googleOAuthClient, { youtube } from 'root/src/server/api/googleClient'
-import { dynamoItemsProp, projectApprovedKey } from 'root/src/server/api/lenses'
+import { dynamoItemsProp, projectApprovedKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
 import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
-import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
+import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
 import { map, prop, join } from 'ramda'
 import moment from 'moment'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
@@ -53,7 +53,7 @@ export default async ({ payload }) => {
 		...assigneesDdb,
 	])
 
-	const acceptedAssignees = getAcceptedAssignees(project.assignees)
+	const acceptedAssignees = getAssigneesByStatus(project.assignees, streamerAcceptedKey)
 
 	const displayPlusNewline = input => `${prop('displayName', input)}: https://www.twitch.tv/${prop('displayName', input)}\n`
 	const ytDescription = `${join('', map(displayPlusNewline, acceptedAssignees))}${project.description}`

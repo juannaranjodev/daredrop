@@ -22,6 +22,17 @@ module.exports = {
 				profile_image_url: 'https://static-cdn.jtvnw.net/jtv_user_pictures/garenatw-profile_image-85f32c0eaad8b48e-300x300.jpeg',
 				offline_image_url: 'https://static-cdn.jtvnw.net/jtv_user_pictures/2269cf6f-7141-431a-a274-2644a4942f32-channel_offline_image-1920x1080.png',
 				view_count: 180326052,
+			},
+			{
+				id: '419843502',
+				login: 'piekarskid',
+				display_name: 'piekarskid',
+				type: '',
+				broadcaster_type: 'partner',
+				description: '',
+				profile_image_url: 'https://static-cdn.jtvnw.net/jtv_user_pictures/garenatw-profile_image-85f32c0eaad8b48e-300x300.jpeg',
+				offline_image_url: 'https://static-cdn.jtvnw.net/jtv_user_pictures/2269cf6f-7141-431a-a274-2644a4942f32-channel_offline_image-1920x1080.png',
+				view_count: 0,
 			}],
 	},
 	gameData: {
