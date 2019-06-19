@@ -63,6 +63,7 @@ jest.mock('root/src/server/api/twitchApi', () => {
 	return {
 		getUserData: jest.fn(() => Promise.resolve(userData)),
 		getGameData: jest.fn(() => Promise.resolve(gameData)),
+		getUserByToken: jest.fn(() => Promise.resolve()),
 	}
 })
 
@@ -107,7 +108,7 @@ jest.mock('root/src/server/api/paypalClient', () => ({
 
 jest.mock('root/src/server/api/actionUtil/getUserEmail', () => ({
 	__esModule: true,
-	default: jest.fn(() => Promise.resolve('user@mail.com' )),
+	default: jest.fn(() => Promise.resolve('user@mail.com')),
 }))
 
 // Normally authentication is a JWT that gets decoded and returns a user id.
