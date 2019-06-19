@@ -20,7 +20,7 @@ export default () => {
 
                   <tr>
                     <td style="margin:0;padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">Where you can Dare (ask, challenge, request, suggest) streamers to do things you’d like to see. On our site, you do by creating a Dare.</p>
+                      <p style="margin:0;padding:0;">Where you can Dare (ask, challenge, request, suggest) streamers to do things you’d like to see. On our site, you do that by creating a Dare.</p>
                     </td>
                   </tr>
 
@@ -33,7 +33,7 @@ export default () => {
                       <p style="font-weight:bold;font-size:26px;line-height:1.23;margin:0;margin-bottom:10px;">How to Dare a Streamer</p>
                       <p style="margin:0;padding:0;">Visit <a href="http://${ourUrl}" style="text-decoration:none;color:#1976d2;">http://${ourUrl}</a></p>
                       Click the “Create a new Dare” link halfway down the page on the left side.
-                      Fill out what you’d like to see then pledge. Our team will review your pledge to make sure it jives with our rules of use, then your pledge will be on our marketplace!
+                      Fill out what you’d like to see, then pledge. Our team will review your pledge to make sure it jives with our rules of use, then your pledge will be on our marketplace!
                     </td>
                   </tr>
 
