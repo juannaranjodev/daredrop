@@ -34,15 +34,16 @@ const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 export const apiHof = (
 	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
-) => async (event, context) => {
+) => async (event) => {
 	try {
+		// const { invokedFunctionArn } = context
+
 		const { endpointId, payload, authentication, triggerSource } = event
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (triggerSource) {
 			const triggerAction = path([triggerSource], getTriggerActionsObj)
 			const { request } = event
 			const res = await triggerAction(request)
-			context.succeed(event)
 			return { statusCode: 200, body: res }
 		}
 		if (!endpointExists) {
