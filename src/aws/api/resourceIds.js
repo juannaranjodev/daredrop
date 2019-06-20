@@ -5,3 +5,7 @@ export const API_LAMBDA_LONG_TASK_FUNCTION = `${resourcePrefix}ApiLambdaLongTask
 export const API_LAMBDA_EXECUTION_ROLE = `${resourcePrefix}ApiLambdaExecutionRole`
 
 export const API_DYNAMO_DB_TABLE = `${resourcePrefix}ApiDynamoDbTable`
+
+export const PERFORMANCE_TEST_LAMBDA_EXECUTION_ROLE = `${resourcePrefix}PerformanceTestLambdaExecutionRole`
+export const PERFORMANCE_TEST_LAMBDA = `${resourcePrefix}PerformanceTestLambda`
+export const PERFORMANCE_TEST_DYNAMODB_TABLE = `${resourcePrefix}PerformanceTestDynamoDbTable`
