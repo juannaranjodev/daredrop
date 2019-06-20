@@ -1,13 +1,18 @@
 /* eslint-disable max-len */
+// libs
 import { head, path } from 'ramda'
+// db stuff
+import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
+import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+// utils
+import deleteCronJob from 'root/src/server/api/actionUtil/deleteCronJob'
 import calculatePayouts from 'root/src/server/api/actionUtil/calculatePayouts'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import paypalBatchPayout from 'root/src/server/api/actionUtil/paypalBatchPayout'
-import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
+// descriptions
+import { PAYOUT_ASSIGNEES } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { dynamoItemsProp, payoutCompleteKey, projectToPayoutKey } from 'root/src/server/api/lenses'
-import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { PAYOUT_ASSIGNEES } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 const payloadLenses = getPayloadLenses(PAYOUT_ASSIGNEES)
 const { viewProjectId } = payloadLenses
@@ -27,7 +32,6 @@ export default async ({ payload }) => {
 	}).promise()
 
 	const payoutToSave = head(dynamoItemsProp(payoutToSaveDdb))
-
 	const paypalPayout = await paypalBatchPayout(payoutToSave, payouts)
 
 	const saveParams = {
@@ -56,6 +60,7 @@ export default async ({ payload }) => {
 	}
 
 	await documentClient.batchWrite(saveParams).promise()
+	await deleteCronJob(PAYOUT_ASSIGNEES, projectId)
 
 	return paypalPayout
 }

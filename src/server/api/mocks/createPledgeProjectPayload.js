@@ -3,6 +3,8 @@ export default projectId => ({
 	pledgeAmount: 1234,
 	paymentInfo: {
 		paymentType: 'stripeCard',
-		paymentId: 'src_FBgaRgsyjOqOiz',
+		// paymentId: random.uuid(),
+		paymentId: 'src_FBgaRgsyj22OqOiz',
+		paymentAmount: 1234,
 	},
 })

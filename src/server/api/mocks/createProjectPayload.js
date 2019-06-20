@@ -11,6 +11,7 @@ const twitchStreamers = [
 const twitchStreamerIds = [
 	{ id: 19571641 }, // ninja
 	{ id: 28462004 }, // garenatw (to test no description)
+	{ id: 419843502 },
 ]
 
 const gameIds = [
