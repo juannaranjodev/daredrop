@@ -143,14 +143,18 @@ export default async ({ payload }) => {
 		}).promise()
 
 		const eventDate = moment().add(5, 'days')
-		await setupCronJob(
-			{
-				endpointId: PAYOUT_ASSIGNEES,
-				payload: { projectId },
-				apiKey: prop('secretKey', await keyProtectedClient),
-			},
-			eventDate, 'projectId',
-		)
+		try {
+			await setupCronJob(
+				{
+					endpointId: PAYOUT_ASSIGNEES,
+					payload: { projectId },
+					apiKey: prop('secretKey', await keyProtectedClient),
+				},
+				eventDate, 'projectId',
+			)
+		} catch (err) {
+			return err
+		}
 	}
 
 	return {

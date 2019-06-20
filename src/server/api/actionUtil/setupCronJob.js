@@ -2,10 +2,13 @@
 import generateCrontab from 'root/src/shared/util/generateCrontab'
 import { CloudWatchEvents, Lambda } from 'aws-sdk'
 import { apiLongTaskFunctionArn, apiCloudWatchEventsIamRole } from 'root/cfOutput'
-import { equals, prop } from 'ramda'
+import { equals, prop, head, split, join, tail, compose } from 'ramda'
 
 export default (eventInput, cronTime, identifier) => new Promise((resolve, reject) => {
-	const eventName = `${eventInput.endpointId}-${eventInput.payload[identifier]}`
+	const ruleId = compose(join('-'), tail, split('-'))(eventInput.payload[identifier])
+
+	// this one has to be max 64 characters
+	const eventName = `${head(process.env.STAGE)}-${eventInput.endpointId}-${ruleId}`
 	const crontab = generateCrontab(cronTime)
 
 	const cloudWatchEvents = new CloudWatchEvents()
