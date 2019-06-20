@@ -62,7 +62,6 @@ describe('getMyProjects', () => {
 	})
 
 	test('gets correct amount of assignees displayed after one rejects', async () => {
-
 		await auditProject({
 			userId: mockUserId,
 			payload: {
@@ -86,6 +85,6 @@ describe('getMyProjects', () => {
 		}
 		const res = await apiFn(event, contextMock)
 
-		expect(res.body.items[0].assignees.length).toEqual(1)
+		expect(res.body.items[0].assignees.length).toEqual(2)
 	})
 })

@@ -1,34 +1,40 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
+// libs
 import { prop, propEq, map, filter, equals, and, not, startsWith } from 'ramda'
-
+import moment from 'moment'
+import { ternary } from 'root/src/shared/util/ramdaPlus'
+// db stuff
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
-import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+// utils
+import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
+import capturePaymentsWrite from 'root/src/server/api/actionUtil/capturePaymentsWrite'
+import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
+import captureProjectPledges from 'root/src/server/api/actionUtil/captureProjectPledges'
+import setupCronJob from 'root/src/server/api/actionUtil/setupCronJob'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
+import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
+import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+// descriptions
+import { REVIEW_DELIVERY, PAYOUT_ASSIGNEES } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import {
 	streamerAcceptedKey, streamerDeliveryApprovedKey,
 	projectDeliveredKey, projectDeliveryPendingKey,
 	projectApprovedKey, projectToCaptureKey,
 } from 'root/src/server/api/lenses'
-import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
-import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
-import getTimestamp from 'root/src/shared/util/getTimestamp'
-import { ternary } from 'root/src/shared/util/ramdaPlus'
-import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
-import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
-import capturePaymentsWrite from 'root/src/server/api/actionUtil/capturePaymentsWrite'
-import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
-import captureProjectPledges from 'root/src/server/api/actionUtil/captureProjectPledges'
-
-
+// emails
 import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
 import { videoRejectedTitle, videoApprovedTitle } from 'root/src/server/email/util/emailTitles'
 import videoApprovedEmail from 'root/src/server/email/templates/videoApproved'
 import videoRejectedEmail from 'root/src/server/email/templates/videoRejected'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
+// rest
+import keyProtectedClient from 'root/src/server/api/keyProtectedClient'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
@@ -44,12 +50,7 @@ export default async ({ payload }) => {
 	const [projectToApproveDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
 
 	const projectSerialized = projectSerializer([...projectToApproveDdb, ...assigneesDdb], true)
-
-	const projectAssignees = prop('assignees', projectSerializer([
-		...assigneesDdb,
-	]))
-
-	const projectAcceptedAssignees = filter(propEq('accepted', streamerAcceptedKey), projectAssignees)
+	const projectAcceptedAssignees = filter(propEq('accepted', streamerAcceptedKey), prop('assignees', projectSerialized))
 
 	const assigneesToWrite = ternary(equals(audit, projectDeliveredKey), map(assignee => ({
 		PutRequest: {
@@ -96,6 +97,7 @@ export default async ({ payload }) => {
 			}], []),
 		...archiveProjectRecord(recordToArchive),
 	]
+
 	const writeParams = {
 		RequestItems: {
 			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],
@@ -138,6 +140,20 @@ export default async ({ payload }) => {
 				[TABLE_NAME]: captureToWrite,
 			},
 		}).promise()
+
+		const eventDate = moment().add(5, 'days')
+		try {
+			await setupCronJob(
+				{
+					endpointId: PAYOUT_ASSIGNEES,
+					payload: { projectId },
+					apiKey: prop('secretKey', await keyProtectedClient),
+				},
+				eventDate, 'projectId',
+			)
+		} catch (err) {
+			return err
+		}
 	}
 
 	return {

@@ -23,5 +23,5 @@ export default ({ email, verificationCode }) => dispatch => new Promise(
 		dispatch(pushRoute(LOGIN_ROUTE_ID))
 	},
 ).catch(
-	console.warn,
+	() => { throw { verificationCode: 'Invalid verification code provided, please try again.' } },
 )

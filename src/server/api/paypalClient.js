@@ -20,9 +20,9 @@ export default new Promise((resolve, reject) => {
 		if (err) {
 			reject(err)
 		}
+
 		const { paypalClientId: clientId, paypalClientSecret: clientSecret } = JSON.parse(data.SecretString)
-		console.log('PAYPAL')
-		console.log({ clientId, clientSecret })
+
 		paypalRestSDK.configure({
 			mode,
 			client_id: clientId,

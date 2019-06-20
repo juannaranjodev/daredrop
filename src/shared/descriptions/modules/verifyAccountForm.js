@@ -6,6 +6,7 @@ export default {
 	[VERIFY_ACCOUNT_FORM_MODULE_ID]: {
 		moduleType: 'form',
 		schema: verifyAccountSchema,
+		subTitle: '  ',
 		fields: [
 			{
 				fieldId: 'email',
