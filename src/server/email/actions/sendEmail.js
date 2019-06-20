@@ -3,7 +3,7 @@ import { ourEmail } from 'root/src/shared/constants/mail'
 
 const ses = new SES()
 
-export default (emailData, emailTemplate) => {
+export default (emailData, emailTemplate) => new Promise(async (resolve, reject) => {
 	const params = {
 		Destination: {
 			ToAddresses: emailData.recipients,
@@ -31,13 +31,11 @@ export default (emailData, emailTemplate) => {
 	}
 
 
-	return ses.sendEmail(params, (err, data) => new Promise((resolve, reject) => {
+	ses.sendEmail(params, (err, data) => {
 		if (err) {
 			reject(err, err.stack)
 		} else {
-			console.log('SM')
-			console.log(data)
 			resolve(data)
 		}
-	}))
-}
+	})
+})
