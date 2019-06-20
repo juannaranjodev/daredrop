@@ -142,9 +142,7 @@ export default async ({ payload }) => {
 			},
 		}).promise()
 
-		// here I leave 5 minutes for testing purposes
-		// const eventDate = moment().add(5, 'days')
-		const eventDate = moment().add(5, 'minutes')
+		const eventDate = moment().add(5, 'days')
 		await setupCronJob(
 			{
 				endpointId: PAYOUT_ASSIGNEES,

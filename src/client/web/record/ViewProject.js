@@ -356,13 +356,6 @@ export const ViewProjectModule = memo(({
 									/>
 								</div>,
 							)}
-							{/* this one is temp only for testing purpose */}
-							<div className={classes.sidebarItem}>
-								<RecordClickActionButton
-									recordClickActionId="PAYOUT_ASSIGNEES"
-									recordId={projectId}
-								/>
-							</div>
 							{
 								orNull(
 									canRejectProject,
