@@ -15,7 +15,7 @@ import { CLEAR_PARTIAL_FORM_KEYS } from 'root/src/shared/descriptions/endpoints/
 const { viewFormChild } = formStoreLenses
 
 export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) => async (dispatch, getState) => {
-	actions.order.authorize().then(async ({ purchase_units }) => {
+	actions.order.authorize().then(async ({purchase_units}) => {
 		const state = getState()
 		const partialFormEntries = viewFormChild(`db-${moduleKey}`, state)
 		if (partialFormEntries) {

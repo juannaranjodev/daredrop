@@ -1,12 +1,13 @@
-import { toString, prop } from 'ramda'
+import { toString, prop, gt } from 'ramda'
 import customValidateForm from 'root/src/client/logic/form/util/customValidateForm'
 import setFormErrors from 'root/src/client/logic/form/actions/setFormErrors'
 import submitForm from 'root/src/client/logic/form/actions/submitForm'
 
+// eslint-disable-next-line max-len
 export default (data, actions, { moduleId, formSchema, formData, moduleKey }) => async (dispatch) => {
 	try {
 		dispatch(submitForm(moduleKey))
-		await customValidateForm(moduleId, formSchema, formData)
+		// await customValidateForm(moduleId, formSchema, formData)
 		return actions.order.create({
 			purchase_units: [{
 				amount: {
