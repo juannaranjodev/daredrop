@@ -21,15 +21,15 @@ export default {
 				Variables: {
 					API_DYNAMO_DB_TABLE: ref(API_DYNAMO_DB_TABLE),
 					RECORD_SET: ref(RECORD_SET),
-					STAGE: process.env.stage
+					STAGE: process.env.stage || 'development'
 				},
 			},
 			// FunctionName: String,
 			Role: getAtt(API_LAMBDA_EXECUTION_ROLE, 'Arn'),
 			// Handler: 'index.default',
-			MemorySize: 512,
+			MemorySize: 1024,
 			Runtime: 'nodejs8.10',
-			Timeout: 4,
+			Timeout: 10,
 		},
 	},
 }

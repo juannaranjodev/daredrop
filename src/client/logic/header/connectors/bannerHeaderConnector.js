@@ -9,12 +9,13 @@ import linkLabelSelector from 'root/src/client/logic/header/selectors/linkLabelS
 import loadOptionsPromise from 'root/src/client/logic/header/selectors/loadOptionsPromise'
 import linkRouteIdSelector from 'root/src/client/logic/header/selectors/linkRouteIdSelector'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
-import filterProjectByGame from 'root/src/client/logic/header/thunk/filterProjectByGame'
-import filterProjectByStreamer from 'root/src/client/logic/header/thunk/filterProjectByStreamer'
+import filterProjectByGame from 'root/src/client/logic/header/thunks/filterProjectByGame'
+import filterProjectByStreamer from 'root/src/client/logic/header/thunks/filterProjectByStreamer'
 import gameFilterValueSelector from 'root/src/client/logic/header/selectors/gameFilterValueSelector'
 import streamerFilterValueSelector from 'root/src/client/logic/header/selectors/streamerFilterValueSelector'
-import sortProject from 'root/src/client/logic/header/thunk/sortProject'
+import sortProject from 'root/src/client/logic/header/thunks/sortProject'
 import sortValueSelector from 'root/src/client/logic/header/selectors/sortValueSelector'
+import isMyProjectsSelector from 'root/src/client/logic/header/selectors/isMyProjectsSelector'
 import bannerImageSubTextSelector from '../selectors/bannerImageSubTextSelector'
 
 export default reduxConnector(
@@ -31,6 +32,7 @@ export default reduxConnector(
 		['linkLabel', linkLabelSelector],
 		['linkRouteId', linkRouteIdSelector],
 		['sortValue', sortValueSelector],
+		['isMyProjects', isMyProjectsSelector],
 	],
 	[
 		['pushRoute', pushRoute],

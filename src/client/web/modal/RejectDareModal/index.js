@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { ACTIVE_PROJECTS_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
+import { DARE_REJECT_SUCCESS_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 import { equals } from 'ramda'
 
 import Button from 'root/src/client/web/base/Button'
@@ -27,7 +27,7 @@ import styles from './styles'
 				additionalClass={classes.button}
 				onClick={() => rejectProject(rejectDescription).then(({ statusCode, schemaErrors }) => {
 					if (equals(statusCode, 200)) {
-						pushRoute(ACTIVE_PROJECTS_ROUTE_ID)
+						pushRoute(DARE_REJECT_SUCCESS_ROUTE_ID)
 					} else {
 						setError(schemaErrors.message)
 					}

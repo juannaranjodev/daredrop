@@ -17,11 +17,12 @@ const getResultSchemaFnMock = jest.fn()
 const getAuthenticationFnMock = jest.fn()
 const testEndpointExistsFnMock = jest.fn()
 const getIsLongRunningTask = jest.fn()
+const getIsInvokedInternal = jest.fn()
 const getTriggerActions = jest.fn()
 
 const apiFn = apiHof(
 	serverEndpointsMock, getPayloadSchemaFnMock, getResultSchemaFnMock, getTriggerActions,
-	getAuthenticationFnMock, testEndpointExistsFnMock, getIsLongRunningTask,
+	getAuthenticationFnMock, testEndpointExistsFnMock, getIsLongRunningTask, getIsInvokedInternal,
 )
 
 describe('api', () => {

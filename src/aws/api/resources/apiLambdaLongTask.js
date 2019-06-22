@@ -21,7 +21,7 @@ export default {
     Variables: {
      API_DYNAMO_DB_TABLE: ref(API_DYNAMO_DB_TABLE),
      RECORD_SET: ref(RECORD_SET),
-     STAGE: process.env.stage
+     STAGE: process.env.stage || 'development'
     },
    },
    // FunctionName: String,

@@ -1,8 +1,8 @@
 import React, { memo, Fragment } from 'react'
-import { identity } from 'ramda'
+import { and, not } from 'ramda'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
-import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST, SORT_BY_CREATED_ASC, SORT_BY_ACCEPTED } from 'root/src/shared/constants/sortTypesOfProject'
+import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST } from 'root/src/shared/constants/sortTypesOfProject'
 
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 import Link from 'root/src/client/web/base/Link'
@@ -186,6 +186,7 @@ export const BannerHeaderUnconnected = memo(({
 	classes, createNewDareActive, loadOptionsPromise,
 	filterProjectByGame, filterProjectByStreamer, sortProject,
 	gameFilterValue, streamerFilterValue, sortValue,
+	isMyProjects,
 }) => (
 	<div className={classNames(classes.bottomMargin, 'layout-column')}>
 		{orNull(bannerImage,
@@ -223,7 +224,7 @@ export const BannerHeaderUnconnected = memo(({
 							</div>,
 						)}
 						{orNull(
-							createNewDareActive,
+							and(createNewDareActive, not(isMyProjects)),
 							<div className={classes.filterContainer}>
 								<div className={classes.sort}>
 									<div className={classes.label}>Sort By:</div>
