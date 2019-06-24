@@ -58,7 +58,7 @@ export default async ({ payload }) => {
 
 	const s3data = {
 		Bucket: videoBucket,
-		Key: viewTestName(payload) || deliveryProject.fileName,
+		Key: process.env.STAGE === 'testing' ? viewTestName(payload) : deliveryProject.fileName,
 	}
 
 	try {
