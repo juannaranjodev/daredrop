@@ -3,16 +3,12 @@ import getAtt from 'root/src/aws/util/getAtt'
 import {
 	API_LAMBDA_FUNCTION, API_LAMBDA_LONG_TASK_FUNCTION,
 	API_DYNAMO_DB_TABLE, PERFORMANCE_TEST_DYNAMODB_DATA_TABLE,
-} from 'root/src/aws/api/resourceIds'
-
-import {
-	PERFORMANCE_TEST_DYNAMODB_DATA_TABLE_ARN,
 	API_CLOUDWATCH_EVENTS_ROLE,
 } from 'root/src/aws/api/resourceIds'
 
 import {
 	API_FUNCTION_ARN, API_LONG_TASK_FUNCTION_ARN, API_DYNAMO_TABLE_NAME,
-	API_CLOUDWATCH_EVENTS_IAM_ROLE,
+	API_CLOUDWATCH_EVENTS_IAM_ROLE, PERFORMANCE_TEST_DYNAMODB_DATA_TABLE_ARN,
 } from 'root/src/aws/api/outputIds'
 
 export default {
