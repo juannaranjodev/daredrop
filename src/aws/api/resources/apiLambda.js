@@ -14,7 +14,7 @@ export default {
 		DependsOn: [
 			API_LAMBDA_EXECUTION_ROLE,
 			API_DYNAMO_DB_TABLE,
-			PERFORMANCE_TEST_DYNAMODB_DATA_TABLE,
+			...(process.env.STAGE !== 'production' ? [PERFORMANCE_TEST_DYNAMODB_DATA_TABLE] : []),
 			RECORD_SET,
 		],
 		Properties: {

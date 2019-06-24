@@ -105,13 +105,13 @@ export default {
 											'*',
 										],
 									),
-									join(
+									...(process.env.STAGE !== 'production' ? [join(
 										'',
 										[
 											getAtt(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, 'Arn'),
 											'*',
 										],
-									),
+									)] : []),
 								],
 							},
 							{
