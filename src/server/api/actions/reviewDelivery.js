@@ -1,15 +1,10 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-<<<<<<< HEAD
-import { prop, propEq, map, filter, equals, and, not, startsWith, omit } from 'ramda'
-
-=======
 // libs
-import { prop, propEq, map, filter, equals, and, not, startsWith } from 'ramda'
+import { prop, propEq, map, filter, equals, and, not, startsWith, omit } from 'ramda'
 import moment from 'moment'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 // db stuff
->>>>>>> release/0.1.0
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 // utils
