@@ -3,7 +3,7 @@ import { map } from 'ramda'
 import webpack from 'webpack'
 import appConstants from 'root/src/shared/constants/app'
 
-const env = process.env.stage || 'development'
+const env = process.env.STAGE || 'development'
 const isProd = env === 'production'
 const envVars = Object.assign(
 	appConstants(env),
