@@ -3,7 +3,7 @@ import ref from 'root/src/aws/util/ref'
 import getAtt from 'root/src/aws/util/getAtt'
 
 import {
-	PERFORMANCE_TEST_LAMBDA, API_LAMBDA_EXECUTION_ROLE, PERFORMANCE_TEST_DYNAMODB_TABLE,
+	PERFORMANCE_TEST_LAMBDA, PERFORMANCE_TEST_LAMBDA_EXECUTION_ROLE, PERFORMANCE_TEST_DYNAMODB_TABLE,
 } from 'root/src/aws/api/resourceIds'
 
 export default {
@@ -20,11 +20,11 @@ export default {
 				},
 			},
 			// FunctionName: String,
-			Role: getAtt(API_LAMBDA_EXECUTION_ROLE, 'Arn'),
+			Role: getAtt(PERFORMANCE_TEST_LAMBDA_EXECUTION_ROLE, 'Arn'),
 			// Handler: 'index.default',
-			MemorySize: 512,
+			MemorySize: 3008,
 			Runtime: 'nodejs8.10',
-			Timeout: 3000,
+			Timeout: 900,
 		},
 	},
 }

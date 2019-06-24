@@ -1,76 +1,69 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable import/prefer-default-export */
+import { path, map, range, reduce, prop, add, length } from 'ramda'
+import authenticateUser from 'root/src/server/performanceTest/authenticateUser'
+import endpointsChain from 'root/src/server/performanceTest/endpointsChain'
+import uuid from 'uuid/v4'
+import { documentClient } from 'root/src/server/api/dynamoClient'
 
-/**
- * Provides a simple framework for conducting various tests of your Lambda
- * functions. Make sure to include permissions for `lambda:InvokeFunction`
- * and `dynamodb:PutItem` in your execution role!
- */
-const AWS = require('aws-sdk')
-const doc = require('dynamodb-doc')
+const integration = async (event, authentication) => {
+	const timerStart = new Date().getTime()
+	try {
+		// here the main heavy work happens
+		const { badStatusCodes, error } = await endpointsChain(event, authentication)
+		const duration = new Date().getTime() - timerStart
+		const iteration = add(prop('iteration', event), 1) || 0
 
-const lambda = new AWS.Lambda({ apiVersion: '2015-03-31' })
-const dynamo = new doc.DynamoDB()
-
-
-/**
- * Will invoke the given function and write its result to the DynamoDB table
- * `event.resultsTable`. This table must have a hash key string of "testId"
- * and range key number of "iteration". Specify a unique `event.testId` to
- * differentiate each unit test run.
- */
-const unit = async (event) => {
-	const lambdaParams = {
-		FunctionName: event.function,
-		Payload: JSON.stringify(event.event),
+		return {
+			duration,
+			iteration,
+			badStatusCodes,
+			error,
+		}
+	} catch (err) {
+		console.log('integration')
+		throw new Error(err)
 	}
-	const data = await lambda.invoke(lambdaParams).promise()
-	// Write result to Dynamo
-	const dynamoParams = {
-		TableName: event.resultsTable,
-		Item: {
-			testId: event.testId,
-			iteration: event.iteration || 0,
-			result: data.Payload,
-			passed: !Object.prototype.hasOwnProperty.call(JSON.parse(data.Payload), 'errorMessage'),
-		},
-	}
-	return dynamo.putItem(dynamoParams).promise()
 }
 
-/**
- * Will invoke the given function asynchronously `event.iterations` times.
- */
-const load = async (event) => {
-	const payload = event.event
-	for (let i = 0; i < event.iterations; i++) {
-		payload.iteration = i
-		await lambda.invoke({
-			FunctionName: event.function,
-			InvocationType: 'Event',
-			Payload: JSON.stringify(payload),
-		}).promise()
+const integrationMulti = async (event) => {
+	const authObj = {
+		email: path(['credentials', 'email'], event),
+		password: path(['credentials', 'password'], event),
 	}
-	return 'Load test complete'
-}
+	const user = await authenticateUser(authObj)
 
+	const authentication = path(['idToken', 'jwtToken'], user)
+	const testId = uuid()
+	const timerStart = new Date().getTime()
+	try {
+		const projects = await Promise.all(
+			map(async iteration => integration({ ...event, iteration }, authentication),
+				range(0, event.iterations)),
+		)
+
+		const sumDuration = reduce((acc, item) => acc + prop('duration', item), 0, projects)
+		const globDuration = new Date().getTime() - timerStart
+
+		const dDbWrites = map(({ iteration, badStatusCodes, duration, error }) => ({
+			TableName: process.env.PERFORMANCE_TEST_DYNAMODB_TABLE,
+			Item: {
+				testId,
+				iteration,
+				duration,
+				badStatusCodes,
+				error,
+			},
+		}), projects)
+		await Promise.all(map(pledge => documentClient.put(pledge).promise(), dDbWrites))
+		return `Success! Iterations: ${event.iterations}. Test duration: ${globDuration}. Sum of lambda invocations: ${sumDuration}`
+	} catch (err) {
+		console.log('multi')
+		throw new Error(err)
+	}
+}
 
 const ops = {
-	unit,
-	load,
+	integration,
+	integrationMulti,
 }
 
-/**
- * Pass the test type (currently either "unit" or "load") as `event.operation`,
- * the name of the Lambda function to test as `event.function`, and the event
- * to invoke this function with as `event.event`.
- *
- * See the individual test methods above for more information about each
- * test type.
- */
-export const handler = async (event, context) => {
-	if (Object.prototype.hasOwnProperty.call(ops, event.operation)) {
-		return ops[event.operation](event)
-	}
-	throw new Error(`Unrecognized operation "${event.operation}"`)
-}
+export default (event, context, callback) => ops[event.operation](event).then(res => res).catch(err => callback(err))

@@ -13,6 +13,7 @@ import {
 import serverEndpoints from 'root/src/server/api/actions'
 import authorizeRequest from 'root/src/server/api/authorizeRequest'
 import triggerActions from 'root/src/server/email/actions'
+import { Lambda } from 'aws-sdk'
 
 const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 	if (schema) {
@@ -30,15 +31,12 @@ const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 	}
 	return Promise.resolve(payload)
 }
-
 export const apiHof = (
 	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
 ) => async (event) => {
+	const { endpointId, payload, authentication, triggerSource, isTestLambda } = event
 	try {
-		// const { invokedFunctionArn } = context
-
-		const { endpointId, payload, authentication, triggerSource } = event
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (triggerSource) {
 			const triggerAction = path([triggerSource], getTriggerActionsObj)
@@ -52,7 +50,6 @@ export const apiHof = (
 		const action = ternary(isLongRunningTask(endpointId),
 			path(['longRunningTask', endpointId], serverEndpointsObj),
 			path(['shortRunningTask', endpointId], serverEndpointsObj))
-
 		const payloadSchema = getPayloadSchemaFn(endpointId)
 		const resultSchema = getResultSchemaFn(endpointId)
 		const userId = await authorizeRequestFn(endpointId, authentication)
@@ -65,8 +62,8 @@ export const apiHof = (
 
 		await validatePayload(payload)
 		const res = await action({ userId, payload })
-
 		await validateResult(res)
+
 		return { statusCode: 200, body: res }
 	} catch (error) {
 		const errorMessage = error.message

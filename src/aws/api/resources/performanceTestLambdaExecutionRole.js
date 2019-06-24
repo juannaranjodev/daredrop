@@ -5,6 +5,7 @@ import {
 	PERFORMANCE_TEST_LAMBDA_EXECUTION_ROLE, PERFORMANCE_TEST_DYNAMODB_TABLE,
 	API_LAMBDA_FUNCTION, API_LAMBDA_LONG_TASK_FUNCTION,
 } from 'root/src/aws/api/resourceIds'
+import { USER_POOL } from 'root/src/aws/cognito/resourceIds'
 
 export default {
 	[PERFORMANCE_TEST_LAMBDA_EXECUTION_ROLE]: {
@@ -13,6 +14,7 @@ export default {
 			PERFORMANCE_TEST_DYNAMODB_TABLE,
 			API_LAMBDA_FUNCTION,
 			API_LAMBDA_LONG_TASK_FUNCTION,
+			USER_POOL,
 		],
 		Properties: {
 			AssumeRolePolicyDocument: {
@@ -35,6 +37,18 @@ export default {
 						Statement: [
 							{
 								Effect: 'Allow',
+								Action: [
+									'logs:CreateLogGroup',
+									'logs:CreateLogStream',
+									'logs:PutLogEvents',
+									'logs:DescribeLogStreams',
+								],
+								Resource: [
+									'arn:aws:logs:*:*:*',
+								],
+							},
+							{
+								Effect: 'Allow',
 								Action: 'lambda:InvokeFunction',
 								Resource:
 									[
@@ -46,6 +60,14 @@ export default {
 								Effect: 'Allow',
 								Action: 'dynamodb:PutItem',
 								Resource: join('', [getAtt(PERFORMANCE_TEST_DYNAMODB_TABLE, 'Arn'), '*']),
+							},
+							{
+								Effect: 'Allow',
+								Action: [
+									'cognito-sync:*',
+									'execute-api:*',
+								],
+								Resource: join('', [getAtt(USER_POOL, 'Arn'), '*']),
 							},
 						],
 					},

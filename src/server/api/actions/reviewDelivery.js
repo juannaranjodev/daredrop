@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import { prop, propEq, map, filter, equals, and, not, startsWith } from 'ramda'
+import { prop, propEq, map, filter, equals, and, not, startsWith, omit } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -56,8 +56,8 @@ export default async ({ payload }) => {
 			Item: {
 				...assigneeDynamoObj({
 					...assignee,
-					accepted: ternary(equals(audit, projectDeliveredKey),
-						streamerDeliveryApprovedKey, prop('accepted', assignee)),
+					accepted: streamerDeliveryApprovedKey,
+					deliveryVideo: projectDeliveredKey,
 				},
 				projectId),
 			},
@@ -141,8 +141,8 @@ export default async ({ payload }) => {
 		}).promise()
 	}
 
-	return {
+	return omit(['assignees'], {
 		...projectSerialized,
 		status: audit,
-	}
+	})
 }

@@ -14,7 +14,7 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
-const { viewDeliverySortKey, viewProjectId } = payloadLenses
+const { viewDeliverySortKey, viewProjectId, viewTestName } = payloadLenses
 
 export default async ({ payload }) => {
 	const deliverySortKey = viewDeliverySortKey(payload)
@@ -60,45 +60,51 @@ export default async ({ payload }) => {
 
 	const s3data = {
 		Bucket: videoBucket,
-		Key: deliveryProject.fileName,
+		Key: viewTestName(payload) || deliveryProject.fileName,
 	}
 
-	const fileStream = S3.getObject(s3data).createReadStream()
-
-	const youtubeUpload = await youtube.videos.insert(
-		{
-			auth: await googleOAuthClient,
-			part: 'id,snippet,status',
-			notifySubscribers: false,
-			requestBody: {
-				snippet: {
-					title: project.title,
-					description: ytDescription,
+	try {
+		const fileStream = S3.getObject(s3data).createReadStream()
+		const youtubeUpload = await youtube.videos.insert(
+			{
+				auth: await googleOAuthClient,
+				part: 'id,snippet,status',
+				notifySubscribers: false,
+				requestBody: {
+					snippet: {
+						title: project.title,
+						description: ytDescription,
+					},
+					status: {
+						privacyStatus: 'private',
+						publishAt: moment().add(2, 'days').format('YYYY-MM-DDThh:mm:ss.sZ'),
+					},
 				},
-				status: {
-					privacyStatus: 'private',
-					publishAt: moment().add(2, 'days').format('YYYY-MM-DDThh:mm:ss.sZ'),
+				media: {
+					body: fileStream,
 				},
 			},
-			media: {
-				body: fileStream,
-			},
-		},
-	)
+		)
 
-	const ytUpdateParams = {
-		TableName: TABLE_NAME,
-		Key: {
-			[PARTITION_KEY]: deliveryProject[PARTITION_KEY],
-			[SORT_KEY]: deliveryProject[SORT_KEY],
-		},
-		UpdateExpression: 'SET youTubeURL = :youTubeURL',
-		ExpressionAttributeValues: {
-			':youTubeURL': youtubeBaseUrl + youtubeUpload.data.id,
-		},
+		const ytUpdateParams = {
+			TableName: TABLE_NAME,
+			Key: {
+				[PARTITION_KEY]: deliveryProject[PARTITION_KEY],
+				[SORT_KEY]: deliveryProject[SORT_KEY],
+			},
+			UpdateExpression: 'SET youTubeURL = :youTubeURL',
+			ExpressionAttributeValues: {
+				':youTubeURL': youtubeBaseUrl + youtubeUpload.data.id,
+			},
+		}
+
+		await documentClient.update(ytUpdateParams).promise()
+
+		return { projectId, youtubeUpload }
+	} catch ({ message }) {
+		return {
+			projectId,
+			message,
+		}
 	}
-
-	await documentClient.update(ytUpdateParams).promise()
-
-	return { youtubeUpload }
 }
