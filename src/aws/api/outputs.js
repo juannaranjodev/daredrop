@@ -6,8 +6,13 @@ import {
 } from 'root/src/aws/api/resourceIds'
 
 import {
-	API_FUNCTION_ARN, API_LONG_TASK_FUNCTION_ARN,
-	API_DYNAMO_TABLE_NAME, PERFORMANCE_TEST_DYNAMODB_DATA_TABLE_ARN,
+	PERFORMANCE_TEST_DYNAMODB_DATA_TABLE_ARN,
+	API_CLOUDWATCH_EVENTS_ROLE,
+} from 'root/src/aws/api/resourceIds'
+
+import {
+	API_FUNCTION_ARN, API_LONG_TASK_FUNCTION_ARN, API_DYNAMO_TABLE_NAME,
+	API_CLOUDWATCH_EVENTS_IAM_ROLE,
 } from 'root/src/aws/api/outputIds'
 
 export default {
@@ -26,5 +31,9 @@ export default {
 	[PERFORMANCE_TEST_DYNAMODB_DATA_TABLE_ARN]: {
 		Description: 'Api dynamodb table name for performance testing',
 		Value: getAtt(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, 'Arn'),
+	},
+	[API_CLOUDWATCH_EVENTS_IAM_ROLE]: {
+		Description: 'IAM role for cloudwatch events',
+		Value: getAtt(API_CLOUDWATCH_EVENTS_ROLE, 'Arn'),
 	},
 }

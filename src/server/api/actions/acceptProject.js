@@ -14,7 +14,7 @@ import getTimestamp from 'root/src/shared/util/getTimestamp'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import randomNumber from 'root/src/shared/util/randomNumber'
-import getAcceptedAssignees from 'root/src/server/api/actionUtil/getAcceptedAssignees'
+import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
 import dareAcceptedPledgerMail from 'root/src/server/email/templates/dareAcceptedPledger'
@@ -55,7 +55,7 @@ export default async ({ payload, userId }) => {
 
 	let projectAcceptedRecord = []
 
-	const acceptedAssigneesInProject = getAcceptedAssignees(assigneesInProject)
+	const acceptedAssigneesInProject = getAssigneesByStatus(assigneesInProject, streamerAcceptedKey)
 	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
 
 	const userAssigneeArrNested = await Promise.all(map(

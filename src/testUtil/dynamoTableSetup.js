@@ -39,12 +39,12 @@ jest.mock('root/src/server/api/stripeClient', () => ({
 			id: 'customerId',
 		})),
 		createSource: jest.fn(() => Promise.resolve()),
-		sources: {
-			retrieve: jest.fn(() => Promise.resolve('source')),
-		},
-		balanceTransactions: {
-			retrieve: jest.fn(() => Promise.resolve({ net: 600000 })),
-		},
+	},
+	sources: {
+		retrieve: jest.fn(() => Promise.resolve('source')),
+	},
+	balanceTransactions: {
+		retrieve: jest.fn(() => Promise.resolve({ net: 600000 })),
 	},
 }))
 
@@ -74,6 +74,11 @@ jest.mock('root/src/server/api/s3Client', () => ({
 	})),
 }))
 
+jest.mock('root/src/server/api/keyProtectedClient', () => ({
+	__esModule: true,
+	default: Promise.resolve({ secretKey: 'asdsadas' }),
+}))
+
 jest.mock('root/src/server/api/googleClient', () => {
 	/* eslint-disable global-require */
 	const { insertVideoMock } = require('root/src/server/api/mocks/youtubeMock')
@@ -87,6 +92,16 @@ jest.mock('root/src/server/api/googleClient', () => {
 		},
 	}
 })
+
+jest.mock('root/src/server/api/actionUtil/setupCronJob', () => ({
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve()),
+}))
+
+jest.mock('root/src/server/api/actionUtil/deleteCronJob', () => ({
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve()),
+}))
 
 jest.mock('root/src/server/api/paypalClient', () => ({
 	payout: {

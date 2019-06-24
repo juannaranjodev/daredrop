@@ -36,4 +36,9 @@ export const getIsLongRunningTask = endpointId => path(
 	clientEndpoints,
 )
 
+export const getIsInvokedInternal = endpointId => path(
+	[endpointId, 'isInvokedInternal'],
+	clientEndpoints,
+)
+
 export const getAction = endpointId => prop(endpointId, serverEndpoints)
