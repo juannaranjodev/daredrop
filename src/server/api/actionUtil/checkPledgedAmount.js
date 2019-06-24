@@ -25,11 +25,9 @@ export default async (projectId) => {
 	const assigneesInProject = prop('assignees', projectToCheck)
 
 	const acceptedAssignees = filter(assign => hasPath(['amountRequested'], assign), assigneesInProject)
-	const allAcceptedAmount = reduce((result, assign) =>
-		add(result, prop('amountRequested', assign))
-		, 0, acceptedAssignees)
+	const allAcceptedAmount = reduce((result, assign) => add(result, prop('amountRequested', assign)),
+		0, acceptedAssignees)
 	if (gt(prop('pledgeAmount', projectToCheck), allAcceptedAmount)) {
-
 		await Promise.all(
 			map(async (assignee) => {
 				const streamerEmail = await getUserEmailByTwitchID(prop('platformId', assignee))
@@ -41,12 +39,10 @@ export default async (projectId) => {
 					bountyAmount: prop('pledgeAmount', projectToCheck),
 					dareHref: projectHrefBuilder(prop('id', projectToCheck)),
 					goal: prop('amountRequested', assignee),
-					expiryTime: prop('created', projectToCheck)
+					expiryTime: prop('created', projectToCheck),
 				}
 				sendEmail(emailData, goalMetStreamerEmail)
-			}, acceptedAssignees)
+			}, acceptedAssignees),
 		)
 	}
-	return
-
 }
