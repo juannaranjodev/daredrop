@@ -1,7 +1,7 @@
 {
  "credentials": {
-  "email": "piekarski_d@tlen.pl",
-  "password": "H34rG34r!"
+  "email": "",
+  "password": ""
  },
  "iterations": 5,
  "operation": "integrationMulti",
