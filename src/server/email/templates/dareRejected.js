@@ -1,5 +1,5 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
-import { rulesOfUseLink, ourName } from 'root/src/shared/constants/mail'
+import { rulesOfUseUrl, ourName } from 'root/src/shared/constants/mail'
 
 export default ({ dareTitle }) => {
 	const mailContent = `
@@ -19,7 +19,7 @@ export default ({ dareTitle }) => {
 
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">We couldn’t bring your Dare ${dareTitle} live because it didn’t follow our <a href="${rulesOfUseLink}" style="text-decoration:none;color:#1976d2;">Rules of Use</a>.</p>
+                    <p style="margin:0;padding:0;">We couldn’t bring your Dare ${dareTitle} live because it didn’t follow our <a href="${rulesOfUseUrl}" style="text-decoration:none;color:#1976d2;">Rules of Use</a>.</p>
                   </td>
                 </tr>
 

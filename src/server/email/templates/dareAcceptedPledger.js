@@ -1,10 +1,9 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
-import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
 import expiryCalculator from 'root/src/server/email/util/expiryCalculator'
 import { ourName } from 'root/src/shared/constants/mail'
 
 export default ({ streamer, dareTitle, goal, expiryTime }) => {
-  const mailContent = `
+	const mailContent = `
             <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="480" class="content">
               <tbody>
                 <tr>
@@ -62,5 +61,5 @@ export default ({ streamer, dareTitle, goal, expiryTime }) => {
               </tbody>
             </table>
 `
-  return mailBody(mailContent)
+	return mailBody(mailContent)
 }

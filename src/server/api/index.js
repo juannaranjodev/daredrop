@@ -58,8 +58,8 @@ export const apiHof = (
 		if (triggerSource) {
 			const triggerAction = path([triggerSource], getTriggerActionsObj)
 			const { request } = event
-			const res = await triggerAction(request)
-			return { statusCode: 200, body: res }
+			await triggerAction(request)
+			return event
 		}
 		if (!endpointExists) {
 			throw notFoundError(endpointId)
