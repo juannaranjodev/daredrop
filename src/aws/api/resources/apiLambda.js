@@ -15,16 +15,16 @@ export default {
 			API_LAMBDA_EXECUTION_ROLE,
 			API_DYNAMO_DB_TABLE,
 			PERFORMANCE_TEST_DYNAMODB_DATA_TABLE,
-			// RECORD_SET,
+			RECORD_SET,
 		],
 		Properties: {
 			Code: fnBuildPath('api'),
 			Environment: {
 				Variables: {
 					API_DYNAMO_DB_TABLE: ref(API_DYNAMO_DB_TABLE),
-					STAGE: process.env.stage || 'development',
-					// RECORD_SET: ref(RECORD_SET),
-					PERFORMANCE_DATA_TABLE: ref(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE),
+					STAGE: process.env.STAGE || 'development',
+					RECORD_SET: ref(RECORD_SET),
+					PERFORMANCE_DATA_TABLE: process.env.STAGE !== 'production' ? ref(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE) : undefined,
 				},
 			},
 			// FunctionName: String,
