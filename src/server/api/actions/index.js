@@ -92,8 +92,11 @@ export default {
 		[GET_PAYOUT_METHOD]: getPayoutMethod,
 		[UPDATE_PAYOUT_METHOD]: updatePayoutMethod,
 
-		[CLEAR_PROJECT_RECORDS]: clearProjectRecordsTestDb,
-		[COPY_DB_RECORDS]: copyDBRecords,
+		...(process.env.STAGE !== 'production'
+			? {
+				[CLEAR_PROJECT_RECORDS]: clearProjectRecordsTestDb,
+				[COPY_DB_RECORDS]: copyDBRecords,
+			} : {}),
 	},
 	longRunningTask: {
 		[DELIVERY_DARE]: deliveryDare,

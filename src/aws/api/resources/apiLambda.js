@@ -24,7 +24,7 @@ export default {
 					API_DYNAMO_DB_TABLE: ref(API_DYNAMO_DB_TABLE),
 					STAGE: process.env.STAGE || 'development',
 					RECORD_SET: ref(RECORD_SET),
-					PERFORMANCE_DATA_TABLE: process.env.STAGE !== 'production' ? ref(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE) : undefined,
+					PERFORMANCE_TEST_DYNAMODB_TABLE: process.env.STAGE !== 'production' ? ref(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE) : undefined,
 				},
 			},
 			// FunctionName: String,

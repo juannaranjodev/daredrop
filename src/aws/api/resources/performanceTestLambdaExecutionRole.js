@@ -49,7 +49,11 @@ export default {
 							},
 							{
 								Effect: 'Allow',
-								Action: 'lambda:InvokeFunction',
+								Action: [
+									'lambda:InvokeFunction',
+									'lambda:UpdateFunctionConfiguration',
+									'lambda:GetFunctionConfiguration',
+								],
 								Resource:
 									[
 										join('', [getAtt(API_LAMBDA_FUNCTION, 'Arn'), '*']),

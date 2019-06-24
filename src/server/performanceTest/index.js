@@ -3,6 +3,9 @@ import authenticateUser from 'root/src/server/performanceTest/authenticateUser'
 import endpointsChain from 'root/src/server/performanceTest/endpointsChain'
 import uuid from 'uuid/v4'
 import { documentClient } from 'root/src/server/api/dynamoClient'
+import { apiLongTaskFunctionArn, apiFunctionArn } from 'root/cfOutput'
+import getLambdaConfigurations from 'root/src/server/performanceTest/getLambdaConfigurations'
+import setLambdaStage from 'root/src/server/performanceTest/setLambdaStage'
 
 const integration = async (event, authentication) => {
 	const timerStart = new Date().getTime()
@@ -38,7 +41,6 @@ const integrationMulti = async (event) => {
 			map(async iteration => integration({ ...event, iteration }, authentication),
 				range(0, event.iterations)),
 		)
-		console.log(projects)
 		const sumDuration = reduce((acc, item) => acc + prop('duration', item), 0, projects)
 		const globDuration = new Date().getTime() - timerStart
 
@@ -64,4 +66,19 @@ const ops = {
 	integrationMulti,
 }
 
-export default (event, context, callback) => ops[event.operation](event).then(res => res).catch(err => callback(err))
+export default async (event, context, callback) => {
+	const functionNames = [apiLongTaskFunctionArn, apiFunctionArn]
+	const configurations = await getLambdaConfigurations(functionNames)
+	try {
+		await setLambdaStage(configurations, 'testing')
+		return ops[event.operation](event).then(async (res) => {
+			await setLambdaStage(configurations, 'development')
+			return res
+		}).catch(async (err) => {
+			await setLambdaStage(configurations, 'development')
+			return callback(err)
+		})
+	} catch (err) {
+		await setLambdaStage(configurations, 'development')
+	}
+}
