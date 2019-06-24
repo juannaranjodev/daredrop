@@ -3,7 +3,7 @@ import { map } from 'ramda'
 
 export default async () => {
 	const sourceTableName = process.env.API_DYNAMO_DB_TABLE
-	const targetTableName = process.env.PERFORMANCE_DATA_TABLE
+	const targetTableName = process.env.PERFORMANCE_TEST_DYNAMODB_TABLE
 	const params = {
 		TableName: sourceTableName,
 	}

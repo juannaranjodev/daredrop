@@ -5,7 +5,7 @@ import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoInde
 
 export default async () => {
 	// this one is for DB cleanup after testing
-	const TableName = process.env.PERFORMANCE_DATA_TABLE
+	const TableName = process.env.PERFORMANCE_TEST_DYNAMODB_TABLE
 	const params = {
 		TableName,
 		ProjectionExpression: '#pk, #sk',
