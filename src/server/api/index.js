@@ -40,13 +40,8 @@ const validateSecretKey = ({ apiKey, secretKey, endpointId }) => {
 
 export const apiHof = (
 	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
-<<<<<<< HEAD
-	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
-) => async (event, context) => {
-=======
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask, isInvokedInternal,
 ) => async (event) => {
->>>>>>> release/0.1.0
 	try {
 		const { endpointId, payload, authentication, triggerSource, apiKey } = event
 
@@ -65,7 +60,6 @@ export const apiHof = (
 			const triggerAction = path([triggerSource], getTriggerActionsObj)
 			const { request } = event
 			await triggerAction(request)
-			// context.succeed(event)
 			return event
 		}
 		if (!endpointExists) {
