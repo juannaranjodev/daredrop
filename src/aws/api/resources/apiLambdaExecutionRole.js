@@ -12,6 +12,7 @@ export default {
 		Type: 'AWS::IAM::Role',
 		DependsOn: [
 			API_DYNAMO_DB_TABLE, API_CLOUDWATCH_EVENTS_ROLE,
+			...(process.env.STAGE !== 'production' ? [PERFORMANCE_TEST_DYNAMODB_DATA_TABLE] : []),
 		],
 		Properties: {
 			AssumeRolePolicyDocument: {
