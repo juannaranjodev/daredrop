@@ -19,8 +19,8 @@ export default (event, authentication) => reduce(async (prevEvent, endpointId) =
 		if (length(params) > 0) {
 			apiEvent = reduce((eventAcc, param) => {
 				const prevPayload = prop('payload', eventAcc)
-				const { name, mapTo } = param
-				const newPayload = { ...prevPayload, [name]: payload[mapTo] }
+				const { name, mapFrom } = param
+				const newPayload = { ...prevPayload, [name]: payload[mapFrom] }
 				return { ...apiEvent, payload: newPayload }
 			}, apiEvent, params)
 		}

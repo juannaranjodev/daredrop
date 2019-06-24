@@ -13,7 +13,7 @@ export default {
 	parameters: [
 		{
 			name: 'projectId',
-			mapTo: 'projectId',
+			mapFrom: 'projectId',
 		},
 	],
 	functionArn: apiLongTaskFunctionArn,

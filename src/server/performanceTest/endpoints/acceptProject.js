@@ -12,7 +12,7 @@ export default {
 	parameters: [
 		{
 			name: 'projectId',
-			mapTo: 'id',
+			mapFrom: 'id',
 		},
 	],
 	functionArn: apiFunctionArn,

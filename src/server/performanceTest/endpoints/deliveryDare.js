@@ -12,11 +12,11 @@ export default {
 	parameters: [
 		{
 			name: 'projectId',
-			mapTo: 'projectId',
+			mapFrom: 'projectId',
 		},
 		{
 			name: 'deliverySortKey',
-			mapTo: 'deliverySortKey',
+			mapFrom: 'deliverySortKey',
 		},
 	],
 	functionArn: apiLongTaskFunctionArn,
