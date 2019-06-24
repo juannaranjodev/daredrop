@@ -20,6 +20,7 @@ const endpointDescriptionSchema = {
 					],
 				},
 				isLongRunningTask: { type: 'boolean' },
+				isInvokedInternal: { type: 'boolean' },
 			},
 		},
 	},

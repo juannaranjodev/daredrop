@@ -44,6 +44,16 @@ describe('getAcceptedProjects', () => {
 			userId: `${mockUserId}2`,
 		})
 
+		const oAuthDetails3 = {
+			tokenId: 'twitch',
+			id: project.assignees[2].platformId,
+		}
+
+		await addOAuthToken({
+			payload: oAuthDetails3,
+			userId: `${mockUserId}3`,
+		})
+
 		await rejectProject({
 			userId: mockUserId,
 			payload: {
@@ -51,7 +61,7 @@ describe('getAcceptedProjects', () => {
 				message: 'asdasdas',
 			},
 		})
-		
+
 		const event = {
 			endpointId: GET_PROJECT,
 			payload: {
@@ -64,6 +74,14 @@ describe('getAcceptedProjects', () => {
 
 		await rejectProject({
 			userId: `${mockUserId}2`,
+			payload: {
+				projectId: project.id,
+				message: 'asdasdas',
+			},
+		})
+
+		await rejectProject({
+			userId: `${mockUserId}3`,
 			payload: {
 				projectId: project.id,
 				message: 'asdasdas',

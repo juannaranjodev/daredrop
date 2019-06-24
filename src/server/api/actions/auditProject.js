@@ -102,7 +102,7 @@ export default async ({ userId, payload }) => {
 	])
 
 	try {
-		const email = await getUserEmail((prop('creator',respons)))
+		const email = await getUserEmail((prop('creator', respons)))
 		if (equals(viewAudit(payload), projectApprovedKey)) {
 			const emailData = {
 				title: dareApprovedTitle,
@@ -112,7 +112,6 @@ export default async ({ userId, payload }) => {
 			}
 			sendEmail(emailData, dareApprovedMail)
 		}
-
 		if (equals(viewAudit(payload), projectRejectedKey)) {
 			const emailData = {
 				title: dareRejectedByToSTitle,

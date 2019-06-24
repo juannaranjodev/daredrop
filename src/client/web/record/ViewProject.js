@@ -326,7 +326,7 @@ export const ViewProjectModule = memo(({
 									<SubHeader>Pledgers</SubHeader>
 									<div className={classNames(classes.text)}>{pledgers}</div>
 								</div>
-								{ orNull(
+								{orNull(
 									daysToGo,
 									<div className={classNames('flex-30', 'flex-gt-sm-50', classes.sidebarItem)}>
 										<SubHeader>Days to go</SubHeader>

@@ -1,5 +1,5 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
-import { ourName } from 'root/src/shared/constants/mail'
+import { ourName, paypalEmailUrl } from 'root/src/shared/constants/mail'
 
 export default ({ dareTitle }) => {
 	const mailContent = `
@@ -32,7 +32,7 @@ export default ({ dareTitle }) => {
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
                     <p style="margin:0;padding:0;">
-                      Once we’ve verified it we’ll charge your backers, blast out the video &amp; pay you!
+                      Once we’ve verified it we’ll charge your backers, blast out the video &amp; pay you! Make sure your PayPal email is up to date <a href="http://${paypalEmailUrl}" style="text-decoration:none;color:#1976d2;">HERE</a> so we know where to send your money.
                     </p>
                   </td>
                 </tr>

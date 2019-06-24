@@ -13,5 +13,6 @@ export default {
 		recordType: project,
 		payloadSchema,
 		isLongRunningTask: true,
+		isInvokedInternal: true,
 	},
 }

@@ -107,10 +107,22 @@ describe('payoutAssignees', async () => {
 			payload: {
 				projectId: project.id,
 			},
+			apiKey: 'asdsadas',
 		}
 
 		const res = await apiFn(event)
 		expect(res.statusCode).toEqual(404)
+	})
+	test('can\'t make payout without apiKey specified (protection for cron invoked actions)', async () => {
+		const event = {
+			endpointId: PAYOUT_ASSIGNEES,
+			payload: {
+				projectId: project.id,
+			},
+		}
+
+		const res = await apiFn(event)
+		expect(res.statusCode).toEqual(401)
 	})
 	test('payouts are calculated properly', async () => {
 		await addPayoutMethod({
@@ -131,7 +143,7 @@ describe('payoutAssignees', async () => {
 		const dareDropFee = reduce((acc, item) => add(acc, prop('pledgeAmount', item)), 0, projectPledgesDdb) * 0.1
 
 		const payoutsCalculated = await calculatePayouts(project.id)
-		expect(payoutsCalculated.payouts[0].payout + payoutsCalculated.payouts[1].payout).toBeCloseTo((480000 - dareDropFee), 7)
+		expect(payoutsCalculated.payouts[0].payout + payoutsCalculated.payouts[1].payout).toBeCloseTo((479960 - dareDropFee), 7)
 	})
 	test('can make payout', async () => {
 		await addPayoutMethod({
@@ -153,6 +165,7 @@ describe('payoutAssignees', async () => {
 			payload: {
 				projectId: project.id,
 			},
+			apiKey: 'asdsadas',
 		}
 
 		const res = await apiFn(event)
