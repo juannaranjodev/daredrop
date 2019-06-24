@@ -1,4 +1,4 @@
-import { path, map, range, reduce, prop, add, length } from 'ramda'
+import { path, map, range, reduce, prop, add } from 'ramda'
 import authenticateUser from 'root/src/server/performanceTest/authenticateUser'
 import endpointsChain from 'root/src/server/performanceTest/endpointsChain'
 import uuid from 'uuid/v4'
@@ -8,14 +8,13 @@ const integration = async (event, authentication) => {
 	const timerStart = new Date().getTime()
 	try {
 		// here the main heavy work happens
-		const { badStatusCodes, error } = await endpointsChain(event, authentication)
+		const { error } = await endpointsChain(event, authentication)
 		const duration = new Date().getTime() - timerStart
 		const iteration = add(prop('iteration', event), 1) || 0
 
 		return {
 			duration,
 			iteration,
-			badStatusCodes,
 			error,
 		}
 	} catch (err) {
@@ -39,17 +38,16 @@ const integrationMulti = async (event) => {
 			map(async iteration => integration({ ...event, iteration }, authentication),
 				range(0, event.iterations)),
 		)
-
+		console.log(projects)
 		const sumDuration = reduce((acc, item) => acc + prop('duration', item), 0, projects)
 		const globDuration = new Date().getTime() - timerStart
 
-		const dDbWrites = map(({ iteration, badStatusCodes, duration, error }) => ({
+		const dDbWrites = map(({ iteration, duration, error }) => ({
 			TableName: process.env.PERFORMANCE_TEST_DYNAMODB_TABLE,
 			Item: {
 				testId,
 				iteration,
 				duration,
-				badStatusCodes,
 				error,
 			},
 		}), projects)

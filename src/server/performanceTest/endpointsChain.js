@@ -14,7 +14,6 @@ export default (event, authentication) => reduce(async (prevEvent, endpointId) =
 		const endpointDesc = prop(endpointId, endpoints)
 		let apiEvent = prop('actionEvent', endpointDesc)
 		apiEvent.authentication = authentication
-		apiEvent.isTestLambda = true
 		const params = prop('parameters', endpointDesc)
 
 		if (length(params) > 0) {

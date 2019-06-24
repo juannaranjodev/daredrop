@@ -1,0 +1,17 @@
+{
+ "credentials": {
+  "email": "piekarski_d@tlen.pl",
+  "password": "H34rG34r!"
+ },
+ "iterations": 5,
+ "operation": "integrationMulti",
+ "endpointId": [
+  "GET_ACTIVE_PROJECTS",
+  "CREATE_PROJECT",
+  "AUDIT_PROJECT",
+  "ACCEPT_PROJECT",
+  "DELIVERY_DARE_INIT",
+  "DELIVERY_DARE",
+  "REVIEW_DELIVERY"
+ ]
+}

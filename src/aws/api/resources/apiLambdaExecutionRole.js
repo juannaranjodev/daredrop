@@ -2,7 +2,7 @@ import getAtt from 'root/src/aws/util/getAtt'
 import join from 'root/src/aws/util/join'
 
 import {
-	API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE,
+	API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE, PERFORMANCE_TEST_DYNAMODB_DATA_TABLE,
 } from 'root/src/aws/api/resourceIds'
 
 export default {
@@ -80,13 +80,22 @@ export default {
 									'dynamodb:BatchGetItem',
 								],
 								// For ARN/index/x_index
-								Resource: join(
-									'',
-									[
-										getAtt(API_DYNAMO_DB_TABLE, 'Arn'),
-										'*',
-									],
-								),
+								Resource: [
+									join(
+										'',
+										[
+											getAtt(API_DYNAMO_DB_TABLE, 'Arn'),
+											'*',
+										],
+									),
+									join(
+										'',
+										[
+											getAtt(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, 'Arn'),
+											'*',
+										],
+									),
+								],
 							},
 						],
 					},

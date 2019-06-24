@@ -110,6 +110,7 @@ export default async ({ payload }) => {
 		)
 		const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
 		const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
+
 		await documentClient.batchWrite(writeParams).promise()
 		map((streamerEmail) => {
 			const emailData = {
@@ -126,12 +127,15 @@ export default async ({ payload }) => {
 	}
 
 	if (equals(audit, projectDeliveredKey)) {
+		console.log(5)
 		const capturesAmount = await captureProjectPledges(projectId)
 
 		if (!capturesAmount) {
 			throw generalError('captures processing error')
 		}
+		console.log(6)
 		const projectToCapture = await dynamoQueryProjectToCapture(projectId)
+
 		const captureToWrite = await capturePaymentsWrite(projectToCapture, capturesAmount)
 
 		await documentClient.batchWrite({

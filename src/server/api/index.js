@@ -35,7 +35,7 @@ export const apiHof = (
 	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
 ) => async (event) => {
-	const { endpointId, payload, authentication, triggerSource, isTestLambda } = event
+	const { endpointId, payload, authentication, triggerSource } = event
 	try {
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (triggerSource) {

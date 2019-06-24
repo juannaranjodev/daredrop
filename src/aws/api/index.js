@@ -12,7 +12,7 @@ import {
 	authPolicies, unauthPolicies,
 } from 'root/src/aws/api/cognitoPolicies'
 
-const isDev = process.env.STAGE !== 'production'
+const isDevEnv = process.env.STAGE !== 'production'
 
 const devResources = {
 	...performanceTestDynamoDbTable,
@@ -26,7 +26,7 @@ export const apiResources = {
 	...apiLambdaExecutionRole,
 	...apiDynamoDbTable,
 	...apiLambdaLongTask,
-	...(isDev ? devResources : {}),
+	...(isDevEnv ? devResources : {}),
 }
 
 export const apiOutputs = outputs
