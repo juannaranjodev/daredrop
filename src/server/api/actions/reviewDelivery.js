@@ -127,13 +127,11 @@ export default async ({ payload }) => {
 	}
 
 	if (equals(audit, projectDeliveredKey)) {
-		console.log(5)
 		const capturesAmount = await captureProjectPledges(projectId)
 
 		if (!capturesAmount) {
 			throw generalError('captures processing error')
 		}
-		console.log(6)
 		const projectToCapture = await dynamoQueryProjectToCapture(projectId)
 
 		const captureToWrite = await capturePaymentsWrite(projectToCapture, capturesAmount)
