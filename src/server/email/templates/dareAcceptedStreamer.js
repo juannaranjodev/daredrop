@@ -50,7 +50,7 @@ export default ({ dareTitle, expiryTime, dareHref, dareDescription }) => {
 
                 <tr>
                   <td style="margin:0; padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">Here’s what you’ll need to do in the submitted video in order to get paid: ${dareDescription}</p>
+                    <p style="margin:0;padding:0;">Here’s what you’ll need to do in the submitted video in order to get paid:<br> <pre style="font-weight:bold;font-size:26px;line-height:1.23;" > ${dareDescription}</pre></p>
                   </td>
                 </tr>
 
