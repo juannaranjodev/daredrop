@@ -11,6 +11,8 @@ import RouteRender from 'root/src/client/web/base/RouteRender'
 
 import webStore from 'root/src/client/logic/web'
 
+import 'root/src/client/assets/favicon.png'
+
 render(
 	<Provider store={webStore}>
 		<RouteRender />
