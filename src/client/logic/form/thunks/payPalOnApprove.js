@@ -45,8 +45,6 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 		}
 		const successPage = successPageSelector(moduleId, submitIndex)
 		const endpointId = endpointIdSelector(moduleId, submitIndex)
-		console.log(JSON.stringify(purchase_units, null, 4))
-		// eslint-disable-next-line max-len
 		dispatch(apiRequest(endpointId, apiPayload)).then(() => dispatch(pushRoute(successPage))).catch(err => dispatch(setFormErrors(moduleKey, err)))
 	}).catch(err => dispatch(setFormErrors(moduleKey, err)))
 }
