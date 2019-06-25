@@ -80,6 +80,7 @@ const styles = {
 		letterSpacing: 1,
 		fontWeight: 'bold',
 		color: primaryColor,
+		position: 'absolute',
 		'&:hover': {
 			color: secondaryColor,
 		},
@@ -92,7 +93,7 @@ const styles = {
 			marginTop: 40,
 		},
 		'@media (max-width: 1024px)': {
-			marginTop: 45,
+			marginTop: 40,
 		},
 	},
 	label: {
