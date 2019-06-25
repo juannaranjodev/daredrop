@@ -142,7 +142,6 @@ export default async ({ payload, userId }) => {
 		await Promise.all(
 			map(async (pledgerUserId) => {
 				const plederEmail = await getUserEmail(slice(7, Infinity, pledgerUserId))
-				console.log(plederEmail)
 				const emailDataForPledger = {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
@@ -162,7 +161,6 @@ export default async ({ payload, userId }) => {
 		await Promise.all(
 			map(async (favouriteUserId) => {
 				const favouriteEmail = await getUserEmail(slice(10, Infinity, favouriteUserId))
-				console.log(favouriteEmail)
 				const emailDataForFavourite = {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
