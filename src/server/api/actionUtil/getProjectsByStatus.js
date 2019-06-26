@@ -12,11 +12,10 @@ import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredPro
 
 const PageItemLength = 8
 
-export default async (status, defaultSortType, payload, isAdminEndpoint, noExpirationFilter, isDenormalized, noPagination=false) => {
+export default async (status, defaultSortType, payload, isAdminEndpoint, noExpirationFilter, isDenormalized, noPagination) => {
 	const realPayload = payload.payload
 	const projectsDdb = await dynamoQueryShardedProjects(status, isDenormalized)
 	const serializedProjects = map(compose(dissoc('myPledge'), projectSerializer(__, isAdminEndpoint, isDenormalized)), projectsDdb)
-
 	// Filter expired projects
 	const filterExpired = (dare) => {
 		const diff = moment().diff(dare.approved, 'days')
