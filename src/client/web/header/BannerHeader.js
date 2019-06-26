@@ -24,6 +24,8 @@ import bannerHeaderConnector from 'root/src/client/logic/header/connectors/banne
 import getValueChip from 'root/src/client/logic/header/handlers/getValueChip'
 
 import { primaryColor, secondaryColor } from 'root/src/client/web/commonStyles'
+import 'create-react-class'
+import Tappable from 'react-tappable/lib/Tappable'
 
 const styles = {
 	bottomMargin: {
@@ -173,9 +175,11 @@ const SingleValue = withStyles(singleStyle)(({ classes, children, label, removeP
 			tabIndex={-1}
 			label={getValueChip(getValue())}
 			onDelete={clearValue}
-			deleteIcon={
+			deleteIcon={(
+				<Tappable onTap={clearValue}>
 				<CancelIcon {...removeProps} />
-			}
+				</Tappable>
+			)}
 		/>
 	</components.SingleValue>
 ))
