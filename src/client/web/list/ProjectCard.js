@@ -8,6 +8,7 @@ import Button from 'root/src/client/web/base/Button'
 import ShareMenu from 'root/src/client/web/base/ShareMenu'
 import Body from 'root/src/client/web/typography/Body'
 import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
+import clipTitleHandler from 'root/src/client/logic/project/handlers/clipTitleHandler'
 import {
 	primaryColor,
 } from 'root/src/client/web/commonStyles'
@@ -59,6 +60,7 @@ export const ListItemUnconnected = memo(({
 						className={classNames(
 							classes.cardHeader,
 							'layout-row layout-align-start-center',
+							'header-container',
 							({ [classes.noOverlay]: projectDeliveries }),
 						)}
 					>
@@ -85,7 +87,7 @@ export const ListItemUnconnected = memo(({
 								className={classNames(classes.headerText, 'flex')}
 								onClick={listRouteHandler(recordId, pushRoute)}
 							>
-								<h3 className={classNames(classes.headerTextH3)}>{projectTitle}</h3>
+								<h3 className={classNames(classes.headerTextH3, 'header-element')}>{clipTitleHandler(projectTitle)}</h3>
 							</div>
 							<div className={classes.shareIcon}>
 								<ShareMenu
