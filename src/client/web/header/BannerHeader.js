@@ -350,6 +350,19 @@ export const BannerHeaderUnconnected = memo(({
 													marginLeft: 20,
 													display: state.isFocused ? 'none' : 'inherit',
 													color: '#cccccc',
+													'@-moz-document url-prefix()': {
+														marginTop: 3,
+													},
+													'@media not all and (min-resolution:.001dpcm)': {
+														'@media': {
+															marginTop: 3,
+														},
+													},
+													'@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0)': {
+														'@media': {
+															marginTop: 3,
+														},
+													},
 												}),
 												singleValue: () => ({
 													width: 100,
