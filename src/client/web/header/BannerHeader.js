@@ -347,7 +347,7 @@ export const BannerHeaderUnconnected = memo(({
 												}),
 												placeholder: (provided, state) => ({
 													marginTop: -2,
-													marginLeft: 20,
+													marginLeft: 5,
 													display: state.isFocused ? 'none' : 'inherit',
 													color: '#cccccc',
 													'@-moz-document url-prefix()': {
