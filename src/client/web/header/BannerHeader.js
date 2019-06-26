@@ -77,6 +77,7 @@ const styles = {
 	},
 	newDare: {
 		fontSize: 18,
+		marginTop: 10,
 		letterSpacing: 1,
 		fontWeight: 'bold',
 		color: primaryColor,
@@ -93,7 +94,12 @@ const styles = {
 			marginTop: 40,
 		},
 		'@media (max-width: 1024px)': {
+			marginTop: 30,
+		},
+		'@media (max-width: 364px)': {
+			flexDirection: 'column',
 			marginTop: 40,
+			width: '60%',
 		},
 	},
 	label: {
@@ -113,7 +119,7 @@ const styles = {
 	},
 	filterBclock: {
 		display: 'flex',
-		'@media (max-width: 414px)': {
+		'@media (max-width: 560px)': {
 			flexDirection: 'column',
 		},
 	},
@@ -126,6 +132,11 @@ const styles = {
 	},
 	createLinkContainer: {
 		width: '50%',
+		'@media (max-width: 364px)': {
+			flexDirection: 'column',
+			marginTop: 0,
+			width: '13%',
+		},
 	},
 	linkAndFilterContainer: {
 		display: 'flex',
