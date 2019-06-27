@@ -134,10 +134,7 @@ export default async ({ payload, userId }) => {
 		// Send email for Creator
 		const emailCreator = await getUserEmail((prop('creator', projectToAccept)))
 
-		const streamerList = map(streamer => ({
-			name: prop('displayName', streamer),
-			image: prop('image', streamer),
-		}), prop('assignees', projectToAcceptEmail))
+		const streamerList = map(streamer => prop('displayName', streamer), prop('assignees', projectToAcceptEmail))
 
 		const sumAmountRequested = reduce((accum, streamer) => {
 			if (!isNil(streamer.amountRequested)) {
@@ -145,8 +142,6 @@ export default async ({ payload, userId }) => {
 			}
 			return accum
 		}, 0, prop('assignees', projectToAcceptEmail))
-
-		console.log(streamerList)
 
 		const emailDataForCreator = {
 			title: dareAcceptedCreatorTitle,

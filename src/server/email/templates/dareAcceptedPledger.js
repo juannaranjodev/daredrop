@@ -1,3 +1,4 @@
+import { reduce } from 'ramda'
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import expiryCalculator from 'root/src/server/email/util/expiryCalculator'
 import { ourName } from 'root/src/shared/constants/mail'
@@ -20,7 +21,7 @@ export default ({ streamers, dareTitle, goal, expiryTime }) => {
 
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">${streamers} has accepted your Dare to ${dareTitle}!</p>
+                    <p style="margin:0;padding:0;">${reduce((accum, streamer) => `${accum}, ${streamer}`, '', streamers)} has accepted your Dare to ${dareTitle}!</p>
                   </td>
                 </tr>
 
@@ -30,7 +31,7 @@ export default ({ streamers, dareTitle, goal, expiryTime }) => {
 
                 <tr>
                   <td style="margin:0; padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">${streamers} said they’d deliver if our bounty hits ${goal}. Can we get there in the ${expiryCalculator(expiryTime)} left?</p>
+                    <p style="margin:0;padding:0;">${reduce((accum, streamer) => `${accum}, ${streamer}`, '', streamers)} said they’d deliver if our bounty hits ${goal}. Can we get there in the ${expiryCalculator(expiryTime)} left?</p>
                   </td>
                 </tr>
 
