@@ -7,6 +7,9 @@ import getAtt from 'root/src/aws/util/getAtt'
 export default {
 	[USER_POOL]: {
 		Type: 'AWS::Cognito::UserPool',
+		DependsOn: [
+			API_LAMBDA_FUNCTION,
+		],
 		Properties: {
 			// AliasAttributes: ['email'],
 			UsernameAttributes: ['email'],
