@@ -79,7 +79,6 @@ const styles = {
 	},
 	newDare: {
 		fontSize: 18,
-		marginTop: 10,
 		letterSpacing: 1,
 		fontWeight: 'bold',
 		color: primaryColor,
