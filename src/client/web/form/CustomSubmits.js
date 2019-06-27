@@ -8,7 +8,7 @@ export const SubmitsUnstyled = memo(({
 	customSubmits, customSubmitsData, payPalCreateOrder, payPalOnApprove, payPalOnError, customPayPalAction,
 }) => (
 	<div>{map(([submit, submitIndex]) => {
-		const pledgeAmount = pathOr(0,['formData', 'pledgeAmount'],customSubmitsData)
+		const pledgeAmount = pathOr(0, ['formData', 'pledgeAmount'], customSubmitsData)
 		switch (submit) {
 			case 'payPalButton':
 				return (
