@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, slice } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, slice, isNil } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -122,8 +122,31 @@ export default async ({ payload, userId }) => {
 	await documentClient.batchWrite(updateProjectParam).promise()
 
 	try {
+		const [projectToAcceptDdbEmail, assigneesDdbEmail] = await dynamoQueryProject(
+			null,
+			projectId,
+		)
+		const projectToAcceptEmail = projectSerializer([
+			...projectToAcceptDdbEmail,
+			...assigneesDdbEmail,
+		])
+
 		// Send email for Creator
 		const emailCreator = await getUserEmail((prop('creator', projectToAccept)))
+
+		const streamerList = map(streamer => ({
+			name: prop('displayName', streamer),
+			image: prop('image', streamer),
+		}), prop('assignees', projectToAcceptEmail))
+
+		const sumAmountRequested = reduce((accum, streamer) => {
+			if (!isNil(streamer.amountRequested)) {
+				return accum + streamer.amountRequested
+			}
+			return accum
+		}, 0, prop('assignees', projectToAcceptEmail))
+
+		console.log(streamerList)
 
 		const emailDataForCreator = {
 			title: dareAcceptedCreatorTitle,
@@ -146,8 +169,8 @@ export default async ({ payload, userId }) => {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
 					recipients: [plederEmail],
-					streamer: prop('displayName', head(userTokens)),
-					goal: amountRequested,
+					streamers: streamerList,
+					goal: sumAmountRequested,
 					expiryTime: prop('created', projectToAccept),
 				}
 				sendEmail(emailDataForPledger, dareAcceptedPledgerMail)
