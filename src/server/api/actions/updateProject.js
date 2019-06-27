@@ -16,7 +16,7 @@ import projectSerializer from 'root/src/server/api/serializers/projectSerializer
  * @returns {Promise<void>}
  */
 export default async ({ userId, payload }) => {
-	const { projectId, description, title, stripeCardId } = payload
+	const { projectId, description, title, paymentInfo } = payload
 
 	const [project, assignees] = await dynamoQueryProject(
 		userId, projectId,
@@ -34,7 +34,7 @@ export default async ({ userId, payload }) => {
 
 	const newUpdate = updateDynamoObj(
 		projectId, project, userId,
-		description, stripeCardId, null, title,
+		description, paymentInfo, null, title,
 	)
 
 	// TODO: Check pledge amount

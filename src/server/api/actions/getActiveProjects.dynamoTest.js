@@ -1,6 +1,4 @@
-import { map, range, reverse, prop, compose, omit, sort, addIndex } from 'ramda'
-
-import wait from 'root/src/testUtil/wait'
+import { map, range, reverse, prop } from 'ramda'
 
 import { apiFn } from 'root/src/server/api'
 

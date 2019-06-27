@@ -24,9 +24,10 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 	}
 })
 
-jest.mock('root/src/server/api/stripeClient', () => Promise.resolve({
+jest.mock('root/src/server/api/stripeClient', () => ({
 	charges: {
 		create: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
+		capture: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
 	},
 	customers: {
 		list: jest.fn(() => Promise.resolve({
@@ -38,9 +39,12 @@ jest.mock('root/src/server/api/stripeClient', () => Promise.resolve({
 			id: 'customerId',
 		})),
 		createSource: jest.fn(() => Promise.resolve()),
-		sources: {
-			retrieve: jest.fn(() => Promise.resolve('source')),
-		},
+	},
+	sources: {
+		retrieve: jest.fn(() => Promise.resolve('source')),
+	},
+	balanceTransactions: {
+		retrieve: jest.fn(() => Promise.resolve({ net: 600000 })),
 	},
 }))
 
@@ -48,12 +52,18 @@ jest.mock('root/src/server/api/actionUtil/validatePaypalAuthorize', () => () => 
 
 jest.mock('root/src/server/api/actionUtil/validateStripeSourceId', () => () => true)
 
+jest.mock('root/src/server/email/actions/sendEmail', () => ({
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve({ id: 'user@mail.com' })),
+}))
+
 jest.mock('root/src/server/api/twitchApi', () => {
 	/* eslint-disable global-require */
 	const { userData, gameData } = require('root/src/server/api/mocks/twitchApiMock')
 	return {
 		getUserData: jest.fn(() => Promise.resolve(userData)),
 		getGameData: jest.fn(() => Promise.resolve(gameData)),
+		getUserByToken: jest.fn(() => Promise.resolve()),
 	}
 })
 
@@ -62,6 +72,11 @@ jest.mock('root/src/server/api/s3Client', () => ({
 	getObject: jest.fn(() => ({
 		createReadStream: jest.fn(() => ('someReadStream')),
 	})),
+}))
+
+jest.mock('root/src/server/api/keyProtectedClient', () => ({
+	__esModule: true,
+	default: Promise.resolve({ secretKey: 'asdsadas' }),
 }))
 
 jest.mock('root/src/server/api/googleClient', () => {
@@ -78,16 +93,38 @@ jest.mock('root/src/server/api/googleClient', () => {
 	}
 })
 
-jest.mock('root/src/server/api/paypalClient', () => ({
-	execute: jest.fn(() => Promise.resolve({ statusCode: 200 })),
+jest.mock('root/src/server/api/actionUtil/setupCronJob', () => ({
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve()),
 }))
+
+jest.mock('root/src/server/api/actionUtil/deleteCronJob', () => ({
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve()),
+}))
+
+jest.mock('root/src/server/api/paypalClient', () => ({
+	payout: {
+		create: jest.fn((a, b, callback) => callback(null, {})),
+	},
+	authorization: {
+		capture: jest.fn((a, b, callback) => callback(null,
+			{
+				amount: {
+					total: '500000.00',
+				},
+				transaction_fee: {
+					value: '20000',
+				},
+			})),
+	},
+}))
+
 
 jest.mock('root/src/server/api/actionUtil/getUserEmail', () => ({
 	__esModule: true,
-	default: jest.fn(() => Promise.resolve({ id: 'user@mail.com' })),
+	default: jest.fn(() => Promise.resolve('user@mail.com')),
 }))
-
-jest.mock('root/src/server/email/actions/sendEmail', () => Promise.resolve('resolve'))
 
 // Normally authentication is a JWT that gets decoded and returns a user id.
 // For tests I'm mocking the authorizeRequest which does the jwt decoding and

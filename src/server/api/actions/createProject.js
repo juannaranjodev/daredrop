@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-console */
 import uuid from 'uuid/v1'
 import { map, omit, prop, join, add, assoc, append } from 'ramda'
 
@@ -47,13 +49,13 @@ export default async ({ userId, payload }) => {
 		if (!validationCardId) {
 			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
 		}
-		const stripeAuthorization = await stripeAuthorizePayment(pledgeAmount, paymentInfo.paymentId, userId)
+		const stripeAuthorization = await stripeAuthorizePayment(pledgeAmount, paymentInfo.paymentId, userId, projectId)
 		if (!stripeAuthorization.authorized) {
 			throw payloadSchemaError(stripeAuthorization.error)
 		}
 		paymentInfo = assoc('paymentId', stripeAuthorization.id, paymentInfo)
 	} else if (paymentInfo.paymentType === paypalAuthorize) {
-		const validation = await validatePaypalAuthorize(paymentInfo.orderID, pledgeAmount)
+		const validation = await validatePaypalAuthorize(paymentInfo.paymentId, pledgeAmount)
 		if (!validation) {
 			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
 		}
@@ -66,8 +68,8 @@ export default async ({ userId, payload }) => {
 		...projectCommon,
 		pledgers: 1,
 		favoritesAmount: 0,
+		creator: userId,
 	}
-
 	const projectAssignees = map(assignee => ({
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: join('|', [
@@ -111,14 +113,15 @@ export default async ({ userId, payload }) => {
 
 	try {
 		const email = await getUserEmail(userId)
-
 		const emailData = {
 			dareTitle: project.title,
 			recipients: [email],
 			title: dareCreatedTitle,
 		}
 		sendEmail(emailData, dareCreatedEmail)
-	} catch (err) { }
+	} catch (err) {
+		console.log('ses error')
+	}
 
 	return {
 		id: projectId,
@@ -127,6 +130,7 @@ export default async ({ userId, payload }) => {
 		...projectCommon,
 		pledgers: 1,
 		favoritesAmount: 0,
+		creator: userId,
 		created,
 	}
 }

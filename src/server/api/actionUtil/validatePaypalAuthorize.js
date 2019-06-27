@@ -1,21 +1,20 @@
-import checkoutNodeJssdk from '@paypal/checkout-server-sdk'
+/* eslint-disable prefer-promise-reject-errors */
 import paypalClient from 'root/src/server/api/paypalClient'
-import { pathOr, equals, not, lt, gt } from 'ramda'
+import { path, equals, not, lt, gt } from 'ramda'
 
-export default async (orderID, pledgeAmount) => {
-	try {
-		const request = new checkoutNodeJssdk.orders.OrdersGetRequest(orderID)
-		const ppClientAuthorized = await paypalClient
-		const order = await ppClientAuthorized.execute(request)
-		const { statusCode } = order
-		if (
-			lt(statusCode, 200) || gt(statusCode, 300)
-			|| not(equals(parseInt(pathOr('0', ['result', 'purchase_units', 0, 'amount', 'value'], order), 10), pledgeAmount))
-		) {
-			return false
+export default (paymentId, pledgeAmount) => new Promise(async (resolve, reject) => {
+	const ppClientAuthorized = await paypalClient
+	ppClientAuthorized.order.get(paymentId, (error, order) => {
+		if (error) {
+			reject(new Error(error))
 		}
-		return true
-	} catch (err) {
-		return false
-	}
-}
+		const { httpStatusCode } = order
+		if (
+			lt(httpStatusCode, 200) || gt(httpStatusCode, 300)
+			|| not(equals(parseFloat(path(['amount', 'total'], order)), pledgeAmount))
+		) {
+			reject(new Error('Invalid pledge amount'))
+		}
+		resolve(true)
+	})
+})

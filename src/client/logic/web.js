@@ -2,6 +2,7 @@ import createStore from 'root/src/shared/util/createStore'
 
 import initApp from 'root/src/client/logic/app/thunks/initApp'
 import testMediaBreakpoints from 'root/src/client/logic/app/thunks/testMediaBreakpoints'
+import setTimeoutId from 'root/src/client/logic/project/reducers/setTimeoutId'
 
 // reducers
 import initAppReducer from 'root/src/client/logic/app/reducers/initAppReducer'
@@ -33,6 +34,8 @@ import initApiListRequest from 'root/src/client/logic/api/reducers/initApiListRe
 import initApiRecordRequest from 'root/src/client/logic/api/reducers/initApiRecordRequest'
 import generalRecordModification from 'root/src/client/logic/api/reducers/generalRecordModification'
 import currentListPayload from 'root/src/client/logic/api/reducers/currentListPayload'
+import clearList from 'root/src/client/logic/api/reducers/clearList'
+import clearListProcessing from 'root/src/client/logic/api/reducers/clearListProcessing'
 
 // project
 import favoritesProcessingStart from 'root/src/client/logic/project/reducers/favoritesProcessingStart'
@@ -59,6 +62,7 @@ import cleareProjectArray from 'root/src/client/logic/header/reducers/clearProje
 import setGameFilterValue from 'root/src/client/logic/header/reducers/setGameFilterValue'
 import setStreamerFilterValue from 'root/src/client/logic/header/reducers/setStreamerFilterValue'
 import clearFilterParams from 'root/src/client/logic/header/reducers/clearFilterParams'
+import setSortValue from 'root/src/client/logic/header/reducers/setSortValue'
 
 import apiExternalRequestSuccess from 'root/src/client/logic/api/reducers/apiExternalRequestSuccess'
 import apiExternalRequestError from 'root/src/client/logic/api/reducers/apiExternalRequestError'
@@ -127,6 +131,10 @@ const store = createStore(
 		...setGameFilterValue,
 		...setStreamerFilterValue,
 		...clearFilterParams,
+		...setTimeoutId,
+		...clearList,
+		...clearListProcessing,
+		...setSortValue,
 	}, // reducer object
 	// [], // sagas
 	[

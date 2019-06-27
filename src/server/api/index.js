@@ -1,17 +1,19 @@
-import { prop, pick, path } from 'ramda'
+import { prop, pick, path, not, equals } from 'ramda'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 
 import validateSchema from 'root/src/shared/util/validateSchema'
 import {
 	customError, payloadSchemaError, responseSchemaError,
-	notFoundError,
+	notFoundError, authorizationError,
 } from 'root/src/server/api/errors'
 import ajvErrors from 'root/src/shared/util/ajvErrors'
 import {
-	getPayloadSchema, getResultSchema, testEndpointExists, getIsLongRunningTask,
+	getPayloadSchema, getResultSchema, testEndpointExists, getIsLongRunningTask, getIsInvokedInternal,
 } from 'root/src/server/api/getEndpointDesc'
 import serverEndpoints from 'root/src/server/api/actions'
 import authorizeRequest from 'root/src/server/api/authorizeRequest'
+import triggerActions from 'root/src/server/email/actions'
+import keyProtectedClient from 'root/src/server/api/keyProtectedClient'
 
 const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 	if (schema) {
@@ -30,15 +32,36 @@ const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 	return Promise.resolve(payload)
 }
 
+const validateSecretKey = ({ apiKey, secretKey, endpointId }) => {
+	if (not(equals(apiKey, secretKey))) {
+		throw authorizationError(`Unauthorized request to ${endpointId}`)
+	}
+}
+
 export const apiHof = (
-	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn,
-	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
+	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
+	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask, isInvokedInternal,
 ) => async (event) => {
 	try {
-		// const { invokedFunctionArn } = context
+		const { endpointId, payload, authentication, triggerSource, apiKey } = event
 
-		const { endpointId, payload, authentication } = event
+		if (isInvokedInternal(endpointId)) {
+			const { secretKey } = await keyProtectedClient
+			const requestData = {
+				apiKey,
+				secretKey,
+				endpointId,
+			}
+			validateSecretKey(requestData)
+		}
+
 		const endpointExists = testEndpointExistsFn(endpointId)
+		if (triggerSource) {
+			const triggerAction = path([triggerSource], getTriggerActionsObj)
+			const { request } = event
+			await triggerAction(request)
+			return event
+		}
 		if (!endpointExists) {
 			throw notFoundError(endpointId)
 		}
@@ -71,8 +94,8 @@ export const apiHof = (
 }
 
 export const apiFn = apiHof(
-	serverEndpoints, getPayloadSchema, getResultSchema, authorizeRequest,
-	testEndpointExists, getIsLongRunningTask,
+	serverEndpoints, getPayloadSchema, getResultSchema, triggerActions,
+	authorizeRequest, testEndpointExists, getIsLongRunningTask, getIsInvokedInternal,
 )
 
 // can't return promise?

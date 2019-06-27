@@ -20,6 +20,7 @@ import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthori
 import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/server/api/lenses'
 import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
+import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
 import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
@@ -46,13 +47,14 @@ export default async ({ userId, payload }) => {
 		if (!validationCardId) {
 			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
 		}
-		const stripeAuthorization = await stripeAuthorizePayment(newPledgeAmount, paymentInfo.paymentId, userId)
+		const stripeAuthorization = await stripeAuthorizePayment(newPledgeAmount, paymentInfo.paymentId, userId, projectId)
+
 		if (!stripeAuthorization.authorized) {
 			throw payloadSchemaError(stripeAuthorization.error)
 		}
 		paymentInfo = assoc('paymentId', prop('id', stripeAuthorization), paymentInfo)
 	} else if (paymentInfo.paymentType === paypalAuthorize) {
-		const validation = await validatePaypalAuthorize(paymentInfo.orderID, newPledgeAmount)
+		const validation = await validatePaypalAuthorize(paymentInfo.paymentId, newPledgeAmount)
 		if (!validation) {
 			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
 		}
@@ -119,14 +121,13 @@ export default async ({ userId, payload }) => {
 			title: pledgeMadeTitle,
 			dareTitle: prop('title', newProject),
 			recipients: [email],
-			// TODO EMAIL
-			// expiry time
+			notClaimedAlready: equals(0, length(filter(propEq('accepted', streamerAcceptedKey), prop('assignees', newProject)))),
 			dareHref: projectHrefBuilder(prop('id', newProject)),
 			streamers: compose(map(prop('username')), prop('assignees'))(newProject),
-			notClaimedAlready: equals(0, length(filter(propEq('accepted', streamerAcceptedKey), prop('assignees', newProject)))),
+			expiryTime: prop('created', projectToPledge),
 		}
-
 		sendEmail(emailData, pledgeMadeMail)
+		await checkPledgedAmount(projectId)
 	} catch (err) { }
 
 

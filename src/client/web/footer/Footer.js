@@ -34,9 +34,9 @@ export const FooterUnconnected = memo(({ classes, currentYear }) => (
 					</Link>
 				</div>
 				<div className={classNames(classes.text, 'margin')}>
-					<Link routeId="">
+					<a href="mailto:support@daredrop.com" className={classNames(classes.supportLink, 'margin')}>
 						<span>Contact Us</span>
-					</Link>
+					</a>
 				</div>
 			</div>
 			<div className={classes.line} />

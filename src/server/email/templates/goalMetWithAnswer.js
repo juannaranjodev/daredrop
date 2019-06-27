@@ -22,28 +22,28 @@ export default ({ dareTitle, streamer, message }) => {
                       <p style="margin:0;padding:0;">Great job meeting ${streamer}’s bounty goal for ${dareTitle}!</p>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>
-                  
+
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
                       <p style="margin:0;padding:0;">Here’s what ${streamer} has to say:</p>
-                      <p style="margin:0;padding:0;">${message}</p>
+                      <p style="margin:0;padding:0;"><br><pre style="font-weight:bold;font-size:26px;line-height:1.23;" >${message}</pre></p>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>
-                  
+
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
                       <p style="margin:0;padding:0;">We’re looking forward to seeing this!</p>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>
@@ -53,7 +53,7 @@ export default ({ dareTitle, streamer, message }) => {
                       <p style="margin:0;padding:0;">The ${ourName} Team</p>
                     </td>
                   </tr>
-                  
+
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
                   </tr>

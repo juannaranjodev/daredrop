@@ -4,18 +4,20 @@ import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import findOrCreateStripeCustomer from 'root/src/server/api/actionUtil/findOrCreateStripeCustomer'
 
 
-export default async (amount, sourceId, userId) => {
+export default async (amount, sourceId, userId, projectId) => {
 	const stripe = await stripeClient
 	const email = await getUserEmail(userId)
-	const customerId = await findOrCreateStripeCustomer(email, sourceId)
 	let result
 	try {
+		const customerId = await findOrCreateStripeCustomer(email, sourceId)
 		const charge = await stripe.charges.create({
 			capture: false,
 			currency: 'usd',
 			source: sourceId,
 			customer: customerId,
 			amount: multiply(amount, 100),
+			expand: ['balance_transaction'],
+			transfer_group: projectId,
 		})
 		result = {
 			authorized: true,
@@ -23,7 +25,7 @@ export default async (amount, sourceId, userId) => {
 		}
 	} catch (error) {
 		result = {
-			authorized: true,
+			authorized: false,
 			error,
 		}
 	}

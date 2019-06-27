@@ -10,19 +10,31 @@ import auditProject from 'root/src/server/api/actions/auditProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
+import pledgeProject from 'root/src/server/api/actions/pledgeProject'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
+import createPledgeProjectPayload from 'root/src/server/api/mocks/createPledgeProjectPayload'
 import getPendingDeliveries from 'root/src/server/api/actions/getPendingDeliveries'
 import dynamoQueryProjectPledges from 'root/src/server/api/actionUtil/dynamoQueryProjectPledges'
 import wait from 'root/src/testUtil/wait'
 
-describe('approveDelivery', async () => {
+describe('reviewDelivery', async () => {
 	let project
 	test('Correctly approves delivery', async () => {
 		// TODO test suites for admin verification
 		project = await createProject({
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),
+		})
+
+		await pledgeProject({
+			userId: 'user-differentuserid1',
+			payload: createPledgeProjectPayload(project.id),
+		})
+
+		await pledgeProject({
+			userId: 'user-differentuserid2',
+			payload: createPledgeProjectPayload(project.id),
 		})
 
 		await auditProject({
@@ -82,7 +94,6 @@ describe('approveDelivery', async () => {
 
 		await wait(500)
 		const res = await apiFn(event)
-
 		expect(res.body.status).toEqual(projectDeliveredKey)
 	})
 	let project2
@@ -154,7 +165,6 @@ describe('approveDelivery', async () => {
 		}
 
 		const res = await apiFn(event)
-
 		expect(res.body.status).toEqual(projectDeliveryRejectedKey)
 	})
 	test('there are no pending deliveries', async () => {
@@ -176,11 +186,10 @@ describe('approveDelivery', async () => {
 				projectId: project.id,
 			},
 		}
-		let projectPledges = await dynamoQueryProjectPledges(project.id)
-		expect(projectPledges[0].paymentInfo[0].captured).toEqual(0)
 		const res = await apiFn(event)
-		projectPledges = await dynamoQueryProjectPledges(project.id)
+		const projectPledges = await dynamoQueryProjectPledges(project.id)
+
 		expect(projectPledges[0].paymentInfo[0].captured).toEqual(200)
-		expect(res.body.message).toEqual('success')
+		expect(res.statusCode).toEqual(500)
 	})
 })

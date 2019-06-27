@@ -1,8 +1,8 @@
 import React, { memo, Fragment } from 'react'
-import { identity } from 'ramda'
+import { and, not } from 'ramda'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
-import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST, SORT_BY_CREATED_ASC, SORT_BY_ACCEPTED } from 'root/src/shared/constants/sortTypesOfProject'
+import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST } from 'root/src/shared/constants/sortTypesOfProject'
 
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 import Link from 'root/src/client/web/base/Link'
@@ -24,6 +24,8 @@ import bannerHeaderConnector from 'root/src/client/logic/header/connectors/banne
 import getValueChip from 'root/src/client/logic/header/handlers/getValueChip'
 
 import { primaryColor, secondaryColor } from 'root/src/client/web/commonStyles'
+import 'create-react-class'
+import Tappable from 'react-tappable/lib/Tappable'
 
 const styles = {
 	bottomMargin: {
@@ -77,9 +79,11 @@ const styles = {
 	},
 	newDare: {
 		fontSize: 18,
+		marginTop: 10,
 		letterSpacing: 1,
 		fontWeight: 'bold',
 		color: primaryColor,
+		position: 'absolute',
 		'&:hover': {
 			color: secondaryColor,
 		},
@@ -92,7 +96,12 @@ const styles = {
 			marginTop: 40,
 		},
 		'@media (max-width: 1024px)': {
-			marginTop: 45,
+			marginTop: 30,
+		},
+		'@media (max-width: 364px)': {
+			flexDirection: 'column',
+			marginTop: 40,
+			width: '60%',
 		},
 	},
 	label: {
@@ -112,7 +121,7 @@ const styles = {
 	},
 	filterBclock: {
 		display: 'flex',
-		'@media (max-width: 414px)': {
+		'@media (max-width: 560px)': {
 			flexDirection: 'column',
 		},
 	},
@@ -125,6 +134,11 @@ const styles = {
 	},
 	createLinkContainer: {
 		width: '50%',
+		'@media (max-width: 364px)': {
+			flexDirection: 'column',
+			marginTop: 0,
+			width: '13%',
+		},
 	},
 	linkAndFilterContainer: {
 		display: 'flex',
@@ -173,9 +187,11 @@ const SingleValue = withStyles(singleStyle)(({ classes, children, label, removeP
 			tabIndex={-1}
 			label={getValueChip(getValue())}
 			onDelete={clearValue}
-			deleteIcon={
+			deleteIcon={(
+				<Tappable onTap={clearValue}>
 				<CancelIcon {...removeProps} />
-			}
+				</Tappable>
+			)}
 		/>
 	</components.SingleValue>
 ))
@@ -185,7 +201,8 @@ export const BannerHeaderUnconnected = memo(({
 	textWithBg, bannerSubText, linkLabel, linkRouteId,
 	classes, createNewDareActive, loadOptionsPromise,
 	filterProjectByGame, filterProjectByStreamer, sortProject,
-	gameFilterValue, streamerFilterValue,
+	gameFilterValue, streamerFilterValue, sortValue,
+	isMyProjects,
 }) => (
 	<div className={classNames(classes.bottomMargin, 'layout-column')}>
 		{orNull(bannerImage,
@@ -223,7 +240,7 @@ export const BannerHeaderUnconnected = memo(({
 							</div>,
 						)}
 						{orNull(
-							createNewDareActive,
+							and(createNewDareActive, not(isMyProjects)),
 							<div className={classes.filterContainer}>
 								<div className={classes.sort}>
 									<div className={classes.label}>Sort By:</div>
@@ -233,6 +250,7 @@ export const BannerHeaderUnconnected = memo(({
 											id: 0,
 											value: SORT_BY_NEWEST,
 										}}
+										value={sortValue}
 										onChange={sortProject}
 										className={classes.autoSelect}
 										options={[
@@ -344,10 +362,11 @@ export const BannerHeaderUnconnected = memo(({
 													},
 												}),
 												placeholder: (provided, state) => ({
-													marginTop: -2,
-													marginLeft: 20,
-													display: state.isFocused ? 'none' : 'inherit',
+													marginLeft: 5,
+													display: state.isFocused ? 'none' : 'flex',
 													color: '#cccccc',
+													height: 24,
+													alignItems: 'center',
 												}),
 												singleValue: () => ({
 													width: 100,
@@ -406,10 +425,11 @@ export const BannerHeaderUnconnected = memo(({
 													},
 												}),
 												placeholder: (provided, state) => ({
-													marginTop: 3,
 													marginLeft: 5,
-													display: state.isFocused ? 'none' : 'inherit',
+													display: state.isFocused ? 'none' : 'flex',
 													color: '#cccccc',
+													height: 24,
+													alignItems: 'center',
 												}),
 											}}
 											className={classes.autoSelect}

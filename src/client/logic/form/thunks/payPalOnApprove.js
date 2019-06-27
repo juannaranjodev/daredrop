@@ -34,7 +34,6 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 		const paymentAuthorization = path([0, 'payments', 'authorizations', 0], purchase_units)
 
 		const paymentInfo = {
-			orderID: data.orderID,
 			paymentId: prop('id', paymentAuthorization),
 			paymentType: paypalAuthorize,
 			paymentAmount: prop('pledgeAmount', formData),
