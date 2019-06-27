@@ -350,10 +350,11 @@ export const BannerHeaderUnconnected = memo(({
 													},
 												}),
 												placeholder: (provided, state) => ({
-													marginTop: -2,
-													marginLeft: 20,
-													display: state.isFocused ? 'none' : 'inherit',
+													marginLeft: 5,
+													display: state.isFocused ? 'none' : 'flex',
 													color: '#cccccc',
+													height: 24,
+													alignItems: 'center',
 												}),
 												singleValue: () => ({
 													width: 100,
@@ -412,10 +413,11 @@ export const BannerHeaderUnconnected = memo(({
 													},
 												}),
 												placeholder: (provided, state) => ({
-													marginTop: 3,
 													marginLeft: 5,
-													display: state.isFocused ? 'none' : 'inherit',
+													display: state.isFocused ? 'none' : 'flex',
 													color: '#cccccc',
+													height: 24,
+													alignItems: 'center',
 												}),
 											}}
 											className={classes.autoSelect}
