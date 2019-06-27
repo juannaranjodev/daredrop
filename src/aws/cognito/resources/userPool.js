@@ -1,7 +1,8 @@
 import {
 	USER_POOL,
 } from 'root/src/aws/cognito/resourceIds'
-import { apiFunctionArn } from 'root/cfOutput'
+import { API_LAMBDA_FUNCTION } from 'root/src/aws/api/resourceIds'
+import getAtt from 'root/src/aws/util/getAtt'
 
 export default {
 	[USER_POOL]: {
@@ -15,7 +16,7 @@ export default {
 			EmailVerificationMessage: 'Your verification code is {####}.',
 			UserPoolName: USER_POOL,
 			LambdaConfig: {
-				PostConfirmation: apiFunctionArn,
+				PostConfirmation: getAtt(API_LAMBDA_FUNCTION, 'Arn'),
 			},
 		},
 	},
