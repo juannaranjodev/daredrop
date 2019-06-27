@@ -15,12 +15,12 @@ const pageContent = classes => [
 	{
 		title: '1. Welcome to Dare Drop!',
 		paragraph: (<span>
-        This page explains our terms of service. When you use Dare Drop, you’re 
-				agreeing to all the rules on this page. We’ve done our best to offer 
-				you clear and simple explanations of what everything means with brief 
-				summaries before each Section. The summaries are not part of the 
+        This page explains our terms of service. When you use Dare Drop, you’re
+				agreeing to all the rules on this page. We’ve done our best to offer
+				you clear and simple explanations of what everything means with brief
+				summaries before each Section. The summaries are not part of the
 				official legal terms.
-				</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -31,7 +31,7 @@ const pageContent = classes => [
           (the “Terms”). You’re also agreeing to our{' '}
 					<Link routeId={PRIVACY_POLICY_ROUTE_ID}>Privacy Policy</Link>,{' '}
 					<Link routeId={COOKIE_POLICY_ROUTE_ID}>Cookie Policy</Link>, and{' '}
-					<Link routeId={COPYRIGHT_POLICY_ROUTE_ID}>Copyright Policy</Link>; 
+					<Link routeId={COPYRIGHT_POLICY_ROUTE_ID}>Copyright Policy</Link>;
 					and agreeing to follow any other rules on the Site, like our{' '}
 					<Link routeId={RULES_OF_USE_ROUTE_ID}>Rules of Use</Link>.
 				</p>
@@ -59,20 +59,20 @@ const pageContent = classes => [
 	{
 		title: '2. Creating an Account',
 		paragraph: (<span>
-			To use Dare Drop, you need to be 13 years old or older. 
-			If you’re between 13 and 18 (or the legal age of majority for your 
-			jurisdiction), you may only use Dare Drop under the supervision of a 
-			parent or legal guardian who agrees to these Terms. You’re responsible 
+			To use Dare Drop, you need to be 13 years old or older.
+			If you’re between 13 and 18 (or the legal age of majority for your
+			jurisdiction), you may only use Dare Drop under the supervision of a
+			parent or legal guardian who agrees to these Terms. You’re responsible
 			for your account and all the activity on it.
-		</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>
-          You can browse Dare Drop without registering for an account. But to 
-					use some of Dare Drop’s functions, you’ll need to register. When you 
-					do that, the information you give us has to be accurate and complete. 
-					Don’t choose names that are offensive or that violate anyone’s 
-					rights, and don’t impersonate anyone. If you don’t follow these 
+          You can browse Dare Drop without registering for an account. But to
+					use some of Dare Drop’s functions, you’ll need to register. When you
+					do that, the information you give us has to be accurate and complete.
+					Don’t choose names that are offensive or that violate anyone’s
+					rights, and don’t impersonate anyone. If you don’t follow these
 					rules, we may cancel your account.
 				</p>
 				<p>
@@ -81,10 +81,10 @@ const pageContent = classes => [
           report it to <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
 				</p>
 				<p>
-				To sign up for an account, you need to be at least 18 years old, old 
-				enough to form a binding contract where you live, or at least 13 years 
-				old under the supervision of a parent or guardian who agrees to be 
-				bound by these Terms of Service. If necessary, we may ask you for proof 
+				To sign up for an account, you need to be at least 18 years old, old
+				enough to form a binding contract where you live, or at least 13 years
+				old under the supervision of a parent or guardian who agrees to be
+				bound by these Terms of Service. If necessary, we may ask you for proof
 				of your age.
 				</p>
 			</React.Fragment>
@@ -93,9 +93,9 @@ const pageContent = classes => [
 	{
 		title: '3. Don’t Do These Things',
 		paragraph: (<span>
-			This Section is a List of things you know you shouldn’t do: lie, break laws, abuse people, 
+			This Section is a List of things you know you shouldn’t do: lie, break laws, abuse people,
 			steal data, hack other people’s computers, and so on. Please behave yourself.
-		</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -170,7 +170,7 @@ const pageContent = classes => [
         different — it explains the relationship between creators and backers of Dare Drop Dares,
         and who’s responsible for what. This is what you’re agreeing to when you create, fund,
         delivers results for a Dare Drop Dare.
-				</span>),
+		</span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -207,9 +207,9 @@ const pageContent = classes => [
 		id: 'section-5',
 		title: '5. How Funding Works',
 		paragraph: (<span>
-			This Section goes over the details of funding and creating Dares. This is how money gets 
+			This Section goes over the details of funding and creating Dares. This is how money gets
 			collected, and the details on how and when pledges can be changed or canceled.
-		</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>These are the terms that apply when you’re funding or creating a Dare:</p>
@@ -228,12 +228,12 @@ const pageContent = classes => [
             collection of funds.
 					</li>
 					<li>
-            You can change or cancel your pledge at any time before the Dare’s funding deadline
-            (with one exception). You can increase, decrease, or cancel your pledge at any time
+			You can increase, decrease, or cancel your pledge at any time
             during the Dare, with one exception. During the last 24 hours before the Dare is
             delivered on, you can’t decrease or cancel your pledge without contacting customer
             support first — if the deliverer has already created the video or is in the process of
-            streaming the video which will be used to deliver on the Dare.
+            streaming the video which will be used to deliver on the Dare, then you may not cancel
+			or decrease your pledge.
 					</li>
 					<li>
             Dare Drop doesn’t offer refunds. Responsibility for finishing a Dare lies entirely
@@ -281,7 +281,7 @@ const pageContent = classes => [
 		title: '6. Stuff We Aren’t Responsible For',
 		paragraph: (<span>
 			We don’t oversee Dares’ performance, and we don’t mediate disputes between users.
-		</span>),
+              </span>),
 		text: (
 			<p>
         Dare Drop isn’t liable for any damages or losses related to your use of the Services. We
@@ -298,9 +298,9 @@ const pageContent = classes => [
 	{
 		title: '7. Our Fees',
 		paragraph: (<span>
-			Fees are only charged on successfully funded Dares. We charge 10%, in addition to any fees 
+			Fees are only charged on successfully funded Dares. We charge 10%, in addition to any fees
 			from our payments partners.
-		</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -325,7 +325,7 @@ const pageContent = classes => [
 		title: '8. Other Websites',
 		paragraph: (<span>
 			If you follow a link to another website, what happens there is between you and them — not us.
-		</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -349,7 +349,7 @@ const pageContent = classes => [
         happening on it. (We generally just use this to promote Dares and showcase our community
         on the website.) You’re responsible for the content you post, and you’re vouching to us that
         it’s all okay to use.
-				</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -413,7 +413,7 @@ const pageContent = classes => [
         The content on Dare Drop is protected in various ways. You do have the right to use it for
         certain personal purposes, but you can’t use it for anything commercial without getting
         permission first.
-				</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -438,10 +438,11 @@ const pageContent = classes => [
 	{
 		title: '11. How We Deal with Copyright Issues',
 		paragraph: (<span>
-        We comply with 
+        We comply with
 				the <a href="https://www.copyright.gov/legislation/dmca.pdf">
-				Digital Millennium Copyright Act</a>.
-              </span>),
+				Digital Millennium Copyright Act
+        </a>.
+		</span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -449,13 +450,13 @@ const pageContent = classes => [
           Policy. The Digital Millennium Copyright Act lays out a system of legal requirements for
           dealing with allegations of copyright infringement. Dare Drop complies with the DMCA, and
           we respond to notices of alleged infringement if they comply with the law and the
-          requirements set forth in our <Link routeId={COPYRIGHT_POLICY_ROUTE_ID}>Copyright Policy</Link>. 
-					We reserve the right to delete or disable content alleged to be infringing, and to terminate 
+          requirements set forth in our <Link routeId={COPYRIGHT_POLICY_ROUTE_ID}>Copyright Policy</Link>.
+					We reserve the right to delete or disable content alleged to be infringing, and to terminate
 					accounts for repeat infringers. (We do this when appropriate and at our sole discretion.)
 				</p>
 				<p>
           If you’d like to submit a claim of copyright infringement, please visit our{' '}
-					<Link routeId={COPYRIGHT_POLICY_ROUTE_ID}>Copyright Policy</Link>. Our designated agent 
+					<Link routeId={COPYRIGHT_POLICY_ROUTE_ID}>Copyright Policy</Link>. Our designated agent
 					for notice of alleged copyright infringement is:
 				</p>
 				<p>
@@ -479,7 +480,7 @@ const pageContent = classes => [
 		paragraph: (<span>
 			You can delete your account at any time. Deleting your account won’t automatically make some
       content you’ve already posted go away.
-		</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -507,7 +508,7 @@ const pageContent = classes => [
         this Section, we reserve the right to make decisions to protect the health and integrity
         of our system. We don’t take these powers lightly, and we only use them when we absolutely
         have to.
-		</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>Dare Drop reserves these rights:</p>
@@ -541,7 +542,7 @@ const pageContent = classes => [
 		paragraph: (<span>
       We work hard to provide you with great services, but we can’t guarantee everything will
       always work perfectly. This site is presented as-is, without warranties.
-		</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -562,7 +563,7 @@ const pageContent = classes => [
 		title: '15. Indemnification ',
 		paragraph: (<span>
         If you do something on Dare Drop that winds up getting us sued, you have to help defend us.
-				</span>),
+		</span>),
 		text: (
 			<React.Fragment>
 				<p>
@@ -590,7 +591,7 @@ const pageContent = classes => [
 		title: '16. Limitation of Liability',
 		paragraph: (<span>
       If something bad happens as a result of your use Dare Drop, we’re not liable.
-		</span>),
+              </span>),
 		text: (
 			<p>
         To the fullest extent permitted by law, in no event will Dare Drop, its directors,
@@ -607,7 +608,7 @@ const pageContent = classes => [
 		paragraph: (<span>
       We’re located in New York, and any disputes with us have to be handled in New York under New
       York State law.
-		</span>),
+              </span>),
 		text: (
 			<p>
         We at Dare Drop encourage you to contact us if you’re having an issue, before resorting to
@@ -634,7 +635,7 @@ const pageContent = classes => [
 		paragraph: (<span>
       These are our official terms and our rules for how things work. (So if you ever see
       conflicting information about any of this stuff, the information here is the last word.)
-		</span>),
+              </span>),
 		text: (
 			<React.Fragment>
 				<p>
