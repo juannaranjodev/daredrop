@@ -30,6 +30,7 @@ const Button = ({ classes, onClick, title, customSubmitsData }) => (
 	<ButtonBase
 		className={classes.button}
 		onClick={() => onClick(customSubmitsData)}
+		disableRipple
 	>
 		<div>
 			<img className={classes.img} src={PayPalIcon} alt={title} />
