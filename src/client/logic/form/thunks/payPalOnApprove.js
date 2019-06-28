@@ -2,11 +2,8 @@ import { prop, path, omit } from 'ramda'
 import setFormErrors from 'root/src/client/logic/form/actions/setFormErrors'
 import successPageSelector from 'root/src/client/logic/form/selectors/submitSuccessPageSelector'
 import endpointIdSelector from 'root/src/client/logic/form/selectors/submitEndpointIdSelector'
-
-import generalRecordModification from 'root/src/client/logic/api/actions/generalRecordModification'
-import recordTypeSelector from 'root/src/client/logic/api/selectors/recordTypeSelector'
-import createRecordStoreKey from 'root/src/client/logic/api/util/createRecordStoreKey'
-
+import clearForm from 'root/src/client/logic/form/actions/clearForm'
+import submitFormComplete from 'root/src/client/logic/form/actions/submitFormComplete'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import currentRouteParamsRecordId from 'root/src/client/logic/route/selectors/currentRouteParamsRecordId'
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
@@ -53,24 +50,8 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 		
 		dispatch(apiRequest(endpointId, apiPayload))
 		.then((res) => {
-			debugger
-			const recordType = recordTypeSelector(endpointId)
-			const recordStoreKey = createRecordStoreKey(
-				recordType, projectId,
-			)
-			const substitutes = { formData, recordStoreKey, res }
-
-			const updates = [{
-				modification: 'set',
-				path: [':recordStoreKey', 'myPledge'],
-				valuePath: ['formData', 'pledgeAmount'],
-			}]
-
-			dispatch(generalRecordModification(
-				substitutes,
-				updates,
-			))
-
+			dispatch(clearForm(moduleKey))
+			dispatch(submitFormComplete(moduleKey))
 			return dispatch(pushRoute(successPage))
 		})
 		.catch(err => dispatch(setFormErrors(moduleKey, err)))

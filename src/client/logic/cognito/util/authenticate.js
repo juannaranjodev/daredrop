@@ -8,6 +8,7 @@ export const getCurrentUser = () => userPool.getCurrentUser()
 
 export const getCurrentSession = () => new Promise((resolve, reject) => {
 	const user  = getCurrentUser()
+	if (!user) reject(null)
 	user.getSession((err, result) => {
 		if (err) reject(err)
 		resolve(result)
@@ -17,11 +18,15 @@ export const getCurrentSession = () => new Promise((resolve, reject) => {
 export const getRefreshToken = (session) => session.getRefreshToken()
 
 export const setRefreshSession = async () => {
-	const session = await getCurrentSession()
-	const refreshToken = session.getRefreshToken()
-	const newSession = await refreshSessionCognito(refreshToken)
-	await setAwsConfig(session)
-	return true
+	try {
+		const session = await getCurrentSession()
+		const refreshToken = session.getRefreshToken()
+		const newSession = await refreshSessionCognito(refreshToken)
+		await setAwsConfig(session)
+		return true		
+	} catch (error) {
+		return false
+	}
 }
 
 const refreshSessionCognito = (refreshToken) => new Promise((resolve, reject) => {
