@@ -56,7 +56,7 @@ export const runModuleMountsHof = (
 					return result
 				},
 				[],
-				enterModuleIds,
+				enterModuleIds || [],
 			),
 		)
 	}
