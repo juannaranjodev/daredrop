@@ -1,13 +1,11 @@
 /* eslint-disable max-len */
-import { head, prop, map, assoc, add, reduce } from 'ramda'
-import { composeE } from 'root/src/shared/util/ramdaPlus'
+import { add, assoc, filter, map, prop, propEq, reduce, test } from 'ramda'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
+import getUserMailFromAssigneeObj from 'root/src/server/api/actionUtil/getUserMailFromAssigneeObj'
 import { projectApprovedKey, streamerDeliveryApprovedKey } from 'root/src/server/api/lenses'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import dynamoQueryPayoutMethod from 'root/src/server/api/actionUtil/dynamoQueryPayoutMethod'
-import buildUserSortKeyFromAssigneeObj from 'root/src/server/api/actionUtil/buildUserSortKeyFromAssigneeObj'
-import dynamoGetUserIdFromSK from 'root/src/server/api/actionUtil/dynamoGetUserIdFromSK'
-import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
+import { emailRe } from 'root/src/shared/util/regexes'
 
 export default async (projectId) => {
 	const [projectDdb, assigneesDdb, projectPledgesDdb, , payoutDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)
@@ -34,17 +32,22 @@ export default async (projectId) => {
 	)
 
 	const payoutsWithPaypalEmails = await Promise.all(map(async (assignee) => {
-		const userEmail = await composeE(
-			prop('email'), head, dynamoQueryPayoutMethod, dynamoGetUserIdFromSK, buildUserSortKeyFromAssigneeObj,
-		)(assignee)
+		const userEmail = await getUserMailFromAssigneeObj(assignee)
 		return assoc('email', userEmail, assignee)
 	}, payoutsArr))
 
-	const payoutTotal = reduce((acc, item) => add(acc, prop('payout', item)), 0, payoutsWithPaypalEmails)
+	const mailIsUndefined = filter(propEq('email', 'NO_EMAIL'))
+	const mailIsNotUndefined = filter(obj => test(emailRe, prop('email', obj)))
+
+	const usersWithoutPaypalMail = mailIsUndefined(payoutsWithPaypalEmails)
+	const usersWithPaypalMail = mailIsNotUndefined(payoutsWithPaypalEmails)
+
+	const payoutTotal = reduce((acc, item) => add(acc, prop('payout', item)), 0, usersWithPaypalMail)
 
 	return {
 		dareTitle: prop('title', projectDdb),
-		payouts: payoutsWithPaypalEmails,
+		usersWithPaypalMail,
+		usersWithoutPaypalMail,
 		payoutTotal,
 	}
 }
