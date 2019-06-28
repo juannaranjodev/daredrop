@@ -66,7 +66,6 @@ export default async ({ payload }) => {
 	}), projectAcceptedAssignees), [])
 	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
 	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
-
 	const projectDataToWrite = [
 		...ternary(equals(audit, projectDeliveredKey),
 			[{

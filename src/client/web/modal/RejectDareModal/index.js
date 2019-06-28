@@ -6,10 +6,10 @@ import { equals } from 'ramda'
 import Button from 'root/src/client/web/base/Button'
 import styles from './styles'
 
- const RejectDareModal = ({ classes, props }) => {
+const RejectDareModal = ({ classes, props }) => {
 	const [rejectDescription, setRejectDescription] = useState('')
 	const [error, setError] = useState('')
-	const { rejectProject, pushRoute } = props
+	const { rejectProject, pushRoute, displayModal, moduleId } = props
 	return (
 		<Fragment>
 			<div className={classes.reason}>
@@ -27,6 +27,7 @@ import styles from './styles'
 				additionalClass={classes.button}
 				onClick={() => rejectProject(rejectDescription).then(({ statusCode, schemaErrors }) => {
 					if (equals(statusCode, 200)) {
+						displayModal(moduleId, false)
 						pushRoute(DARE_REJECT_SUCCESS_ROUTE_ID)
 					} else {
 						setError(schemaErrors.message)
@@ -39,4 +40,4 @@ import styles from './styles'
 }
 
 
- export default withStyles(styles)(RejectDareModal)
+export default withStyles(styles)(RejectDareModal)

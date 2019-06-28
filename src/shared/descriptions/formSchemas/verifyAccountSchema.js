@@ -10,5 +10,10 @@ export default {
 		},
 	},
 	required: ['email', 'verificationCode'],
+	errorMessage: {
+		properties: {
+			verificationCode: 'Verification code is required',
+		},
+	},
 	additionalProperties: false,
 }
