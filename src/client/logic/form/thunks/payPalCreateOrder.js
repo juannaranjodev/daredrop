@@ -3,6 +3,7 @@ import customValidateForm from 'root/src/client/logic/form/util/customValidateFo
 import setFormErrors from 'root/src/client/logic/form/actions/setFormErrors'
 import submitForm from 'root/src/client/logic/form/actions/submitForm'
 
+// eslint-disable-next-line max-len
 export default (data, actions, { moduleId, formSchema, formData, moduleKey }) => async (dispatch) => {
 	try {
 		dispatch(submitForm(moduleKey))

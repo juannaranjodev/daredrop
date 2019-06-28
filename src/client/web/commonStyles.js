@@ -35,6 +35,7 @@ export const navLinkStyle = {
 }
 
 export const primaryColorBorder = '1px solid #800080'
+export const blackColorBorder = '1px solid #000000'
 
 
 export const xsMediaQuery = '@media (max-width: 599px)'
