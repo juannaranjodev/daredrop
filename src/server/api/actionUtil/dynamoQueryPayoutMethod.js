@@ -13,11 +13,10 @@ export default userId => new Promise(async (resolve) => {
 		},
 		ConsistentRead: true,
 	}
-
 	const dynamoResult = await documentClient.query(paymentMethodParams).promise()
 	const payoutMethod = dynamoItemsProp(dynamoResult)
 	if (equals(length(payoutMethod), 0)) {
-		resolve([{ email: 'NO_EMAIL' }])
+		resolve([{ email: undefined }])
 	}
 	resolve(payoutMethod)
 })

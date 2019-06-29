@@ -44,7 +44,6 @@ export const apiHof = (
 ) => async (event) => {
 	try {
 		const { endpointId, payload, authentication, triggerSource, apiKey } = event
-
 		// secret key check is disabled for now
 		//
 		// if (isInvokedInternal(endpointId)) {
@@ -83,7 +82,6 @@ export const apiHof = (
 
 		await validatePayload(payload)
 		const res = await action({ userId, payload })
-
 		await validateResult(res)
 		return { statusCode: 200, body: res }
 	} catch (error) {

@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 import generateCrontab from 'root/src/shared/util/generateCrontab'
-import { CloudWatchEvents, Lambda } from 'aws-sdk'
-import { apiLongTaskFunctionArn, apiCloudWatchEventsIamRole } from 'root/cfOutput'
+import { CloudWatchEvents } from 'aws-sdk'
+import { apiLongTaskFunctionArn, cloudWatchEventsIamRole } from 'root/cfOutput'
 import { equals, prop, head, split, join, tail, compose } from 'ramda'
 
 export default (eventInput, cronTime, identifier) => new Promise((resolve, reject) => {
@@ -17,27 +17,13 @@ export default (eventInput, cronTime, identifier) => new Promise((resolve, rejec
 		Name: eventName,
 		ScheduleExpression: crontab,
 		State: 'ENABLED',
-		RoleArn: apiCloudWatchEventsIamRole,
+		RoleArn: cloudWatchEventsIamRole,
 	}
 
 	cloudWatchEvents.putRule(ruleParams, (err, rule) => {
 		if (err) {
 			reject(err)
 		}
-		// const lambda = new Lambda()
-
-		// const permissionParams = {
-		// 	Action: 'lambda:InvokeFunction',
-		// 	FunctionName: apiLongTaskFunctionArn,
-		// 	Principal: 'events.amazonaws.com',
-		// 	SourceArn: rule.RuleArn,
-		// 	StatementId: `statement-${eventName}`,
-		// }
-
-		// lambda.addPermission(permissionParams, (err) => {
-		// 	if (err) {
-		// 		reject(err)
-		// 	}
 
 		const targetParams = {
 			Rule: eventName,
@@ -62,4 +48,3 @@ export default (eventInput, cronTime, identifier) => new Promise((resolve, rejec
 		})
 	})
 })
-// })

@@ -1,15 +1,10 @@
-import getAtt from 'root/src/aws/util/getAtt'
+import ref from 'root/src/aws/util/ref'
+import join from 'root/src/aws/util/join'
 import { CLOUDWATCH_EVENTS_ROLE } from 'root/src/aws/cloudWatchEvents/resourceIds'
-import {
-	API_LAMBDA_FUNCTION, API_LAMBDA_LONG_TASK_FUNCTION,
-} from 'root/src/aws/api/resourceIds'
 
 export default {
 	[CLOUDWATCH_EVENTS_ROLE]: {
 		Type: 'AWS::IAM::Role',
-		DependsOn: [
-			API_LAMBDA_FUNCTION, API_LAMBDA_LONG_TASK_FUNCTION,
-		],
 		Properties: {
 			AssumeRolePolicyDocument: {
 				Version: '2012-10-17',
@@ -45,7 +40,11 @@ export default {
 								Sid: 'InvokeLambda',
 								Effect: 'Allow',
 								Action: 'lambda:InvokeFunction',
-								Resource: getAtt(API_LAMBDA_LONG_TASK_FUNCTION, 'Arn'),
+								Resource: join(':', [
+									'arn:aws:lambda:*',
+									ref('AWS::AccountId'),
+									'*:*',
+								]),
 							},
 							{
 								Sid: 'AccessToSecretsManager',
