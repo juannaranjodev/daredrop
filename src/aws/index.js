@@ -2,6 +2,8 @@ import addCognitoPolicies from 'root/src/aws/util/addCognitoPolicies'
 
 import { cognitoResources, cognitoOutputs } from 'root/src/aws/cognito'
 import { staticHostingResources, staticHostingOutputs } from 'root/src/aws/staticHosting'
+import { secretsResources, secretsOutputs } from 'root/src/aws/secrets'
+import { cloudWatchEventsResources, cloudWatchEventsOutputs } from 'root/src/aws/cloudWatchEvents'
 import {
 	apiResources, apiOutputs, apiAuthPolicies, apiUnauthPolicies,
 } from 'root/src/aws/api'
@@ -21,10 +23,14 @@ export default {
 		...appendedCognitoResources,
 		...apiResources,
 		...staticHostingResources,
+		...secretsResources,
+		...cloudWatchEventsResources,
 	},
 	Outputs: {
 		...cognitoOutputs,
 		...apiOutputs,
 		...staticHostingOutputs,
+		...secretsOutputs,
+		...cloudWatchEventsOutputs,
 	},
 }

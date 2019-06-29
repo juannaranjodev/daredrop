@@ -24,42 +24,42 @@ export default (eventInput, cronTime, identifier) => new Promise((resolve, rejec
 		if (err) {
 			reject(err)
 		}
-		const lambda = new Lambda()
+		// const lambda = new Lambda()
 
-		const permissionParams = {
-			Action: 'lambda:InvokeFunction',
-			FunctionName: apiLongTaskFunctionArn,
-			Principal: 'events.amazonaws.com',
-			SourceArn: rule.RuleArn,
-			StatementId: `statement-${eventName}`,
+		// const permissionParams = {
+		// 	Action: 'lambda:InvokeFunction',
+		// 	FunctionName: apiLongTaskFunctionArn,
+		// 	Principal: 'events.amazonaws.com',
+		// 	SourceArn: rule.RuleArn,
+		// 	StatementId: `statement-${eventName}`,
+		// }
+
+		// lambda.addPermission(permissionParams, (err) => {
+		// 	if (err) {
+		// 		reject(err)
+		// 	}
+
+		const targetParams = {
+			Rule: eventName,
+			Targets: [
+				{
+					Arn: apiLongTaskFunctionArn,
+					Id: 'cloudWatchTarget',
+					Input: JSON.stringify(eventInput),
+				},
+			],
 		}
-
-		lambda.addPermission(permissionParams, (err) => {
+		cloudWatchEvents.putTargets(targetParams, (err, data) => {
 			if (err) {
 				reject(err)
+			} else if (equals(prop('FailedEntryCount', data), 0)) {
+				resolve()
 			}
-
-			const targetParams = {
-				Rule: eventName,
-				Targets: [
-					{
-						Arn: apiLongTaskFunctionArn,
-						Id: 'cloudWatchTarget',
-						Input: JSON.stringify(eventInput),
-					},
-				],
-			}
-			cloudWatchEvents.putTargets(targetParams, (err, data) => {
-				if (err) {
-					reject(err)
-				} else if (equals(prop('FailedEntryCount', data), 0)) {
-					resolve()
-				}
-				reject(new Error({
-					message: 'Setting cron job error',
-					data: prop('FailedEntries', data),
-				}))
-			})
+			reject(new Error({
+				message: 'Setting cron job error',
+				data: prop('FailedEntries', data),
+			}))
 		})
 	})
 })
+// })
