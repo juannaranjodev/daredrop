@@ -15,7 +15,7 @@ export const staticHostingResources = {
 	...staticBucket,
 	...publicBucketPolicy,
 	...videoBucket,
-	...videoBucketPolicy
+	...videoBucketPolicy,
 }
 
 export const staticHostingOutputs = outputs

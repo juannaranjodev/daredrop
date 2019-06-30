@@ -14,7 +14,7 @@ import deliveryDare from 'root/src/server/api/actions/deliveryDare'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
 import reviewDelivery from 'root/src/server/api/actions/reviewDelivery'
 import addPayoutMethod from 'root/src/server/api/actions/addPayoutMethod'
-import { PAYOUT_ASSIGNEES } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { PAYOUT_ASSIGNEES, PAY_OUTSTANDING_PAYOUTS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import calculatePayouts from 'root/src/server/api/actionUtil/calculatePayouts'
 /* eslint-disable max-len */
 import { prop, add, reduce } from 'ramda'
@@ -23,8 +23,8 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 
 describe('payoutAssignees', async () => {
 	let project
+	let project2
 	test('can\'t make payouts when assignee has no payout method set', async () => {
-		// TODO test suites for admin verification
 		project = await createProject({
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),
@@ -111,48 +111,122 @@ describe('payoutAssignees', async () => {
 		}
 
 		const res = await apiFn(event)
-		expect(res.statusCode).toEqual(404)
+		expect(res.body.paypalPayout.httpStatusCode).toEqual(404)
 	})
-	test('can\'t make payout without apiKey specified (protection for cron invoked actions)', async () => {
+
+	test('payouts are calculated properly', async () => {
+		project2 = await createProject({
+			userId: 'user-differentuserid',
+			payload: createProjectPayload(),
+		})
+
+		await auditProject({
+			userId: mockUserId,
+			payload: {
+				projectId: project2.id,
+				audit: projectApprovedKey,
+			},
+		})
+
+		await acceptProject({
+			userId: mockUserId,
+			payload: {
+				projectId: project2.id,
+				assigneeId: `twitch|${project2.assignees[0].platformId}`,
+				amountRequested: 1000,
+			},
+		})
+
+		await acceptProject({
+			userId: `${mockUserId}1`,
+			payload: {
+				projectId: project2.id,
+				assigneeId: `twitch|${project2.assignees[1].platformId}`,
+				amountRequested: 1350,
+			},
+		})
+
+		const deliveryPayload = deliveryDareMock(project2.id)
+
+		const deliveryInit = await deliveryDareInit({
+			userId: mockUserId,
+			payload: deliveryPayload,
+		})
+
+		const { deliverySortKey } = deliveryInit
+
+		const deliveryFinishPayload = {
+			projectId: project2.id,
+			deliverySortKey,
+		}
+
+		await deliveryDare({
+			userId: mockUserId,
+			payload: deliveryFinishPayload,
+		})
+
+		await reviewDelivery({
+			payload: {
+				projectId: project2.id,
+				audit: projectDeliveredKey,
+			},
+		})
+
+		await addPayoutMethod({
+			userId: mockUserId,
+			payload: {
+				email: 'email@dot.com',
+			},
+		})
+
+		const [, , projectPledgesDdb, ,] = await dynamoQueryProject(null, project2.id, projectApprovedKey)
+
+		const dareDropFee = reduce((acc, item) => add(acc, prop('pledgeAmount', item)), 0, projectPledgesDdb) * 0.1
+
+		const payoutsCalculated = await calculatePayouts(project2.id)
+		expect(payoutsCalculated.usersWithPaypalMail[0].payout + payoutsCalculated.usersWithoutPaypalMail[0].payout).toBeCloseTo((479960 - dareDropFee), 7)
+	})
+
+	test.skip('can\'t make payout without apiKey specified (protection for cron invoked actions)', async () => {
 		const event = {
 			endpointId: PAYOUT_ASSIGNEES,
 			payload: {
-				projectId: project.id,
+				projectId: project2.id,
 			},
 		}
 
 		const res = await apiFn(event)
 		expect(res.statusCode).toEqual(401)
 	})
-	test('payouts are calculated properly', async () => {
-		await addPayoutMethod({
-			userId: mockUserId,
+
+	test('can make payout and haves still one pending payout for user without email', async () => {
+		const event = {
+			endpointId: PAYOUT_ASSIGNEES,
 			payload: {
-				email: 'email@dot.com',
+				projectId: project2.id,
 			},
-		})
+			apiKey: 'asdsadas',
+		}
 
-		await addPayoutMethod({
-			userId: `${mockUserId}1`,
-			payload: {
-				email: 'email1@dot.com',
-			},
-		})
-		const [, , projectPledgesDdb, ,] = await dynamoQueryProject(null, project.id, projectApprovedKey)
-
-		const dareDropFee = reduce((acc, item) => add(acc, prop('pledgeAmount', item)), 0, projectPledgesDdb) * 0.1
-
-		const payoutsCalculated = await calculatePayouts(project.id)
-		expect(payoutsCalculated.payouts[0].payout + payoutsCalculated.payouts[1].payout).toBeCloseTo((479960 - dareDropFee), 7)
+		const res = await apiFn(event)
+		expect(res.statusCode).toEqual(200)
+		expect(res.body.usersNotPaid.length).toEqual(1)
 	})
-	test('can make payout', async () => {
-		await addPayoutMethod({
-			userId: mockUserId,
-			payload: {
-				email: 'email@dot.com',
-			},
-		})
 
+	test('pays outstanding payouts but leaves next outstanding', async () => {
+		const event = {
+			endpointId: PAY_OUTSTANDING_PAYOUTS,
+			payload: {},
+			apiKey: 'asdsadas',
+		}
+
+		const res = await apiFn(event)
+		const statusCodeArrSorted = [res.body[0].httpStatusCode, res.body[1].httpStatusCode].sort()
+		expect(statusCodeArrSorted[0]).toEqual(200)
+		expect(statusCodeArrSorted[1]).toEqual(404)
+	})
+
+	test('pays all the outstanding payouts', async () => {
 		await addPayoutMethod({
 			userId: `${mockUserId}1`,
 			payload: {
@@ -161,14 +235,24 @@ describe('payoutAssignees', async () => {
 		})
 
 		const event = {
-			endpointId: PAYOUT_ASSIGNEES,
-			payload: {
-				projectId: project.id,
-			},
+			endpointId: PAY_OUTSTANDING_PAYOUTS,
+			payload: {},
 			apiKey: 'asdsadas',
 		}
 
 		const res = await apiFn(event)
-		expect(res.statusCode).toEqual(200)
+		expect(res.body[0].httpStatusCode).toEqual(200)
+		expect(res.body[1].httpStatusCode).toEqual(200)
+	})
+
+	test('there are no outstanding payouts', async () => {
+		const event = {
+			endpointId: PAY_OUTSTANDING_PAYOUTS,
+			payload: {},
+			apiKey: 'asdsadas',
+		}
+
+		const res = await apiFn(event)
+		expect(res.body.length).toEqual(0)
 	})
 })
