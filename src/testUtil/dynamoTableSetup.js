@@ -25,27 +25,32 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 })
 
 jest.mock('root/src/server/api/stripeClient', () => ({
-	charges: {
-		create: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
-		capture: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
-	},
-	customers: {
-		list: jest.fn(() => Promise.resolve({
-			data: [{
-				id: 'customerId',
-			}],
-		})),
-		create: jest.fn(() => Promise.resolve({
-			id: 'customerId',
-		})),
-		createSource: jest.fn(() => Promise.resolve()),
-	},
-	sources: {
-		retrieve: jest.fn(() => Promise.resolve('source')),
-	},
-	balanceTransactions: {
-		retrieve: jest.fn(() => Promise.resolve({ net: 600000 })),
-	},
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve(
+		{
+			charges: {
+				create: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
+				capture: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
+			},
+			customers: {
+				list: jest.fn(() => Promise.resolve({
+					data: [{
+						id: 'customerId',
+					}],
+				})),
+				create: jest.fn(() => Promise.resolve({
+					id: 'customerId',
+				})),
+				createSource: jest.fn(() => Promise.resolve()),
+			},
+			sources: {
+				retrieve: jest.fn(() => Promise.resolve('source')),
+			},
+			balanceTransactions: {
+				retrieve: jest.fn(() => Promise.resolve({ net: 600000 })),
+			},
+		},
+	)),
 }))
 
 jest.mock('root/src/server/api/actionUtil/validatePaypalAuthorize', () => () => true)
@@ -84,7 +89,7 @@ jest.mock('root/src/server/api/googleClient', () => {
 	const { insertVideoMock } = require('root/src/server/api/mocks/youtubeMock')
 	return {
 		__esModule: true,
-		default: 'googleAuthMock',
+		default: jest.fn(() => Promise.resolve('googleAuthMock')),
 		youtube: {
 			videos: {
 				insert: jest.fn(() => Promise.resolve(insertVideoMock)),
@@ -104,20 +109,23 @@ jest.mock('root/src/server/api/actionUtil/deleteCronJob', () => ({
 }))
 
 jest.mock('root/src/server/api/paypalClient', () => ({
-	payout: {
-		create: jest.fn((a, b, callback) => callback(null, {})),
-	},
-	authorization: {
-		capture: jest.fn((a, b, callback) => callback(null,
-			{
-				amount: {
-					total: '500000.00',
-				},
-				transaction_fee: {
-					value: '20000',
-				},
-			})),
-	},
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve({
+		payout: {
+			create: jest.fn((a, b, callback) => callback(null, {})),
+		},
+		authorization: {
+			capture: jest.fn((a, b, callback) => callback(null,
+				{
+					amount: {
+						total: '500000.00',
+					},
+					transaction_fee: {
+						value: '20000',
+					},
+				})),
+		},
+	})),
 }))
 
 
