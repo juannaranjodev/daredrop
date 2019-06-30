@@ -46,7 +46,7 @@ export const apiHof = (
 		const { endpointId, payload, authentication, triggerSource, apiKey } = event
 
 		if (isInvokedInternal(endpointId)) {
-			const { secretKey } = await keyProtectedClient
+			const { secretKey } = await keyProtectedClient()
 			const requestData = {
 				apiKey,
 				secretKey,

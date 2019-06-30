@@ -76,7 +76,7 @@ jest.mock('root/src/server/api/s3Client', () => ({
 
 jest.mock('root/src/server/api/keyProtectedClient', () => ({
 	__esModule: true,
-	default: Promise.resolve({ secretKey: 'asdsadas' }),
+	default: jest.fn(() => Promise.resolve({ secretKey: 'asdsadas' })),
 }))
 
 jest.mock('root/src/server/api/googleClient', () => {

@@ -67,7 +67,7 @@ export default async ({ payload }) => {
 
 	const youtubeUpload = await youtube.videos.insert(
 		{
-			auth: await googleOAuthClient,
+			auth: await googleOAuthClient(),
 			part: 'id,snippet,status',
 			notifySubscribers: false,
 			requestBody: {

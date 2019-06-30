@@ -147,7 +147,7 @@ export default async ({ payload }) => {
 				{
 					endpointId: PAYOUT_ASSIGNEES,
 					payload: { projectId },
-					apiKey: prop('secretKey', await keyProtectedClient),
+					apiKey: prop('secretKey', await keyProtectedClient()),
 				},
 				eventDate, 'projectId',
 			)
