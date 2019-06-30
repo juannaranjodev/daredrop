@@ -4,17 +4,11 @@ import { productionKeyProtected, developmentKeyProtected } from 'root/src/shared
 const secretsClient = new SecretsManager()
 const secretName = process.env.STAGE === 'production' ? productionKeyProtected : developmentKeyProtected
 
-export default new Promise((resolve, reject) => {
+export default async () => {
 	try {
-		secretsClient.getSecretValue({ SecretId: secretName }, (err, data) => {
-			if (err) {
-				reject(err)
-			}
-			const keyProtectedClient = JSON.parse(data.SecretString)
-
-			resolve(keyProtectedClient)
-		})
+		const data = await secretsClient.getSecretValue({ SecretId: secretName }).promise()
+		return JSON.parse(data.SecretString)
 	} catch (err) {
-		reject(err)
+		throw new Error(err)
 	}
-})
+}

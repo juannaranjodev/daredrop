@@ -14,6 +14,7 @@ export const apiRecordRequestSuccess = (
 	const recordId = idProp(record)
 	const recordStoreId = createRecordStoreKey(recordType, recordId)
 	const setRecordsChild = getLensFromType('set', 'child', recordType, apiStoreLenses)
+
 	return compose(
 		setRecordsChild(recordStoreId, record),
 		setRecordProcessingChild(recordStoreId, false),
