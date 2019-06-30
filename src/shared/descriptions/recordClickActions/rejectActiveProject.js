@@ -15,7 +15,7 @@ export default {
 		onSuccessRecordUpdates: [
 			{
 				modification: 'set',
-				path: [':recordStoreKey', 'status'],
+				path: ['project', ':recordStoreKey', 'status'],
 				value: projectRejectedKey,
 			},
 		],
