@@ -20,7 +20,7 @@ export default (state, props) => {
 	const assigneesDisplayNames = map(prop('displayName'), assignees)
 	const assigneeNames = intersection(userDataDisplayNames, assigneesDisplayNames)
 	const isAssignee = gt(length(assigneeNames), 0)
-
+	console.log('assignees', assignees, 'userData', userData, 'userDataDisplayNames', userDataDisplayNames, 'assigneesDisplayNames', assigneesDisplayNames, 'assigneeNames', assigneeNames, 'isAssignee', isAssignee)
 	const matches = head(assigneeNames)
 	const assigneObject = head(filter(assigne => equals(prop('displayName', assigne), matches), assignees))
 	const deliveryVideoStatus = prop('deliveryVideo', assigneObject)
