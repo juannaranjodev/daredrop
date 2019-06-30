@@ -16,6 +16,9 @@ import submitForm from 'root/src/client/logic/form/thunks/submitForm'
 import savePartialForm from 'root/src/client/logic/form/thunks/savePartialForm'
 import payPalCreateOrder from 'root/src/client/logic/form/thunks/payPalCreateOrder'
 import payPalOnApprove from 'root/src/client/logic/form/thunks/payPalOnApprove'
+import payPalOnError from 'root/src/client/logic/form/thunks/payPalOnError'
+import customPayPalAction from 'root/src/client/logic/form/thunks/customPayPalAction'
+
 
 export default reduxConnector(
 	[
@@ -35,5 +38,7 @@ export default reduxConnector(
 		['submitForm', submitForm],
 		['payPalCreateOrder', payPalCreateOrder],
 		['payPalOnApprove', payPalOnApprove],
+		['payPalOnError', payPalOnError],
+		['customPayPalAction', customPayPalAction],
 	],
 )
