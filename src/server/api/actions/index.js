@@ -9,7 +9,7 @@ import {
 	DELIVERY_DARE_INIT, DELIVERY_DARE,
 	ADD_PAYOUT_METHOD, GET_PAYOUT_METHOD, UPDATE_PAYOUT_METHOD,
 	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN,
-	CAPTURE_PROJECT_PAYMENTS, PAYOUT_ASSIGNEES,
+	CAPTURE_PROJECT_PAYMENTS, PAYOUT_ASSIGNEES, PAY_OUTSTANDING_PAYOUTS,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -45,6 +45,7 @@ import getPayoutMethod from 'root/src/server/api/actions/getPayoutMethod'
 import updatePayoutMethod from 'root/src/server/api/actions/updatePayoutMethod'
 import captureProjectPayments from 'root/src/server/api/actions/captureProjectPayments'
 import payoutAssignees from 'root/src/server/api/actions/payoutAssignees'
+import payOutstandingPayouts from 'root/src/server/api/actions/payOutstandingPayouts'
 
 export default {
 	shortRunningTask: {
@@ -93,5 +94,6 @@ export default {
 		[CAPTURE_PROJECT_PAYMENTS]: captureProjectPayments,
 		[REVIEW_DELIVERY]: reviewDelivery,
 		[PAYOUT_ASSIGNEES]: payoutAssignees,
+		[PAY_OUTSTANDING_PAYOUTS]: payOutstandingPayouts,
 	},
 }

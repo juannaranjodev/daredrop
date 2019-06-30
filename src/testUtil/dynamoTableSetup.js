@@ -108,11 +108,19 @@ jest.mock('root/src/server/api/actionUtil/deleteCronJob', () => ({
 	default: jest.fn(() => Promise.resolve()),
 }))
 
-jest.mock('root/src/server/api/paypalClient', () => ({
+
+jest.mock('root/src/server/api/paypalClient', () => {
+	const uuid = require('uuid/v4')
+	return {
 	__esModule: true,
 	default: jest.fn(() => Promise.resolve({
 		payout: {
-			create: jest.fn((a, b, callback) => callback(null, {})),
+			create: jest.fn((a, b, callback) => callback(null, {
+				batch_header: {
+					payout_batch_id: uuid(),
+				},
+				httpStatusCode: 200,
+			})),
 		},
 		authorization: {
 			capture: jest.fn((a, b, callback) => callback(null,
@@ -125,8 +133,8 @@ jest.mock('root/src/server/api/paypalClient', () => ({
 					},
 				})),
 		},
-	})),
-}))
+	}))
+}})
 
 
 jest.mock('root/src/server/api/actionUtil/getUserEmail', () => ({
