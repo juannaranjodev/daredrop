@@ -19,7 +19,6 @@ export default {
 
 		return compose(
 			overPaymentMethodToDefault,
-			identity,
 			setPaymentMethod(mapDefaultToFalse),
 		)(state)
 	},
