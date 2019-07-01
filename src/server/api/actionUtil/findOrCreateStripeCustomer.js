@@ -3,7 +3,7 @@ import stripeClient from 'root/src/server/api/stripeClient'
 
 export default async (email, sourceId) => {
 	try {
-		const stripe = await stripeClient
+		const stripe = await stripeClient()
 		const customerList = await stripe.customers.list({ email })
 		let customer
 		if (isEmpty(prop('data', customerList))) {

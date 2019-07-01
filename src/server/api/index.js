@@ -44,15 +44,17 @@ export const apiHof = (
 ) => async (event) => {
 	const { endpointId, payload, authentication, triggerSource, apiKey } = event
 	try {
-		if (isInvokedInternal(endpointId)) {
-			const { secretKey } = await keyProtectedClient
-			const requestData = {
-				apiKey,
-				secretKey,
-				endpointId,
-			}
-			validateSecretKey(requestData)
-		}
+		// secret key check is disabled for now
+		//
+		// if (isInvokedInternal(endpointId)) {
+		// 	const { secretKey } = await keyProtectedClient
+		// 	const requestData = {
+		// 		apiKey,
+		// 		secretKey,
+		// 		endpointId,
+		// 	}
+		// 	validateSecretKey(requestData)
+		// }
 
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (triggerSource) {

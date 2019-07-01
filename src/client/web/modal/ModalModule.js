@@ -26,7 +26,7 @@ export const ModalModuleUnconnected = memo(({
 	>
 		<div
 			onClick={e => e.stopPropagation()}
-	className={classes.modal}
+			className={classes.modal}
 		>
 			<div className={classes.closeContainer}>
 				<button
@@ -37,15 +37,15 @@ export const ModalModuleUnconnected = memo(({
 				</button>
 			</div>
 			<div className={classes.contentContainer}>
-	<div className={classes.container}>
-					<div className={classes.content}>
+				<div className={classes.container}>
+		<div className={classes.content}>
 						<div className={classes.title}>{modalTitle}</div>
 						<div className={classes.text}>
 							{modalText}
-							{renderModal(modalType, props)}
+							{renderModal(modalType, { displayModal, moduleId, ...props })}
 						</div>
 					</div>
-				</div>
+ </div>
 			</div>
 		</div>
 	</div>

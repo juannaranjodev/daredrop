@@ -23,60 +23,60 @@ import { DeletePaymentModal } from './DeletePaymentModal'
 export const CardList = ({
 	list, currentPage, hasMore, classes, getNextPage,
 }) => (
-	<div className="flex layout-row layout-align-center-start">
-		<MaxWidthContainer>
-			<div className={classNames(classes.listModuleContainer, 'flex', 'layout-row', 'layout-align-center')}>
-				<InfiniteScroll
-					pageStart={0}
-					loadMore={() => getNextPage(currentPage, hasMore)}
-					hasMore={hasMore}
-				>
-					{ternary(
-						compose(gt(__, 0), length, head),
-						(
-							<div
-								className={classNames(
-									classes.paddingOffset,
-									'layout-row layout-wrap',
-								)}
-							>
-								{map(recordId => (
-									<ProjectCard
-										key={recordId}
-										recordId={recordId}
-										filterList={list[1]}
-										acceptedList={list[2]}
-									/>
-								), head(list))}
+		<div className="flex layout-row layout-align-center-start">
+			<MaxWidthContainer>
+				<div className={classNames(classes.listModuleContainer, 'flex', 'layout-row', 'layout-align-center')}>
+					<InfiniteScroll
+						pageStart={0}
+						loadMore={() => getNextPage(currentPage, hasMore)}
+						hasMore={hasMore}
+					>
+						{ternary(
+							compose(gt(__, 0), length, head),
+							(
+								<div
+									className={classNames(
+										classes.paddingOffset,
+										'layout-row layout-wrap',
+									)}
+								>
+									{map(recordId => (
+										<ProjectCard
+											key={recordId}
+											recordId={recordId}
+											filterList={list[1]}
+											acceptedList={list[2]}
+										/>
+									), head(list))}
 
-							</div>
-						),
-						(
-							<div>
+								</div>
+							),
+							(
+								<div>
 									Nothing found
-							</div>
-						),
-					)}
-				</InfiniteScroll>
-				<div className={classes.goTopContainer} onClick={scrollTopHandler}>
-					<div>
-						<div className={classes.iconContainer}>
-							<SvgIcon>
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-									<path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
-									<path d="M0 0h24v24H0z" fill="none" />
-								</svg>
-							</SvgIcon>
-						</div>
+								</div>
+							),
+						)}
+					</InfiniteScroll>
+					<div className={classes.goTopContainer} onClick={scrollTopHandler}>
 						<div>
+							<div className={classes.iconContainer}>
+								<SvgIcon>
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+										<path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+										<path d="M0 0h24v24H0z" fill="none" />
+									</svg>
+								</SvgIcon>
+							</div>
+							<div>
 								Go to Top
+						</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</MaxWidthContainer>
-	</div>
-)
+			</MaxWidthContainer>
+		</div>
+	)
 
 const UniversalList = ({
 	list, classes, listTitle, listSubtitle, listControls, deletePaymentMethod, setDefaultPaymentMethod,
@@ -124,7 +124,7 @@ const UniversalList = ({
 						</div>
 					</LinkButton>
 				),
-				listControls)}
+					listControls)}
 			</div>
 		</List>
 	)

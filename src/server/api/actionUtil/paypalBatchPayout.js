@@ -6,7 +6,7 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import { projectApprovedKey } from 'root/src/server/api/lenses'
 
 export default async (payoutObj, payoutsArr) => new Promise(async (resolve, reject) => {
-	const ppClientAuthorized = await paypalClient
+	const ppClientAuthorized = await paypalClient()
 
 	const projectId = prop('pk', payoutObj)
 	const [projectDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)

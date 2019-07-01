@@ -10,7 +10,7 @@ import {
 	ADD_PAYOUT_METHOD, GET_PAYOUT_METHOD, UPDATE_PAYOUT_METHOD,
 	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN,
 	CAPTURE_PROJECT_PAYMENTS, PAYOUT_ASSIGNEES, CLEAR_PROJECT_RECORDS,
-	COPY_DB_RECORDS,
+	COPY_DB_RECORDS,	PAY_OUTSTANDING_PAYOUTS,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -46,6 +46,7 @@ import getPayoutMethod from 'root/src/server/api/actions/getPayoutMethod'
 import updatePayoutMethod from 'root/src/server/api/actions/updatePayoutMethod'
 import captureProjectPayments from 'root/src/server/api/actions/captureProjectPayments'
 import payoutAssignees from 'root/src/server/api/actions/payoutAssignees'
+import payOutstandingPayouts from 'root/src/server/api/actions/payOutstandingPayouts'
 
 import clearProjectRecordsTestDb from 'root/src/server/api/actions/clearProjectRecordsTestDb'
 import copyDBRecords from 'root/src/server/api/actions/copyDBRecords'
@@ -103,5 +104,6 @@ export default {
 		[CAPTURE_PROJECT_PAYMENTS]: captureProjectPayments,
 		[REVIEW_DELIVERY]: reviewDelivery,
 		[PAYOUT_ASSIGNEES]: payoutAssignees,
+		[PAY_OUTSTANDING_PAYOUTS]: payOutstandingPayouts,
 	},
 }

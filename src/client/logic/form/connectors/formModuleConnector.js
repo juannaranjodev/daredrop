@@ -21,6 +21,8 @@ import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import handleAction from 'root/src/client/logic/form/thunks/handleAction'
 import payPalCreateOrder from 'root/src/client/logic/form/thunks/payPalCreateOrder'
 import payPalOnApprove from 'root/src/client/logic/form/thunks/payPalOnApprove'
+import payPalOnError from 'root/src/client/logic/form/thunks/payPalOnError'
+import customPayPalAction from 'root/src/client/logic/form/thunks/customPayPalAction'
 
 export default reduxConnector(
 	[
@@ -46,5 +48,7 @@ export default reduxConnector(
 		['handleAction', handleAction],
 		['payPalCreateOrder', payPalCreateOrder],
 		['payPalOnApprove', payPalOnApprove],
+		['payPalOnError', payPalOnError],
+		['customPayPalAction', customPayPalAction],
 	],
 )

@@ -58,7 +58,7 @@ export const StepFormModuleUnconnected = memo(({
 	stepFormCurrentPage, onLastStep, onFirstStep, onStep,
 	stepFormNextPage, stepFormPrevPage, savePartialForm,
 	customSubmits, customSubmitsData, payPalCreateOrder,
-	payPalOnApprove,
+	payPalOnApprove, payPalOnError,
 }) => (
 	<div className="flex layout-row layout-align-center">
 		<div className={classes.formContainer}>
@@ -105,6 +105,7 @@ export const StepFormModuleUnconnected = memo(({
 							customSubmitsData={customSubmitsData}
 							payPalCreateOrder={payPalCreateOrder}
 							payPalOnApprove={payPalOnApprove}
+							payPalOnError={payPalOnError}
 						/>)}
 				</div>,
 			)}
