@@ -126,7 +126,6 @@ export default async ({ payload }) => {
 	} catch (err) {
 		console.log('ses error')
 	}
-
 	if (equals(audit, projectDeliveredKey)) {
 		const capturesAmount = await captureProjectPledges(projectId)
 
@@ -134,22 +133,20 @@ export default async ({ payload }) => {
 			throw generalError('captures processing error')
 		}
 		const projectToCapture = await dynamoQueryProjectToCapture(projectId)
-
 		const captureToWrite = await capturePaymentsWrite(projectToCapture, capturesAmount)
-
 		await documentClient.batchWrite({
 			RequestItems: {
 				[TABLE_NAME]: captureToWrite,
 			},
 		}).promise()
-
 		const eventDate = moment().add(5, 'days')
 		try {
 			await setupCronJob(
 				{
 					endpointId: PAYOUT_ASSIGNEES,
 					payload: { projectId },
-					apiKey: prop('secretKey', await keyProtectedClient()),
+					apiKey: 'for now it is just mock',
+					// apiKey: prop('secretKey', await keyProtectedClient()),
 				},
 				eventDate, 'projectId',
 			)
