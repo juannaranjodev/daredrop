@@ -65,7 +65,7 @@ export default async ({ payload }) => {
 		const fileStream = S3.getObject(s3data).createReadStream()
 		const youtubeUpload = await youtube.videos.insert(
 			{
-				auth: await googleOAuthClient,
+				auth: await googleOAuthClient(),
 				part: 'id,snippet,status',
 				notifySubscribers: false,
 				requestBody: {

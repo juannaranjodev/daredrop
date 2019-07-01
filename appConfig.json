@@ -1,9 +1,5 @@
 {
     "name": "dareMe",
     "awsAdminProfile": "dareMeAdmin",
-<<<<<<< HEAD
-    "region": "us-east-1"
-=======
     "awsRegion": "us-east-1"
->>>>>>> release/0.1.0
 }
