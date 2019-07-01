@@ -25,27 +25,32 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 })
 
 jest.mock('root/src/server/api/stripeClient', () => ({
-	charges: {
-		create: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
-		capture: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
-	},
-	customers: {
-		list: jest.fn(() => Promise.resolve({
-			data: [{
-				id: 'customerId',
-			}],
-		})),
-		create: jest.fn(() => Promise.resolve({
-			id: 'customerId',
-		})),
-		createSource: jest.fn(() => Promise.resolve()),
-	},
-	sources: {
-		retrieve: jest.fn(() => Promise.resolve('source')),
-	},
-	balanceTransactions: {
-		retrieve: jest.fn(() => Promise.resolve({ net: 600000 })),
-	},
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve(
+		{
+			charges: {
+				create: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
+				capture: jest.fn(() => Promise.resolve({ id: 'chargeId' })),
+			},
+			customers: {
+				list: jest.fn(() => Promise.resolve({
+					data: [{
+						id: 'customerId',
+					}],
+				})),
+				create: jest.fn(() => Promise.resolve({
+					id: 'customerId',
+				})),
+				createSource: jest.fn(() => Promise.resolve()),
+			},
+			sources: {
+				retrieve: jest.fn(() => Promise.resolve('source')),
+			},
+			balanceTransactions: {
+				retrieve: jest.fn(() => Promise.resolve({ net: 600000 })),
+			},
+		},
+	)),
 }))
 
 jest.mock('root/src/server/api/actionUtil/validatePaypalAuthorize', () => () => true)
@@ -76,7 +81,7 @@ jest.mock('root/src/server/api/s3Client', () => ({
 
 jest.mock('root/src/server/api/keyProtectedClient', () => ({
 	__esModule: true,
-	default: Promise.resolve({ secretKey: 'asdsadas' }),
+	default: jest.fn(() => Promise.resolve({ secretKey: 'asdsadas' })),
 }))
 
 jest.mock('root/src/server/api/googleClient', () => {
@@ -84,7 +89,7 @@ jest.mock('root/src/server/api/googleClient', () => {
 	const { insertVideoMock } = require('root/src/server/api/mocks/youtubeMock')
 	return {
 		__esModule: true,
-		default: 'googleAuthMock',
+		default: jest.fn(() => Promise.resolve('googleAuthMock')),
 		youtube: {
 			videos: {
 				insert: jest.fn(() => Promise.resolve(insertVideoMock)),
@@ -103,9 +108,12 @@ jest.mock('root/src/server/api/actionUtil/deleteCronJob', () => ({
 	default: jest.fn(() => Promise.resolve()),
 }))
 
+
 jest.mock('root/src/server/api/paypalClient', () => {
 	const uuid = require('uuid/v4')
 	return {
+	__esModule: true,
+	default: jest.fn(() => Promise.resolve({
 		payout: {
 			create: jest.fn((a, b, callback) => callback(null, {
 				batch_header: {
@@ -125,8 +133,8 @@ jest.mock('root/src/server/api/paypalClient', () => {
 					},
 				})),
 		},
-	}
-})
+	}))
+}})
 
 
 jest.mock('root/src/server/api/actionUtil/getUserEmail', () => ({

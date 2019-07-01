@@ -47,7 +47,6 @@ import apiRecordClickActionRequestSuccess from 'root/src/client/logic/api/reduce
 import initApiRecordClickActionRequest from 'root/src/client/logic/api/reducers/initApiRecordClickActionRequest'
 import deletePaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/deletePaymentMethodOnSuccess'
 import setDefaultPaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/setDefaultPaymentMethodOnSuccess'
-import addPaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/addPaymentMethodOnSuccess'
 import addPayoutMethodOnSuccess from 'root/src/client/logic/payoutMethod/reducers/addPayoutMethodOnSuccess'
 
 // list
@@ -110,7 +109,6 @@ const store = createStore(
 		...clearPartialFormKeys,
 		...deletePaymentMethodOnSuccess,
 		...apiExternalRequestError,
-		...addPaymentMethodOnSuccess,
 		...deletePaymentMethodOnSuccess,
 		...setDefaultPaymentMethodOnSuccess,
 		...partialFormDbSaveSuccess,

@@ -1,4 +1,7 @@
-import { curry, __, compose, isEmpty, without, toUpper, head, tail, concat, converge, split, length, reject, isNil, propIs, unapply, apply, map, composeP } from 'ramda'
+import {
+	curry, __, compose, isEmpty, without, toUpper, head, tail, concat,
+	converge, split, length, reject, isNil, propIs, unapply, apply, map, composeP,
+} from 'ramda'
 
 export const ternary = curry((bool, truth, faulty) => (bool ? truth : faulty))
 

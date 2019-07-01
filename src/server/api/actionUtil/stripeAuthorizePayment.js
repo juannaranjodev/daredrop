@@ -5,7 +5,7 @@ import findOrCreateStripeCustomer from 'root/src/server/api/actionUtil/findOrCre
 
 
 export default async (amount, sourceId, userId, projectId) => {
-	const stripe = await stripeClient
+	const stripe = await stripeClient()
 	const email = await getUserEmail(userId)
 	let result
 	try {

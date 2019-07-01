@@ -3,15 +3,11 @@ import { lambdaAccessSecretArn } from 'root/cfOutput'
 
 const secretsClient = new SecretsManager()
 
-export default new Promise((resolve, reject) => {
+export default async () => {
 	try {
-		secretsClient.getSecretValue({ SecretId: lambdaAccessSecretArn }, (err, data) => {
-			if (err) {
-				reject(err)
-			}
-			resolve(data.SecretString)
-		})
+		const data = await secretsClient.getSecretValue({ SecretId: lambdaAccessSecretArn }).promise()
+		return JSON.parse(data.SecretString)
 	} catch (err) {
-		reject(err)
+		throw new Error(err)
 	}
-})
+}
