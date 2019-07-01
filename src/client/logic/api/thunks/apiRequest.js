@@ -38,7 +38,6 @@ import { TWITCH_OAUTH_FAILURE_ROUTE_ID } from 'root/src/shared/descriptions/rout
 export const fetchList = async (dispatch, state, endpointId, payload, getState) => {
 	const recordType = recordTypeSelector(endpointId)
 	const listStoreKey = createListStoreKey(endpointId, payload)
-	await checkTokenExpire(state, dispatch)
 	dispatch(initApiListRequest(listStoreKey))
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	const { statusCode, body, statusError, generalError } = lambdaRes
@@ -63,7 +62,6 @@ export const fetchList = async (dispatch, state, endpointId, payload, getState) 
 export const fetchRecord = async (dispatch, state, endpointId, payload, getState) => {
 	const recordType = recordTypeSelector(endpointId)
 	const recordId = idProp(payload)
-	await checkTokenExpire(state, dispatch)
 	if (recordId) { // else creating, don't need record loading state
 		const recordStoreKey = createRecordStoreKey(recordType, recordId)
 		dispatch(initApiRecordRequest(recordStoreKey))
@@ -82,7 +80,6 @@ export const fetchRecord = async (dispatch, state, endpointId, payload, getState
 
 export const fetchExternal = async (dispatch, state, endpointId, payload, getState) => {
 	try {
-		await checkTokenExpire(state, dispatch)
 		const externalRes = await invokeApiExternal(endpointId, payload)
 		externalRes.tokenId = determineToken(endpointId)
 		const lambdaEndpoint = endpointMappings(endpointId, payload)
@@ -110,7 +107,6 @@ export const fetchExternal = async (dispatch, state, endpointId, payload, getSta
 		}
 		return externalRes
 	} catch (error) {
-		console.log(error)
 		dispatch(pushRoute(TWITCH_OAUTH_FAILURE_ROUTE_ID))
 		dispatch(apiExternalRequestError(error))
 		return error
@@ -119,7 +115,6 @@ export const fetchExternal = async (dispatch, state, endpointId, payload, getSta
 
 export const fetchUserData = async (dispatch, state, endpointId, payload, getState) => {
 	const recordType = recordTypeSelector(endpointId)
-	await checkTokenExpire(state, dispatch)
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	if (lambdaRes.body.length > 0) {
 		forEach((res) => {
@@ -144,6 +139,7 @@ export default (endpointId, payload) => async (dispatch, getState) => {
 		try {
 			const state = getState()
 			const endpointType = endpointTypeSelector(endpointId)
+			await checkTokenExpire(state, dispatch)
 			return endpointTypeFunctionMap[endpointType](
 				dispatch, state, endpointId, payload, getState,
 			)
