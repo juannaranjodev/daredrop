@@ -1,4 +1,4 @@
-import { map, head, last, length, gt, compose, __ } from 'ramda'
+import { map, head, last, length, gt, compose, __, not } from 'ramda'
 import React, { memo, useState } from 'react'
 import classNames from 'classnames'
 import InfiniteScroll from 'react-infinite-scroller'
@@ -97,6 +97,9 @@ const UniversalList = ({
 			/>
 			<Title notUpperCase>{listTitle}</Title>
 			<SubTitle additionalClass={classes.subtitle}>{listSubtitle}</SubTitle>
+			{
+				compose(not, gt(__, 0), length, last)(list) && <div className={classes.noPaymentMessage}>No payment method saved</div>
+			}
 			{map(recordId => (
 				<PaymentMethod
 					key={recordId}

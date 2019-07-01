@@ -291,6 +291,10 @@ export const projectCardStyle = {
 
 
 export const listStyle = {
+	noPaymentMessage: {
+		fontWeight: 'bold',
+		marginBottom: 20,
+	},
 	listModuleContainer: {
 		display: 'flex',
 		flexDirection: 'column',
