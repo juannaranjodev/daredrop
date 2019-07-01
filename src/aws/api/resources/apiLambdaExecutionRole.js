@@ -4,6 +4,7 @@ import ref from 'root/src/aws/util/ref'
 
 import {
 	API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE,
+	PERFORMANCE_TEST_DYNAMODB_DATA_TABLE,
 } from 'root/src/aws/api/resourceIds'
 
 import { CLOUDWATCH_EVENTS_ROLE } from 'root/src/aws/cloudWatchEvents/resourceIds'
@@ -13,6 +14,7 @@ export default {
 		Type: 'AWS::IAM::Role',
 		DependsOn: [
 			API_DYNAMO_DB_TABLE, CLOUDWATCH_EVENTS_ROLE,
+			...(process.env.STAGE !== 'production' ? [PERFORMANCE_TEST_DYNAMODB_DATA_TABLE] : []),
 		],
 		Properties: {
 			AssumeRolePolicyDocument: {
@@ -98,13 +100,22 @@ export default {
 									'dynamodb:BatchGetItem',
 								],
 								// For ARN/index/x_index
-								Resource: join(
-									'',
-									[
-										getAtt(API_DYNAMO_DB_TABLE, 'Arn'),
-										'*',
-									],
-								),
+								Resource: [
+									join(
+										'',
+										[
+											getAtt(API_DYNAMO_DB_TABLE, 'Arn'),
+											'*',
+										],
+									),
+									...(process.env.STAGE !== 'production' ? [join(
+										'',
+										[
+											getAtt(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, 'Arn'),
+											'*',
+										],
+									)] : []),
+								],
 							},
 							{
 								Sid: 'CloudWatchEventsFullAccess',
