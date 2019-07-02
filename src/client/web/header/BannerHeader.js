@@ -163,8 +163,8 @@ const DropdownIndicator = props => (
 
 const singleStyle = {
 	chip: {
-		width: 100,
-		height: 22,
+		width: 130,
+		height: 24,
 		overflow: 'hidden',
 		marginBottom: 2,
 		display: 'flex',
@@ -290,10 +290,10 @@ export const BannerHeaderUnconnected = memo(({
 												boxShadow: '0 9px 13px 0 rgba(0, 0, 0, 0.26)',
 											}),
 											option: () => ({
-												width: 123,
+												width: 142,
 												height: 26,
 												fontSize: 16,
-												paddingLeft: 19,
+												paddingLeft: 5,
 												paddingTop: 6,
 												fontWeight: 'normal',
 												fontStyle: 'normal',
@@ -307,7 +307,6 @@ export const BannerHeaderUnconnected = memo(({
 											}),
 											singleValue: () => ({
 												paddingBottom: 3,
-												paddingLeft: 10,
 												fontWeight: 'normal',
 												fontStyle: 'normal',
 												color: '#000000',
@@ -347,7 +346,7 @@ export const BannerHeaderUnconnected = memo(({
 													width: 142,
 													height: 40,
 													fontSize: 16,
-													paddingLeft: 10,
+													paddingLeft: 5,
 													paddingTop: 6,
 													overflow: 'hidden',
 													fontWeight: 'normal',
@@ -361,7 +360,6 @@ export const BannerHeaderUnconnected = memo(({
 													},
 												}),
 												placeholder: (provided, state) => ({
-													marginLeft: 5,
 													display: state.isFocused ? 'none' : 'flex',
 													color: '#cccccc',
 													height: 24,
@@ -411,7 +409,7 @@ export const BannerHeaderUnconnected = memo(({
 													height: 40,
 													fontSize: 16,
 													overflow: 'hidden',
-													paddingLeft: 10,
+													paddingLeft: 5,
 													paddingTop: 6,
 													fontWeight: 'normal',
 													fontStyle: 'normal',
@@ -424,7 +422,6 @@ export const BannerHeaderUnconnected = memo(({
 													},
 												}),
 												placeholder: (provided, state) => ({
-													marginLeft: 5,
 													display: state.isFocused ? 'none' : 'flex',
 													color: '#cccccc',
 													height: 24,
