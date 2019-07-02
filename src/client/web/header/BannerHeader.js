@@ -163,8 +163,8 @@ const DropdownIndicator = props => (
 
 const singleStyle = {
 	chip: {
-		width: 130,
-		height: 24,
+		width: 115,
+		height: 25,
 		overflow: 'hidden',
 		marginBottom: 2,
 		display: 'flex',
@@ -366,7 +366,7 @@ export const BannerHeaderUnconnected = memo(({
 													alignItems: 'center',
 												}),
 												singleValue: () => ({
-													width: 100,
+													width: 130,
 												}),
 											}}
 											className={classes.autoSelect}
