@@ -9,7 +9,8 @@ import {
 	DELIVERY_DARE_INIT, DELIVERY_DARE,
 	ADD_PAYOUT_METHOD, GET_PAYOUT_METHOD, UPDATE_PAYOUT_METHOD,
 	GET_PENDING_DELIVERIES, REVIEW_DELIVERY, GET_PROJECT_ADMIN,
-	CAPTURE_PROJECT_PAYMENTS, PAYOUT_ASSIGNEES, PAY_OUTSTANDING_PAYOUTS,
+	CAPTURE_PROJECT_PAYMENTS, PAYOUT_ASSIGNEES, CLEAR_PROJECT_RECORDS,
+	COPY_DB_RECORDS,	PAY_OUTSTANDING_PAYOUTS,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 import getProject from 'root/src/server/api/actions/getProject'
@@ -46,6 +47,9 @@ import updatePayoutMethod from 'root/src/server/api/actions/updatePayoutMethod'
 import captureProjectPayments from 'root/src/server/api/actions/captureProjectPayments'
 import payoutAssignees from 'root/src/server/api/actions/payoutAssignees'
 import payOutstandingPayouts from 'root/src/server/api/actions/payOutstandingPayouts'
+
+import clearProjectRecordsTestDb from 'root/src/server/api/actions/clearProjectRecordsTestDb'
+import copyDBRecords from 'root/src/server/api/actions/copyDBRecords'
 
 export default {
 	shortRunningTask: {
@@ -88,6 +92,12 @@ export default {
 		[ADD_PAYOUT_METHOD]: addPayoutMethod,
 		[GET_PAYOUT_METHOD]: getPayoutMethod,
 		[UPDATE_PAYOUT_METHOD]: updatePayoutMethod,
+
+		...(process.env.STAGE !== 'production'
+			? {
+				[CLEAR_PROJECT_RECORDS]: clearProjectRecordsTestDb,
+				[COPY_DB_RECORDS]: copyDBRecords,
+			} : {}),
 	},
 	longRunningTask: {
 		[DELIVERY_DARE]: deliveryDare,

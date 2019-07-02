@@ -20,11 +20,11 @@ const styles = {
 }
 
 const DropdownEmbeded = ({
-	setInput, classes, fieldPath, endpointId, fieldIndex, fieldsValue, fieldsOptions, fieldId, moduleId,
+	setInput, classes, fieldPath, endpointId, fieldIndex, fieldValue, fieldsOptions, fieldId, moduleId,
 }) => (
 	<div className={classes.sort}>
 		<Select
-			value={fieldsValue[fieldIndex]}
+			value={fieldValue(fieldIndex, fieldId)}
 			onChange={value => setInput(moduleId, fieldPath(fieldId), value, endpointId[fieldIndex])}
 			className={classes.autoSelect}
 			options={fieldsOptions[fieldIndex]}

@@ -1,6 +1,7 @@
 import reduxConnector from 'root/src/shared/util/reduxConnector'
 
-import fieldsValueSelector from 'root/src/client/logic/embeded/selectors/fieldsValueSelector'
+import fieldValueSelector from 'root/src/client/logic/embeded/selectors/fieldValueSelector'
+import allFieldsValuesSelector from 'root/src/client/logic/embeded/selectors/allFieldsValuesSelector'
 import fieldsSelector from 'root/src/client/logic/embeded/selectors/fieldsSelector'
 import fieldsDefaultSelector from 'root/src/client/logic/embeded/selectors/fieldsDefaultSelector'
 import fieldsPathDescriptionsSelector from 'root/src/client/logic/embeded/selectors/fieldsPathDescriptionsSelector'
@@ -14,7 +15,8 @@ import fieldsPlaceholderSelector from 'root/src/client/logic/embeded/selectors/f
 export default reduxConnector(
 	[
 		['fields', fieldsSelector],
-		['fieldsValue', fieldsValueSelector],
+		['allFieldsValues', allFieldsValuesSelector],
+		['fieldValue', fieldValueSelector],
 		['fieldsDefault', fieldsDefaultSelector],
 		['fieldsLoadOptionsPromise', fieldsLoadOptionsPromiseSelector],
 		['fieldsPathDescriptions', fieldsPathDescriptionsSelector],

@@ -22,7 +22,6 @@ import {
 	REJECT_PROJECT_MODAL_MODULE_ID, DELIVERY_DARE_FORM_MODULE_ID,
 	DARE_DELIVERY_DETAIL_MODULE_ID, ACCEPT_DARE_SUCCESS_MODULE_ID,
 	REJECT_DARE_SUCCESS_MODULE_ID,
-	MY_PROJECTS_BANNER_HEADER_FORM_MODULE_ID,
 } from 'root/src/shared/descriptions/modules/moduleIds'
 
 import { authValue } from 'root/src/client/logic/route/lenses'
@@ -107,7 +106,6 @@ export default {
 		authentication: authValue,
 		modules: [
 			MY_PROJECT_BANNER_HEADER_MODULE_ID,
-			MY_PROJECTS_BANNER_HEADER_FORM_MODULE_ID,
 			MY_PROJECTS_LIST_MODULE_ID,
 		],
 	},

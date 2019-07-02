@@ -10,6 +10,9 @@ import { baseUrlV5 } from 'root/src/shared/constants/twitch'
 const promiseTypeMap = {
 	twitchChannels: async (input) => {
 		try {
+			if (!input) {
+				return []
+			}
 			const searchResults = await ajax({
 				url: `${baseUrlV5}search/channels`,
 				headers: { 'Client-ID': TWITCH_CLIENT_ID },
@@ -31,6 +34,9 @@ const promiseTypeMap = {
 	},
 	twitchGames: async (input) => {
 		try {
+			if (!input) {
+				return []
+			}
 			const searchResults = await ajax({
 				url: `${baseUrlV5}search/games`,
 				headers: { 'Client-ID': TWITCH_CLIENT_ID },

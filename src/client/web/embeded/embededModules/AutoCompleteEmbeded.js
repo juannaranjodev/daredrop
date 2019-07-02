@@ -68,13 +68,13 @@ const SingleValue = withStyles(singleStyle)(({ classes, children, label, removeP
 
 export const AutoCompleteEmbeded = memo(({
 	classes, fieldsLoadOptionsPromise, moduleKey, fieldPath, setInput, fieldsPlaceholder,
-	endpointId, fieldsValue, fieldIndex, fieldId, moduleId,
+	endpointId, fieldValue, fieldIndex, fieldId, moduleId,
 }) => (
 	<AsyncSelect
 		cacheOptions
 		loadOptions={fieldsLoadOptionsPromise[fieldIndex]}
 		defaultOptions
-		value={fieldsValue[fieldIndex]}
+		value={fieldValue(fieldIndex, fieldId)}
 		placeholder={fieldsPlaceholder[fieldIndex]}
 		backspaceRemovesValue
 		styles={{

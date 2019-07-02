@@ -42,8 +42,8 @@ export const apiHof = (
 	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask, isInvokedInternal,
 ) => async (event) => {
+	const { endpointId, payload, authentication, triggerSource, apiKey } = event
 	try {
-		const { endpointId, payload, authentication, triggerSource, apiKey } = event
 		// secret key check is disabled for now
 		//
 		// if (isInvokedInternal(endpointId)) {
@@ -69,7 +69,6 @@ export const apiHof = (
 		const action = ternary(isLongRunningTask(endpointId),
 			path(['longRunningTask', endpointId], serverEndpointsObj),
 			path(['shortRunningTask', endpointId], serverEndpointsObj))
-
 		const payloadSchema = getPayloadSchemaFn(endpointId)
 		const resultSchema = getResultSchemaFn(endpointId)
 		const userId = await authorizeRequestFn(endpointId, authentication)
@@ -83,6 +82,7 @@ export const apiHof = (
 		await validatePayload(payload)
 		const res = await action({ userId, payload })
 		await validateResult(res)
+
 		return { statusCode: 200, body: res }
 	} catch (error) {
 		const errorMessage = error.message

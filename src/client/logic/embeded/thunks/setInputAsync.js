@@ -2,7 +2,7 @@
 /* eslint-disable no-shadow */
 import { prop, reduce, propOr, filter, not, propEq, toString } from 'ramda'
 import changeEmbededFieldData from 'root/src/client/logic/embeded/actions/changeEmbededFieldData'
-import fieldsValueSelector from 'root/src/client/logic/embeded/selectors/fieldsValueSelector'
+import allFieldsValuesSelector from 'root/src/client/logic/embeded/selectors/allFieldsValuesSelector'
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
 import clearProjectArray from 'root/src/client/logic/header/actions/clearProjectArray'
 import addSortFilterParams from 'root/src/client/logic/header/actions/addSortFilterParams'
@@ -10,7 +10,7 @@ import addSortFilterParams from 'root/src/client/logic/header/actions/addSortFil
 export const setInputHof = changeEmbededFieldDataFn => (moduleId, fieldPath, value, endpointId) => async (dispatch, getState) => {
 	dispatch(changeEmbededFieldDataFn(fieldPath, value))
 	const state = getState()
-	const fieldsValue = fieldsValueSelector(state, { moduleId })
+	const fieldsValue = allFieldsValuesSelector(state, { moduleId })
 	const requestPayload = reduce((acc, key) => {
 		const item = prop(key, fieldsValue)
 		const prevFilter = propOr([], 'filter', acc)

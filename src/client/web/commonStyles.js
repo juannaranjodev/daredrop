@@ -29,7 +29,7 @@ export const navLinkStyle = {
 		backgroundColor: '#222',
 	},
 	padding: [[0, 24]],
-	'@media (max-width: 375px)': {
+	'@media (max-width: 769px)': {
 		padding: [[0, 0]],
 	},
 }
