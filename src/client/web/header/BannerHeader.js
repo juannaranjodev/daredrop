@@ -251,6 +251,7 @@ export const BannerHeaderUnconnected = memo(({
 										}}
 										value={sortValue}
 										onChange={sortProject}
+										blurInputOnSelect={true}
 										className={classes.autoSelect}
 										options={[
 											{ 	label: 'Newest',
