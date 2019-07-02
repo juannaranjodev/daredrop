@@ -17,7 +17,7 @@ export const setInputHof = changeEmbededFieldDataFn => (moduleId, fieldPath, val
 		switch (key) {
 			case 'sort':
 				return { ...acc, sortType: prop('value', item) }
-			case 'game|twitch':
+			case 'game':
 			case 'assignee|twitch':
 				const filteredFilter = filter(item => not(propEq('param', key, item)), prevFilter)
 				const newFilter = [...filteredFilter, { param: key, value: toString(prop('value', item)) }]
