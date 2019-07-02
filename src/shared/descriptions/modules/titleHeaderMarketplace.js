@@ -48,7 +48,7 @@ export default {
 					endpointId: GET_ACTIVE_PROJECTS,
 				},
 				{
-					fieldId: 'game|twitch',
+					fieldId: 'game',
 					fieldCaption: 'Filter By:',
 					inputType: 'autoCompleteEmbeded',
 					optionsPromiseType: 'twitchGames',
