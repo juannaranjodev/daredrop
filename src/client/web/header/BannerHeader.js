@@ -1,31 +1,15 @@
-import React, { memo, Fragment } from 'react'
-import { and, not } from 'ramda'
 import classNames from 'classnames'
-import { withStyles } from '@material-ui/core/styles'
-import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST } from 'root/src/shared/constants/sortTypesOfProject'
-
-import { orNull } from 'root/src/shared/util/ramdaPlus'
-import Link from 'root/src/client/web/base/Link'
-import Header from 'root/src/client/web/typography/Header'
-import Title from 'root/src/client/web/typography/Title'
-import SubTitle from 'root/src/client/web/typography/SubTitle'
-
-import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
-import withModuleContext from 'root/src/client/util/withModuleContext'
-
-import SvgIcon from '@material-ui/core/SvgIcon'
-import Chip from '@material-ui/core/Chip'
-import CancelIcon from '@material-ui/icons/Cancel'
-
-import Select, { components } from 'react-select'
-import AsyncSelect from 'react-select/lib/Async'
-
+import React, { memo } from 'react'
 import bannerHeaderConnector from 'root/src/client/logic/header/connectors/bannerHeaderConnector'
-import getValueChip from 'root/src/client/logic/header/handlers/getValueChip'
-
+import withModuleContext from 'root/src/client/util/withModuleContext'
+import Link from 'root/src/client/web/base/Link'
+import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import { primaryColor, secondaryColor } from 'root/src/client/web/commonStyles'
-import Fields from 'root/src/client/web/form/Fields'
 import EmbededModule from 'root/src/client/web/embeded/EmbededModule'
+import Header from 'root/src/client/web/typography/Header'
+import SubTitle from 'root/src/client/web/typography/SubTitle'
+import Title from 'root/src/client/web/typography/Title'
+import { orNull } from 'root/src/shared/util/ramdaPlus'
 
 const styles = {
 	bottomMargin: {
@@ -87,50 +71,6 @@ const styles = {
 			color: secondaryColor,
 		},
 	},
-	filterContainer: {
-		display: 'flex',
-		justifyContent: 'flex-end',
-		width: '50%',
-		'@media (max-width: 414px)': {
-			marginTop: 40,
-		},
-		'@media (max-width: 1024px)': {
-			marginTop: 30,
-		},
-		'@media (max-width: 364px)': {
-			flexDirection: 'column',
-			marginTop: 40,
-			width: '60%',
-		},
-	},
-	label: {
-		fontSize: 14,
-		marginLeft: 25,
-		marginBottom: 8,
-	},
-	input: {
-		height: 29,
-		width: 159,
-		borderRadius: 5,
-		boxShadow: '0 0 26px 0 rgba(0, 0, 0, 0.16)',
-		'& fieldset': {
-			borderColor: 'white',
-		},
-		marginLeft: 25,
-	},
-	filterBclock: {
-		display: 'flex',
-		'@media (max-width: 560px)': {
-			flexDirection: 'column',
-		},
-	},
-	autoSelect: {
-		width: 152,
-		height: 29,
-		marginLeft: 25,
-		marginBottom: 12,
-		boxShadow: '0 0 26px 0 rgba(0, 0, 0, 0.16)',
-	},
 	createLinkContainer: {
 		width: '50%',
 		height: '20px',
@@ -140,7 +80,7 @@ const styles = {
 			width: '13%',
 		},
 	},
-	linkAndFilterContainer: {
+	embededModuleAndLinkContainer: {
 		display: 'flex',
 		justifyContent: 'space-between',
 		'@media (max-width: 631px)': {
@@ -162,49 +102,49 @@ export const BannerHeaderUnconnected = memo(({
 	gameFilterValue, streamerFilterValue,
 	isMyProjects, embededContent,
 }) => (
-		<div className={classNames(classes.bottomMargin, 'layout-column')}>
-			{orNull(bannerImage,
-				(
+	<div className={classNames(classes.bottomMargin, 'layout-column')}>
+		{orNull(bannerImage,
+			(
+				<div
+					className={classNames(classes.banner, 'layout-row')}
+				>
 					<div
-						className={classNames(classes.banner, 'layout-row')}
-					>
-						<div
-							className={classNames(classes.bannerBg, 'flex')}
-							style={{ backgroundImage: `url(${bannerImage})` }}
-						/>
-						<div className={classes.overlay} />
-						<div className={classes.textOverlay}>
-							<div className={classNames({ [classes.textBox]: textWithBg })}>
-								<Title>{bannerImageText}</Title>
-								<SubTitle>{bannerImageSubText}</SubTitle>
-							</div>
+						className={classNames(classes.bannerBg, 'flex')}
+						style={{ backgroundImage: `url(${bannerImage})` }}
+					/>
+					<div className={classes.overlay} />
+					<div className={classes.textOverlay}>
+						<div className={classNames({ [classes.textBox]: textWithBg })}>
+							<Title>{bannerImageText}</Title>
+							<SubTitle>{bannerImageSubText}</SubTitle>
 						</div>
 					</div>
-				))
-			}
-			<div className="layout-row layout-align-center">
-				<MaxWidthContainer>
-					<div className={classNames('flex layout-column', classes.embedModuleContainer)}>
-						<div className="layout-row layout-align-center">
-							<Header>{bannerSubText}</Header>
-						</div>
-						<div className={classes.linkAndFilterContainer}>
-							{orNull(
-								createNewDareActive,
-								<div className={classes.createLinkContainer}>
-									<Link routeId={linkRouteId}>
-										<span className={classes.newDare}>{linkLabel}</span>
-									</Link>
-								</div>,
-							)}
-							{orNull(embededContent,
-								<EmbededModule {...embededContent} />)}
-						</div>
+				</div>
+			))
+		}
+		<div className="layout-row layout-align-center">
+			<MaxWidthContainer>
+				<div className={classNames('flex layout-column', classes.embedModuleContainer)}>
+					<div className="layout-row layout-align-center">
+						<Header>{bannerSubText}</Header>
 					</div>
-				</MaxWidthContainer>
-			</div>
+					<div className={classes.embededModuleAndLinkContainer}>
+						{orNull(
+							createNewDareActive,
+							<div className={classes.createLinkContainer}>
+								<Link routeId={linkRouteId}>
+									<span className={classes.newDare}>{linkLabel}</span>
+								</Link>
+							</div>,
+						)}
+						{orNull(embededContent,
+							<EmbededModule {...embededContent} />)}
+					</div>
+				</div>
+			</MaxWidthContainer>
 		</div>
-	))
+	</div>
+))
 
 export default withModuleContext(
 	bannerHeaderConnector(BannerHeaderUnconnected, styles),

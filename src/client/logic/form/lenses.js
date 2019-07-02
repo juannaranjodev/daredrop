@@ -54,9 +54,6 @@ const formSchema = {
 							// this is really a function
 							type: 'string',
 						},
-						dropdownValue: {
-							type: 'string',
-						},
 					},
 				},
 			},
@@ -158,25 +155,6 @@ export const formModuleSchema = {
 									targetProgress: { type: 'integer' },
 								},
 							},
-						},
-					},
-				},
-				dropdown: {
-					type: 'object',
-					properties: {
-						dropdownOptions: {
-							type: 'array',
-							items: {
-								type: 'object',
-								properties: {
-									label: { type: 'string' },
-									id: { type: 'string' },
-									value: { type: 'string' },
-								},
-							},
-						},
-						dropdownDefault: {
-							type: 'string',
 						},
 					},
 				},
