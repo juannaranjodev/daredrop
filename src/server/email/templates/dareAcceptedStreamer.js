@@ -2,7 +2,7 @@ import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourName } from 'root/src/shared/constants/mail'
 import expiryCalculator from 'root/src/server/email/util/expiryCalculator'
 
-export default ({ dareTitle, expiryTime, dareHref, dareDescription }) => {
+export default ({ dareTitleLink, dareTitle, expiryTime, dareHref, dareDescription }) => {
 	const mailContent = `
             <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="480" class="content">
               <tbody>
@@ -20,7 +20,7 @@ export default ({ dareTitle, expiryTime, dareHref, dareDescription }) => {
 
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">Alright, it’s on for the Dare, ${dareTitle} that you accepted. We have ${expiryCalculator(expiryTime)} before the Dare, and all the pledges we can gather, expire.</p>
+                    <p style="margin:0;padding:0;">Alright, it’s on for the Dare, <a href="${dareTitleLink}">${dareTitle}</a> that you accepted. We have ${expiryCalculator(expiryTime)} before the Dare, and all the pledges we can gather, expire.</p>
                   </td>
                 </tr>
 

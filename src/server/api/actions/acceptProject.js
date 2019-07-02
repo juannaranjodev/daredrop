@@ -23,6 +23,8 @@ import { dareAcceptedCreatorTitle, dareAcceptedStreamerTitle } from 'root/src/se
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
+import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
+import { ourUrl } from 'root/src/shared/constants/mail'
 
 import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
 
@@ -143,9 +145,13 @@ export default async ({ payload, userId }) => {
 			return accum
 		}, 0, prop('assignees', projectToAcceptEmail))
 
+		const titleDareLink = `http://${ourUrl}/view-project`
+
+
 		const emailDataForCreator = {
 			title: dareAcceptedCreatorTitle,
 			dareTitle: prop('title', projectToAccept),
+			dareTitleLink: titleDareLink,
 			recipients: [emailCreator],
 			streamer: prop('displayName', head(userTokens)),
 			goal: amountRequested,
@@ -164,7 +170,8 @@ export default async ({ payload, userId }) => {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
 					recipients: [plederEmail],
-					streamers: streamerList,
+					streamers: arrayToStringParser(streamerList),
+					dareTitleLink: titleDareLink,
 					goal: sumAmountRequested,
 					expiryTime: prop('created', projectToAccept),
 				}
@@ -182,6 +189,7 @@ export default async ({ payload, userId }) => {
 				const emailDataForFavourite = {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
+					dareTitleLink: titleDareLink,
 					recipients: [favouriteEmail],
 					streamer: prop('displayName', head(userTokens)),
 					goal: amountRequested,
@@ -197,6 +205,7 @@ export default async ({ payload, userId }) => {
 		const emailDataForStreamer = {
 			title: dareAcceptedStreamerTitle,
 			dareTitle: prop('title', projectToAccept),
+			dareTitleLink: titleDareLink,
 			recipients: [emailStreamer],
 			streamer: prop('displayName', head(userTokens)),
 			goal: amountRequested,
