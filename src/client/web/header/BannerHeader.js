@@ -323,7 +323,7 @@ export const BannerHeaderUnconnected = memo(({
 											cacheOptions
 											loadOptions={loadOptionsPromise('twitchGames')}
 											defaultOptions
-											placeholder="Filter game"
+											placeholder="Game"
 											styles={{
 												control: () => ({
 													border: 'none',
@@ -386,7 +386,7 @@ export const BannerHeaderUnconnected = memo(({
 											cacheOptions
 											loadOptions={loadOptionsPromise('twitchChannels')}
 											defaultOptions
-											placeholder="Filter streamer"
+											placeholder="Streamer"
 											backspaceRemovesValue
 											styles={{
 												control: () => ({
