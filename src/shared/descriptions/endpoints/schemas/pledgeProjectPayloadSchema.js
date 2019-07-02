@@ -9,7 +9,7 @@ export default {
 			minimum: 1,
 			maximum: 999999,
 			errorMessage: {
-				minimum: 'Pledge amount must be at least $5.',
+				minimum: 'Pledge amount must be at least $1.',
 			},
 		},
 		paymentInfo: {
