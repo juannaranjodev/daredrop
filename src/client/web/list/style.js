@@ -1,5 +1,5 @@
 import {
-	primaryColor,
+	primaryColor, secondaryColor,
 } from 'root/src/client/web/commonStyles'
 
 import modalStyle from 'root/src/client/web/list/modalStyle'
@@ -294,6 +294,30 @@ export const listStyle = {
 	noPaymentMessage: {
 		fontWeight: 'bold',
 		marginBottom: 20,
+	},
+	nothingHeight: {
+		height: 525,
+		display: 'flex',
+		alignItems: 'center',
+		'@media (max-width: 1024px)': {
+			height: 301,
+		},
+		'@media (max-width: 414px)': {
+			height: 373,
+		},
+	},
+	nothingTextContainer: {
+		fontSize: 20,
+	},
+	createNewLink: {
+		fontSize: 18,
+		letterSpacing: 1,
+		fontWeight: 'bold',
+		color: primaryColor,
+		textDecoration: 'underline',
+		'&:hover': {
+			color: secondaryColor,
+		},
 	},
 	listModuleContainer: {
 		display: 'flex',
