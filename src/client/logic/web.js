@@ -24,6 +24,7 @@ import stepFormPrevPage from 'root/src/client/logic/form/reducers/stepFormPrevPa
 import partialFormDbSaveSuccess from 'root/src/client/logic/form/reducers/partialFormDbSaveSuccess'
 import clearPartialFormKeys from 'root/src/client/logic/form/reducers/clearPartialFormKeys'
 import clearAllForms from 'root/src/client/logic/form/reducers/clearAllForms'
+import setLoadingBlock from 'root/src/client/logic/form/reducers/setLoadingBlock'
 
 // api
 import apiListRequestError from 'root/src/client/logic/api/reducers/apiListRequestError'
@@ -133,6 +134,7 @@ const store = createStore(
 		...clearList,
 		...clearListProcessing,
 		...setSortValue,
+		...setLoadingBlock,
 	}, // reducer object
 	// [], // sagas
 	[

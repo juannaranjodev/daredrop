@@ -7,6 +7,7 @@ import { variableSchemaKey } from 'root/src/shared/util/commonLenses'
 const formSchema = {
 	type: 'object',
 	properties: {
+		formLoadingBlock: {	type: 'boolean' },
 		form: {
 			type: 'object',
 			patternProperties: {
