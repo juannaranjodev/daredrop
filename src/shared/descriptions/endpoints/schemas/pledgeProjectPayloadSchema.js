@@ -6,7 +6,7 @@ export default {
 		projectId: { type: 'string' },
 		pledgeAmount: {
 			type: 'integer',
-			minimum: 5,
+			minimum: 1,
 			maximum: 999999,
 			errorMessage: {
 				minimum: 'Pledge amount must be at least $5.',

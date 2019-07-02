@@ -12,7 +12,7 @@ export const SubmitsUnstyled = memo(({
 		switch (submit) {
 			case 'payPalButton':
 				return (
-					gte(pledgeAmount, 5) ? (
+					gte(pledgeAmount, 1) ? (
 						<PayPalButton
 							key={`${submitIndex}-custom`}
 							payPalOnApprove={payPalOnApprove}
