@@ -55,8 +55,7 @@ import currentPage from 'root/src/client/logic/list/reducers/currentPage'
 import hasMore from 'root/src/client/logic/list/reducers/hasMore'
 
 // headers
-import addFilterParams from 'root/src/client/logic/header/reducers/addFilterParams'
-import addSortParams from 'root/src/client/logic/header/reducers/addSortParams'
+import addSortFilterParams from 'root/src/client/logic/header/reducers/addSortFilterParams'
 import cleareProjectArray from 'root/src/client/logic/header/reducers/clearProjectArray'
 import setGameFilterValue from 'root/src/client/logic/header/reducers/setGameFilterValue'
 import setStreamerFilterValue from 'root/src/client/logic/header/reducers/setStreamerFilterValue'
@@ -75,6 +74,8 @@ import windowSizeListener from 'root/src/client/logic/app/listeners/windowSizeLi
 // modal
 import displayModal from 'root/src/client/logic/modal/reducers/displayModal'
 
+// embeded
+import changeEmbededFieldData from 'root/src/client/logic/embeded/reducers/changeEmbededFieldData'
 
 const store = createStore(
 	{
@@ -123,8 +124,7 @@ const store = createStore(
 		...displayModal,
 		...addPayoutMethodOnSuccess,
 		...uploadProgress,
-		...addFilterParams,
-		...addSortParams,
+		...addSortFilterParams,
 		...cleareProjectArray,
 		...setGameFilterValue,
 		...setStreamerFilterValue,
@@ -133,6 +133,7 @@ const store = createStore(
 		...clearList,
 		...clearListProcessing,
 		...setSortValue,
+		...changeEmbededFieldData,
 	}, // reducer object
 	// [], // sagas
 	[

@@ -17,6 +17,7 @@ import sortProject from 'root/src/client/logic/header/thunks/sortProject'
 import sortValueSelector from 'root/src/client/logic/header/selectors/sortValueSelector'
 import isMyProjectsSelector from 'root/src/client/logic/header/selectors/isMyProjectsSelector'
 import bannerImageSubTextSelector from '../selectors/bannerImageSubTextSelector'
+import embededContentSelector from '../selectors/embededContentSelector'
 
 export default reduxConnector(
 	[
@@ -33,6 +34,7 @@ export default reduxConnector(
 		['linkRouteId', linkRouteIdSelector],
 		['sortValue', sortValueSelector],
 		['isMyProjects', isMyProjectsSelector],
+		['embededContent', embededContentSelector],
 	],
 	[
 		['pushRoute', pushRoute],

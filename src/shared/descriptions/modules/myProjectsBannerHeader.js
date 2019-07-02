@@ -21,5 +21,10 @@ export default {
 			label: 'Create a new Dare +',
 		},
 		createNewDareActive: true,
+		form: {
+			dropdown: {
+
+			},
+		},
 	},
 }

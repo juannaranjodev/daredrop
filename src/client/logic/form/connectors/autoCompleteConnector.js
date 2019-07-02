@@ -7,8 +7,10 @@ import fieldLabel from 'root/src/client/logic/form/selectors/fieldLabel'
 import fieldError from 'root/src/client/logic/form/selectors/fieldError'
 import fieldHasError from 'root/src/client/logic/form/selectors/fieldHasError'
 import fieldPlaceholder from 'root/src/client/logic/form/selectors/fieldPlaceholder'
+import actionSelector from 'root/src/client/logic/form/selectors/actionSelector'
 
 import setInput from 'root/src/client/logic/form/thunks/setInput'
+import setInputAsync from 'root/src/client/logic/embeded/thunks/setInputAsync'
 
 export default reduxConnector(
 	[
@@ -19,6 +21,10 @@ export default reduxConnector(
 		['fieldHasError', fieldHasError],
 		['fieldLabel', fieldLabel],
 		['fieldPlaceholder', fieldPlaceholder],
+		['action', actionSelector],
 	],
-	[['setInput', setInput]],
+	[
+		['setInput', setInput],
+		['setInputAsync', setInputAsync],
+	],
 )
