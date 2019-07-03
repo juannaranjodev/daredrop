@@ -19,7 +19,7 @@ export default async (items) => {
 		map(async (item) => {
 			let items
 			switch (prop('param', item)) {
-				case 'assignee|twitch':
+				case 'assignee':
 					items = await documentClient.query({
 						TableName: TABLE_NAME,
 						IndexName: GSI1_INDEX_NAME,

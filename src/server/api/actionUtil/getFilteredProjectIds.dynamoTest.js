@@ -41,14 +41,14 @@ describe('getFilteredProjectIds', () => {
 
 		const filters0 = [
 			{ param: 'game', value: '138585' },
-			{ param: "assignee|twitch", value: "19571641" }
+			{ param: "assignee", value: "twitch|19571641" }
 		]
 		const res0 = await getFilteredProjectIds(filters0)
 		expect(res0.length).toBe(9)
 
 		const filters1 = [
 			{ param: 'game', value: '1385815' },
-			{ param: "assignee|twitch", value: "19571641" }
+			{ param: "assignee", value: "twitch|19571641" }
 		]
 		const res1 = await getFilteredProjectIds(filters1)
 		expect(res1.length).toBe(0)

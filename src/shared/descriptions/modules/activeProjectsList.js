@@ -2,7 +2,7 @@ import {
 	GET_ACTIVE_PROJECTS, GET_PLEDGED_PROJECTS, GET_ACCEPTED_PROJECTS,
 } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import {
-	ACTIVE_PROJECTS_LIST_MODULE_ID,
+	ACTIVE_PROJECTS_LIST_MODULE_ID, TITLE_HEADER_MARKETPLACE_MODULE_ID,
 } from 'root/src/shared/descriptions/modules/moduleIds'
 import { project } from 'root/src/shared/descriptions/endpoints/recordTypes'
 import goToViewProjectHandler from 'root/src/client/logic/project/handlers/goToViewProjectHandler'
@@ -19,5 +19,6 @@ export default {
 			GET_ACCEPTED_PROJECTS,
 		],
 		listRouteHandler: goToViewProjectHandler,
+		sortFilterModule: TITLE_HEADER_MARKETPLACE_MODULE_ID,
 	},
 }

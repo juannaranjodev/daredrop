@@ -144,8 +144,8 @@ describe('filtering tests', async () => {
 			payload: {
 				currentPage: 1,
 				filter: [{
-					param: 'assignee|twitch',
-					value: projectArr[0].assignees[0].platformId,
+					param: 'assignee',
+					value: `twitch|${projectArr[0].assignees[0].platformId}`,
 				}],
 			},
 			authentication: mockUserId,
