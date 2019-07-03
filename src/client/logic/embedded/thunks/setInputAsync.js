@@ -1,14 +1,14 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-shadow */
 import { prop, reduce, propOr, filter, not, propEq, toString } from 'ramda'
-import changeEmbededFieldData from 'root/src/client/logic/embeded/actions/changeEmbededFieldData'
-import allFieldsValuesSelector from 'root/src/client/logic/embeded/selectors/allFieldsValuesSelector'
+import changeEmbeddedFieldData from 'root/src/client/logic/embedded/actions/changeEmbeddedFieldData'
+import allFieldsValuesSelector from 'root/src/client/logic/embedded/selectors/allFieldsValuesSelector'
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
 import clearProjectArray from 'root/src/client/logic/header/actions/clearProjectArray'
 import addSortFilterParams from 'root/src/client/logic/header/actions/addSortFilterParams'
 
-export const setInputHof = changeEmbededFieldDataFn => (moduleId, fieldPath, value, endpointId) => async (dispatch, getState) => {
-	dispatch(changeEmbededFieldDataFn(fieldPath, value))
+export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, value, endpointId) => async (dispatch, getState) => {
+	dispatch(changeEmbeddedFieldDataFn(fieldPath, value))
 	const state = getState()
 	const fieldsValue = allFieldsValuesSelector(state, { moduleId })
 	const requestPayload = reduce((acc, key) => {
@@ -32,5 +32,5 @@ export const setInputHof = changeEmbededFieldDataFn => (moduleId, fieldPath, val
 }
 
 export default setInputHof(
-	changeEmbededFieldData,
+	changeEmbeddedFieldData,
 )

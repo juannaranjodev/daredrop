@@ -21,7 +21,7 @@ export const bannerHeaderModuleDescriptionSchema = {
 						label: { type: 'string' },
 					},
 				},
-				embededContent: {
+				embeddedContent: {
 					type: 'object',
 				},
 			},

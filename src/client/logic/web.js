@@ -74,8 +74,8 @@ import windowSizeListener from 'root/src/client/logic/app/listeners/windowSizeLi
 // modal
 import displayModal from 'root/src/client/logic/modal/reducers/displayModal'
 
-// embeded
-import changeEmbededFieldData from 'root/src/client/logic/embeded/reducers/changeEmbededFieldData'
+// embedded
+import changeEmbeddedFieldData from 'root/src/client/logic/embedded/reducers/changeEmbeddedFieldData'
 
 const store = createStore(
 	{
@@ -133,7 +133,7 @@ const store = createStore(
 		...clearList,
 		...clearListProcessing,
 		...setSortValue,
-		...changeEmbededFieldData,
+		...changeEmbeddedFieldData,
 	}, // reducer object
 	// [], // sagas
 	[
