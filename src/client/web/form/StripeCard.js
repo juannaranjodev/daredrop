@@ -11,7 +11,7 @@ import { ternary } from 'root/src/shared/util/ramdaPlus'
 import stripeFieldConnector from 'root/src/client/logic/form/connectors/stripeFieldConnector'
 
 export const StripeCardUnconnected = memo(({
-	moduleKey, fieldPath, setInput, cardList,
+	moduleKey, fieldPath, setInput, cardList, formLoadingBlock,
 }) => {
 	const [listView = cardList.length > 0, setListView] = useState()
 	return (
@@ -36,6 +36,7 @@ export const StripeCardUnconnected = memo(({
 								moduleKey={moduleKey}
 								fieldPath={fieldPath}
 								setInput={setInput}
+								payPalLoading={formLoadingBlock}
 							/>
 						</Elements>
 					),

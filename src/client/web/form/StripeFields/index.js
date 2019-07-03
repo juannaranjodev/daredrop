@@ -21,15 +21,20 @@ const ccFields = [
 ]
 
 const StripeFields = memo(({
-	stripe, moduleKey, fieldPath, setInput,
+	stripe, moduleKey, fieldPath, setInput, payPalLoading,
 }) => {
 	const classes = useStyles()
+	const [errorStatus, setErrorStatus] = useState(false)
 	const [focus, setFocus] = useState()
 	const [emptys, setEmptys] = useState()
 	const [errors, setErrors] = useState({})
 	useEffect(() => {
 		setInput(moduleKey, fieldPath, stripe)
 	}, [stripe])
+	if (payPalLoading && !errorStatus) {
+		setErrors({})
+		setErrorStatus(true)
+	}
 	return (
 		<div className="layout-column">
 			<div

@@ -17,7 +17,7 @@ import formModuleConnector from 'root/src/client/logic/form/connectors/formModul
 import Handlers from 'root/src/client/web/form/Handlers'
 
 import PayoutField from 'root/src/client/web/form/PayoutField'
-
+import CircularProgress from '@material-ui/core/CircularProgress'
 import backToPrevHandler from 'root/src/client/logic/form/handlers/backToPrevHandler'
 import goToViewProjectHandler from 'root/src/client/logic/project/handlers/goToViewProjectHandler'
 import submitFormHandler from 'root/src/client/logic/form/handlers/submitFormHandler'
@@ -72,6 +72,35 @@ const styles = {
 	formTitle: {
 		fontSize: 32,
 	},
+	waitSpiner: {
+		width: '100%',
+		height: '100%',
+		position: 'absolute',
+		backgroundColor: 'black',
+		zIndex: 1000,
+		opacity: 0.85,
+		display: 'flex',
+		justifyContent: 'center',
+		flexDirection: 'column',
+	},
+	loadingText: {
+		bottom: '23%',
+		position: 'relative',
+		fontFamily: 'Roboto',
+		fontSize: 14,
+		fontWeight: 'bold',
+		fontStyle: 'normal',
+		fontStretch: 'normal',
+		lineHeight: 1.36,
+		letterSpacing: 'normal',
+		textAlign: 'center',
+		color: '#ffffff',
+	},
+	loading: {
+		bottom: '22%',
+		left: '49.2%',
+		position: 'relative',
+	},
 }
 
 export const FormModuleUnconnected = memo(({
@@ -79,10 +108,23 @@ export const FormModuleUnconnected = memo(({
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
 	classes, subTitle, formType, backButton, formHandlers, handleAction, customSubmits,
 	customSubmitsData, payPalCreateOrder, payPalOnApprove, uploadProgress, payPalOnError, customPayPalAction,
+	formLoadingBlock,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
 		<div className="inline-flex layout-row layout-align-center">
+
+			{ formLoadingBlock
+			&& (
+				<div className={classes.waitSpiner}>
+					<div className={classes.loadingText}>Loading...</div>
+					<CircularProgress
+						size={24}
+						className={classes.loading}
+					/>,
+				</div>
+			)
+			}
 			<div className={classes.formContainer}>
 				{orNull(
 					formTitle,
