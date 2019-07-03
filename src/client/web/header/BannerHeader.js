@@ -5,7 +5,7 @@ import withModuleContext from 'root/src/client/util/withModuleContext'
 import Link from 'root/src/client/web/base/Link'
 import MaxWidthContainer from 'root/src/client/web/base/MaxWidthContainer'
 import { primaryColor, secondaryColor } from 'root/src/client/web/commonStyles'
-import EmbeddedModule from 'root/src/client/web/embedded/EmbeddedModule'
+import EmbededModule from 'root/src/client/web/embeded/EmbededModule'
 import Header from 'root/src/client/web/typography/Header'
 import SubTitle from 'root/src/client/web/typography/SubTitle'
 import Title from 'root/src/client/web/typography/Title'
@@ -80,7 +80,7 @@ const styles = {
 			width: '13%',
 		},
 	},
-	embeddedModuleAndLinkContainer: {
+	embededModuleAndLinkContainer: {
 		display: 'flex',
 		justifyContent: 'space-between',
 		'@media (max-width: 631px)': {
@@ -100,7 +100,7 @@ export const BannerHeaderUnconnected = memo(({
 	classes, createNewDareActive, loadOptionsPromise,
 	filterProjectByGame, filterProjectByStreamer,
 	gameFilterValue, streamerFilterValue,
-	isMyProjects, embeddedContent,
+	isMyProjects, embededContent,
 }) => (
 	<div className={classNames(classes.bottomMargin, 'layout-column')}>
 		{orNull(bannerImage,
@@ -128,7 +128,7 @@ export const BannerHeaderUnconnected = memo(({
 					<div className="layout-row layout-align-center">
 						<Header>{bannerSubText}</Header>
 					</div>
-					<div className={classes.embeddedModuleAndLinkContainer}>
+					<div className={classes.embededModuleAndLinkContainer}>
 						{orNull(
 							createNewDareActive,
 							<div className={classes.createLinkContainer}>
@@ -137,8 +137,8 @@ export const BannerHeaderUnconnected = memo(({
 								</Link>
 							</div>,
 						)}
-						{orNull(embeddedContent,
-							<EmbeddedModule {...embeddedContent} />)}
+						{orNull(embededContent,
+							<EmbededModule {...embededContent} />)}
 					</div>
 				</div>
 			</MaxWidthContainer>

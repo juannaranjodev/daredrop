@@ -1,12 +1,12 @@
-import Chip from 'root/src/src/client/web/embedded/embeddedModules/@material-ui/core/Chip'
-import { withStyles } from 'root/src/src/client/web/embedded/embeddedModules/@material-ui/core/styles'
-import SvgIcon from 'root/src/src/client/web/embedded/embeddedModules/@material-ui/core/SvgIcon'
-import CancelIcon from 'root/src/src/client/web/embedded/embeddedModules/@material-ui/icons/Cancel'
-import 'root/src/src/client/web/embedded/embeddedModules/create-react-class'
-import React, { memo } from 'root/src/src/client/web/embedded/embeddedModules/react'
-import { components } from 'root/src/src/client/web/embedded/embeddedModules/react-select'
-import AsyncSelect from 'root/src/src/client/web/embedded/embeddedModules/react-select/lib/Async'
-import Tappable from 'root/src/src/client/web/embedded/embeddedModules/react-tappable/lib/Tappable'
+import Chip from '@material-ui/core/Chip'
+import { withStyles } from '@material-ui/core/styles'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import CancelIcon from '@material-ui/icons/Cancel'
+import 'create-react-class'
+import React, { memo } from 'react'
+import { components } from 'react-select'
+import AsyncSelect from 'react-select/lib/Async'
+import Tappable from 'react-tappable/lib/Tappable'
 import autoCompleteConnector from 'root/src/client/logic/form/connectors/autoCompleteConnector'
 import getValueChip from 'root/src/client/logic/header/handlers/getValueChip'
 import withModuleContext from 'root/src/client/util/withModuleContext'
@@ -66,7 +66,7 @@ const SingleValue = withStyles(singleStyle)(({ classes, children, label, removeP
 	</components.SingleValue>
 ))
 
-export const AutoCompleteEmbedded = memo(({
+export const AutoCompleteEmbeded = memo(({
 	classes, fieldsLoadOptionsPromise, moduleKey, fieldPath, setInput, fieldsPlaceholder,
 	endpointId, fieldValue, fieldIndex, fieldId, moduleId,
 }) => (
@@ -131,4 +131,4 @@ export const AutoCompleteEmbedded = memo(({
 	/>
 ))
 
-export default withStyles(styles)(AutoCompleteEmbedded)
+export default withStyles(styles)(AutoCompleteEmbeded)

@@ -1,5 +1,5 @@
 import { pathOr, map, prop } from 'ramda'
-import fieldsPathDescriptionsSelector from 'root/src/client/logic/embedded/selectors/fieldsPathDescriptionsSelector'
+import fieldsPathDescriptionsSelector from 'root/src/client/logic/embeded/selectors/fieldsPathDescriptionsSelector'
 // import stringFormat from 'string-format'
 
 import ajax from 'root/src/shared/util/ajax'

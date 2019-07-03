@@ -1,6 +1,6 @@
 import { pathOr, map } from 'ramda'
 
 import moduleDescriptions from 'root/src/shared/descriptions/modules'
-import fieldsPathDescriptionsSelector from 'root/src/client/logic/embedded/selectors/fieldsPathDescriptionsSelector'
+import fieldsPathDescriptionsSelector from 'root/src/client/logic/embeded/selectors/fieldsPathDescriptionsSelector'
 
 export default (state, props) => map(path => pathOr('', [...path, 'placeholder'], moduleDescriptions), fieldsPathDescriptionsSelector(state, props))

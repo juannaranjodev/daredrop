@@ -2,12 +2,12 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable indent */
 /* eslint-disable import/no-named-as-default */
-import React, { memo } from 'root/src/src/client/web/embedded/embeddedModules/react'
-import { map, prop, addIndex } from 'root/src/src/client/web/embedded/embeddedModules/ramda'
-import { orNull } from 'root/src/src/client/web/embedded/embeddedModules/root/src/shared/util/ramdaPlus'
-import AutoCompleteEmbedded from '/root/src/client/web/embedded/embeddedModules/AutoCompleteEmbedded'
-import DropdownEmbedded from 'root/src/client/web/embedded/embeddedModules/DropdownEmbedded'
-import { withStyles } from 'root/src/src/client/web/embedded/embeddedModules/@material-ui/core/styles'
+import React, { memo } from 'react'
+import { map, prop, addIndex } from 'ramda'
+import { orNull } from 'root/src/shared/util/ramdaPlus'
+import AutoCompleteEmbeded from 'root/src/client/web/embeded/embededModules/AutoCompleteEmbeded'
+import DropdownEmbeded from 'root/src/client/web/embeded/embededModules/DropdownEmbeded'
+import { withStyles } from '@material-ui/core/styles'
 
 const styles = {
  fields: {
@@ -29,32 +29,32 @@ const styles = {
  },
 }
 
-const EmbeddedFieldUnstyled = memo(({ fields, classes, ...moduleProps }) => (
+const EmbededFieldUnstyled = memo(({ fields, classes, ...moduleProps }) => (
  <div className={classes.fields}>
   {orNull(fields, addIndex(map)(({ inputType, ...embedProps }, idx) => {
    switch (inputType) {
-    case 'autoCompleteEmbedded':
+    case 'autoCompleteEmbeded':
      return (
       <div
        key={prop('fieldId', embedProps)}
       >
        {orNull(prop('fieldCaption', embedProps),
         <div className={classes.label}>{prop('fieldCaption', embedProps)}</div>)}
-       <AutoCompleteEmbedded
+       <AutoCompleteEmbeded
         {...moduleProps}
         fieldId={prop('fieldId', embedProps)}
         fieldIndex={idx}
        />
       </div>
      )
-    case 'dropdownEmbedded':
+    case 'dropdownEmbeded':
      return (
       <div
        key={prop('fieldId', embedProps)}
       >
        {orNull(prop('fieldCaption', embedProps),
         <div className={classes.label}>{prop('fieldCaption', embedProps)}</div>)}
-       <DropdownEmbedded
+       <DropdownEmbeded
         {...moduleProps}
         fieldId={prop('fieldId', embedProps)}
         fieldIndex={idx}
@@ -67,4 +67,4 @@ const EmbeddedFieldUnstyled = memo(({ fields, classes, ...moduleProps }) => (
  </div>
 ))
 
-export default withStyles(styles)(EmbeddedFieldUnstyled)
+export default withStyles(styles)(EmbededFieldUnstyled)

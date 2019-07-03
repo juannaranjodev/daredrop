@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import React from 'root/src/src/client/web/embedded/embeddedModules/react'
-import Select from 'root/src/src/client/web/embedded/embeddedModules/react-select'
-import { withStyles } from 'root/src/src/client/web/embedded/embeddedModules/@material-ui/core/styles'
+import React from 'react'
+import Select from 'react-select'
+import { withStyles } from '@material-ui/core/styles'
 
 const styles = {
 	autoSelect: {
@@ -19,7 +19,7 @@ const styles = {
 	},
 }
 
-const DropdownEmbedded = ({
+const DropdownEmbeded = ({
 	setInput, classes, fieldPath, endpointId, fieldIndex, fieldValue, fieldsOptions, fieldId, moduleId,
 }) => (
 	<div className={classes.sort}>
@@ -80,4 +80,4 @@ const DropdownEmbedded = ({
 	</div>
 )
 
-export default withStyles(styles)(DropdownEmbedded)
+export default withStyles(styles)(DropdownEmbeded)
