@@ -7,6 +7,7 @@ import {
 } from 'root/src/shared/descriptions/routes/routeIds'
 import myprojects from 'root/src/client/assets/myprojects.jpg'
 import { projectDeliveredKey } from 'root/src/server/api/lenses'
+import { myTwitchId myUserId } from 'root/src/shared/constants/filterConstants'
 
 export default {
 	[MY_PROJECT_BANNER_HEADER_MODULE_ID]: {
@@ -37,7 +38,7 @@ export default {
 							id: 1,
 							payload: {
 								param: 'assignee',
-								value: 'myTwitchId',
+								value: myTwitchId,
 							},
 						},
 						{
@@ -53,7 +54,7 @@ export default {
 							id: 3,
 							payload: {
 								param: 'favorites',
-								value: 'myUserId',
+								value: myUserId,
 							},
 						},
 						{
@@ -61,7 +62,7 @@ export default {
 							id: 4,
 							payload: {
 								param: 'pledge',
-								value: 'myUserId',
+								value: myUserId,
 							},
 						},
 					],

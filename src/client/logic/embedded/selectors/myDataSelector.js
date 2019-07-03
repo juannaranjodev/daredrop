@@ -7,13 +7,12 @@ const viewCognitoUsername = appStoreLenses['viewCognito:username']
 const { viewUserData } = apiStoreLenses
 
 export default (constant, state) => {
- const userId = `user-${viewCognitoUsername(state)}`
- switch (constant) {
-  case myTwitchId:
-   return last(split('-', head(Object.keys(viewUserData(state)))))
-  case myUserId:
-   return userId
-  default:
-   return undefined
- }
+	switch (constant) {
+		case myTwitchId:
+			return last(split('-', head(Object.keys(viewUserData(state)))))
+		case myUserId:
+			return `user-${viewCognitoUsername(state)}`
+		default:
+			return undefined
+	}
 }
