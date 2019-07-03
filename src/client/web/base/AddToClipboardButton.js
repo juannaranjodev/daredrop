@@ -20,12 +20,15 @@ class AddToClipboard extends Component {
 	render() {
 		const { isCopied } = this.state
 		return (
-			<div>
+			<div style={{
+				position: 'relative',
+			}}
+			>
 				{ isCopied && (
 					<div style={{
 						position: 'absolute',
-						right: 8,
-						top: -11,
+						right: -10,
+						top: -23,
 						color: '#ffffff',
 						fontWeight: 'bold',
 						backgroundColor: primaryColor,
