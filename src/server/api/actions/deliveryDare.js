@@ -14,10 +14,15 @@ import moment from 'moment'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
+import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
+import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
+import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
+import sendEmail from 'root/src/server/email/actions/sendEmail'
+
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
 const { viewDeliverySortKey, viewProjectId, viewTestName } = payloadLenses
 
-export default async ({ payload }) => {
+export default async ({ payload, userId }) => {
 	const deliverySortKey = viewDeliverySortKey(payload)
 	const projectId = viewProjectId(payload)
 	const deliveryQueryParams = {
@@ -57,9 +62,12 @@ export default async ({ payload }) => {
 			[PARTITION_KEY]: prop('id', project),
 			[SORT_KEY]: head(projectDdb)[SORT_KEY],
 		},
-		UpdateExpression: 'SET deliveryVideo = :deliveryState',
+		UpdateExpression: 'SET #sts = :statusVal',
 		ExpressionAttributeValues: {
-			':deliveryState': projectDeliveryPendingKey,
+			':statusVal': projectDeliveryPendingKey,
+		},
+		ExpressionAttributeNames: {
+			'#sts': 'status',
 		},
 	}
 	await documentClient.update(projectUpdateParams).promise()
@@ -71,6 +79,17 @@ export default async ({ payload }) => {
 	const s3data = {
 		Bucket: videoBucket,
 		Key: process.env.STAGE === 'testing' ? viewTestName(payload) : deliveryProject.fileName,
+	}
+	try {
+		const email = await getUserEmail(userId)
+		const emailData = {
+			title: videoSubmittedTitle,
+			dareTitle: prop('title', project),
+			recipients: [email],
+		}
+		sendEmail(emailData, videoSubmittedEmail)
+	} catch (err) {
+		console.log('ses error')
 	}
 
 	try {

@@ -22,21 +22,14 @@ import getTimestamp from 'root/src/shared/util/getTimestamp'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 import { authorizationError, actionForbiddenError } from 'root/src/server/api/errors'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
-import setDeliveryStatus from 'root/src/server/api/actionUtil/setDeliveryStatus'
 
 // query utils
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
-import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
 import dynamoQueryProjectDeliveries from 'root/src/server/api/actionUtil/dynamoQueryProjectDeliveries'
 
 // serializers
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-
-import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
-import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
-import sendEmail from 'root/src/server/email/actions/sendEmail'
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE_INIT)
 
@@ -74,16 +67,14 @@ const updateProject = async (project, projectDdb) => {
 						Item: {
 							[PARTITION_KEY]: prop('id', project),
 							[SORT_KEY]: head(projectDdb)[SORT_KEY],
-							status: project.status,
-							deliveryVideo: projectDeliveryInitKey,
-							...omit(['status', 'id', 'deliveryVideo'], project),
+							...omit(['status', 'id'], project),
+							status: projectDeliveryInitKey,
 						},
 					},
 				},
 			],
 		},
 	}
-
 	await documentClient.batchWrite(updateProjectParam).promise()
 }
 
@@ -94,7 +85,7 @@ export default async ({ payload, userId }) => {
 	const projectId = viewProjectId(payload)
 	const timeStamp = viewTimeStamp(payload)
 
-	let deliverySortKey = await verification(projectId, userId)
+	let deliverySortKey = await verification(projectId)
 
 	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
 
@@ -109,8 +100,7 @@ export default async ({ payload, userId }) => {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
 
-	updateProject(userTokensInProject, projectId, project, projectDdb)
-
+	updateProject(project, projectDdb)
 	// action
 	const fileName = `${uuid()}.${extension(lookup(videoName))}`
 
@@ -142,16 +132,5 @@ export default async ({ payload, userId }) => {
 	}
 	await documentClient.put(deliveryParams).promise()
 
-	try {
-		const email = await getUserEmail(userId)
-		const emailData = {
-			title: videoSubmittedTitle,
-			dareTitle: prop('title', project),
-			recipients: [email],
-		}
-		sendEmail(emailData, videoSubmittedEmail)
-	} catch (err) {
-		console.log('ses error')
-	}
 	return { projectId, url, deliverySortKey }
 }
