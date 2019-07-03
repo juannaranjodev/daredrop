@@ -4,8 +4,8 @@ import {
 	bannerHeaderModuleDescriptionLenses,
 } from 'root/src/client/logic/header/lenses'
 
-const { viewEmbededContent } = bannerHeaderModuleDescriptionLenses
+const { viewEmbeddedContent } = bannerHeaderModuleDescriptionLenses
 
-export default (state, { moduleId }) => viewEmbededContent(
+export default (state, { moduleId }) => viewEmbeddedContent(
 	moduleId, moduleDescriptions,
 )
