@@ -28,10 +28,10 @@ export const formCommon = {
 		{
 			fieldId: 'pledgeAmount',
 			inputType: 'amountNumber',
-			label: '$5',
+			label: '$1',
 			labelFieldText: [
 				{
-					text: 'Amount to Contribute (min. $5)',
+					text: 'Amount to Contribute (min. $1)',
 				},
 			],
 		},

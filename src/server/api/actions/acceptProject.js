@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, slice } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, slice, isNil } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -23,6 +23,8 @@ import { dareAcceptedCreatorTitle, dareAcceptedStreamerTitle } from 'root/src/se
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
+import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
+import { ourUrl } from 'root/src/shared/constants/mail'
 
 import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
 
@@ -122,14 +124,36 @@ export default async ({ payload, userId }) => {
 	await documentClient.batchWrite(updateProjectParam).promise()
 
 	try {
+		const [projectToAcceptDdbEmail, assigneesDdbEmail] = await dynamoQueryProject(
+			null,
+			projectId,
+		)
+		const projectToAcceptEmail = projectSerializer([
+			...projectToAcceptDdbEmail,
+			...assigneesDdbEmail,
+		])
+
 		// Send email for Creator
 		const emailCreator = await getUserEmail((prop('creator', projectToAccept)))
+
+		const streamerList = map(streamer => prop('displayName', streamer), prop('assignees', projectToAcceptEmail))
+
+		const sumAmountRequested = reduce((accum, streamer) => {
+			if (!isNil(streamer.amountRequested)) {
+				return accum + streamer.amountRequested
+			}
+			return accum
+		}, 0, prop('assignees', projectToAcceptEmail))
+
+		const titleDareLink = `http://${ourUrl}/view-project`
+
 
 		const emailDataForCreator = {
 			title: dareAcceptedCreatorTitle,
 			dareTitle: prop('title', projectToAccept),
+			dareTitleLink: titleDareLink,
 			recipients: [emailCreator],
-			streamer: prop('displayName', head(userTokens)),
+			streamers: arrayToStringParser(streamerList),
 			goal: amountRequested,
 			expiryTime: prop('created', projectToAccept),
 		}
@@ -146,8 +170,9 @@ export default async ({ payload, userId }) => {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
 					recipients: [plederEmail],
-					streamer: prop('displayName', head(userTokens)),
-					goal: amountRequested,
+					streamers: arrayToStringParser(streamerList),
+					dareTitleLink: titleDareLink,
+					goal: sumAmountRequested,
 					expiryTime: prop('created', projectToAccept),
 				}
 				sendEmail(emailDataForPledger, dareAcceptedPledgerMail)
@@ -164,8 +189,9 @@ export default async ({ payload, userId }) => {
 				const emailDataForFavourite = {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
+					dareTitleLink: titleDareLink,
 					recipients: [favouriteEmail],
-					streamer: prop('displayName', head(userTokens)),
+					streamers: arrayToStringParser(streamerList),
 					goal: amountRequested,
 					expiryTime: prop('created', projectToAccept),
 				}
@@ -179,6 +205,7 @@ export default async ({ payload, userId }) => {
 		const emailDataForStreamer = {
 			title: dareAcceptedStreamerTitle,
 			dareTitle: prop('title', projectToAccept),
+			dareTitleLink: titleDareLink,
 			recipients: [emailStreamer],
 			streamer: prop('displayName', head(userTokens)),
 			goal: amountRequested,

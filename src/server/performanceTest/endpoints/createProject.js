@@ -17,7 +17,7 @@ export default {
 			title: '2',
 			description: '2',
 			games: [{ label: 'Poker', id: 488190, value: 488190, image: 'https://static-cdn.jtvnw.net/ttv-boxart/Poker-52x72.jpg' }],
-			pledgeAmount: 5,
+			pledgeAmount: 1,
 			paymentInfo: { paymentType: 'stripeCard', paymentId: 'src_1EnbIDGe99c40zVyhcObZ1Sa', paymentAmount: 5 },
 		},
 	},

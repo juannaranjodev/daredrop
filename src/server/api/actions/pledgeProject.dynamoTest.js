@@ -17,7 +17,7 @@ describe('pledgeProject', () => {
 			userId: internet.userName(),
 			payload: { ...projectPayload, status: projectApprovedKey },
 		})
-		const pledgeAmount = 20
+		const pledgeAmount = 2
 
 		const event = {
 			endpointId: PLEDGE_PROJECT,
@@ -27,7 +27,7 @@ describe('pledgeProject', () => {
 				paymentInfo: {
 					paymentType: 'stripeCard',
 					paymentId: 'src_FBgaRgsyjOqOiz',
-					paymentAmount: 20,
+					paymentAmount: 2,
 				},
 			},
 			authentication: mockUserId,
@@ -46,7 +46,7 @@ describe('pledgeProject', () => {
 	})
 
 	test('another pledge to the same project', async () => {
-		const pledgeAmount = 20
+		const pledgeAmount = 2
 		const event = {
 			endpointId: PLEDGE_PROJECT,
 			payload: {
@@ -55,7 +55,7 @@ describe('pledgeProject', () => {
 				paymentInfo: {
 					paymentType: 'paypalAuthorize',
 					paymentId: 'paypalAuthorization',
-					paymentAmount: 20,
+					paymentAmount: 2,
 				},
 			},
 			authentication: mockUserId,
@@ -78,13 +78,13 @@ describe('pledgeProject', () => {
 	test('project pledges are displayed properly', async () => {
 		const pledges = await dynamoQueryProjectPledges(newProject.id)
 		expect(pledges[1].paymentInfo[0]).toEqual({
-			paymentAmount: 20,
+			paymentAmount: 2,
 			paymentId: 'chargeId',
 			paymentType: 'stripeCard',
 			captured: 0,
 		})
 		expect(pledges[1].paymentInfo[1]).toEqual({
-			paymentAmount: 20,
+			paymentAmount: 2,
 			paymentId: 'paypalAuthorization',
 			paymentType: 'paypalAuthorize',
 			captured: 0,
