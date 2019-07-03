@@ -29,7 +29,7 @@ export default (state, props) => {
 	const acceptanceStatus = prop('accepted', assignee)
 	if (
 		gt(length(deliveryVideos), 0)
-		&& acceptanceStatus === streamerAcceptedKey
+		&& acceptanceStatus === streamerAcceptedKey && 0
 	) {
 		return videoPendingAproved
 	}

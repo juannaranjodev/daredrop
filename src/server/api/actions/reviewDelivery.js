@@ -103,12 +103,15 @@ export default async ({ payload }) => {
 			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],
 		},
 	}
+	console.log(await getUserEmailByTwitchID('438819448'))
 
 	try {
 		const streamerEmails = await Promise.all(
 			map(streamer => getUserEmailByTwitchID(prop('platformId', streamer)),
 				projectAcceptedAssignees),
 		)
+		console.log(streamerEmails)
+
 		const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
 		const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
 
@@ -121,6 +124,7 @@ export default async ({ payload }) => {
 				recipients: [streamerEmail],
 				expiryTime: prop('created', projectSerialized),
 			}
+			console.log(emailData)
 			sendEmail(emailData, emailTemplate)
 		}, streamerEmails)
 	} catch (err) {
@@ -160,3 +164,4 @@ export default async ({ payload }) => {
 		status: audit,
 	})
 }
+

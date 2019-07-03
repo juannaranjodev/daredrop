@@ -15,6 +15,8 @@ const PageItemLength = 8
 export default async (status, defaultSortType, payload, isAdminEndpoint, noExpirationFilter, isDenormalized, noPagination) => {
 	const realPayload = payload.payload
 	const projectsDdb = await dynamoQueryShardedProjects(status, isDenormalized)
+	console.log(projectsDdb)
+	return
 	const serializedProjects = map(compose(dissoc('myPledge'), projectSerializer(__, isAdminEndpoint, isDenormalized)), projectsDdb)
 	// Filter expired projects
 	const filterExpired = (dare) => {
