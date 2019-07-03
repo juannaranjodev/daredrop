@@ -18,7 +18,7 @@ import payPalCreateOrder from 'root/src/client/logic/form/thunks/payPalCreateOrd
 import payPalOnApprove from 'root/src/client/logic/form/thunks/payPalOnApprove'
 import payPalOnError from 'root/src/client/logic/form/thunks/payPalOnError'
 import customPayPalAction from 'root/src/client/logic/form/thunks/customPayPalAction'
-
+import formLoadingBlockSelector from 'root/src/client/logic/form/selectors/formLoadingBlockSelector'
 
 export default reduxConnector(
 	[
@@ -30,6 +30,7 @@ export default reduxConnector(
 		['stepFormCurrentPage', stepFormCurrentPage],
 		['customSubmits', customSubmitsSelector],
 		['customSubmitsData', customSubmitsDataSelector],
+		['formLoadingBlock', formLoadingBlockSelector],
 	],
 	[
 		['stepFormNextPage', stepFormNextPage],
