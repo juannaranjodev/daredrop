@@ -153,7 +153,7 @@ export default async ({ payload, userId }) => {
 			dareTitle: prop('title', projectToAccept),
 			dareTitleLink: titleDareLink,
 			recipients: [emailCreator],
-			streamer: prop('displayName', head(userTokens)),
+			streamers: arrayToStringParser(streamerList),
 			goal: amountRequested,
 			expiryTime: prop('created', projectToAccept),
 		}
@@ -191,7 +191,7 @@ export default async ({ payload, userId }) => {
 					dareTitle: prop('title', projectToAccept),
 					dareTitleLink: titleDareLink,
 					recipients: [favouriteEmail],
-					streamer: prop('displayName', head(userTokens)),
+					streamers: arrayToStringParser(streamerList),
 					goal: amountRequested,
 					expiryTime: prop('created', projectToAccept),
 				}
