@@ -7,7 +7,7 @@ import {
 } from 'root/src/shared/descriptions/routes/routeIds'
 import myprojects from 'root/src/client/assets/myprojects.jpg'
 import { projectDeliveredKey } from 'root/src/server/api/lenses'
-import { myTwitchId myUserId } from 'root/src/shared/constants/filterConstants'
+import { myTwitchId, myUserId } from 'root/src/shared/constants/filterConstants'
 
 export default {
 	[MY_PROJECT_BANNER_HEADER_MODULE_ID]: {
