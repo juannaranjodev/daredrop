@@ -16,13 +16,13 @@ export default {
 			routeId: CREATE_PROJECT_ROUTE_ID,
 			label: 'Create a New Dare +',
 		},
-		embededContent: {
-			moduleType: 'embededForm',
+		embeddedContent: {
+			moduleType: 'embeddedForm',
 			fields: [
 				{
 					fieldId: 'sort',
 					fieldCaption: 'Sort By:',
-					inputType: 'dropdownEmbeded',
+					inputType: 'dropdownEmbedded',
 					options: [
 						{
 							label: 'Newest',
@@ -50,14 +50,14 @@ export default {
 				{
 					fieldId: 'game',
 					fieldCaption: 'Filter By:',
-					inputType: 'autoCompleteEmbeded',
+					inputType: 'autoCompleteEmbedded',
 					optionsPromiseType: 'twitchGames',
 					placeholder: 'Game',
 					endpointId: GET_ACTIVE_PROJECTS,
 				},
 				{
 					fieldId: 'assignee|twitch',
-					inputType: 'autoCompleteEmbeded',
+					inputType: 'autoCompleteEmbedded',
 					optionsPromiseType: 'twitchChannels',
 					placeholder: 'Streamer',
 					endpointId: GET_ACTIVE_PROJECTS,

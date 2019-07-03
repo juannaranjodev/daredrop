@@ -19,7 +19,7 @@ const styles = {
 	},
 }
 
-const DropdownEmbeded = ({
+const DropdownEmbedded = ({
 	setInput, classes, fieldPath, endpointId, fieldIndex, fieldValue, fieldsOptions, fieldId, moduleId,
 }) => (
 	<div className={classes.sort}>
@@ -80,4 +80,4 @@ const DropdownEmbeded = ({
 	</div>
 )
 
-export default withStyles(styles)(DropdownEmbeded)
+export default withStyles(styles)(DropdownEmbedded)

@@ -5,8 +5,8 @@
 import React, { memo } from 'react'
 import { map, prop, addIndex } from 'ramda'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
-import AutoCompleteEmbeded from 'root/src/client/web/embeded/embededModules/AutoCompleteEmbeded'
-import DropdownEmbeded from 'root/src/client/web/embeded/embededModules/DropdownEmbeded'
+import AutoCompleteEmbedded from 'root/src/client/web/embedded/embeddedModules/AutoCompleteEmbedded'
+import DropdownEmbedded from 'root/src/client/web/embedded/embeddedModules/DropdownEmbedded'
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = {
@@ -29,32 +29,32 @@ const styles = {
  },
 }
 
-const EmbededFieldUnstyled = memo(({ fields, classes, ...moduleProps }) => (
+const EmbeddedFieldUnstyled = memo(({ fields, classes, ...moduleProps }) => (
  <div className={classes.fields}>
   {orNull(fields, addIndex(map)(({ inputType, ...embedProps }, idx) => {
    switch (inputType) {
-    case 'autoCompleteEmbeded':
+    case 'autoCompleteEmbedded':
      return (
       <div
        key={prop('fieldId', embedProps)}
       >
        {orNull(prop('fieldCaption', embedProps),
         <div className={classes.label}>{prop('fieldCaption', embedProps)}</div>)}
-       <AutoCompleteEmbeded
+       <AutoCompleteEmbedded
         {...moduleProps}
         fieldId={prop('fieldId', embedProps)}
         fieldIndex={idx}
        />
       </div>
      )
-    case 'dropdownEmbeded':
+    case 'dropdownEmbedded':
      return (
       <div
        key={prop('fieldId', embedProps)}
       >
        {orNull(prop('fieldCaption', embedProps),
         <div className={classes.label}>{prop('fieldCaption', embedProps)}</div>)}
-       <DropdownEmbeded
+       <DropdownEmbedded
         {...moduleProps}
         fieldId={prop('fieldId', embedProps)}
         fieldIndex={idx}
@@ -67,4 +67,4 @@ const EmbededFieldUnstyled = memo(({ fields, classes, ...moduleProps }) => (
  </div>
 ))
 
-export default withStyles(styles)(EmbededFieldUnstyled)
+export default withStyles(styles)(EmbeddedFieldUnstyled)

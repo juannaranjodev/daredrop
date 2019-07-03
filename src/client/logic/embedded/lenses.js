@@ -2,10 +2,10 @@ import lensesFromSchema from 'root/src/shared/util/lensesFromSchema'
 
 import { variableSchemaKey } from 'root/src/shared/util/commonLenses'
 
-export const embededModuleLenses = {
+export const embeddedModuleLenses = {
 	type: 'object',
 	properties: {
-		embeded: {
+		embedded: {
 			type: 'object',
 			patternProperties: {
 				[variableSchemaKey]: {
@@ -25,6 +25,6 @@ export const embededModuleLenses = {
 	},
 }
 
-export const embededStoreLenses = lensesFromSchema(
-	embededModuleLenses,
+export const embeddedStoreLenses = lensesFromSchema(
+	embeddedModuleLenses,
 )

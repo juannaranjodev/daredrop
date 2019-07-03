@@ -66,7 +66,7 @@ const SingleValue = withStyles(singleStyle)(({ classes, children, label, removeP
 	</components.SingleValue>
 ))
 
-export const AutoCompleteEmbeded = memo(({
+export const AutoCompleteEmbedded = memo(({
 	classes, fieldsLoadOptionsPromise, moduleKey, fieldPath, setInput, fieldsPlaceholder,
 	endpointId, fieldValue, fieldIndex, fieldId, moduleId,
 }) => (
@@ -131,4 +131,4 @@ export const AutoCompleteEmbeded = memo(({
 	/>
 ))
 
-export default withStyles(styles)(AutoCompleteEmbeded)
+export default withStyles(styles)(AutoCompleteEmbedded)
