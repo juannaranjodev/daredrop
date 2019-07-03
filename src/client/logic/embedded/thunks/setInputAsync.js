@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-shadow */
-import { prop, reduce, propOr, filter, not, propEq, toString } from 'ramda'
+import { prop, reduce, propOr, filter, not, propEq, toString, contains, equals } from 'ramda'
 import changeEmbeddedFieldData from 'root/src/client/logic/embedded/actions/changeEmbeddedFieldData'
 import allFieldsValuesSelector from 'root/src/client/logic/embedded/selectors/allFieldsValuesSelector'
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
@@ -8,6 +8,7 @@ import clearProjectArray from 'root/src/client/logic/header/actions/clearProject
 import addSortFilterParams from 'root/src/client/logic/header/actions/addSortFilterParams'
 import setFirstPage from 'root/src/client/logic/list/actions/setFirstPage'
 import myDataSelector from 'root/src/client/logic/embedded/selectors/myDataSelector'
+import filterConstants from 'root/src/shared/constants/filterConstants'
 
 export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, value, endpointId) => async (dispatch, getState) => {
 	dispatch(setFirstPage())
@@ -19,6 +20,21 @@ export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, va
 		const prevFilter = propOr([], 'filter', acc)
 		const filteredFilter = filter(item => not(propEq('param', key, item)), prevFilter)
 		const newFilter = nextFilter => [...filteredFilter, nextFilter]
+
+		// here two separate conditionals for key just for
+		// readability - if else fits better for multiline code
+		if (equals(key, 'filter')) {
+			const { payload } = item
+			if (!payload) {
+				return acc
+			}
+			let { param, value } = payload
+			if (contains(value, filterConstants)) {
+				value = myDataSelector(value, state)
+			}
+			return { ...acc, filter: newFilter({ param, value }) }
+		}
+
 		switch (key) {
 			case 'sort':
 				return { ...acc, sortType: prop('value', item) }
@@ -26,18 +42,11 @@ export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, va
 				return { ...acc, filter: newFilter({ param: key, value: toString(prop('value', item)) }) }
 			case 'assignee':
 				return { ...acc, filter: newFilter({ param: key, value: `twitch|${toString(prop('value', item))}` }) }
-			case 'filter':
-				const { payload } = item
-				if (!payload) {
-					return acc
-				}
-				let { param, value } = payload
-				value = myDataSelector(value, state)
-				return { ...acc, filter: newFilter({ param, value }) }
 			default:
 				return acc
 		}
 	}, { currentPage: 1 }, Object.keys(fieldsValue))
+
 	dispatch(addSortFilterParams(moduleId, requestPayload))
 	dispatch(clearProjectArray(moduleId))
 	dispatch(apiRequest(endpointId, requestPayload))

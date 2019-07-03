@@ -12,7 +12,7 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
 import dynamoGetTokenIdFromUserId from 'root/src/server/api/actionUtil/dynamoGetTokenIdFromUserId'
-import { SORT_BY_NEWEST } from 'root/src/shared/constants/sortTypesOfProject'
+import { SORT_BY_CREATED_DESC } from 'root/src/shared/constants/sortTypesOfProject'
 import paginate from 'root/src/server/api/actionUtil/paginate'
 
 import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredProjectIds'
@@ -83,7 +83,7 @@ export default async ({ userId, payload }) => {
 	}
 
 	// sorting and pagination
-	const diffBySortType = prop(SORT_BY_NEWEST, sortByType)
+	const diffBySortType = prop(SORT_BY_CREATED_DESC, sortByType)
 	const sortedProjects = sort(diffBySortType, filteredProjects)
 	const allPage = paginate(sortedProjects, PageItemLength)
 
