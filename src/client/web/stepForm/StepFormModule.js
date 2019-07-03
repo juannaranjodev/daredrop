@@ -10,6 +10,7 @@ import Button from 'root/src/client/web/base/Button'
 import stepFormModuleConnector from 'root/src/client/logic/form/connectors/stepFormModuleConnector'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import classNames from 'classnames'
 
@@ -58,10 +59,21 @@ export const StepFormModuleUnconnected = memo(({
 	stepFormCurrentPage, onLastStep, onFirstStep, onStep,
 	stepFormNextPage, stepFormPrevPage, savePartialForm,
 	customSubmits, customSubmitsData, payPalCreateOrder,
-	payPalOnApprove, payPalOnError,
+	payPalOnApprove, payPalOnError, formLoadingBlock,
 }) => (
 	<div className="flex layout-row layout-align-center">
 		<div className={classes.formContainer}>
+			{ formLoadingBlock
+			&& (
+				<div className={classes.waitSpiner}>
+					<div className={classes.loadingText}>Loading...</div>
+					<CircularProgress
+						size={24}
+						className={classes.loading}
+					/>,
+				</div>
+			)
+			}
 			<div
 				className={classNames(
 					classes.space,
