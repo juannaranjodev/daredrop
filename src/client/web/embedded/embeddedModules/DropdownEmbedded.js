@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import React from 'react'
-import Select from 'react-select'
-import { withStyles } from '@material-ui/core/styles'
+import React from 'root/src/src/client/web/embedded/embeddedModules/react'
+import Select from 'root/src/src/client/web/embedded/embeddedModules/react-select'
+import { withStyles } from 'root/src/src/client/web/embedded/embeddedModules/@material-ui/core/styles'
 
 const styles = {
 	autoSelect: {

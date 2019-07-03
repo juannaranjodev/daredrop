@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo } from 'root/src/src/client/web/embedded/react'
 
 import embeddedModuleConnector from 'root/src/client/logic/embedded/connectors/embeddedModuleConnector'
 import withModuleContext from 'root/src/client/util/withModuleContext'

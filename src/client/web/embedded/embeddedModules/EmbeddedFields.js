@@ -2,12 +2,12 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable indent */
 /* eslint-disable import/no-named-as-default */
-import React, { memo } from 'react'
-import { map, prop, addIndex } from 'ramda'
-import { orNull } from 'root/src/shared/util/ramdaPlus'
-import AutoCompleteEmbedded from 'root/src/client/web/embedded/embeddedModules/AutoCompleteEmbedded'
+import React, { memo } from 'root/src/src/client/web/embedded/embeddedModules/react'
+import { map, prop, addIndex } from 'root/src/src/client/web/embedded/embeddedModules/ramda'
+import { orNull } from 'root/src/src/client/web/embedded/embeddedModules/root/src/shared/util/ramdaPlus'
+import AutoCompleteEmbedded from '/root/src/client/web/embedded/embeddedModules/AutoCompleteEmbedded'
 import DropdownEmbedded from 'root/src/client/web/embedded/embeddedModules/DropdownEmbedded'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from 'root/src/src/client/web/embedded/embeddedModules/@material-ui/core/styles'
 
 const styles = {
  fields: {
