@@ -47,12 +47,16 @@ export default async (userId, projectId, projectStatus) => {
 		ConsistentRead: true,
 	}
 
+	const myFavoritesParamsExpression = ternary(userId,
+		`${PARTITION_KEY} = :pk and ${SORT_KEY} = :favoritesUserId`,
+		`${PARTITION_KEY} = :pk and begins_with(${SORT_KEY}, :favoritesUserId)`)
+
 	const myFavoritesParams = {
 		TableName: TABLE_NAME,
-		KeyConditionExpression: `${PARTITION_KEY} = :pk and ${SORT_KEY} = :favoritesUserId`,
+		KeyConditionExpression: myFavoritesParamsExpression,
 		ExpressionAttributeValues: {
 			':pk': projectId,
-			':favoritesUserId': `favorites|${userId}`,
+			':favoritesUserId': `favorites|${ternary(userId, userId, '')}`,
 		},
 		ConsistentRead: true,
 	}

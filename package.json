@@ -22,7 +22,9 @@
     "bundleLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda",
     "genAWSCreds": "./node_modules/.bin/babel-node --presets=env ./customScripts/generateAWSCredentials.js",
     "runLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default",
-    "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmbz dareMeZDevApiLambdaFunction.default"
+    "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmb dareMeXDevApiLambdaFunction.default",
+    "deployProduction": "STAGE=production ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli deploy -s production",
+    "updateProduction": "STAGE=production ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli update -s production"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
@@ -33,6 +35,7 @@
     "ajv": "^6.5.1",
     "ajv-errors": "^1.0.0",
     "amazon-cognito-identity-js": "^2.0.20",
+    "amazon-cognito-identity-js-node": "^0.0.3",
     "aws-config": "^1.2.0",
     "aws-sdk": "^2.476.0",
     "babel-cli": "^6.26.0",
@@ -56,6 +59,7 @@
     "compression-webpack-plugin": "^3.0.0",
     "copy-to-clipboard": "^3.1.0",
     "copy-webpack-plugin": "^5.0.3",
+    "create-react-class": "^15.6.3",
     "downshift": "^3.1.8",
     "eslint": "^5.7.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -106,6 +110,7 @@
     "react-select": "^2.2.0",
     "react-share": "^2.4.0",
     "react-stripe-elements": "^2.0.1",
+    "react-tappable": "^1.0.4",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",
     "redux-thunk": "^2.3.0",

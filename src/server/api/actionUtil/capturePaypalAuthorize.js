@@ -2,7 +2,7 @@
 import paypalClient from 'root/src/server/api/paypalClient'
 
 export default (paypalAuthorizeId, paymentAmount) => new Promise(async (resolve, reject) => {
-	const ppClientAuthorized = await paypalClient
+	const ppClientAuthorized = await paypalClient()
 	ppClientAuthorized.authorization.capture(
 		paypalAuthorizeId,
 		{

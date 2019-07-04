@@ -32,7 +32,7 @@ import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 
 import endpointMappings from 'root/src/client/logic/api/util/endpointMappings'
 import determineToken from 'root/src/client/logic/api/util/determineToken'
-
+import checkTokenExpire from 'root/src/client/logic/api/util/checkTokenExpire'
 import { TWITCH_OAUTH_FAILURE_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 
 export const fetchList = async (dispatch, state, endpointId, payload, getState) => {
@@ -107,7 +107,6 @@ export const fetchExternal = async (dispatch, state, endpointId, payload, getSta
 		}
 		return externalRes
 	} catch (error) {
-		console.log(error)
 		dispatch(pushRoute(TWITCH_OAUTH_FAILURE_ROUTE_ID))
 		dispatch(apiExternalRequestError(error))
 		return error
@@ -140,6 +139,7 @@ export default (endpointId, payload) => async (dispatch, getState) => {
 		try {
 			const state = getState()
 			const endpointType = endpointTypeSelector(endpointId)
+			await checkTokenExpire(state, dispatch)
 			return endpointTypeFunctionMap[endpointType](
 				dispatch, state, endpointId, payload, getState,
 			)

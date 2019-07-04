@@ -10,6 +10,8 @@ export default (currentPage, hasMore) => async (dispatch, getState) => {
 		dispatch(setHasMore(false))
 		const currentModuleId = getCurrentModuleId()
 		const endpointId = getEndpointIdFromModules(currentModuleId)
+		if (!endpointId)
+			return
 		let realEndpoint
 		if (typeof endpointId === 'string') {
 			realEndpoint = endpointId

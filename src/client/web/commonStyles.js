@@ -29,9 +29,13 @@ export const navLinkStyle = {
 		backgroundColor: '#222',
 	},
 	padding: [[0, 24]],
+	'@media (max-width: 769px)': {
+		padding: [[0, 0]],
+	},
 }
 
 export const primaryColorBorder = '1px solid #800080'
+export const blackColorBorder = '1px solid #000000'
 
 
 export const xsMediaQuery = '@media (max-width: 599px)'

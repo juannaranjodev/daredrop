@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/button-has-type */
 import React, { memo } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -42,7 +44,7 @@ export const ModalModuleUnconnected = memo(({
 						<div className={classes.title}>{modalTitle}</div>
 						<div className={classes.text}>
 							{modalText}
-							{renderModal(modalType, props)}
+							{renderModal(modalType, { displayModal, moduleId, ...props })}
 						</div>
 					</div>
 				</div>

@@ -10,8 +10,10 @@ import auditProject from 'root/src/server/api/actions/auditProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
+import pledgeProject from 'root/src/server/api/actions/pledgeProject'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
+import createPledgeProjectPayload from 'root/src/server/api/mocks/createPledgeProjectPayload'
 import getPendingDeliveries from 'root/src/server/api/actions/getPendingDeliveries'
 import dynamoQueryProjectPledges from 'root/src/server/api/actionUtil/dynamoQueryProjectPledges'
 import wait from 'root/src/testUtil/wait'
@@ -23,6 +25,16 @@ describe('reviewDelivery', async () => {
 		project = await createProject({
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),
+		})
+
+		await pledgeProject({
+			userId: 'user-differentuserid1',
+			payload: createPledgeProjectPayload(project.id),
+		})
+
+		await pledgeProject({
+			userId: 'user-differentuserid2',
+			payload: createPledgeProjectPayload(project.id),
 		})
 
 		await auditProject({
@@ -82,7 +94,6 @@ describe('reviewDelivery', async () => {
 
 		await wait(500)
 		const res = await apiFn(event)
-
 		expect(res.body.status).toEqual(projectDeliveredKey)
 	})
 	let project2

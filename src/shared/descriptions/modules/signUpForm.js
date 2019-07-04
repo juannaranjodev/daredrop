@@ -14,9 +14,9 @@ export default {
 			{ text: 'Sign In', routeId: LOGIN_ROUTE_ID },
 		],
 		postSubmitCaption: join('', [
-			'By signing up, you agree to our terms of use, privacy policy, and',
-			'cookie policy. Our policies explain how we use your data to',
-			'deliver, improve, and promote our service and our site, and how',
+			'By signing up, you agree to our terms of use, privacy policy, and ',
+			'cookie policy. Our policies explain how we use your data to ',
+			'deliver, improve, and promote our service and our site, and how ',
 			'you can exercise your rights to control that use.',
 		]),
 		fields: [

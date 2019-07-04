@@ -18,6 +18,7 @@ export default async (projectStatus, isDenormalized) => {
 			range(1, 11),
 		),
 	)
+
 	const combinedProjects = reduce(
 		(result, projectDdb) => [...result, ...dynamoItemsProp(projectDdb)],
 		[],

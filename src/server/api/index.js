@@ -1,14 +1,14 @@
-import { prop, pick, path } from 'ramda'
+import { prop, pick, path, not, equals } from 'ramda'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 
 import validateSchema from 'root/src/shared/util/validateSchema'
 import {
 	customError, payloadSchemaError, responseSchemaError,
-	notFoundError,
+	notFoundError, authorizationError,
 } from 'root/src/server/api/errors'
 import ajvErrors from 'root/src/shared/util/ajvErrors'
 import {
-	getPayloadSchema, getResultSchema, testEndpointExists, getIsLongRunningTask,
+	getPayloadSchema, getResultSchema, testEndpointExists, getIsLongRunningTask, getIsInvokedInternal,
 } from 'root/src/shared/descriptions/getEndpointDesc'
 import serverEndpoints from 'root/src/server/api/actions'
 import authorizeRequest from 'root/src/server/api/authorizeRequest'
@@ -35,16 +35,14 @@ export const apiHof = (
 	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
 ) => async (event) => {
+	const { endpointId, payload, authentication, triggerSource } = event
 	try {
-		// const { invokedFunctionArn } = context
-
-		const { endpointId, payload, authentication, triggerSource } = event
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (triggerSource) {
 			const triggerAction = path([triggerSource], getTriggerActionsObj)
 			const { request } = event
-			const res = await triggerAction(request)
-			return { statusCode: 200, body: res }
+			await triggerAction(request)
+			return event
 		}
 		if (!endpointExists) {
 			throw notFoundError(endpointId)
@@ -52,7 +50,6 @@ export const apiHof = (
 		const action = ternary(isLongRunningTask(endpointId),
 			path(['longRunningTask', endpointId], serverEndpointsObj),
 			path(['shortRunningTask', endpointId], serverEndpointsObj))
-
 		const payloadSchema = getPayloadSchemaFn(endpointId)
 		const resultSchema = getResultSchemaFn(endpointId)
 		const userId = await authorizeRequestFn(endpointId, authentication)
@@ -65,8 +62,8 @@ export const apiHof = (
 
 		await validatePayload(payload)
 		const res = await action({ userId, payload })
-
 		await validateResult(res)
+
 		return { statusCode: 200, body: res }
 	} catch (error) {
 		const errorMessage = error.message
@@ -79,7 +76,7 @@ export const apiHof = (
 
 export const apiFn = apiHof(
 	serverEndpoints, getPayloadSchema, getResultSchema, triggerActions,
-	authorizeRequest, testEndpointExists, getIsLongRunningTask,
+	authorizeRequest, testEndpointExists, getIsLongRunningTask, getIsInvokedInternal,
 )
 
 // can't return promise?

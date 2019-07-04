@@ -27,7 +27,7 @@ const afterCreateOrUpdate = [
 	{ title: 'Uploading statics', fn: uploadStatics },
 ]
 const bundleLambda = [
-	{ title: 'Bundling lambda functions', fn: webpackLambda }
+	{ title: 'Bundling lambda functions', fn: webpackLambda },
 ]
 
 const createUpdateCommon = [
@@ -61,5 +61,5 @@ const outputs = [
 ]
 
 export default {
-	create, update, remove, outputs, bundleLambda
+	create, update, remove, outputs, bundleLambda,
 }

@@ -46,6 +46,7 @@ module.exports = {
 		historyApiFallback: true,
 		contentBase: path.join(__dirname, 'src/client/web'),
 		compress: true,
+		host: '0.0.0.0',
 		port: 8585,
 	},
 	// resolve: {

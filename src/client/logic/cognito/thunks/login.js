@@ -1,5 +1,5 @@
-import CognitoUser from 'amazon-cognito-identity-js/es/CognitoUser'
-import AuthenticationDetails from 'amazon-cognito-identity-js/es/AuthenticationDetails'
+import CognitoUser from 'amazon-cognito-identity-js/lib/CognitoUser'
+import AuthenticationDetails from 'amazon-cognito-identity-js/lib/AuthenticationDetails'
 
 import userPool from 'root/src/client/logic/cognito/util/userPool'
 

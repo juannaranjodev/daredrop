@@ -1,4 +1,4 @@
-import CognitoUser from 'amazon-cognito-identity-js/es/CognitoUser'
+import CognitoUser from 'amazon-cognito-identity-js/lib/CognitoUser'
 
 import userPool from 'root/src/client/logic/cognito/util/userPool'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
@@ -23,5 +23,5 @@ export default ({ email, verificationCode }) => dispatch => new Promise(
 		dispatch(pushRoute(LOGIN_ROUTE_ID))
 	},
 ).catch(
-	console.warn,
+	() => { throw { verificationCode: 'Invalid verification code provided, please try again.' } },
 )

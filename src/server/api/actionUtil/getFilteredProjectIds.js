@@ -1,13 +1,13 @@
 import { intersection, prop, map, head, reduce, equals, length } from 'ramda'
+import { streamerRejectedKey, dynamoItemsProp } from 'root/src/shared/descriptions/apiLenses'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
-import { dynamoItemsProp } from 'root/src/shared/descriptions/apiLenses'
 
 export default async (items) => {
-	if (items == undefined || equals(length(items), 0)) {
+	if (items === undefined || equals(length(items), 0)) {
 		return null
 	}
 	const filteredResults = await Promise.all(
@@ -15,8 +15,10 @@ export default async (items) => {
 			TableName: TABLE_NAME,
 			IndexName: GSI1_INDEX_NAME,
 			KeyConditionExpression: `${GSI1_PARTITION_KEY} = :pk`,
+			FilterExpression: 'accepted <> :accepted',
 			ExpressionAttributeValues: {
 				':pk': `${item.param}|${item.value}`,
+				':accepted': streamerRejectedKey,
 			},
 		}).promise(), items),
 	)

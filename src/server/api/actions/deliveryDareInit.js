@@ -149,7 +149,6 @@ export default async ({ payload, userId }) => {
 		deliverySortKey = await generateUniqueSortKey(projectId, `project|${projectDeliveryPendingKey}`, 1, 10)
 	}
 
-
 	const dareDeliveryObject = {
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: deliverySortKey,
@@ -178,5 +177,5 @@ export default async ({ payload, userId }) => {
 	} catch (err) {
 		console.log('ses error')
 	}
-	return { url, deliverySortKey }
+	return { projectId, url, deliverySortKey }
 }

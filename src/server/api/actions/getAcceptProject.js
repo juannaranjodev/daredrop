@@ -1,34 +1,6 @@
-import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
-import { map, reduce, range } from 'ramda'
-import {
-	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
-} from 'root/src/shared/constants/apiDynamoIndexes'
-import { dynamoItemsProp, projectAcceptedKey } from 'root/src/shared/descriptions/apiLenses'
+import { map, prop, assoc, pick } from 'ramda'
+import { projectAcceptedKey } from 'root/src/shared/descriptions/apiLenses'
+import getProjectsByStatus from 'root/src/server/api/actionUtil/getProjectsByStatus'
+import { SORT_BY_NEWEST } from 'root/src/shared/constants/sortTypesOfProject'
 
-export default async () => {
-	const dynamoResults = await Promise.all(
-		map(index => documentClient.query({
-			TableName: TABLE_NAME,
-			IndexName: GSI1_INDEX_NAME,
-			KeyConditionExpression: `${GSI1_PARTITION_KEY} = :pk`,
-			ExpressionAttributeValues: {
-				':pk': `project|${projectAcceptedKey}|${index}`,
-			},
-		}).promise(), range(1, 11)),
-	)
-
-
-	const items = reduce(
-		(result, projectDdb) => {
-			const [project] = dynamoItemsProp(projectDdb)
-			if (project) {
-				return [...result, { id: project.pk, accepted: project.created }]
-			}
-			return result
-		},
-		[],
-		dynamoResults,
-	)
-
-	return { items }
-}
+export default async payload => assoc('items', map(pick(['id']), prop('items', await getProjectsByStatus(projectAcceptedKey, SORT_BY_NEWEST, payload, false, false, false, true))), {})

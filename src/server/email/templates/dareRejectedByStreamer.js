@@ -1,6 +1,5 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourName } from 'root/src/shared/constants/mail'
-import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
 
 export default ({ streamer, dareTitle, textFromStreamersReject }) => {
 	const mailContent = `
@@ -22,7 +21,7 @@ export default ({ streamer, dareTitle, textFromStreamersReject }) => {
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
                     <p style="margin:0;padding:0;">${streamer} won’t do ${dareTitle} because:</p>
-                    <p style="margin:0;padding:0;">${textFromStreamersReject}</p>
+                    <p style="margin:0;padding:0;"><br><pre style="font-weight:bold;font-size:26px;line-height:1.23;" >${textFromStreamersReject}</pre></p>
                   </td>
                 </tr>
 

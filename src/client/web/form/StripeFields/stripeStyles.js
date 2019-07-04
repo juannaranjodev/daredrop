@@ -58,15 +58,33 @@ export const useStyles = makeStyles({
 	},
 	elementWrapper: {
 		position: 'relative',
-		padding: 15,
-		paddingTop: 18,
-		paddingBottom: 18,
+		height: 56,
 		border: '1px solid rgba(0, 0, 0, 0.23)',
 		borderRadius: 0,
 		'&:hover': {
 			borderColor: '#000',
 		},
 		transition: [['border-color', '200ms', 'cubic-bezier(0.0, 0, 0.2, 1)', '0ms']],
+		'& #cardExpiry': {
+			'& .__PrivateStripeElement': {
+				height: 56,
+			},
+		},
+		'& #cardCvc': {
+			'& .__PrivateStripeElement': {
+				height: 56,
+			},
+		},
+		'& #cardNumber': {
+			'& .__PrivateStripeElement': {
+				height: 56,
+			},
+		},
+		'& #postalCode': {
+			'& .__PrivateStripeElement': {
+				height: 56,
+			},
+		},
 	},
 	inputLabelBase: {
 		transition: [
@@ -99,9 +117,11 @@ export const useStyles = makeStyles({
 		marginBottom: 8,
 	},
 	elementFocus: {
+		padding: [[0, 15]],
 		borderWidth: 2,
 		paddingTop: 17,
 		paddingBottom: 17,
+		height: 20,
 		borderColor: '#5665b7',
 		'&:hover': {
 			borderColor: '#5665b7',

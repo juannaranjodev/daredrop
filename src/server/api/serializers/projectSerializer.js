@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath, propOr, assoc } from 'ramda'
 import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/shared/descriptions/apiLenses'
 

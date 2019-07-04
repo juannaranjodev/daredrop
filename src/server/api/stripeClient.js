@@ -1,20 +1,17 @@
 import Stripe from 'stripe'
 import { SecretsManager } from 'aws-sdk'
+import { productionStripe, developmentStripe } from 'root/src/shared/constants/secretNames'
 
 const secretsClient = new SecretsManager()
-const secretName = 'Stripe_Test_0'
+const secretName = process.env.STAGE === 'production' ? productionStripe : developmentStripe
 
-export default new Promise((resolve, reject) => {
+export default async () => {
 	try {
-		secretsClient.getSecretValue({ SecretId: secretName }, (err, data) => {
-			if (err) {
-				reject(err)
-			}
-			const { stripeSecret: clientSecret, stripeKey: clientId } = JSON.parse(data.SecretString)
-			const stripe = Stripe(clientSecret)
-			resolve(stripe)
-		})
+		const data = await secretsClient.getSecretValue({ SecretId: secretName }).promise()
+		const { stripeSecret: clientSecret, stripeKey: clientId } = JSON.parse(data.SecretString)
+		const stripe = Stripe(clientSecret)
+		return stripe
 	} catch (err) {
-		reject(err)
+		throw new Error(err)
 	}
-})
+}

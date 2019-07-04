@@ -1,3 +1,4 @@
+import { map, range } from 'ramda'
 import wait from 'root/src/testUtil/wait'
 
 import { apiFn } from 'root/src/server/api'
@@ -14,37 +15,59 @@ import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 
 describe('getAcceptedProjects', () => {
 	test('Successfully get accepted projects', async () => {
-		const project = await createProject({
-			userId: 'user-differentuserid',
-			payload: createProjectPayload(),
-		})
+		const projectArr = await Promise.all(
+			map(
+				() => createProject({
+					userId: 'user-differentuserid',
+					payload: createProjectPayload(),
+				}),
+				range(1, 15),
+			),
+		)
 
-		const oAuthDetails = {
-			tokenId: 'twitch',
-			id: project.assignees[0].platformId,
-		}
+		const authProjectArr = await Promise.all(
+			map(
+				project => {
+					const oAuthDetails = {
+						tokenId: 'twitch',
+						id: project.assignees[0].platformId,
+					}
 
-		await addOAuthToken({
-			payload: oAuthDetails,
-			userId: mockUserId,
-		})
+					return addOAuthToken({
+						payload: oAuthDetails,
+						userId: mockUserId,
+					})
+				},
+				projectArr,
+			),
+		)
 
-		await auditProject({
-			userId: mockUserId,
-			payload: {
-				projectId: project.id,
-				audit: projectApprovedKey,
-			},
-		})
+		const auditProjectArr = await Promise.all(
+			map(
+				project => auditProject({
+					userId: mockUserId,
+					payload: {
+						projectId: project.id,
+						audit: projectApprovedKey,
+					},
+				}),
+				projectArr,
+			),
+		)
 
-		await acceptProject({
-			userId: mockUserId,
-			payload: {
-				projectId: project.id,
-				assigneeId: `twitch|${project.assignees[0].platformId}`,
-				amountRequested: 1000,
-			},
-		})
+		await Promise.all(
+			map(
+				project => acceptProject({
+					userId: mockUserId,
+					payload: {
+						projectId: project.id,
+						assigneeId: `twitch|${project.assignees[0].platformId}`,
+						amountRequested: 1000,
+					},
+				}),
+				projectArr,
+			),
+		)
 
 		// So this kinda sucks, but there is no way to ConsistenRead on a GSI.
 		// This test will fail because of a race condition occasionally. Should
@@ -60,6 +83,6 @@ describe('getAcceptedProjects', () => {
 		const res = await apiFn(event, contextMock)
 
 		expect(res.statusCode).toEqual(200)
-		expect(res.body.items.length).toEqual(1)
+		expect(res.body.items.length).toEqual(14)
 	})
 })
