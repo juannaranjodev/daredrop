@@ -46,13 +46,6 @@ export default {
 									'*:*',
 								]),
 							},
-							{
-								Sid: 'AccessToSecretsManager',
-								Effect: 'Allow',
-								Action: 'secretsmanager:GetSecretValue',
-								// edit this
-								Resource: ref(LAMBDA_ACCESS_SECRET),
-							},
 						],
 					},
 				},

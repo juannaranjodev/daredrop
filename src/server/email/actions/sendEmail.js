@@ -30,7 +30,6 @@ export default (emailData, emailTemplate) => new Promise(async (resolve, reject)
 		],
 	}
 
-
 	ses.sendEmail(params, (err, data) => {
 		if (err) {
 			reject(err, err.stack)

@@ -1,5 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
-/* eslint-disable quotes */
 import getAtt from 'root/src/aws/util/getAtt'
 
 import {
