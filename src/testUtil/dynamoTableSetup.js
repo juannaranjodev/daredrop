@@ -79,11 +79,6 @@ jest.mock('root/src/server/api/s3Client', () => ({
 	})),
 }))
 
-jest.mock('root/src/server/api/keyProtectedClient', () => ({
-	__esModule: true,
-	default: jest.fn(() => Promise.resolve({ secretKey: 'asdsadas' })),
-}))
-
 jest.mock('root/src/server/api/googleClient', () => {
 	/* eslint-disable global-require */
 	const { insertVideoMock } = require('root/src/server/api/mocks/youtubeMock')
@@ -112,29 +107,30 @@ jest.mock('root/src/server/api/actionUtil/deleteCronJob', () => ({
 jest.mock('root/src/server/api/paypalClient', () => {
 	const uuid = require('uuid/v4')
 	return {
-	__esModule: true,
-	default: jest.fn(() => Promise.resolve({
-		payout: {
-			create: jest.fn((a, b, callback) => callback(null, {
-				batch_header: {
-					payout_batch_id: uuid(),
-				},
-				httpStatusCode: 200,
-			})),
-		},
-		authorization: {
-			capture: jest.fn((a, b, callback) => callback(null,
-				{
-					amount: {
-						total: '500000.00',
+		__esModule: true,
+		default: jest.fn(() => Promise.resolve({
+			payout: {
+				create: jest.fn((a, b, callback) => callback(null, {
+					batch_header: {
+						payout_batch_id: uuid(),
 					},
-					transaction_fee: {
-						value: '20000',
-					},
+					httpStatusCode: 200,
 				})),
-		},
-	}))
-}})
+			},
+			authorization: {
+				capture: jest.fn((a, b, callback) => callback(null,
+					{
+						amount: {
+							total: '500000.00',
+						},
+						transaction_fee: {
+							value: '20000',
+						},
+					})),
+			},
+		}))
+	}
+})
 
 
 jest.mock('root/src/server/api/actionUtil/getUserEmail', () => ({

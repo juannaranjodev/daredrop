@@ -1,5 +1,4 @@
-import { prop, pick, path } from 'ramda'
-import { ternary } from 'root/src/shared/util/ramdaPlus'
+import { prop, pick } from 'ramda'
 
 import validateSchema from 'root/src/shared/util/validateSchema'
 import {
@@ -8,10 +7,9 @@ import {
 } from 'root/src/server/api/errors'
 import ajvErrors from 'root/src/shared/util/ajvErrors'
 import {
-	getPayloadSchema, getResultSchema, testEndpointExists, getIsLongRunningTask, getIsInvokedInternal,
+	getPayloadSchema, getResultSchema, testEndpointExists,
 } from 'root/src/server/api/getEndpointDesc'
-import serverEndpoints from 'root/src/server/api/actions'
-import authorizeRequest from 'root/src/server/api/authorizeRequest'
+import cloudWatchJobs from 'root/src/server/cloudWatchEvents/actions'
 import triggerActions from 'root/src/server/email/actions'
 
 const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
@@ -32,27 +30,19 @@ const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 }
 
 export const apiHof = (
-	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
-	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
+	cloudWatchJobsObj, getPayloadSchemaFn, getResultSchemaFn,
+	getTriggerActionsObj, testEndpointExistsFn,
 ) => async (event) => {
-	const { endpointId, payload, authentication, triggerSource } = event
+	const { endpointId, payload } = event
 	try {
 		const endpointExists = testEndpointExistsFn(endpointId)
-		if (triggerSource) {
-			const triggerAction = path([triggerSource], getTriggerActionsObj)
-			const { request } = event
-			await triggerAction(request)
-			return event
-		}
 		if (!endpointExists) {
 			throw notFoundError(endpointId)
 		}
-		const action = ternary(isLongRunningTask(endpointId),
-			path(['longRunningTask', endpointId], serverEndpointsObj),
-			path(['shortRunningTask', endpointId], serverEndpointsObj))
+		const action = prop(endpointId, cloudWatchJobsObj)
+
 		const payloadSchema = getPayloadSchemaFn(endpointId)
 		const resultSchema = getResultSchemaFn(endpointId)
-		const userId = await authorizeRequestFn(endpointId, authentication)
 		const validatePayload = validateOrNah(
 			'payloadSchema', endpointId, payloadSchema,
 		)
@@ -61,7 +51,7 @@ export const apiHof = (
 		)
 
 		await validatePayload(payload)
-		const res = await action({ userId, payload })
+		const res = await action({ payload })
 		await validateResult(res)
 
 		return { statusCode: 200, body: res }
@@ -75,8 +65,8 @@ export const apiHof = (
 }
 
 export const apiFn = apiHof(
-	serverEndpoints, getPayloadSchema, getResultSchema, triggerActions,
-	authorizeRequest, testEndpointExists, getIsLongRunningTask, getIsInvokedInternal,
+	cloudWatchJobs, getPayloadSchema, getResultSchema,
+	triggerActions, testEndpointExists,
 )
 
 // can't return promise?
