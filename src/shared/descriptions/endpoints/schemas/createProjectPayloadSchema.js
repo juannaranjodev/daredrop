@@ -59,7 +59,7 @@ export default {
 			required: ['paymentType', 'paymentId', 'paymentAmount'],
 			additionalProperties: false,
 		},
-		pledgeAmount: { type: 'integer', minimum: 5, maximum: 999999 },
+		pledgeAmount: { type: 'integer', minimum: 1, maximum: 999999 },
 		favoritesAmount: { type: 'integer' },
 		partialFormId: { type: 'string' },
 	},
