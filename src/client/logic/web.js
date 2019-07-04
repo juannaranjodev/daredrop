@@ -70,6 +70,7 @@ import apiExternalRequestSuccess from 'root/src/client/logic/api/reducers/apiExt
 import apiExternalRequestError from 'root/src/client/logic/api/reducers/apiExternalRequestError'
 
 import apiFetchUserDataSuccess from 'root/src/client/logic/api/reducers/apiFetchUserDataSuccess'
+import setVisibleSuccessMessage from 'root/src/client/logic/app/reducers/setVisibleSuccessMessage'
 
 // listeners
 import popStateListener from 'root/src/client/logic/route/listeners/popStateListener'
@@ -142,6 +143,7 @@ const store = createStore(
 		...setSortValue,
 		...changeEmbeddedFieldData,
 		...setVisibleLoadingBlock,
+		...setVisibleSuccessMessage,
 	}, // reducer object
 	// [], // sagas
 	[
