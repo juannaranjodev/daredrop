@@ -8,7 +8,6 @@ import fieldHasError from 'root/src/client/logic/form/selectors/fieldHasError'
 import fieldPlaceholder from 'root/src/client/logic/form/selectors/fieldPlaceholder'
 import fieldMultiline from 'root/src/client/logic/form/selectors/fieldMultiline'
 import getPaymentListSelector from 'root/src/client/logic/api/selectors/getPaymentListSelector'
-import formLoadingBlockSelector from 'root/src/client/logic/form/selectors/formLoadingBlockSelector'
 
 import setInput from 'root/src/client/logic/form/thunks/setInput'
 
@@ -22,7 +21,6 @@ export default reduxConnector(
 		['fieldPlaceholder', fieldPlaceholder],
 		['fieldMultiline', fieldMultiline],
 		['cardList', getPaymentListSelector],
-		['formLoadingBlock', formLoadingBlockSelector],
 	],
 	[['setInput', setInput]],
 )

@@ -24,7 +24,6 @@ import stepFormPrevPage from 'root/src/client/logic/form/reducers/stepFormPrevPa
 import partialFormDbSaveSuccess from 'root/src/client/logic/form/reducers/partialFormDbSaveSuccess'
 import clearPartialFormKeys from 'root/src/client/logic/form/reducers/clearPartialFormKeys'
 import clearAllForms from 'root/src/client/logic/form/reducers/clearAllForms'
-import setLoadingBlock from 'root/src/client/logic/form/reducers/setLoadingBlock'
 
 // api
 import apiListRequestError from 'root/src/client/logic/api/reducers/apiListRequestError'
@@ -56,8 +55,7 @@ import currentPage from 'root/src/client/logic/list/reducers/currentPage'
 import hasMore from 'root/src/client/logic/list/reducers/hasMore'
 
 // headers
-import addFilterParams from 'root/src/client/logic/header/reducers/addFilterParams'
-import addSortParams from 'root/src/client/logic/header/reducers/addSortParams'
+import addSortFilterParams from 'root/src/client/logic/header/reducers/addSortFilterParams'
 import cleareProjectArray from 'root/src/client/logic/header/reducers/clearProjectArray'
 import setGameFilterValue from 'root/src/client/logic/header/reducers/setGameFilterValue'
 import setStreamerFilterValue from 'root/src/client/logic/header/reducers/setStreamerFilterValue'
@@ -76,6 +74,8 @@ import windowSizeListener from 'root/src/client/logic/app/listeners/windowSizeLi
 // modal
 import displayModal from 'root/src/client/logic/modal/reducers/displayModal'
 
+// embedded
+import changeEmbeddedFieldData from 'root/src/client/logic/embedded/reducers/changeEmbeddedFieldData'
 
 const store = createStore(
 	{
@@ -124,8 +124,7 @@ const store = createStore(
 		...displayModal,
 		...addPayoutMethodOnSuccess,
 		...uploadProgress,
-		...addFilterParams,
-		...addSortParams,
+		...addSortFilterParams,
 		...cleareProjectArray,
 		...setGameFilterValue,
 		...setStreamerFilterValue,
@@ -134,7 +133,7 @@ const store = createStore(
 		...clearList,
 		...clearListProcessing,
 		...setSortValue,
-		...setLoadingBlock,
+		...changeEmbeddedFieldData,
 	}, // reducer object
 	// [], // sagas
 	[
