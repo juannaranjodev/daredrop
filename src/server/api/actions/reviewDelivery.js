@@ -25,7 +25,7 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import {
 	streamerAcceptedKey, streamerDeliveryApprovedKey,
 	projectDeliveredKey, projectDeliveryPendingKey,
-	projectApprovedKey, projectToCaptureKey, projectDeliveryInitKey
+	projectApprovedKey, projectToCaptureKey, projectDeliveryInitKey,
 } from 'root/src/server/api/lenses'
 // emails
 import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
@@ -51,6 +51,17 @@ export default async ({ payload }) => {
 
 	const projectSerialized = projectSerializer([...projectToApproveDdb, ...assigneesDdb], true)
 	const projectAcceptedAssignees = filter(propEq('accepted', streamerAcceptedKey), prop('assignees', projectSerialized))
+	const assigneesToWrite = ternary(equals(audit, projectDeliveredKey), map(assignee => ({
+		PutRequest: {
+			Item: {
+				...assigneeDynamoObj({
+					...assignee,
+					accepted: streamerDeliveryApprovedKey,
+				},
+				projectId),
+			},
+		},
+	}), projectAcceptedAssignees), [])
 
 	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
 	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
@@ -96,7 +107,7 @@ export default async ({ payload }) => {
 
 	const writeParams = {
 		RequestItems: {
-			[TABLE_NAME]: [...projectDataToWrite],
+			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],
 		},
 	}
 	await documentClient.batchWrite(writeParams).promise()

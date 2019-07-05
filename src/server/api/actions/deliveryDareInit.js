@@ -67,7 +67,7 @@ const updateProject = async (project, projectDdb) => {
 						Item: {
 							[PARTITION_KEY]: prop('id', project),
 							[SORT_KEY]: head(projectDdb)[SORT_KEY],
-							...omit(['status', 'id'], project),
+							...omit(['id'], project),
 							status: projectDeliveryInitKey,
 						},
 					},

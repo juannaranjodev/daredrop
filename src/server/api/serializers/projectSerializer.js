@@ -1,5 +1,9 @@
-import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath, propOr, assoc } from 'ramda'
-import { skProp, pkProp, projectDeliveredKey, streamerRejectedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
+import { reduce, pick, append, prepend, startsWith, split, prop, propEq, and, hasPath, propOr, assoc, equals } from 'ramda'
+import {
+	skProp, pkProp, projectDeliveredKey,
+	streamerRejectedKey, projectDeliveryPendingKey,
+	projectDeliveryInitKey,
+} from 'root/src/server/api/lenses'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
@@ -10,6 +14,14 @@ const {
 	overAssignees, setMyPledge, viewPledgeAmount, overGames,
 	setMyFavorites, viewMyFavorites, overDeliveries,
 } = responseLenses
+
+const getStatus = (result, newStatus) => {
+	const status = propOr('', 'status', result)
+	if (equals(status, projectDeliveredKey)) return status
+	if (equals(status, projectDeliveryPendingKey)) return status
+	if (equals(status, projectDeliveryInitKey)) return status
+	return newStatus
+}
 
 export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 	(result, projectPart) => {
@@ -55,7 +67,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 			)
 			return {
 				...overDeliveries(append(deliveryObj), result),
-				status: prop(1, split('|', skProp(projectPart))),
+				status: getStatus(result, prop(1, split('|', skProp(projectPart)))),
 			}
 		}
 		if (startsWith(`project|${projectDeliveredKey}`, sk)) {
@@ -67,7 +79,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 			)
 			return {
 				...overDeliveries(append(deliveryObj), result),
-				status: prop(1, split('|', skProp(projectPart))),
+				status: getStatus(result, prop(1, split('|', skProp(projectPart)))),
 				deliveryApproved: prop('approved', projectPart),
 			}
 		}
@@ -89,7 +101,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 					...result,
 					...projectObj,
 					id: pkProp(projectPart),
-					status: propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart),
+					status: getStatus(result, propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart)),
 					assignees: getActiveAssignees(prop('assignees', projectPart)),
 				}
 			}
@@ -97,7 +109,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 				...result,
 				...projectObj,
 				id: pkProp(projectPart),
-				status: propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart),
+				status: getStatus(result, propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart)),
 			}
 		}
 		return result
