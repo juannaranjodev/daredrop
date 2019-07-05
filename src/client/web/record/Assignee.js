@@ -10,6 +10,8 @@ const styles = {
 	},
 	linkStyle: {
 		textDecoration: 'none',
+		flexBasis: 1,
+		flexGrow: 1,
 	},
 	linkText: {
 		color: 'black',
@@ -19,6 +21,11 @@ const styles = {
 			fontWeight: 'bold',
 		},
 	},
+	fontStyle: {
+		whiteSpace: 'nowrap',
+	    overflow: 'hidden',
+	    textOverflow: 'ellipsis'
+	}
 }
 
 const Assignee = memo(({ displayName, image, username, classes }) => (
@@ -29,15 +36,15 @@ const Assignee = memo(({ displayName, image, username, classes }) => (
 		className={classNames('flex-190', classes.linkStyle)}
 	>
 		<div className="flex layout-row layout-align-space-between-center">
-			<div className="flex-65">
+			<div className="">
 				<img
 					src={image}
 					alt={username}
 					className={classes.image}
 				/>
 			</div>
-			<div className={classNames('flex-55', classes.linkText)}>
-				<SubHeader>{displayName}</SubHeader>
+			<div className={classNames('flex-55', classes.linkText, classes.fontStyle)}>
+				<SubHeader additionalClass={classes.fontStyle}>{displayName}</SubHeader>
 			</div>
 		</div>
 	</a>
