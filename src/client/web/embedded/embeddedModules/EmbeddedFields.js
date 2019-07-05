@@ -10,23 +10,46 @@ import DropdownEmbedded from 'root/src/client/web/embedded/embeddedModules/Dropd
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = {
- fields: {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'flex-end',
-  '@media(max-width: 800px)': {
-   paddingTop: 30,
-  },
-  '@media(max-width: 631px)': {
-   flexDirection: 'column',
-   alignItems: 'center',
-  },
- },
- label: {
-  fontSize: 14,
-  marginLeft: 25,
-  marginBottom: 8,
- },
+    fields: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        '@media(max-width: 800px)': {
+            paddingTop: 50,
+        },
+        '@media(max-width: 631px)': {
+            flexDirection: 'column',
+            alignItems: 'center',
+        },
+    },
+    label: {
+        fontSize: 14,
+        marginLeft: 25,
+        marginBottom: 8,
+    },
+    autoComplete: {
+        dispaly: 'flex',
+        flexDirection: 'column',
+        alignSelf: 'flex-end',
+        '@media(max-width: 321px)': {
+            alignSelf: 'center',
+        },
+    },
+    dropDown: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignSelf: 'flex-start',
+        '@media(max-width: 631px)': {
+            marginBottom: -106,
+            marginRight: 160,
+            alignSelf: 'flex-end',
+        },
+        '@media(max-width: 321px)': {
+            alignSelf: 'center',
+            marginBottom: 0,
+            marginRight: 0,
+        },
+    },
 }
 
 const EmbeddedFieldUnstyled = memo(({ fields, classes, ...moduleProps }) => (
@@ -37,6 +60,7 @@ const EmbeddedFieldUnstyled = memo(({ fields, classes, ...moduleProps }) => (
      return (
       <div
        key={prop('fieldId', embedProps)}
+       className={classes.autoComplete}
       >
        {orNull(prop('fieldCaption', embedProps),
         <div className={classes.label}>{prop('fieldCaption', embedProps)}</div>)}
@@ -51,6 +75,7 @@ const EmbeddedFieldUnstyled = memo(({ fields, classes, ...moduleProps }) => (
      return (
       <div
        key={prop('fieldId', embedProps)}
+       className={classes.dropDown}
       >
        {orNull(prop('fieldCaption', embedProps),
         <div className={classes.label}>{prop('fieldCaption', embedProps)}</div>)}
