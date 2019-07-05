@@ -15,6 +15,7 @@ import SubTitle from 'root/src/client/web/typography/SubTitle'
 import LinkButton from 'root/src/client/web/base/LinkButton'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import scrollTopHandler from 'root/src/client/logic/list/handlers/goTopHandler'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import List from '@material-ui/core/List'
 import {
 	CREATE_PROJECT_ROUTE_ID,
@@ -28,6 +29,15 @@ export const CardList = ({
 	list, currentPage, hasMore, classes, getNextPage,
 }) => (
 	<div className="flex layout-row layout-align-center-start">
+		<div className={classes.loadingContainer}>
+			<div className={classes.loadingBlock}>
+				<div className={classes.loadingText}>Loading...</div>
+				<CircularProgress
+					size={24}
+					className={classes.loading}
+				/>,
+			</div>
+		</div>
 		<MaxWidthContainer>
 			<div className={classNames(classes.listModuleContainer, 'flex', 'layout-row', 'layout-align-center')}>
 				<InfiniteScroll
