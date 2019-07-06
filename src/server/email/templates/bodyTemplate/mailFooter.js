@@ -24,13 +24,13 @@ export default (survey, ourName, ourEmail, ourUrl) => `
                           </tr>
                           <tr height="80">
                             <td style="margin:0;padding:0;" align="center" width="100%">
-                              <a href="/" target="_blank" width="21" height="21" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
+                              <a href="https://www.facebook.com/daredrops" target="_blank" width="21" height="21" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
                                 <img src="https://${ourUrl}/facebook.png" alt="facebook" title="facebook" width="21" height="21" border="0" style="display: block; border:0;">
                               </a>
-                              <a href="/" target="_blank" width="22" height="22" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
+                              <a href="https://www.twitter.com/daredrops" target="_blank" width="22" height="22" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
                                 <img src="https://${ourUrl}/twitter.png" alt="twitter" title="twitter" width="22" height="22" border="0" style="display: block; border:0;">
                               </a>
-                              <a href="/" target="_blank" width="22" height="22" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
+                              <a href="https://instagram.com/dare.drop" target="_blank" width="22" height="22" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
                                 <img src="https://${ourUrl}/instagram.png" alt="instagram" title="instagram" width="22" height="22" border="0" style="display: block; border:0;">
                               </a>
                             </td>
