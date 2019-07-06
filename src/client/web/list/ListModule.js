@@ -24,7 +24,7 @@ import listModuleConnector from 'root/src/client/logic/api/connectors/listModule
 
 import { DeletePaymentModal } from './DeletePaymentModal'
 
-export const CardList = ({
+export const CardList = memo(({
 	list, currentPage, hasMore, classes, getNextPage,
 }) => (
 	<div className="flex layout-row layout-align-center-start">
@@ -64,13 +64,13 @@ export const CardList = ({
 								)}
 							>
 								<div className={classes.nothingTextContainer}>
-								No Dares match your criteria, want to
-									<span>{' '} </span>
+										No Dares match your criteria, want to
+										<span>{' '} </span>
 									<Link routeId={CREATE_PROJECT_ROUTE_ID}>
 										<span className={classes.createNewLink}>make one</span>
 									</Link>
-								?
-								</div>
+										?
+         </div>
 							</div>
 						),
 					)}
@@ -87,15 +87,15 @@ export const CardList = ({
 						</div>
 						<div>
 								Go to Top
-						</div>
+       </div>
 					</div>
 				</div>
 			</div>
 		</MaxWidthContainer>
 	</div>
-)
+))
 
-const UniversalList = ({
+const UniversalList = memo(({
 	list, classes, listTitle, listSubtitle, listControls, deletePaymentMethod, setDefaultPaymentMethod,
 }) => {
 	const [modalOpen, setModalOpen] = useState(false)
@@ -148,14 +148,14 @@ const UniversalList = ({
 			</div>
 		</List>
 	)
-}
+})
 
 export const ListModuleUnconnected = memo((props) => {
 	switch (props.listType) {
 		case 'card':
-			return CardList(props)
+			return <CardList {...props} />
 		case 'list':
-			return UniversalList(props)
+			return <UniversalList {...props} />
 		default:
 			return (
 				<List>

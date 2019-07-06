@@ -1,4 +1,4 @@
-import React/* , { memo }  */ from 'react'
+import React, { memo } from 'react'
 
 import withStyles from '@material-ui/core/styles/withStyles'
 
@@ -9,10 +9,10 @@ const styles = {
 	},
 }
 
-export const MinMaxLengthUnstyled = ({ classes, children }) => (
+export const MinMaxLengthUnstyled = memo(({ classes, children }) => (
 	<div className="flex layout-row layout-align-end">
 		<span className={classes.fieldMax}>{children}</span>
 	</div>
-)
+))
 
 export default withStyles(styles)(MinMaxLengthUnstyled)

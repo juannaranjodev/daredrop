@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import { map } from 'ramda'
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -8,7 +8,7 @@ import { TERMS_OF_SERVICE_ROUTE_ID } from 'root/src/shared/descriptions/routes/r
 import styles from './style'
 import pageContent from './pageContent'
 
-const TermsOfService = ({ classes }) => (
+const TermsOfService = memo(({ classes }) => (
 	<Terms>
 		{map(
 			({ title, text, paragraph, id = null }) => (
@@ -21,11 +21,11 @@ const TermsOfService = ({ classes }) => (
 			pageContent(classes),
 		)}
 		<p className={classes.info}>
-      	These updated terms will go into effect on February 11, 2019, at 12 a.m. Eastern
-      	Time, and apply to all Dares launched on Dare Drop on or after that date.
+			These updated terms will go into effect on February 11, 2019, at 12 a.m. Eastern
+			Time, and apply to all Dares launched on Dare Drop on or after that date.
 		</p>
 	</Terms>
-)
+))
 
 TermsOfService.propTypes = {
 	// eslint-disable-next-line react/forbid-prop-types

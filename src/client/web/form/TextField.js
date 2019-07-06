@@ -75,7 +75,7 @@ const styles = {
 	},
 }
 
-const UniversalFormTextField = ({
+const UniversalFormTextField = memo(({
 	moduleKey, fieldId, fieldPath, setInput, fieldValue, fieldLabel, fieldError, fieldHasError,
 	fieldType, fieldPlaceholder, classes, wasSubmitted }) => {
 	const [previousValue, setPreviousValue] = useState('')
@@ -117,9 +117,9 @@ const UniversalFormTextField = ({
 			}
 		</div>
 	)
-}
+})
 
-const StyledTextField = ({
+const StyledTextField = memo(({
 	moduleKey, fieldId, fieldPath, setInput, fieldValue, fieldLabel, fieldError, fieldHasError,
 	fieldType, fieldMultiline, fieldPlaceholder, classes, fieldMax, fieldMultilineRows,
 }) => (
@@ -147,14 +147,14 @@ const StyledTextField = ({
 				</div>,
 			)}
 		</div>
-	)
+	))
 
 export const InputField = memo((props) => {
 	switch (props.formType) {
 		case universalForm:
-			return UniversalFormTextField(props)
+			return <UniversalFormTextField {...props} />
 		default:
-			return StyledTextField(props)
+			return <StyledTextField {...props} />
 	}
 })
 

@@ -12,7 +12,7 @@ import {
 	TwitterIcon, FacebookIcon, RedditIcon, VKIcon,
 } from 'react-share'
 
-const ShareMenuItems = ({ url }) => [
+const ShareMenuItems = memo(({ url }) => [
 	<MenuItem key="twitter">
 		<TwitterShareButton url={url}>
 			<div className="layout-row layout-align-start-center">
@@ -53,7 +53,7 @@ const ShareMenuItems = ({ url }) => [
 			</div>
 		</AddToClipboardButton>
 	</MenuItem>,
-]
+])
 
 const styles = {
 	iconColor: {

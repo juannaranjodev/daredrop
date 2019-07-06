@@ -137,8 +137,6 @@ export default async ({ payload }) => {
 				{
 					endpointId: PAYOUT_ASSIGNEES,
 					payload: { projectId },
-					apiKey: 'for now it is just mock',
-					// apiKey: prop('secretKey', await keyProtectedClient()),
 				},
 				eventDate, 'projectId',
 			)

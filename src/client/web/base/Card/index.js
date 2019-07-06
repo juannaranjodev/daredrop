@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import withStyles from '@material-ui/core/styles/withStyles'
 import classNames from 'classnames'
 import styles from './style'
 
-const Card = ({ icon, title, children, classes }) => (
+const Card = memo(({ icon, title, children, classes }) => (
 	<div className={classNames('flex', 'layout-column', 'layout-align-start-center', classes.card)}>
 		<div className={classes.iconWrapper}>
 			<img src={icon} alt={title} />
@@ -12,7 +12,7 @@ const Card = ({ icon, title, children, classes }) => (
 		<h3 className={classes.cardTitle}>{title}</h3>
 		{children}
 	</div>
-)
+))
 
 Card.propTypes = {
 	title: PropTypes.string.isRequired,

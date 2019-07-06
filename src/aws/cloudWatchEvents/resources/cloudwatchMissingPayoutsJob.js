@@ -7,16 +7,13 @@ import {
 } from 'root/src/aws/cloudWatchEvents/resourceIds'
 
 import { API_LAMBDA_LONG_TASK_FUNCTION } from 'root/src/aws/api/resourceIds'
-
-import { LAMBDA_ACCESS_SECRET } from 'root/src/aws/secrets/resourceIds'
-
 import { PAY_OUTSTANDING_PAYOUTS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 export default {
 	[CLOUDWATCH_MISSING_PAYOUTS_JOB]: {
 		Type: 'AWS::Events::Rule',
 		DependsOn: [
-			CLOUDWATCH_EVENTS_ROLE, LAMBDA_ACCESS_SECRET, API_LAMBDA_LONG_TASK_FUNCTION,
+			CLOUDWATCH_EVENTS_ROLE, API_LAMBDA_LONG_TASK_FUNCTION,
 		],
 		Properties: {
 			Description: 'CloudWatch rule for submitting outstanding payouts (8 AM GMT every Friday)',

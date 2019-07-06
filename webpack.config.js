@@ -1,11 +1,15 @@
-const { map } = require('ramda')
+const { map, filter, contains, replace } = require('ramda')
 const path = require('path')
+const fs = require('fs')
+const { promisify } = require('util')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 const BrotliGzipPlugin = require('brotli-gzip-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const EndWebpackPlugin = require('end-webpack-plugin')
+const RobotstxtPlugin = require('robotstxt-webpack-plugin')
 const appConstants = require('./src/shared/constants/app')
 const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
@@ -122,6 +126,23 @@ module.exports = {
 				threshold: 10240,
 				minRatio: 0.8,
 			}) : () => ''),
+		(isProd
+			? new RobotstxtPlugin({
+				filePath: path.resolve(__dirname, 'dist/build-web-client'),
+			}) : () => ''),
+		new EndWebpackPlugin(async () => {
+			const readdir = promisify(fs.readdir)
+			const writeFile = promisify(fs.writeFile)
+			const files = await readdir(path.resolve(__dirname, 'dist/build-web-client'))
+			const nameContainsBr = contains('.br.')
+			const brFiles = filter(nameContainsBr, files)
+			const gzipFiles = map(replace('.br', ''), brFiles)
+			const compressedFilenames = [...brFiles, ...gzipFiles]
+			await writeFile(
+				path.resolve(__dirname, 'src/server/edge/origin/webpackCompressedFilenames.js'),
+				`export default ${JSON.stringify(compressedFilenames)}`,
+			)
+		}),
 	],
 	optimization: {
 		minimizer: [new UglifyJsPlugin({

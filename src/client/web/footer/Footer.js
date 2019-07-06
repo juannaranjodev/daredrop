@@ -1,10 +1,10 @@
 import React, { memo } from 'react'
 
 import classNames from 'classnames'
-import facebookFooter from 'root/src/client/assets/Facebook footer.png'
-import twitterFooter from 'root/src/client/assets/Twitter footer.png'
-import instagramFooter from 'root/src/client/assets/Instagram footer.png'
-import youtubeFooter from 'root/src/client/assets/Youtube footer.png'
+import facebookFooter from 'root/src/client/assets/Facebook footer.jpg'
+import twitterFooter from 'root/src/client/assets/Twitter footer.jpg'
+import instagramFooter from 'root/src/client/assets/Instagram footer.jpg'
+import youtubeFooter from 'root/src/client/assets/Youtube footer.jpg'
 
 import {
 	HOW_IT_WORKS_ROUTE_ID,

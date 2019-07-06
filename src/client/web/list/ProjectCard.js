@@ -9,9 +9,6 @@ import ShareMenu from 'root/src/client/web/base/ShareMenu'
 import Body from 'root/src/client/web/typography/Body'
 import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
 import clipTitleHandler from 'root/src/client/logic/project/handlers/clipTitleHandler'
-import {
-	primaryColor,
-} from 'root/src/client/web/commonStyles'
 import classNames from 'classnames'
 import { ternary, orNull } from 'root/src/shared/util/ramdaPlus'
 

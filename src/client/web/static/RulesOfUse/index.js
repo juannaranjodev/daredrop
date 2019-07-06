@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 import withStyles from '@material-ui/core/styles/withStyles'
 import Terms from 'root/src/client/web/base/StaticLayout'
 import styles from './style'
 import rules from './pageContent'
 
-const RulesOfUse = ({ classes }) => (
+const RulesOfUse = memo(({ classes }) => (
 	<Terms>
 		<section className={classes.section}>
 			<p>
@@ -23,11 +23,14 @@ const RulesOfUse = ({ classes }) => (
 				We also prohibit any content that violates the Community Guidelines or
 				Terms on a platform streamers deliver content on. Adhere
 		to <a href="https://www.twitch.tv/p/legal/community-guidelines/" target="__blank">
-					Twitch's Community Guidelines</a> if posting or streaming on Twitch,
+					Twitch's Community Guidelines
+				</a> if posting or streaming on Twitch,
 		or <a href="https://www.youtube.com/yt/about/policies" target="__blank">
-					YouTube's Community Guidelines</a> if posting or streaming on YouTube.
+					YouTube's Community Guidelines
+				</a> if posting or streaming on YouTube.
 			</p>
 		</section>
 	</Terms>
-)
+))
+
 export default withStyles(styles)(RulesOfUse)

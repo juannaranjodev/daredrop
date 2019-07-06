@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import Chip from '@material-ui/core/Chip'
 import { withStyles } from '@material-ui/core/styles'
 import SvgIcon from '@material-ui/core/SvgIcon'
@@ -9,6 +10,7 @@ import AsyncSelect from 'react-select/lib/Async'
 import Tappable from 'react-tappable/lib/Tappable'
 import getValueChip from 'root/src/client/logic/header/handlers/getValueChip'
 
+
 const styles = {
 	autoSelect: {
 		width: 152,
@@ -19,7 +21,7 @@ const styles = {
 	},
 }
 
-const DropdownIndicator = props => (
+const DropdownIndicator = memo(props => (
 	<components.DropdownIndicator {...props}>
 		<SvgIcon>
 			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
@@ -28,7 +30,7 @@ const DropdownIndicator = props => (
 			</svg>
 		</SvgIcon>
 	</components.DropdownIndicator>
-)
+))
 
 const singleStyle = {
 	chip: {
@@ -48,7 +50,7 @@ const singleStyle = {
 	},
 }
 
-const SingleValue = withStyles(singleStyle)(({ classes, children, label, removeProps, clearValue, getValue, ...props }) => (
+const SingleValue = withStyles(singleStyle)(memo(({ classes, children, label, removeProps, clearValue, getValue, ...props }) => (
 	<components.SingleValue {...props}>
 		<Chip
 			className={classes.chip}
@@ -62,71 +64,74 @@ const SingleValue = withStyles(singleStyle)(({ classes, children, label, removeP
 			)}
 		/>
 	</components.SingleValue>
-))
+)))
 
 export const AutoCompleteEmbedded = memo(({
 	classes, fieldsLoadOptionsPromise, moduleKey, fieldPath, setInput, fieldsPlaceholder,
 	endpointId, fieldValue, fieldIndex, fieldId, moduleId,
 }) => (
-		<AsyncSelect
-			cacheOptions
-			loadOptions={fieldsLoadOptionsPromise[fieldIndex]}
-			defaultOptions
-			value={fieldValue(fieldIndex, fieldId)}
-			placeholder={fieldsPlaceholder[fieldIndex]}
-			backspaceRemovesValue
-			styles={{
-				control: () => ({
-					border: 'none',
-					width: 125,
-				}),
-				dropdownIndicator: () => ({
-					position: 'absolute',
-					top: 7,
-					right: 0,
-				}),
-				menu: () => ({
-					position: 'absolute',
-					zIndex: 1000,
-					background: 'white',
-					marginTop: -16,
-					width: 152,
-					boxShadow: '0 9px 13px 0 rgba(0, 0, 0, 0.26)',
-				}),
-				option: () => ({
-					width: 142,
-					height: 40,
-					fontSize: 16,
-					overflow: 'hidden',
-					paddingLeft: 10,
-					paddingTop: 6,
-					fontWeight: 'normal',
-					fontStyle: 'normal',
-					lineHeight: 1.19,
-					textAlign: 'left',
-					color: '#000000',
-					'&:hover': {
-						background: '#eeeeee',
-						cursor: 'pointer',
-					},
-				}),
-				placeholder: (provided, state) => ({
-					marginLeft: 5,
-					display: state.isFocused ? 'none' : 'flex',
-					color: '#cccccc',
-					height: 24,
-					alignItems: 'center',
-				}),
-			}}
-			className={classes.autoSelect}
-			onChange={value => setInput(moduleId, fieldPath(fieldId), value, endpointId[fieldIndex])}
-			getOptionLabel={option => option.label}
-			getOptionValue={option => option.value}
-			components={{
-				DropdownIndicator,
-				SingleValue,
-			}}
-		/>
-	))
+	<AsyncSelect
+		cacheOptions
+		textFieldProps={{
+			label: 'fieldLabel',
+		}}
+		loadOptions={fieldsLoadOptionsPromise[fieldIndex]}
+		defaultOptions
+		value={fieldValue(fieldIndex, fieldId)}
+		placeholder={fieldsPlaceholder[fieldIndex]}
+		backspaceRemovesValue
+		styles={{
+			control: () => ({
+				border: 'none',
+				width: 125,
+			}),
+			dropdownIndicator: () => ({
+				position: 'absolute',
+				top: 7,
+				right: 0,
+			}),
+			menu: () => ({
+				position: 'absolute',
+				zIndex: 1000,
+				background: 'white',
+				marginTop: -16,
+				width: 152,
+				boxShadow: '0 9px 13px 0 rgba(0, 0, 0, 0.26)',
+			}),
+			option: () => ({
+				width: 142,
+				height: 40,
+				fontSize: 16,
+				overflow: 'hidden',
+				paddingLeft: 10,
+				paddingTop: 6,
+				fontWeight: 'normal',
+				fontStyle: 'normal',
+				lineHeight: 1.19,
+				textAlign: 'left',
+				color: '#000000',
+				'&:hover': {
+					background: '#eeeeee',
+					cursor: 'pointer',
+				},
+			}),
+			placeholder: (provided, state) => ({
+				marginLeft: 5,
+				display: state.isFocused ? 'none' : 'flex',
+				color: '#cccccc',
+				height: 24,
+				alignItems: 'center',
+			}),
+		}}
+		className={classes.autoSelect}
+		onChange={value => setInput(moduleId, fieldPath(fieldId), value, endpointId[fieldIndex])}
+		getOptionLabel={option => option.label}
+		getOptionValue={option => option.value}
+		components={{
+			DropdownIndicator,
+			SingleValue,
+		}}
+	/>
+))
 
 export default withStyles(styles)(AutoCompleteEmbedded)

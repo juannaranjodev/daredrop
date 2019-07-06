@@ -8,11 +8,11 @@ import classNames from 'classnames'
 
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 
-import facebook from 'root/src/client/assets/Facebook.png'
-import twitter from 'root/src/client/assets/Twitter.png'
-import instagram from 'root/src/client/assets/Instagram.png'
-import youtube from 'root/src/client/assets/Youtube.png'
-import vk from 'root/src/client/assets/VK.png'
+import facebook from 'root/src/client/assets/Facebook.jpg'
+import twitter from 'root/src/client/assets/Twitter.jpg'
+import instagram from 'root/src/client/assets/Instagram.jpg'
+import youtube from 'root/src/client/assets/Youtube.jpg'
+import vk from 'root/src/client/assets/VK.jpg'
 
 import styles from './style'
 

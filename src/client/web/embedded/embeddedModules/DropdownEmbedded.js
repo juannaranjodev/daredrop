@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import React from 'react'
+import React, { memo } from 'react'
 import Select from 'react-select'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -19,7 +19,7 @@ const styles = {
 	},
 }
 
-const DropdownEmbedded = ({
+const DropdownEmbedded = memo(({
 	setInput, classes, fieldPath, endpointId, fieldIndex, fieldValue, fieldsOptions, fieldId, moduleId,
 }) => (
 		<div className={classes.sort}>
@@ -78,6 +78,6 @@ const DropdownEmbedded = ({
 				}}
 			/>
 		</div>
-	)
+	))
 
 export default withStyles(styles)(DropdownEmbedded)

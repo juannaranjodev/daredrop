@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 
 import Button from 'root/src/client/web/base/Button'
@@ -33,21 +33,21 @@ const wrapperStyles = {
 }
 
 export default withStyles(wrapperStyles)(
-	({
+	memo(({
 		children, onClick, classes, loading, formType, buttonType,
 	}) => (
-			<div className="flex layout-row layout-align-center">
-				<div className={classes.wrapper}>
-					<Button
-						disabled={loading}
-						onClick={onClick}
-						formType={formType}
-						buttonType={buttonType}
-					>
-						{children}
-					</Button>
-					<RenderLoading loading={loading} />
-				</div>
+		<div className="flex layout-row layout-align-center">
+			<div className={classes.wrapper}>
+				<Button
+					disabled={loading}
+					onClick={onClick}
+					formType={formType}
+					buttonType={buttonType}
+				>
+					{children}
+				</Button>
+				<RenderLoading loading={loading} />
 			</div>
-		),
+		</div>
+	)),
 )

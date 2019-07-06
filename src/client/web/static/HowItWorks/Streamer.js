@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import withStyles from '@material-ui/core/styles/withStyles'
 import classNames from 'classnames'
 import Link from 'root/src/client/web/base/Link'
@@ -12,7 +12,7 @@ import SmileIcon from 'root/src/client/assets/smile-regular.svg'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 import styles from './style'
 
-const Streamer = ({ classes }) => (
+const Streamer = memo(({ classes }) => (
 	<div className={classNames('flex', 'layout-row', 'layout-wrap', 'layout-xs-column', 'layout-sm-column', 'layout-md-column', classes.cardWrapper)}>
 		<Card title="Accept" icon={StarIcon}>
 			<p>Verify your Twitch Channel from the pledge page to accept a Dare.</p>
@@ -20,13 +20,13 @@ const Streamer = ({ classes }) => (
 		<Card title="Goal" icon={FlagIcon}>
 			<p>Set a goal for the Bounty. Remember that only 90% can usually be
 				collected due to transaction issues, so take that into account.
-   </p>
+			</p>
 			<p>Then mention the Dare on your stream!</p>
 		</Card>
 		<Card title="Stream" icon={TvIcon}>
 			<p>When the Bounty reaches your goal we will let you know.</p><p>Then,
 				live stream and upload video proof to Dare Drop within {daysToExpire} days.
-                                                                 </p>
+			</p>
 		</Card>
 		<Card title="Reward" icon={HeartIcon}>
 			<p>We will verify the proof, take a 10% cut, then pay you the rest!</p>
@@ -42,6 +42,6 @@ const Streamer = ({ classes }) => (
 		</Card>
 
 	</div>
-)
+))
 
 export default withStyles(styles)(Streamer)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { TwitchButton } from 'root/src/client/web/base/CustomButton'
 import { twitchOauthUrl } from 'root/src/client/constants'
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
@@ -10,7 +10,7 @@ import { notConnected, connectedNotClaimed, accepted, notEligible, videoPendingA
 import goToClaimProjectHandler from 'root/src/client/logic/project/handlers/goToClaimProjectHandler'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
 
-const ClaimButton = ({
+const ClaimButton = memo(({
 	projectAcceptanceStatus,
 	pushRoute,
 	assignees,
@@ -61,7 +61,7 @@ const ClaimButton = ({
 				}}
 				>
 					<SubHeader>
-					Video Under Review
+						Video Under Review
 					</SubHeader>
 				</div>
 			)
@@ -69,6 +69,6 @@ const ClaimButton = ({
 			return null
 		default:
 	}
-}
+})
 
 export default ClaimButton

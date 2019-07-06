@@ -79,11 +79,6 @@ jest.mock('root/src/server/api/s3Client', () => ({
 	})),
 }))
 
-jest.mock('root/src/server/api/keyProtectedClient', () => ({
-	__esModule: true,
-	default: jest.fn(() => Promise.resolve({ secretKey: 'asdsadas' })),
-}))
-
 jest.mock('root/src/server/api/googleClient', () => {
 	/* eslint-disable global-require */
 	const { insertVideoMock } = require('root/src/server/api/mocks/youtubeMock')

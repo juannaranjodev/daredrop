@@ -36,28 +36,28 @@ export default {
 							Forward: 'none',
 						},
 					},
-					// LambdaFunctionAssociations: [
-					// 	{
-					// 		EventType: 'origin-request',
-					// 		LambdaFunctionARN: join(
-					// 			':',
-					// 			[
-					// 				getAtt(LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER, 'Arn'),
-					// 				'1',
-					// 			],
-					// 		),
-					// 	},
-					// 	{
-					// 		EventType: 'viewer-request',
-					// 		LambdaFunctionARN: join(
-					// 			':',
-					// 			[
-					// 				getAtt(LAMBDA_EDGE_VIEWER_REQUEST_HANDLER, 'Arn'),
-					// 				'1',
-					// 			],
-					// 		),
-					// 	},
-					// ],
+					LambdaFunctionAssociations: [
+						{
+							EventType: 'origin-request',
+							LambdaFunctionARN: join(
+								':',
+								[
+									getAtt(LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER, 'Arn'),
+									'1',
+								],
+							),
+						},
+						{
+							EventType: 'viewer-request',
+							LambdaFunctionARN: join(
+								':',
+								[
+									getAtt(LAMBDA_EDGE_VIEWER_REQUEST_HANDLER, 'Arn'),
+									'1',
+								],
+							),
+						},
+					],
 				},
 				Origins: [
 					{
@@ -83,6 +83,7 @@ export default {
 					SslSupportMethod: 'sni-only',
 					AcmCertificateArn: ref(SSL),
 				},
+				HttpVersion: 'http2',
 			},
 		},
 	},

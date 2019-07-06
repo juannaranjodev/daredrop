@@ -32,6 +32,7 @@ export const ModalModuleUnconnected = memo(({
 		>
 			<div className={classes.closeContainer}>
 				<button
+					type="button"
 					onClick={() => displayModal(moduleId, false)}
 					className={classes.close}
 				>

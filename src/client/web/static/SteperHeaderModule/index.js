@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleRight } from 'fortawesome-light/fontawesome-light'
@@ -90,7 +90,7 @@ const styles = {
 	},
 }
 
-const SubBanner = ({ classes }) => (
+const SubBanner = memo(({ classes }) => (
 	<div className={classes.container}>
 		<div className={classes.shadowBox}>
 			<div className={classes.stepComponent}>
@@ -113,7 +113,11 @@ const SubBanner = ({ classes }) => (
 					<FontAwesomeIcon icon={faAngleRight} color="rgba(128, 0, 128, 0.8)" size="lg" />
 				</div>
 				<div className={classes.item}>
-					<img src={Player} className={classes.player} alt="player" />
+					<img
+						src={Player}
+						className={classes.player}
+						alt="player"
+					/>
 					<div className={classNames(classes.itemText, classes.enjoyAwesomeContent)}>
 						ENJOY AWESOME CONTENT
 					</div>
@@ -121,6 +125,6 @@ const SubBanner = ({ classes }) => (
 			</div>
 		</div>
 	</div>
-)
+))
 
 export default withStyles(styles)(SubBanner)

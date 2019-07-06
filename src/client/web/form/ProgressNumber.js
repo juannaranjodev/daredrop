@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 
@@ -10,9 +10,8 @@ const styles = {
 	},
 }
 
-
-const ProgressBar = ({ classes, uploadProgress }) => (orNull(uploadProgress, (
+const ProgressBar = memo(({ classes, uploadProgress }) => (orNull(uploadProgress, (
 	<span className={classes.text}>{`${Math.floor((uploadProgress.currentProgress / uploadProgress.targetProgress) * 100)}%`}</span>
-)))
+))))
 
 export default withStyles(styles)(ProgressBar)

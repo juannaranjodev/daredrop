@@ -1,19 +1,18 @@
-import React, { Children } from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import withStyles from '@material-ui/core/styles/withStyles'
-import classNames from 'classnames'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from 'fortawesome-light/fontawesome-light'
 import styles from './styles'
 
-const Modal = (props) => {
+const Modal = memo((props) => {
 	const { classes, onClose, children, visible } = props
 	return (
 		<div className={visible ? classes.backdrop : classes.hide}>
 			<div className={classes.modal}>
 				<div className={classes.closeContainer}>
-					<button onClick={onClose} className={classes.close}>
+					<button type="button" onClick={onClose} className={classes.close}>
 						<FontAwesomeIcon icon={faTimesCircle} size="lg" color="#000000" />
 					</button>
 				</div>
@@ -21,7 +20,7 @@ const Modal = (props) => {
 			</div>
 		</div>
 	)
-}
+})
 
 Modal.propTypes = {
 	visible: PropTypes.bool.isRequired,
