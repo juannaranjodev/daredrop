@@ -12,7 +12,7 @@ export default (survey, ourName, ourEmail, ourUrl) => `
                           </tr>
                           <tr>
                             <td style="margin:0;padding:0;" width="100%">
-                              <p style="font-weight:700;font-size:39px;line-height:1;margin:0;margin-bottom:12px;">We’d love to hear from you!</p>
+                              <p style="font-weight:500;font-size:24px;line-height:1;margin:0;margin-bottom:16px;">We’d love to hear from you!</p>
                             </td>
                           </tr>
                           <tr>
