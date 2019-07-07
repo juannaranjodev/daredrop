@@ -3,7 +3,7 @@ import Link from 'root/src/client/web/base/Link'
 import { TERMS_OF_SERVICE_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 import { EMAIL } from 'root/src/shared/constants/pageData'
 
-const pageContent = memo(classes => [
+const pageContent = classes => [
 	{
 		title: 'Why we use cookies',
 		text: (
@@ -144,6 +144,6 @@ const pageContent = memo(classes => [
 			</React.Fragment>
 		),
 	},
-])
+]
 
 export default pageContent

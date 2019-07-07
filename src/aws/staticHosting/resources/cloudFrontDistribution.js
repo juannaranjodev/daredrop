@@ -3,13 +3,11 @@ import split from 'root/src/aws/util/split'
 import select from 'root/src/aws/util/select'
 import getAtt from 'root/src/aws/util/getAtt'
 import domainName from 'root/src/aws/util/domainName'
-import join from 'root/src/aws/util/join'
 
 import {
-	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET, CLOUDFRONT_IAM_ROLE,
+	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET,
 } from 'root/src/aws/staticHosting/resourceIds'
 import {
-	LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER, LAMBDA_EDGE_VIEWER_REQUEST_HANDLER,
 	LAMBDA_EDGE_VIEWER_VERSION, LAMBDA_EDGE_ORIGIN_VERSION,
 } from 'root/src/aws/lambdaEdge/resourceIds'
 
@@ -17,9 +15,8 @@ export default {
 	[CLOUDFRONT_DISTRIBUTION]: {
 		Type: 'AWS::CloudFront::Distribution',
 		DependsOn: [
-			STATIC_BUCKET, LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER,
-			LAMBDA_EDGE_VIEWER_REQUEST_HANDLER, CLOUDFRONT_IAM_ROLE,
-			LAMBDA_EDGE_VIEWER_VERSION, LAMBDA_EDGE_ORIGIN_VERSION,
+			STATIC_BUCKET, LAMBDA_EDGE_VIEWER_VERSION,
+			LAMBDA_EDGE_ORIGIN_VERSION,
 		],
 		Properties: {
 			DistributionConfig: {

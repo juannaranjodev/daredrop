@@ -10,7 +10,7 @@ import {
 } from 'root/src/shared/constants/pageData'
 
 
-const pageContent = memo(classes => [
+const pageContent = classes => [
 	{
 		title: 'Changes to This Policy',
 		id: ANCHORS.CHANGE_POLICY,
@@ -499,6 +499,6 @@ delete it.
 			</React.Fragment>
 		),
 	},
-])
+]
 
 export default pageContent

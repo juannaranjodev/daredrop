@@ -1,6 +1,6 @@
-import {
-	LAMBDA_EDGE_EXECUTION_ROLE,
-} from 'root/src/aws/lambdaEdge/resourceIds'
+import { LAMBDA_EDGE_EXECUTION_ROLE } from 'root/src/aws/lambdaEdge/resourceIds'
+import join from 'root/src/aws/util/join'
+import ref from 'root/src/aws/util/ref'
 
 export default {
 	[LAMBDA_EDGE_EXECUTION_ROLE]: {
@@ -26,8 +26,32 @@ export default {
 						Statement: [
 							{
 								Effect: 'Allow',
-								Action: ['*'],
-								Resource: ['*'],
+								Action: ['lambda:GetFunction', 'lambda:ReplicateFunction'],
+								Resource: [
+									join(':',
+										['arn:aws:lambda:us-east-1',
+											ref('AWS::AccountId'),
+											'function:*:*',
+										])],
+							},
+							{
+								Effect: 'Allow',
+								Action: ['iam:CreateServiceLinkedRole'],
+								Resource: [
+									join(':',
+										['arn:aws:iam:',
+											ref('AWS::AccountId'),
+											'role/*',
+										])],
+							},
+							{
+								Effect: 'Allow',
+								Action: ['cloudfront:UpdateDistribution'],
+								Resource: join(':',
+									['arn:aws:cloudfront:',
+										ref('AWS::AccountId'),
+										'distribution/*',
+									]),
 							},
 						],
 					},

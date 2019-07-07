@@ -4,12 +4,10 @@ const fs = require('fs')
 const { promisify } = require('util')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
-const CircularDependencyPlugin = require('circular-dependency-plugin')
 const BrotliGzipPlugin = require('brotli-gzip-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const EndWebpackPlugin = require('end-webpack-plugin')
-const RobotstxtPlugin = require('robotstxt-webpack-plugin')
 const appConstants = require('./src/shared/constants/app')
 const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
@@ -53,12 +51,6 @@ module.exports = {
 		host: '0.0.0.0',
 		port: 8585,
 	},
-	// resolve: {
-	// 	alias: {
-	// 		react: 'preact-compat',
-	// 		'react-dom': 'preact-compat',
-	// 	},
-	// },
 	module: {
 		rules: [
 			{
@@ -85,40 +77,30 @@ module.exports = {
 		new HtmlWebpackPlugin(Object.assign({
 			template: path.resolve(__dirname, 'src/client/web/app.html'),
 			hash: isProd,
-			// inject: 'body',
-			// minify: {
-			// 	collapseWhitespace: true,
-			// 	removeRedundantAttributes: true,
-			// 	useShortDoctype: true,
-			// },
 		}, envVars)),
+		// COPY STATICS
 		new webpack.DefinePlugin(
 			map(JSON.stringify, envVars),
 		),
-		// new CircularDependencyPlugin({
-		// 	// exclude detection of files based on a RegExp
-		// 	exclude: /node_modules/,
-		// 	// add errors to webpack instead of warnings
-		// 	failOnError: true,
-		// 	// set the current working directory for displaying module paths
-		// 	cwd: process.cwd(),
-		// }),
 		new CopyWebpackPlugin([
 			{
 				from: path.resolve(__dirname, './src/client/web/static/staticJs/'),
 				to: '',
 			},
 		]),
-		new UglifyJsPlugin({
-			uglifyOptions: {
-				compress: {
-					global_defs: {
-						'@alert': 'console.log',
+		// CONSOLE LOGS REMOVE
+		(isProd
+			? new UglifyJsPlugin({
+				uglifyOptions: {
+					compress: {
+						global_defs: {
+							'@alert': 'console.log',
+						},
+						drop_console: true,
 					},
-					drop_console: true,
 				},
-			},
-		}),
+			}) : () => { }),
+		// COMPRESSION THINGS
 		(isProd
 			? new BrotliGzipPlugin({
 				asset: '[fileWithoutExt].br.[ext][query]',
@@ -127,7 +109,7 @@ module.exports = {
 				threshold: 10240,
 				minRatio: 0.8,
 			})
-			: () => ''),
+			: () => { }),
 		(isProd
 			? new BrotliGzipPlugin({
 				asset: '[fileWithoutExt].[ext][query]',
@@ -135,11 +117,7 @@ module.exports = {
 				test: /\.(js|css|html|svg)$/,
 				threshold: 10240,
 				minRatio: 0.8,
-			}) : () => ''),
-		(isProd
-			? new RobotstxtPlugin({
-				filePath: path.resolve(__dirname, 'dist/build-web-client'),
-			}) : () => ''),
+			}) : () => { }),
 		new EndWebpackPlugin(async () => {
 			const readdir = promisify(fs.readdir)
 			const writeFile = promisify(fs.writeFile)
@@ -158,14 +136,16 @@ module.exports = {
 		minimizer: [new UglifyJsPlugin({
 			sourceMap: true,
 		})],
-		splitChunks: {
-			cacheGroups: {
-				commons: {
-					test: /[\\/]node_modules[\\/]/,
-					name: 'vendors',
-					chunks: 'all',
+		...(isProd ? {
+			splitChunks: {
+				cacheGroups: {
+					commons: {
+						test: /[\\/]node_modules[\\/]/,
+						name: 'vendors',
+						chunks: 'all',
+					},
 				},
 			},
-		},
+		} : {}),
 	},
 }

@@ -10,7 +10,6 @@ const uploadFileHof = (s3Client, bucket) => (
 ) => (
 	new Promise(
 		(resolve, reject) => {
-			console.log(fileName)
 			fs.createReadStream(localPath).pipe(
 				UploadStream(
 					s3Client,

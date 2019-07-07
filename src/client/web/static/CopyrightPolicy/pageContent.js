@@ -3,7 +3,7 @@ import {
 	EMAIL,
 } from 'root/src/shared/constants/pageData'
 
-const pageContent = memo(classes => [
+const pageContent = classes => [
 	{
 		title: 'Policy',
 		text: (
@@ -12,10 +12,10 @@ const pageContent = memo(classes => [
 				infringement in accordance with
 		the <a href="https://www.copyright.gov/legislation/dmca.pdf">
 					Digital Millennium Copyright Act of 1998.
-      </a> Dare Drop removes
-				material that is the subject of a compliant DMCA takedown notice.
-				Section 512 of the DMCA provides the rules for reporting copyright
-				infringement and for filing a counter-notification.
+				</a> Dare Drop removes
+		material that is the subject of a compliant DMCA takedown notice.
+		Section 512 of the DMCA provides the rules for reporting copyright
+		infringement and for filing a counter-notification.
 			</p>
 		),
 	},
@@ -32,18 +32,18 @@ const pageContent = memo(classes => [
 
 					If you believe that your copyright is being infringed, you can file a DMCA
 	notification by emailing us at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. Your
-					claim must include the following information (please note that all
-					information must be submitted in English):
+									claim must include the following information (please note that all
+									information must be submitted in English):
 				</p>
 				<ul className={classes.list}>
 					<li>an electronic or physical signature of the person authorized to act on
 						behalf of the owner of the copyright interest;
 					</li>
 					<li>a description of the copyrighted work that you claim has been infringed;
-     </li>
+					</li>
 					<li>a description of where the material that you claim is infringing is
 						located on the Site, sufficient for Dare Drop to locate the material;
-     </li>
+					</li>
 					<li>your address, telephone number, and email address;
 					</li>
 					<li>a statement by you that you understand that under 17 U.S.C § 512(f) you
@@ -106,6 +106,6 @@ const pageContent = memo(classes => [
 			</React.Fragment>
 		),
 	},
-])
+]
 
 export default pageContent
