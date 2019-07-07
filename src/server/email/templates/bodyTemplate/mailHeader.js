@@ -21,7 +21,7 @@ export default (ourUrl, ourName) => `
                     <td height="105" style="margin:0;padding:0;" width="60"></td>
                     <td height="105" style="margin:0;padding:0;" width="480">
                       <a href="/" width="75" height="37" target="_blank">
-                        <img src="http://${logoSrc}?t=2351" alt="${ourName}" alt="logo" title="logo" width="75" height="37" border="0" style="display:block; border:0;">
+                        <img src="http://${logoSrc}?t=2305" alt="${ourName}" alt="logo" title="logo" width="200" height="100" border="0" style="display:block; border:0;">
                       </a>
                     </td>
                     <td height="105" style="margin:0;padding:0;" width="60"></td>
