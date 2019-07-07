@@ -7,4 +7,3 @@ export const VIDEO_BUCKET_POLICY = `${resourcePrefix}VideoBucketPolicy`
 export const SSL = `${resourcePrefix}SSL`
 export const RECORD_SET = `${resourcePrefix}RecordSet`
 export const CLOUDFRONT_DISTRIBUTION = `${resourcePrefix}CloudfrontDistribution`
-export const CLOUDFRONT_IAM_ROLE = `${resourcePrefix}CloudfrontDistributionIAMRole`
