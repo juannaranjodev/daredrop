@@ -4,7 +4,6 @@ import lambdaEdgeOriginRequestHandler from 'root/src/aws/lambdaEdge/resources/la
 import lambdaEdgeViewerRequestHandler from 'root/src/aws/lambdaEdge/resources/lambdaEdgeViewerRequestHandler'
 import lambdaEdgeOriginVersion from 'root/src/aws/lambdaEdge/resources/lambdaEdgeOriginVersion'
 import lambdaEdgeViewerVersion from 'root/src/aws/lambdaEdge/resources/lambdaEdgeViewerVersion'
-import lambdaVersionExecutionRole from 'root/src/aws/lambdaEdge/resources/lambdaVersionExecutionRole'
 
 export const lambdaEdgeResources = {
 	// lambdas
@@ -12,7 +11,6 @@ export const lambdaEdgeResources = {
 	...lambdaEdgeOriginRequestHandler,
 	...lambdaEdgeViewerRequestHandler,
 	// versions
-	...lambdaVersionExecutionRole,
 	...lambdaEdgeOriginVersion,
 	...lambdaEdgeViewerVersion,
 }

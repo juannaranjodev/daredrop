@@ -26,22 +26,8 @@ export default {
 						Statement: [
 							{
 								Effect: 'Allow',
-								Action: [
-									'lambda:GetFunction',
-								],
+								Action: ['*'],
 								Resource: ['*'],
-							},
-							{
-								Effect: 'Allow',
-								Action: [
-									'logs:CreateLogGroup',
-									'logs:CreateLogStream',
-									'logs:PutLogEvents',
-									'logs:DescribeLogStreams',
-								],
-								Resource: [
-									'arn:aws:logs:*:*:*',
-								],
 							},
 						],
 					},

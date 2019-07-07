@@ -109,6 +109,16 @@ module.exports = {
 				to: '',
 			},
 		]),
+		new UglifyJsPlugin({
+			uglifyOptions: {
+				compress: {
+					global_defs: {
+						'@alert': 'console.log',
+					},
+					drop_console: true,
+				},
+			},
+		}),
 		(isProd
 			? new BrotliGzipPlugin({
 				asset: '[fileWithoutExt].br.[ext][query]',

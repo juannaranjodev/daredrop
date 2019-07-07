@@ -8,7 +8,10 @@ import join from 'root/src/aws/util/join'
 import {
 	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET, CLOUDFRONT_IAM_ROLE,
 } from 'root/src/aws/staticHosting/resourceIds'
-import { LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER, LAMBDA_EDGE_VIEWER_REQUEST_HANDLER } from 'root/src/aws/lambdaEdge/resourceIds'
+import {
+	LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER, LAMBDA_EDGE_VIEWER_REQUEST_HANDLER,
+	LAMBDA_EDGE_VIEWER_VERSION, LAMBDA_EDGE_ORIGIN_VERSION,
+} from 'root/src/aws/lambdaEdge/resourceIds'
 
 export default {
 	[CLOUDFRONT_DISTRIBUTION]: {
@@ -16,6 +19,7 @@ export default {
 		DependsOn: [
 			STATIC_BUCKET, LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER,
 			LAMBDA_EDGE_VIEWER_REQUEST_HANDLER, CLOUDFRONT_IAM_ROLE,
+			LAMBDA_EDGE_VIEWER_VERSION, LAMBDA_EDGE_ORIGIN_VERSION,
 		],
 		Properties: {
 			DistributionConfig: {
@@ -39,23 +43,11 @@ export default {
 					LambdaFunctionAssociations: [
 						{
 							EventType: 'origin-request',
-							LambdaFunctionARN: join(
-								':',
-								[
-									getAtt(LAMBDA_EDGE_ORIGIN_REQUEST_HANDLER, 'Arn'),
-									'1',
-								],
-							),
+							LambdaFunctionARN: ref(LAMBDA_EDGE_ORIGIN_VERSION),
 						},
 						{
 							EventType: 'viewer-request',
-							LambdaFunctionARN: join(
-								':',
-								[
-									getAtt(LAMBDA_EDGE_VIEWER_REQUEST_HANDLER, 'Arn'),
-									'1',
-								],
-							),
+							LambdaFunctionARN: ref(LAMBDA_EDGE_VIEWER_VERSION),
 						},
 					],
 				},

@@ -1,5 +1,7 @@
 import getAtt from 'root/src/aws/util/getAtt'
-import { LAMBDA_EDGE_VIEWER_VERSION, LAMBDA_EDGE_VIEWER_REQUEST_HANDLER } from 'root/src/aws/lambdaEdge/resourceIds'
+import {
+	LAMBDA_EDGE_VIEWER_VERSION, LAMBDA_EDGE_VIEWER_REQUEST_HANDLER,
+} from 'root/src/aws/lambdaEdge/resourceIds'
 
 export default {
 	[LAMBDA_EDGE_VIEWER_VERSION]: {
