@@ -11,7 +11,7 @@ const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
 
 // const env = slsConstants.env || 'dev'
-const env = process.env.stage || 'development'
+const env = process.env.STAGE || 'development'
 const isProd = env === 'production'
 const envVars = Object.assign(
 	{ __sha__: process.env.CIRCLE_SHA1 || 'dev' },
@@ -40,6 +40,7 @@ module.exports = {
 		historyApiFallback: true,
 		contentBase: path.join(__dirname, 'src/client/web'),
 		compress: true,
+		host: '0.0.0.0',
 		port: 8585,
 	},
 	module: {

@@ -1,7 +1,8 @@
-import { map, head, last, length, gt, compose, __ } from 'ramda'
+import { map, head, last, length, gt, compose, __, not } from 'ramda'
 import React, { memo, useState } from 'react'
 import classNames from 'classnames'
 import InfiniteScroll from 'react-infinite-scroller'
+import Link from 'root/src/client/web/base/Link'
 
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 import PaymentMethod from 'root/src/client/web/list/PaymentMethod'
@@ -15,6 +16,9 @@ import LinkButton from 'root/src/client/web/base/LinkButton'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import scrollTopHandler from 'root/src/client/logic/list/handlers/goTopHandler'
 import List from '@material-ui/core/List'
+import {
+	CREATE_PROJECT_ROUTE_ID,
+} from 'root/src/shared/descriptions/routes/routeIds'
 
 import listModuleConnector from 'root/src/client/logic/api/connectors/listModuleConnector'
 
@@ -32,7 +36,7 @@ export const CardList = ({
 					hasMore={hasMore}
 				>
 					{ternary(
-						compose(gt(__, 0), length, head),
+						compose(gt(__, 0), length, head)(list),
 						(
 							<div
 								className={classNames(
@@ -52,8 +56,21 @@ export const CardList = ({
 							</div>
 						),
 						(
-							<div>
-									Nothing found
+							<div
+								className={classNames(
+									classes.paddingOffset,
+									'layout-row layout-wrap',
+									classes.nothingHeight,
+								)}
+							>
+								<div className={classes.nothingTextContainer}>
+								No Dares match your criteria, want to
+									<span>{' '} </span>
+									<Link routeId={CREATE_PROJECT_ROUTE_ID}>
+										<span className={classes.createNewLink}>make one</span>
+									</Link>
+								?
+								</div>
 							</div>
 						),
 					)}
@@ -97,6 +114,9 @@ const UniversalList = ({
 			/>
 			<Title notUpperCase>{listTitle}</Title>
 			<SubTitle additionalClass={classes.subtitle}>{listSubtitle}</SubTitle>
+			{
+				compose(not, gt(__, 0), length, last)(list) && <div className={classes.noPaymentMessage}>No payment method saved</div>
+			}
 			{map(recordId => (
 				<PaymentMethod
 					key={recordId}

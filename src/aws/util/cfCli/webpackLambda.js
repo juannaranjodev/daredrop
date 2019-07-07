@@ -18,8 +18,11 @@ export const buildFilesHof = buildPath => ({
 		webpack(
 			createWebpackConf(entryPath, resourceKey, buildPath),
 			(err, stats) => {
-				if (err || stats.hasErrors()) {
+				if (err) {
 					reject(err)
+				} else if (stats.hasErrors()) {
+					const info = stats.toJson()
+					reject(info.errors)
 				}
 				resolve()
 			},

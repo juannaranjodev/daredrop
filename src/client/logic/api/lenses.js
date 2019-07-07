@@ -3,6 +3,11 @@ import { prop } from 'ramda'
 import lensesFromSchema from 'root/src/shared/util/lensesFromSchema'
 
 import { variableSchemaKey } from 'root/src/shared/util/commonLenses'
+import {
+	project, projectList, projectAccepted, projectPledged,
+	external, userData, paymentMethod, payoutMethod,
+} from 'root/src/shared/descriptions/endpoints/recordTypes'
+
 
 const apiStoreSchema = {
 	type: 'object',
@@ -44,10 +49,78 @@ const apiStoreSchema = {
 				},
 				records: {
 					type: 'object',
-					patternProperties: {
-						[variableSchemaKey]: { // recordTypes-recordId
+					properties: {
+						[project]: {
 							type: 'object',
-							properties: {},
+							patternProperties: {
+								[variableSchemaKey]: {
+									type: 'object',
+									properties: {},
+								},
+							},
+						},
+						[projectList]: {
+							type: 'object',
+							patternProperties: {
+								[variableSchemaKey]: {
+									type: 'object',
+									properties: {},
+								},
+							},
+						},
+						[projectAccepted]: {
+							type: 'object',
+							patternProperties: {
+								[variableSchemaKey]: {
+									type: 'object',
+									properties: {},
+								},
+							},
+						},
+						[projectPledged]: {
+							type: 'object',
+							patternProperties: {
+								[variableSchemaKey]: {
+									type: 'object',
+									properties: {},
+								},
+							},
+						},
+						[external]: {
+							type: 'object',
+							patternProperties: {
+								[variableSchemaKey]: {
+									type: 'object',
+									properties: {},
+								},
+							},
+						},
+						[userData]: {
+							type: 'object',
+							patternProperties: {
+								[variableSchemaKey]: {
+									type: 'object',
+									properties: {},
+								},
+							},
+						},
+						[paymentMethod]: {
+							type: 'object',
+							patternProperties: {
+								[variableSchemaKey]: {
+									type: 'object',
+									properties: {},
+								},
+							},
+						},
+						[payoutMethod]: {
+							type: 'object',
+							patternProperties: {
+								[variableSchemaKey]: {
+									type: 'object',
+									properties: {},
+								},
+							},
 						},
 					},
 				},

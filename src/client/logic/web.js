@@ -47,7 +47,6 @@ import apiRecordClickActionRequestSuccess from 'root/src/client/logic/api/reduce
 import initApiRecordClickActionRequest from 'root/src/client/logic/api/reducers/initApiRecordClickActionRequest'
 import deletePaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/deletePaymentMethodOnSuccess'
 import setDefaultPaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/setDefaultPaymentMethodOnSuccess'
-import addPaymentMethodOnSuccess from 'root/src/client/logic/list/reducers/addPaymentMethodOnSuccess'
 import addPayoutMethodOnSuccess from 'root/src/client/logic/payoutMethod/reducers/addPayoutMethodOnSuccess'
 
 // list
@@ -56,8 +55,7 @@ import currentPage from 'root/src/client/logic/list/reducers/currentPage'
 import hasMore from 'root/src/client/logic/list/reducers/hasMore'
 
 // headers
-import addFilterParams from 'root/src/client/logic/header/reducers/addFilterParams'
-import addSortParams from 'root/src/client/logic/header/reducers/addSortParams'
+import addSortFilterParams from 'root/src/client/logic/header/reducers/addSortFilterParams'
 import cleareProjectArray from 'root/src/client/logic/header/reducers/clearProjectArray'
 import setGameFilterValue from 'root/src/client/logic/header/reducers/setGameFilterValue'
 import setStreamerFilterValue from 'root/src/client/logic/header/reducers/setStreamerFilterValue'
@@ -76,6 +74,8 @@ import windowSizeListener from 'root/src/client/logic/app/listeners/windowSizeLi
 // modal
 import displayModal from 'root/src/client/logic/modal/reducers/displayModal'
 
+// embedded
+import changeEmbeddedFieldData from 'root/src/client/logic/embedded/reducers/changeEmbeddedFieldData'
 
 const store = createStore(
 	{
@@ -110,7 +110,6 @@ const store = createStore(
 		...clearPartialFormKeys,
 		...deletePaymentMethodOnSuccess,
 		...apiExternalRequestError,
-		...addPaymentMethodOnSuccess,
 		...deletePaymentMethodOnSuccess,
 		...setDefaultPaymentMethodOnSuccess,
 		...partialFormDbSaveSuccess,
@@ -125,8 +124,7 @@ const store = createStore(
 		...displayModal,
 		...addPayoutMethodOnSuccess,
 		...uploadProgress,
-		...addFilterParams,
-		...addSortParams,
+		...addSortFilterParams,
 		...cleareProjectArray,
 		...setGameFilterValue,
 		...setStreamerFilterValue,
@@ -135,6 +133,7 @@ const store = createStore(
 		...clearList,
 		...clearListProcessing,
 		...setSortValue,
+		...changeEmbeddedFieldData,
 	}, // reducer object
 	// [], // sagas
 	[

@@ -1,9 +1,5 @@
-import { pathOr } from 'ramda'
+import { apiStoreLenses } from 'root/src/client/logic/api/lenses'
 
-export default (state, props = {}) => {
-	const userDataObj = (pathOr(undefined, ['api', 'userData'], state))
-	if (!userDataObj) {
-		return {}
-	}
-	return userDataObj
-}
+const { viewUserData } = apiStoreLenses
+
+export default state => viewUserData(state) || {}

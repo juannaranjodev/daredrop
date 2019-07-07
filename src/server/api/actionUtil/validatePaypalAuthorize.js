@@ -3,7 +3,7 @@ import paypalClient from 'root/src/server/api/paypalClient'
 import { path, equals, not, lt, gt } from 'ramda'
 
 export default (paymentId, pledgeAmount) => new Promise(async (resolve, reject) => {
-	const ppClientAuthorized = await paypalClient
+	const ppClientAuthorized = await paypalClient()
 	ppClientAuthorized.order.get(paymentId, (error, order) => {
 		if (error) {
 			reject(new Error(error))

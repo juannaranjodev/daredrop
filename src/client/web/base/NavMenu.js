@@ -36,10 +36,6 @@ const styles = {
 		display: 'flex',
 		alignItems: 'center',
 	},
-	centeredButton: {
-		display: 'flex',
-		alignItems: 'center'
-	},
 	navLinkStyle,
 }
 

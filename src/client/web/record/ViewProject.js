@@ -233,7 +233,6 @@ export const ViewProjectModule = memo(({
 		setTitle(projectTitle)
 		setDescription(projectDescription)
 	}, [projectTitle, projectDescription])
-
 	return (
 		<div className="flex layout-row layout-align-center-start">
 			<MaxWidthContainer>

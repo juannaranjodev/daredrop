@@ -20,5 +20,7 @@ export default reduxConnector(
 		['fieldLabel', fieldLabel],
 		['fieldPlaceholder', fieldPlaceholder],
 	],
-	[['setInput', setInput]],
+	[
+		['setInput', setInput],
+	],
 )

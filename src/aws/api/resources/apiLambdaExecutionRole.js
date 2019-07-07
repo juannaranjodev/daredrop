@@ -3,14 +3,18 @@ import join from 'root/src/aws/util/join'
 import ref from 'root/src/aws/util/ref'
 
 import {
-	API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE, API_CLOUDWATCH_EVENTS_ROLE,
+	API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE,
+	PERFORMANCE_TEST_DYNAMODB_DATA_TABLE,
 } from 'root/src/aws/api/resourceIds'
+
+import { CLOUDWATCH_EVENTS_ROLE } from 'root/src/aws/cloudWatchEvents/resourceIds'
 
 export default {
 	[API_LAMBDA_EXECUTION_ROLE]: {
 		Type: 'AWS::IAM::Role',
 		DependsOn: [
-			API_DYNAMO_DB_TABLE, API_CLOUDWATCH_EVENTS_ROLE,
+			API_DYNAMO_DB_TABLE, CLOUDWATCH_EVENTS_ROLE,
+			...(process.env.STAGE !== 'production' ? [PERFORMANCE_TEST_DYNAMODB_DATA_TABLE] : []),
 		],
 		Properties: {
 			AssumeRolePolicyDocument: {
@@ -96,13 +100,22 @@ export default {
 									'dynamodb:BatchGetItem',
 								],
 								// For ARN/index/x_index
-								Resource: join(
-									'',
-									[
-										getAtt(API_DYNAMO_DB_TABLE, 'Arn'),
-										'*',
-									],
-								),
+								Resource: [
+									join(
+										'',
+										[
+											getAtt(API_DYNAMO_DB_TABLE, 'Arn'),
+											'*',
+										],
+									),
+									...(process.env.STAGE !== 'production' ? [join(
+										'',
+										[
+											getAtt(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, 'Arn'),
+											'*',
+										],
+									)] : []),
+								],
 							},
 							{
 								Sid: 'CloudWatchEventsFullAccess',
@@ -114,7 +127,7 @@ export default {
 								Sid: 'IAMPassRoleForCloudWatchEvents',
 								Effect: 'Allow',
 								Action: 'iam:PassRole',
-								Resource: getAtt(API_CLOUDWATCH_EVENTS_ROLE, 'Arn'),
+								Resource: getAtt(CLOUDWATCH_EVENTS_ROLE, 'Arn'),
 							},
 						],
 					},

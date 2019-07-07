@@ -4,8 +4,7 @@ import createRecordStoreKey from 'root/src/client/logic/api/util/createRecordSto
 import currentRouteParamsRecordId from 'root/src/client/logic/route/selectors/currentRouteParamsRecordId'
 
 import { apiStoreLenses } from 'root/src/client/logic/api/lenses'
-
-const { viewRecordsChild } = apiStoreLenses
+import getLensFromType from 'root/src/client/logic/api/util/getLensFromType'
 
 export default (state, props = {}) => {
 	const { moduleId, recordId } = props
@@ -13,10 +12,11 @@ export default (state, props = {}) => {
 	let recordType
 	if (typeof endpointId === 'string') {
 		recordType = recordTypeSelector(endpointId)
-	}	else {
+	} else {
 		recordType = recordTypeSelector(endpointId[0])
 	}
 
+	const viewRecordsChild = getLensFromType('view', 'child', recordType, apiStoreLenses)
 	// From a list module we just pass in the recordId, for a record view we
 	// have to get it from the current route params
 	let recordStoreId

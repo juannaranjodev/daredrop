@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
 // libs
-import { prop, propEq, map, filter, equals, and, not, startsWith } from 'ramda'
+import { prop, propEq, map, filter, equals, and, not, startsWith, omit } from 'ramda'
 import moment from 'moment'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 // db stuff
@@ -57,8 +57,8 @@ export default async ({ payload }) => {
 			Item: {
 				...assigneeDynamoObj({
 					...assignee,
-					accepted: ternary(equals(audit, projectDeliveredKey),
-						streamerDeliveryApprovedKey, prop('accepted', assignee)),
+					accepted: streamerDeliveryApprovedKey,
+					deliveryVideo: projectDeliveredKey,
 				},
 				projectId),
 			},
@@ -111,6 +111,7 @@ export default async ({ payload }) => {
 		)
 		const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
 		const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
+
 		await documentClient.batchWrite(writeParams).promise()
 		map((streamerEmail) => {
 			const emailData = {
@@ -125,7 +126,6 @@ export default async ({ payload }) => {
 	} catch (err) {
 		console.log('ses error')
 	}
-
 	if (equals(audit, projectDeliveredKey)) {
 		const capturesAmount = await captureProjectPledges(projectId)
 
@@ -134,20 +134,19 @@ export default async ({ payload }) => {
 		}
 		const projectToCapture = await dynamoQueryProjectToCapture(projectId)
 		const captureToWrite = await capturePaymentsWrite(projectToCapture, capturesAmount)
-
 		await documentClient.batchWrite({
 			RequestItems: {
 				[TABLE_NAME]: captureToWrite,
 			},
 		}).promise()
-
 		const eventDate = moment().add(5, 'days')
 		try {
 			await setupCronJob(
 				{
 					endpointId: PAYOUT_ASSIGNEES,
 					payload: { projectId },
-					apiKey: prop('secretKey', await keyProtectedClient),
+					apiKey: 'for now it is just mock',
+					// apiKey: prop('secretKey', await keyProtectedClient()),
 				},
 				eventDate, 'projectId',
 			)
@@ -156,8 +155,8 @@ export default async ({ payload }) => {
 		}
 	}
 
-	return {
+	return omit(['assignees'], {
 		...projectSerialized,
 		status: audit,
-	}
+	})
 }

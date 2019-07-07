@@ -6,19 +6,18 @@ import { productionGoogle, developmentGoogle } from 'root/src/shared/constants/s
 const secretsClient = new SecretsManager()
 const secretName = process.env.STAGE === 'production' ? productionGoogle : developmentGoogle
 
-export default new Promise((resolve, reject) => {
-	secretsClient.getSecretValue({ SecretId: secretName }, (err, data) => {
-		if (err) {
-			reject(err)
-		}
+export default async () => {
+	try {
+		const data = await secretsClient.getSecretValue({ SecretId: secretName }).promise()
 		const { clientSecret, refreshToken, clientId } = JSON.parse(data.SecretString)
 		const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectURI)
-
 		oauth2Client.setCredentials({
 			refresh_token: refreshToken,
 		})
-		resolve(oauth2Client)
-	})
-})
+		return oauth2Client
+	} catch (err) {
+		throw new Error(err)
+	}
+}
 
 export const youtube = google.youtube('v3')
