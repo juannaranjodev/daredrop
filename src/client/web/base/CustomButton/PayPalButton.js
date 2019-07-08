@@ -1,24 +1,35 @@
 /* eslint-disable max-len */
 import { PayPalButton } from 'react-paypal-button-v2'
 import React, { memo } from 'react'
-import PropTypes from 'prop-types'
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import buttonConnector from 'root/src/client/logic/form/connectors/buttonConnector'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 
 const styles = {
+	errorTip: {
+		width: '100%',
+		color: '#f00',
+		height: '27px',
+		outline: 'none',
+		padding: '5px 0 5px 0',
+		fontSize: '15px',
+		background: 'none',
+		fontWeight: '400',
+		textAlign: 'center',
+		backgrounColor: '#fff',
+	},
 }
 
 
 const PayPalButtonUnconnected = memo(({
-	moduleKey, payPalCreateOrder, payPalOnApprove, payPalOnError,
+	payPalCreateOrder, payPalOnApprove, payPalOnError,
 	customSubmitsData, submitIndex, buttonErrorTip, classes,
 }) => (
 	<div>
 		{orNull(
 			buttonErrorTip,
-			<div>
-				{'This is error'}
+			<div className={classes.errorTip}>
+				{buttonErrorTip}
 			</div>,
 		)}
 		<PayPalButton

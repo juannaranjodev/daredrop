@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { map, pathOr, gte } from 'ramda'
 import PayPalButton from 'root/src/client/web/base/CustomButton/PayPalButton'
 import PayPalCustomButton from 'root/src/client/web/base/CustomButton/PayPalCustomButton'
-
+import { PAYPAL_BUTTON } from 'root/src/client/logic/form/buttonNames'
 
 export const SubmitsUnstyled = memo(({
 	customSubmits, customSubmitsData, payPalCreateOrder, payPalOnApprove, payPalOnError, customPayPalAction,
@@ -20,7 +20,7 @@ export const SubmitsUnstyled = memo(({
 							payPalOnError={payPalOnError}
 							customSubmitsData={customSubmitsData}
 							submitIndex={submitIndex}
-							buttonName="paypalButton"
+							buttonName={PAYPAL_BUTTON}
 						/>
 					) : (
 						<PayPalCustomButton

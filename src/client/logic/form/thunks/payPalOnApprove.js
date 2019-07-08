@@ -1,5 +1,5 @@
 import { prop, path, omit } from 'ramda'
-import setFormErrors from 'root/src/client/logic/form/actions/setFormErrors'
+import setButtonErrors from 'root/src/client/logic/form/actions/setButtonErrors'
 import successPageSelector from 'root/src/client/logic/form/selectors/submitSuccessPageSelector'
 import endpointIdSelector from 'root/src/client/logic/form/selectors/submitEndpointIdSelector'
 import clearForm from 'root/src/client/logic/form/actions/clearForm'
@@ -13,6 +13,7 @@ import { formStoreLenses } from 'root/src/client/logic/form/lenses'
 import clearPartialFormKeys from 'root/src/client/logic/form/actions/clearPartialFormKeys'
 import invokeApiLambda from 'root/src/client/logic/api/util/invokeApiLambda'
 import { CLEAR_PARTIAL_FORM_KEYS } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { PAYPAL_BUTTON } from 'root/src/client/logic/form/buttonNames'
 
 const { viewFormChild } = formStoreLenses
 
@@ -54,6 +55,8 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 				dispatch(submitFormComplete(moduleKey))
 				return dispatch(pushRoute(successPage))
 			})
-			.catch(err => dispatch(setFormErrors(moduleKey, err)))
-	}).catch(err => dispatch(setFormErrors(moduleKey, { paypalButton: 'Pledge amount must be at least $1.' })))
+			.catch(err => dispatch(setButtonErrors(moduleKey, { PAYPAL_BUTTON: 'PayPal payment failed, please try again' })))
+	}).catch((err) => {
+		dispatch(setButtonErrors(moduleKey, { PAYPAL_BUTTON: 'PayPal payment failed, please try again' }))
+	})
 }
