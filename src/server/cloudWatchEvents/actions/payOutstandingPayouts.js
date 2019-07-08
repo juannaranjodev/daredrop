@@ -72,6 +72,7 @@ export default async () => {
 				],
 			},
 		}
+
 		await documentClient.batchWrite(saveParams).promise()
 		await sendEmailToAssigneesWithoutPaypalEmail(usersWithoutPaypalMail)
 

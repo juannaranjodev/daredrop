@@ -5,9 +5,6 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import classNames from 'classnames'
 
 import styled from 'root/src/client/web/base/StaticLayout/style'
-import Megaphone from 'root/src/client/assets/Megaphone.svg'
-import Bubbles from 'root/src/client/assets/Bubbles.svg'
-import Player from 'root/src/client/assets/Player.svg'
 
 const styles = {
 	section: {
@@ -95,7 +92,6 @@ const SubBanner = ({ classes }) => (
 		<div className={classes.shadowBox}>
 			<div className={classes.stepComponent}>
 				<div className={classNames(classes.item, classes.megaphoneItem)}>
-					<img src={Megaphone} className={classes.megaphone} alt="megaphone" />
 					<div className={classNames(classes.itemText, classes.dareAStreamer)}>
 					DARE A STREAMER
 					</div>
@@ -104,7 +100,6 @@ const SubBanner = ({ classes }) => (
 					<FontAwesomeIcon icon={faAngleRight} color="rgba(128, 0, 128, 0.8)" size="lg" />
 				</div>
 				<div className={classes.item}>
-					<img src={Bubbles} className={classes.bubbles} alt="bubbles" />
 					<div className={classNames(classes.itemText, classes.crowdfundYourDare)}>
 					CROWDFUND YOUR DARE
 					</div>
@@ -113,7 +108,6 @@ const SubBanner = ({ classes }) => (
 					<FontAwesomeIcon icon={faAngleRight} color="rgba(128, 0, 128, 0.8)" size="lg" />
 				</div>
 				<div className={classes.item}>
-					<img src={Player} className={classes.player} alt="player" />
 					<div className={classNames(classes.itemText, classes.enjoyAwesomeContent)}>
 					ENJOY AWESOME CONTENT
 					</div>

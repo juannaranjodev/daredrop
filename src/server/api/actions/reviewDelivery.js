@@ -34,7 +34,6 @@ import videoApprovedEmail from 'root/src/server/email/templates/videoApproved'
 import videoRejectedEmail from 'root/src/server/email/templates/videoRejected'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 // rest
-import keyProtectedClient from 'root/src/server/api/keyProtectedClient'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
@@ -152,8 +151,6 @@ export default async ({ payload }) => {
 				{
 					endpointId: PAYOUT_ASSIGNEES,
 					payload: { projectId },
-					apiKey: 'for now it is just mock',
-					// apiKey: prop('secretKey', await keyProtectedClient()),
 				},
 				eventDate, 'projectId',
 			)

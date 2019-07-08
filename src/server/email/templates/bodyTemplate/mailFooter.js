@@ -12,7 +12,7 @@ export default (survey, ourName, ourEmail, ourUrl) => `
                           </tr>
                           <tr>
                             <td style="margin:0;padding:0;" width="100%">
-                              <p style="font-weight:700;font-size:39px;line-height:1;margin:0;margin-bottom:16px;">We’d love to hear from you!</p>
+                              <p style="font-weight:500;font-size:24px;line-height:1;margin:0;margin-bottom:16px;">We’d love to hear from you!</p>
                             </td>
                           </tr>
                           <tr>
@@ -24,13 +24,13 @@ export default (survey, ourName, ourEmail, ourUrl) => `
                           </tr>
                           <tr height="80">
                             <td style="margin:0;padding:0;" align="center" width="100%">
-                              <a href="/" target="_blank" width="21" height="21" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
+                              <a href="https://www.facebook.com/daredrops" target="_blank" width="21" height="21" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
                                 <img src="https://${ourUrl}/facebook.png" alt="facebook" title="facebook" width="21" height="21" border="0" style="display: block; border:0;">
                               </a>
-                              <a href="/" target="_blank" width="22" height="22" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
+                              <a href="https://www.twitter.com/daredrops" target="_blank" width="22" height="22" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
                                 <img src="https://${ourUrl}/twitter.png" alt="twitter" title="twitter" width="22" height="22" border="0" style="display: block; border:0;">
                               </a>
-                              <a href="/" target="_blank" width="22" height="22" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
+                              <a href="https://instagram.com/dare.drop" target="_blank" width="22" height="22" style="display:inline-block;margin-left:10px;margin-right:10px;vertical-align:middle;">
                                 <img src="https://${ourUrl}/instagram.png" alt="instagram" title="instagram" width="22" height="22" border="0" style="display: block; border:0;">
                               </a>
                             </td>
