@@ -88,9 +88,9 @@ module.exports = {
 				to: '',
 			},
 		]),
-		// CONSOLE LOGS REMOVE
-		(isProd
-			? new UglifyJsPlugin({
+		...(isProd ? [
+			// CONSOLE LOGS REMOVE
+			new UglifyJsPlugin({
 				uglifyOptions: {
 					compress: {
 						global_defs: {
@@ -99,25 +99,25 @@ module.exports = {
 						drop_console: true,
 					},
 				},
-			}) : () => { }),
-		// COMPRESSION THINGS
-		(isProd
-			? new BrotliGzipPlugin({
+			}),
+			// COMPRESSION THINGS
+			new BrotliGzipPlugin({
 				asset: '[fileWithoutExt].br.[ext][query]',
 				algorithm: 'brotli',
 				test: /\.(js|css|html|svg)$/,
 				threshold: 10240,
 				minRatio: 0.8,
-			})
-			: () => { }),
-		(isProd
-			? new BrotliGzipPlugin({
+			}),
+			new BrotliGzipPlugin({
 				asset: '[fileWithoutExt].[ext][query]',
 				algorithm: 'gzip',
 				test: /\.(js|css|html|svg)$/,
 				threshold: 10240,
 				minRatio: 0.8,
-			}) : () => { }),
+			}),
+		] : []),
+		// WRITING COMPRESSED FILENAMES TO FILE (LEAVING THIS IN DEV ENV
+		// JUST NOT TO CRASH BECAUSE OF BLANK webpackCompressedFilenames.js)
 		new EndWebpackPlugin(async () => {
 			const readdir = promisify(fs.readdir)
 			const writeFile = promisify(fs.writeFile)
