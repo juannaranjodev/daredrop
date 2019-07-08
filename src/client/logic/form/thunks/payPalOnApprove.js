@@ -17,7 +17,7 @@ import { CLEAR_PARTIAL_FORM_KEYS } from 'root/src/shared/descriptions/endpoints/
 const { viewFormChild } = formStoreLenses
 
 export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) => async (dispatch, getState) => {
-	actions.order.authorize().then(async ({ purchase_units }) => {
+	actions.order.authorize().then(async ({ purchaseUnits }) => {
 		const state = getState()
 		const partialFormEntries = viewFormChild(`db-${moduleKey}`, state)
 		if (partialFormEntries) {
@@ -33,7 +33,7 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 		}
 
 		const projectId = currentRouteParamsRecordId(state)
-		const paymentAuthorization = path([0, 'payments', 'authorizations', 0], purchase_units)
+		const paymentAuthorization = path([0, 'payments', 'authorizations', 0], purchaseUnits)
 
 		const paymentInfo = {
 			paymentId: prop('id', paymentAuthorization),
@@ -47,13 +47,13 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 		}
 		const successPage = successPageSelector(moduleId, submitIndex)
 		const endpointId = endpointIdSelector(moduleId, submitIndex)
-		
+
 		dispatch(apiRequest(endpointId, apiPayload))
-		.then((res) => {
-			dispatch(clearForm(moduleKey))
-			dispatch(submitFormComplete(moduleKey))
-			return dispatch(pushRoute(successPage))
-		})
-		.catch(err => dispatch(setFormErrors(moduleKey, err)))
-	}).catch(err => dispatch(setFormErrors(moduleKey, err)))
+			.then(() => {
+				dispatch(clearForm(moduleKey))
+				dispatch(submitFormComplete(moduleKey))
+				return dispatch(pushRoute(successPage))
+			})
+			.catch(err => dispatch(setFormErrors(moduleKey, err)))
+	}).catch(err => dispatch(setFormErrors(moduleKey, { paypalButton: 'Pledge amount must be at least $1.' })))
 }

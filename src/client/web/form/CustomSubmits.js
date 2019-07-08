@@ -20,6 +20,7 @@ export const SubmitsUnstyled = memo(({
 							payPalOnError={payPalOnError}
 							customSubmitsData={customSubmitsData}
 							submitIndex={submitIndex}
+							buttonName="paypalButton"
 						/>
 					) : (
 						<PayPalCustomButton
