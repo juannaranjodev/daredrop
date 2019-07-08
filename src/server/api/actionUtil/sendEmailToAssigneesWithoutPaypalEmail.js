@@ -11,5 +11,6 @@ export default async (assigneesWithoutMail) => {
 		title: payoutFailureTitle,
 		recipients: userEmails,
 	}
+
 	await sendEmail(emailDataForCreator, payoutFailure)
 }

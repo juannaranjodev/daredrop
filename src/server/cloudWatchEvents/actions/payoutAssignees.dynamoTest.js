@@ -1,5 +1,6 @@
 /* eslint-disable comma-spacing */
-import { apiFn } from 'root/src/server/api'
+import { apiFn } from 'root/src/server/cloudWatchEvents'
+import { apiFn as serverApiFn } from 'root/src/server/api'
 
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import createProject from 'root/src/server/api/actions/createProject'
@@ -187,7 +188,7 @@ describe('payoutAssignees', async () => {
 		expect(payoutsCalculated.usersWithPaypalMail[0].payout + payoutsCalculated.usersWithoutPaypalMail[0].payout).toBeCloseTo((479960 - dareDropFee), 7)
 	})
 
-	test.skip('can\'t make payout without apiKey specified (protection for cron invoked actions)', async () => {
+	test('can\'t make payout from normal apiLambda (protection for cron invoked actions)', async () => {
 		const event = {
 			endpointId: PAYOUT_ASSIGNEES,
 			payload: {
@@ -195,8 +196,8 @@ describe('payoutAssignees', async () => {
 			},
 		}
 
-		const res = await apiFn(event)
-		expect(res.statusCode).toEqual(401)
+		const res = await serverApiFn(event)
+		expect(res.statusCode).toEqual(500)
 	})
 
 	test('can make payout and haves still one pending payout for user without email', async () => {

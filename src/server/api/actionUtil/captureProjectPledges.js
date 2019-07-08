@@ -1,4 +1,4 @@
-import { reduce, assoc, prop, map, unnest, path, anyPass, gte, lt, filter, __, gt, add } from 'ramda'
+import { reduce, assoc, propOr, prop, map, unnest, path, anyPass, gte, lt, filter, __, gt, add } from 'ramda'
 import dynamoQueryProjectPledges from 'root/src/server/api/actionUtil/dynamoQueryProjectPledges'
 import capturePayments from 'root/src/server/api/actionUtil/capturePayments'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
@@ -24,6 +24,6 @@ export default async (projectId) => {
 		return false
 	}
 
-	return reduce((acc, item) => add(acc, prop('transactionNet', item)),
+	return reduce((acc, item) => add(acc, propOr(0, 'transactionNet', item)),
 		0, captures)
 }
