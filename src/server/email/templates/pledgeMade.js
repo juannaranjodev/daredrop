@@ -5,7 +5,7 @@ import expiryCalculator from 'root/src/server/email/util/expiryCalculator'
 
 export default ({ dareTitle, expiryTime, dareHref, streamers, notClaimedAlready }) => {
 	const mailContent = `
-              <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="480" class="content">
+              <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="80%" class="content">
                 <tbody>
                   <tr>
                     <td height="50" style="margin:0;padding:0;" width="100%"></td>
