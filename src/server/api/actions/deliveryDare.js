@@ -36,41 +36,38 @@ export default async ({ payload, userId }) => {
 
 	const deliveryProjectDdb = await documentClient.query(deliveryQueryParams).promise()
 	const [deliveryProject] = dynamoItemsProp(deliveryProjectDdb)
-
-	const s3UpdateParams = {
-		TableName: TABLE_NAME,
-		Key: {
-			[PARTITION_KEY]: deliveryProject[PARTITION_KEY],
-			[SORT_KEY]: deliveryProject[SORT_KEY],
-		},
-		UpdateExpression: 'SET s3Uploaded = :s3Uploaded',
-		ExpressionAttributeValues: {
-			':s3Uploaded': true,
-		},
-	}
-	await documentClient.update(s3UpdateParams).promise()
 	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)
 
 	const project = projectSerializer([
 		...projectDdb,
 		...assigneesDdb,
 	])
-
-	const projectUpdateParams = {
-		TableName: TABLE_NAME,
-		Key: {
-			[PARTITION_KEY]: prop('id', project),
-			[SORT_KEY]: head(projectDdb)[SORT_KEY],
-		},
-		UpdateExpression: 'SET #sts = :statusVal',
-		ExpressionAttributeValues: {
-			':statusVal': projectDeliveryPendingKey,
-		},
-		ExpressionAttributeNames: {
-			'#sts': 'status',
+	const s3DataWrite = {
+		PutRequest: {
+			Item: {
+				[PARTITION_KEY]: deliveryProject[PARTITION_KEY],
+				[SORT_KEY]: deliveryProject[SORT_KEY],
+				...deliveryProject,
+				s3Uploaded: true,
+			},
 		},
 	}
-	await documentClient.update(projectUpdateParams).promise()
+	const projectDataToWrite = {
+		PutRequest: {
+			Item: {
+				[PARTITION_KEY]: prop('id', project),
+				[SORT_KEY]: head(projectDdb)[SORT_KEY],
+				...head(projectDdb),
+				status: projectDeliveryPendingKey,
+			},
+		},
+	}
+	const writeParams = {
+		RequestItems: {
+			[TABLE_NAME]: [s3DataWrite, projectDataToWrite],
+		},
+	}
+	await documentClient.batchWrite(writeParams).promise()
 	const acceptedAssignees = getAssigneesByStatus(project.assignees, streamerAcceptedKey)
 
 	const displayPlusNewline = input => `${prop('displayName', input)}: https://www.twitch.tv/${prop('displayName', input)}\n`
