@@ -8,8 +8,8 @@ import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import TitleStrideText from 'root/src/client/web/typography/TitleStrideText'
 import cardDateSelector from 'root/src/client/web/list/util/cardDateSelector'
+import classNames from 'classnames'
 import { useStyles } from './stripeStyles'
-
 
 const mapIndexed = addIndex(map)
 
@@ -20,7 +20,7 @@ const StripeLists = memo(({ stripe, setInput, moduleKey, fieldPath, list, setVie
 		setInput(moduleKey, fieldPath, radiovalue)
 	}, [radiovalue])
 	return (
-		<FormControl className={classes.formConrol}>
+		<FormControl className={classNames('layout-row', 'layout-wrap', 'layout-align-space-between', classes.formConrol)}>
 			<TitleStrideText icon>Credit Card Number:</TitleStrideText>
 			<RadioGroup
 				onChange={event => setValue(event.target.value)}
