@@ -10,17 +10,34 @@ const styles = {
 	image: {
 		width: 100,
 		height: 100,
+		'@media screen and (max-width: 425px)': {
+			width: 80,
+			height: 80
+		}
 	},
 	linkStyle: {
 		textDecoration: 'none',
+		flexBasis: 1,
+		flexGrow: 1,
+		width: '50%'
 	},
 	linkText: {
 		color: 'black',
+		width: 100,
 		marginLeft: 8,
-		marginTop: -12,
 		'& div': {
 			fontWeight: 'bold',
 		},
+		'@media screen and (max-width: 425px)': {
+			width: 80,
+		}
+	},
+	fontStyle: {
+	    overflow: 'hidden',
+	    textOverflow: 'ellipsis',
+	    '@media screen and (max-width: 425px)': {
+	    	fontSize: 17
+	    }
 	},
 	imageContainer: {
 		position: 'relative'
@@ -43,6 +60,19 @@ const styles = {
 		fontWeight: 500,
 		fontStyle: 'italic',
 		zIndex: 201,
+	},
+	wrapper: {
+		maxWidth: 200
+	},
+	ellipse: {
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		display: '-webkit-box',
+		'-webkit-box-orient': 'vertical',
+		'-webkit-line-clamp': 3,
+		lineHeight: '20px',
+		maxHeight: 60,
+		wordBreak: 'break-all'
 	}
 }
 
@@ -53,8 +83,8 @@ const Assignee = memo(({ displayName, image, username, classes, accepted }) => (
 		target="_blank"
 		className={classNames('flex-190', classes.linkStyle)}
 	>
-		<div className="flex layout-row layout-align-space-between-center">
-			<div className={classNames('flex-65', classes.imageContainer)}>
+		<div className={classNames("flex layout-row layout-align-start-center", classes.wrapper)}>
+			<div className={classNames('', classes.imageContainer)}>
 				{equals(accepted, streamerAcceptedKey) && 
 					<div className={classes.marksContainer}>
 						<div className={classes.acceptedMark}>
@@ -67,9 +97,9 @@ const Assignee = memo(({ displayName, image, username, classes, accepted }) => (
 					alt={username}
 					className={classes.image}
 				/>
-			</div>
-			<div className={classNames('flex-55', classes.linkText)}>
-				<SubHeader>{displayName}</SubHeader>
+			</div>			
+			<div className={classNames('', classes.linkText)}>
+				<SubHeader additionalClass={classNames(classes.fontStyle, classes.ellipse)}>{displayName}</SubHeader>
 			</div>
 		</div>
 	</a>
