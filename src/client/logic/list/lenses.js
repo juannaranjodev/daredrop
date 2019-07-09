@@ -8,6 +8,7 @@ const listSchema = {
 		list: {
 			type: 'object',
 			properties: {
+				loadingBlockVisible: { type: 'boolean' },
 				currentPage: { type: 'integer' },
 				hasMore: { type: 'boolean' },
 				filterParams: {
