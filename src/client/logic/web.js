@@ -53,6 +53,7 @@ import addPayoutMethodOnSuccess from 'root/src/client/logic/payoutMethod/reducer
 import setFirstPage from 'root/src/client/logic/list/reducers/setFirstPage'
 import currentPage from 'root/src/client/logic/list/reducers/currentPage'
 import hasMore from 'root/src/client/logic/list/reducers/hasMore'
+import setVisibleLoadingBlock from 'root/src/client/logic/list/reducers/setVisibleLoadingBlock'
 
 // headers
 import addSortFilterParams from 'root/src/client/logic/header/reducers/addSortFilterParams'
@@ -134,6 +135,7 @@ const store = createStore(
 		...clearListProcessing,
 		...setSortValue,
 		...changeEmbeddedFieldData,
+		...setVisibleLoadingBlock,
 	}, // reducer object
 	// [], // sagas
 	[
