@@ -2,6 +2,7 @@ import reduxConnector from 'root/src/shared/util/reduxConnector'
 
 import formFieldTypes from 'root/src/client/logic/form/selectors/formFieldTypes'
 import formSubmits from 'root/src/client/logic/form/selectors/formSubmits'
+import formSubmitError from 'root/src/client/logic/form/selectors/formSubmitError'
 import customSubmitsSelector from 'root/src/client/logic/form/selectors/customSubmitsSelector'
 import customSubmitsDataSelector from 'root/src/client/logic/form/selectors/customSubmitsDataSelector'
 import formTitle from 'root/src/client/logic/form/selectors/formTitle'
@@ -41,6 +42,7 @@ export default reduxConnector(
 		['customSubmits', customSubmitsSelector],
 		['customSubmitsData', customSubmitsDataSelector],
 		['uploadProgress', uploadProgressSelector],
+		['formSubmitError', formSubmitError],
 	],
 	[
 		['submitForm', submitForm],

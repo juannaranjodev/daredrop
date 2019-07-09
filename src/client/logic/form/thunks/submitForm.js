@@ -2,6 +2,7 @@ import { isNil, and, length, gt, prop, path, pathOr } from 'ramda'
 import validateForm from 'root/src/client/logic/form/util/validateForm'
 
 import submitForm from 'root/src/client/logic/form/actions/submitForm'
+import submitFormError from 'root/src/client/logic/form/actions/submitFormError'
 import submitFormComplete from 'root/src/client/logic/form/actions/submitFormComplete'
 import moduleIdFromKey from 'root/src/client/logic/route/util/moduleIdFromKey'
 
@@ -30,7 +31,7 @@ const { viewFormChild } = formStoreLenses
 
 export const submitFormHof = (
 	submitFormFn, moduleDescriptionsObj, validateFormFn, setFormErrorsFn,
-	clearFormFn, submitFormCompleteFn, formSubmitsObj,
+	clearFormFn, submitFormCompleteFn, formSubmitsObj, submitFormErrorFn
 ) => (moduleKey, submitIndex) => (dispatch, getState) => {
 	const nullSubmitIndex = isNil(submitIndex)
 	const moduleId = moduleIdFromKey(moduleKey)
@@ -41,10 +42,16 @@ export const submitFormHof = (
 	}
 	const correctedSubmitIndex = nullSubmitIndex ? 0 : submitIndex
 	dispatch(submitFormFn(moduleKey, submitIndex))
+	// clear form error
+	dispatch(submitFormErrorFn(moduleKey, submitIndex, {}))
 	const state = getState()
 	return validateFormFn(moduleKey, state, submitIndex).then((formData) => {
 		const submitAction = path([correctedSubmitIndex, 'action'], submits)
 		return dispatch(submitAction(formData)).then((res) => {
+			if (prop('statusCode', res) >= 400) {
+				dispatch(submitFormErrorFn(moduleKey, submitIndex, res))
+				return Promise.reject(res)
+			}
 			const successPromises = []
 			const onSuccessFn = path(
 				[correctedSubmitIndex, 'onSuccess'], submits,
@@ -124,5 +131,5 @@ export const submitFormHof = (
 
 export default submitFormHof(
 	submitForm, moduleDescriptions, validateForm, setFormErrors, clearForm,
-	submitFormComplete, formSubmits,
+	submitFormComplete, formSubmits, submitFormError
 )

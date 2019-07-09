@@ -13,6 +13,12 @@ const formSchema = {
 				[variableSchemaKey]: {
 					type: 'object',
 					properties: {
+						formError: {
+							type: 'object',
+							properties: {
+								formSubmitError: { type: 'string' }
+							}
+						},
 						formData: {
 							type: 'object',
 							properties: {
