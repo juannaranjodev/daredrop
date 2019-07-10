@@ -149,7 +149,7 @@ export const useStyles = makeStyles({
 		justifyContent: 'center',
 	},
 	formConrol: {
-		width: 360,
+		width: '100%',
 	},
 	cardItem: {
 		height: 57,

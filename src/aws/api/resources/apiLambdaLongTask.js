@@ -1,9 +1,7 @@
 import fnBuildPath from 'root/src/aws/util/fnBuildPath'
 import getAtt from 'root/src/aws/util/getAtt'
 
-import {
-	API_LAMBDA_LONG_TASK_FUNCTION, API_LAMBDA_EXECUTION_ROLE,
-} from 'root/src/aws/api/resourceIds'
+import { API_LAMBDA_LONG_TASK_FUNCTION, API_LAMBDA_EXECUTION_ROLE } from 'root/src/aws/api/resourceIds'
 import { DependsOn, Environment } from 'root/src/aws/api/resources/common/apiLambdaCommon'
 
 export default {

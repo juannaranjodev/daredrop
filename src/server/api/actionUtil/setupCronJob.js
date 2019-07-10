@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 import generateCrontab from 'root/src/shared/util/generateCrontab'
 import { CloudWatchEvents } from 'aws-sdk'
-import { apiLongTaskFunctionArn, cloudWatchEventsIamRole } from 'root/cfOutput'
+import { apiCloudwatchFunctionArn, cloudWatchEventsIamRole } from 'root/cfOutput'
 import { equals, prop, head, split, join, tail, compose } from 'ramda'
 
 export default (eventInput, cronTime, identifier) => new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ export default (eventInput, cronTime, identifier) => new Promise((resolve, rejec
 			Rule: eventName,
 			Targets: [
 				{
-					Arn: apiLongTaskFunctionArn,
+					Arn: apiCloudwatchFunctionArn,
 					Id: 'cloudWatchTarget',
 					Input: JSON.stringify(eventInput),
 				},

@@ -4,8 +4,8 @@ import { prop, reduce, propOr, filter, not, propEq, toString } from 'ramda'
 import changeEmbeddedFieldData from 'root/src/client/logic/embedded/actions/changeEmbeddedFieldData'
 import allFieldsValuesSelector from 'root/src/client/logic/embedded/selectors/allFieldsValuesSelector'
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
-import clearProjectArray from 'root/src/client/logic/header/actions/clearProjectArray'
 import addSortFilterParams from 'root/src/client/logic/header/actions/addSortFilterParams'
+import setLoadingBlock from 'root/src/client/logic/list/actions/setLoadingBlock'
 
 export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, value, endpointId) => async (dispatch, getState) => {
 	dispatch(changeEmbeddedFieldDataFn(fieldPath, value))
@@ -27,8 +27,9 @@ export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, va
 		}
 	}, { currentPage: 1 }, Object.keys(fieldsValue))
 	dispatch(addSortFilterParams(requestPayload))
-	dispatch(clearProjectArray())
-	dispatch(apiRequest(endpointId, requestPayload))
+	dispatch(setLoadingBlock(true))
+	dispatch(apiRequest(endpointId, requestPayload, true))
+		.then(() => dispatch(setLoadingBlock(false)))
 }
 
 export default setInputHof(

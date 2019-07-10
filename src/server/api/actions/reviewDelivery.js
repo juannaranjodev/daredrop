@@ -27,6 +27,7 @@ import { PAYOUT_ASSIGNEES, REVIEW_DELIVERY } from 'root/src/shared/descriptions/
 import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
+// rest
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses

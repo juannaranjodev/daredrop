@@ -165,7 +165,7 @@ export default async ({ payload, userId }) => {
 		)
 		await Promise.all(
 			map(async (pledgerUserId) => {
-				const plederEmail = await getUserEmail(slice(7, Infinity, pledgerUserId))
+				const pledgerEmail = await getUserEmail(slice(7, Infinity, pledgerUserId))
 				const emailDataForPledger = {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),

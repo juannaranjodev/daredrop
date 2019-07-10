@@ -6,7 +6,7 @@ import {
 	CREATE_PROJECT_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
 
-import myprojects from 'root/src/client/assets/Your-Dare.jpg'
+import myprojects from 'root/src/client/assets/my-projects.jpg'
 
 export default {
 	[MY_PROJECT_BANNER_HEADER_MODULE_ID]: {

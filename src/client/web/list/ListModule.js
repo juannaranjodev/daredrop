@@ -15,6 +15,7 @@ import SubTitle from 'root/src/client/web/typography/SubTitle'
 import LinkButton from 'root/src/client/web/base/LinkButton'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import scrollTopHandler from 'root/src/client/logic/list/handlers/goTopHandler'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import List from '@material-ui/core/List'
 import {
 	CREATE_PROJECT_ROUTE_ID,
@@ -24,10 +25,21 @@ import listModuleConnector from 'root/src/client/logic/api/connectors/listModule
 
 import { DeletePaymentModal } from './DeletePaymentModal'
 
-export const CardList = memo(({
-	list, currentPage, hasMore, classes, getNextPage,
+export const CardList = ({
+	list, currentPage, hasMore, classes, getNextPage, visibleLoadingBlock,
 }) => (
 	<div className="flex layout-row layout-align-center-start">
+		{visibleLoadingBlock && (
+			<div className={classes.loadingContainer}>
+				<div className={classes.loadingBlock}>
+					<div className={classes.loadingText}>Loading...</div>
+					<CircularProgress
+						size={24}
+						className={classes.loading}
+					/>,
+					</div>
+			</div>
+		)}
 		<MaxWidthContainer>
 			<div className={classNames(classes.listModuleContainer, 'flex', 'layout-row', 'layout-align-center')}>
 				<InfiniteScroll
@@ -65,12 +77,12 @@ export const CardList = memo(({
 							>
 								<div className={classes.nothingTextContainer}>
 										No Dares match your criteria, want to
-										<span>{' '} </span>
+									<span>{' '} </span>
 									<Link routeId={CREATE_PROJECT_ROUTE_ID}>
 										<span className={classes.createNewLink}>make one</span>
 									</Link>
 										?
-         </div>
+								</div>
 							</div>
 						),
 					)}
@@ -87,13 +99,13 @@ export const CardList = memo(({
 						</div>
 						<div>
 								Go to Top
-       </div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</MaxWidthContainer>
 	</div>
-))
+)
 
 const UniversalList = memo(({
 	list, classes, listTitle, listSubtitle, listControls, deletePaymentMethod, setDefaultPaymentMethod,
