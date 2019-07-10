@@ -7,7 +7,7 @@ import performanceTestDynamoDbTable from 'root/src/aws/api/resources/performance
 import performanceTestDataTable from 'root/src/aws/api/resources/performanceTestDataTable'
 import performanceTestLambda from 'root/src/aws/api/resources/performanceTestLambda'
 import performanceTestLambdaExecutionRole from 'root/src/aws/api/resources/performanceTestLambdaExecutionRole'
-
+import authenticationLayer from 'root/src/aws/authenticationLayer'
 
 import outputs from 'root/src/aws/api/outputs'
 import {
@@ -21,6 +21,7 @@ const devResources = {
 	...performanceTestLambda,
 	...performanceTestLambdaExecutionRole,
 	...performanceTestDataTable,
+	...authenticationLayer,
 }
 
 export const apiResources = {
