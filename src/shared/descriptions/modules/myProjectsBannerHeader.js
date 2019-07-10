@@ -5,7 +5,8 @@ import { GET_MY_PROJECTS } from 'root/src/shared/descriptions/endpoints/endpoint
 import {
 	CREATE_PROJECT_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
-import myprojects from 'root/src/client/assets/myprojects.jpg'
+
+import myprojects from 'root/src/client/assets/my-projects.jpg'
 import { projectDeliveredKey } from 'root/src/server/api/lenses'
 import { myTwitchId, myUserId } from 'root/src/shared/constants/filterConstants'
 
