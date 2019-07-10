@@ -28,7 +28,7 @@ import listModuleConnector from 'root/src/client/logic/api/connectors/listModule
 import { DeletePaymentModal } from './DeletePaymentModal'
 
 export const CardList = ({
-	list, currentPage, hasMore, classes, getNextPage, visibleLoadingBlock,
+	list, currentPage, hasMore, classes, getNextPage, visibleLoadingBlock, moduleId,
 }) => (
 		<div className="flex layout-row layout-align-center-start">
 			{visibleLoadingBlock && (
@@ -39,14 +39,14 @@ export const CardList = ({
 							size={24}
 							className={classes.loading}
 						/>,
-				</div>
+     </div>
 				</div>
 			)}
 			<MaxWidthContainer>
 				<div className={classNames(classes.listModuleContainer, 'flex', 'layout-row', 'layout-align-center')}>
 					<InfiniteScroll
 						pageStart={0}
-						loadMore={() => getNextPage(currentPage, hasMore)}
+						loadMore={() => getNextPage(moduleId, currentPage, hasMore)}
 						hasMore={hasMore}
 					>
 						{ternary(
@@ -84,7 +84,7 @@ export const CardList = ({
 											<span className={classes.createNewLink}>make one</span>
 										</Link>
 										?
-								</div>
+         </div>
 								</div>
 							),
 						)}
@@ -101,7 +101,7 @@ export const CardList = ({
 							</div>
 							<div>
 								Go to Top
-						</div>
+       </div>
 						</div>
 					</div>
 				</div>

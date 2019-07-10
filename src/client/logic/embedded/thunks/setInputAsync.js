@@ -9,6 +9,7 @@ import setFirstPage from 'root/src/client/logic/list/actions/setFirstPage'
 import myDataSelector from 'root/src/client/logic/embedded/selectors/myDataSelector'
 import filterConstants from 'root/src/shared/constants/filterConstants'
 import setLoadingBlock from 'root/src/client/logic/list/actions/setLoadingBlock'
+import clearProjectArray from 'root/src/client/logic/header/actions/clearProjectArray'
 
 export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, value, endpointId) => async (dispatch, getState) => {
 	dispatch(setFirstPage())
@@ -47,6 +48,7 @@ export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, va
 		}
 	}, { currentPage: 1, filter: undefined, sortType: undefined }, Object.keys(fieldsValue))
 	dispatch(addSortFilterParams(moduleId, requestPayload))
+	dispatch(clearProjectArray(moduleId))
 	dispatch(setLoadingBlock(true))
 	dispatch(apiRequest(endpointId, requestPayload, true))
 		.then(() => dispatch(setLoadingBlock(false)))
