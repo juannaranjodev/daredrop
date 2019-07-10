@@ -1,7 +1,7 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourName, paypalEmailUrl } from 'root/src/shared/constants/mail'
 
-export default ({ dareTitle }) => {
+export default ({ dareTitle, dareTItleLink }) => {
 	const mailContent = `
             <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="80%" class="content">
               <tbody>
@@ -20,7 +20,7 @@ export default ({ dareTitle }) => {
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
                     <p style="margin:0;padding:0;">
-                      We’re reviewing your video to make sure it contains everything your backers dared you to do in ${dareTitle}.
+                      We’re reviewing your video to make sure it contains everything your backers dared you to do in <a href="${dareTitleLink}">${dareTitle}</a>.
                     </p>
                   </td>
                 </tr>
