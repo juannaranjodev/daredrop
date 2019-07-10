@@ -31,6 +31,7 @@ export const buildFilesHof = buildPath => ({
 )
 
 export default ({ lambdaResourceEntries, buildPath }) => {
+	console.log(lambdaResourceEntries)
 	const buildFiles = buildFilesHof(buildPath)
 	return Promise.all(
 		map(buildFiles, lambdaResourceEntries),
