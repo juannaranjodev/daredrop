@@ -3,7 +3,6 @@ import { extension, lookup } from 'mime-types'
 import uuid from 'uuid/v4'
 import s3 from 'root/src/server/api/s3Client'
 
-
 // configurate
 import { videoBucket } from 'root/cfOutput'
 import { s3BaseURL } from 'root/src/shared/constants/s3Constants'

@@ -3,30 +3,35 @@
 import uuid from 'uuid/v1'
 import { map, omit, prop, join, add, assoc, append } from 'ramda'
 
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+//keys
+import { CREATE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { payloadSchemaError } from 'root/src/server/api/errors'
 import { projectPendingKey } from 'root/src/server/api/lenses'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
-import assigneeSerializer from 'root/src/server/api/serializers/assigneeSerializer'
-import { CREATE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
+//lenses
+import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 
-import sendEmail from 'root/src/server/email/actions/sendEmail'
-import dareCreatedEmail from 'root/src/server/email/templates/dareCreated'
-import { dareCreatedTitle } from 'root/src/server/email/util/emailTitles'
-
+//utils
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
+import moment from 'moment'
 import pledgeDynamoObj from 'root/src/server/api/actionUtil/pledgeDynamoObj'
 import projectDenormalizeFields from 'root/src/server/api/actionUtil/projectDenormalizeFields'
 import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
+import randomNumber from 'root/src/shared/util/randomNumber'
 import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthorizePayment'
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
 
-import randomNumber from 'root/src/shared/util/randomNumber'
-import moment from 'moment'
+//email
+import sendEmail from 'root/src/server/email/actions/sendEmail'
+import dareCreatedEmail from 'root/src/server/email/templates/dareCreated'
+import { dareCreatedTitle } from 'root/src/server/email/util/emailTitles'
+
+//other
+import assigneeSerializer from 'root/src/server/api/serializers/assigneeSerializer'
+import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
 
 const payloadLenses = getPayloadLenses(CREATE_PROJECT)

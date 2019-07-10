@@ -3,17 +3,14 @@
 /* eslint-disable max-len */
 import { equals, head, unnest, not, length, gt, last, split, map, compose, omit, prop } from 'ramda'
 
+//keys
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
+import { REJECT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { streamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 
-import { REJECT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
+//lenses
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
-import { generalError, authorizationError } from 'root/src/server/api/errors'
-
-import auditProject from 'root/src/server/api/actions/auditProject'
-import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-
-import { streamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
 
 //query utils
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
@@ -21,21 +18,21 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 
 //utils
-import { dareRejectedByStreamerTitle } from 'root/src/server/email/util/emailTitles'
+import auditProject from 'root/src/server/api/actions/auditProject'
+import { generalError, authorizationError } from 'root/src/server/api/errors'
 import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
-import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectByStatus'
 import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 
+//email
 import dareRejectedByStreamerMail from 'root/src/server/email/templates/dareRejectedByStreamer'
+import { dareRejectedByStreamerTitle } from 'root/src/server/email/util/emailTitles'
+import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
-
-
-
-
 
 const payloadLenses = getPayloadLenses(REJECT_PROJECT)
 const { viewProjectId, viewMessage } = payloadLenses
