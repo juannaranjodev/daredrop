@@ -15,7 +15,7 @@ export default (emailData, emailTemplate) => new Promise(async (resolve, reject)
 					Charset: 'UTF-8',
 					Data: emailTemplate(emailData),
 				},
-			}, 
+			},
 			Subject: {
 				Charset: 'UTF-8',
 				Data: emailData.title,
@@ -30,7 +30,6 @@ export default (emailData, emailTemplate) => new Promise(async (resolve, reject)
 			},
 		],
 	}
-
 
 	ses.sendEmail(params, (err, data) => {
 		if (err) {
