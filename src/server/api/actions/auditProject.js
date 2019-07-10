@@ -18,8 +18,8 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import { projectApprovedKey, projectRejectedKey } from 'root/src/server/api/lenses'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import projectStatusKeySelector from 'root/src/server/api/actionUtil/projectStatusKeySelector'
 import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectByStatus'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 
 import moment from 'moment'
 
@@ -107,6 +107,7 @@ export default async ({ userId, payload }) => {
 			const emailData = {
 				title: dareApprovedTitle,
 				dareTitle: prop('title', newProject),
+				dareTItleLink: projectHrefBuilder(prop('id', newProject)),
 				recipients: [email],
 				streamers: compose(map(prop('username')), prop('assignees'))(newProject),
 			}
@@ -116,6 +117,7 @@ export default async ({ userId, payload }) => {
 			const emailData = {
 				title: dareRejectedByToSTitle,
 				dareTitle: prop('title', newProject),
+				dareTItleLink: projectHrefBuilder(prop('id', newProject)),
 				recipients: [email],
 			}
 			sendEmail(emailData, dareRejectedByToSMail)

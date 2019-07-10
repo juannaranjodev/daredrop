@@ -2,7 +2,7 @@ import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourName, rulesOfUseUrl } from 'root/src/shared/constants/mail'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 
-export default ({ dareTitle }) => {
+export default ({ dareTitle, dareTitleLink }) => {
 	const mailContent = `
             <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="80%" class="content">
               <tbody>
@@ -20,7 +20,7 @@ export default ({ dareTitle }) => {
 
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">We’re reviewing your Dare ${dareTitle} to make sure it jives with our <a href="http://${rulesOfUseUrl}" style="text-decoration:none;color:#1976d2;">Rules of Use</a>. Then it’ll go live on our marketplace. This usually happens within 24 hours.</p>
+                    <p style="margin:0;padding:0;">We’re reviewing your Dare <a href="${dareTitleLink}">${dareTitle}</a> to make sure it jives with our <a href="http://${rulesOfUseUrl}" style="text-decoration:none;color:#1976d2;">Rules of Use</a>. Then it’ll go live on our marketplace. This usually happens within 24 hours.</p>
                   </td>
                 </tr>
 

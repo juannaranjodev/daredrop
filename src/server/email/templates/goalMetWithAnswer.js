@@ -1,7 +1,7 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourName } from 'root/src/shared/constants/mail'
 
-export default ({ dareTitle, streamer, message }) => {
+export default ({ dareTitle, dareTitleLink, streamer, message }) => {
 	const mailContent = `
               <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="80%" class="content">
                 <tbody>
@@ -19,7 +19,7 @@ export default ({ dareTitle, streamer, message }) => {
 
                   <tr>
                     <td style="margin:0;padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">Great job meeting ${streamer}’s bounty goal for ${dareTitle}!</p>
+                      <p style="margin:0;padding:0;">Great job meeting ${streamer}’s bounty goal for <a href="${dareTitleLink}">${dareTitle}</a>!</p>
                     </td>
                   </tr>
 

@@ -22,6 +22,7 @@ import dareAcceptedStreamerMail from 'root/src/server/email/templates/dareAccept
 import { dareAcceptedCreatorTitle, dareAcceptedStreamerTitle } from 'root/src/server/email/util/emailTitles'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
 import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
 import { ourUrl } from 'root/src/shared/constants/mail'
@@ -145,13 +146,10 @@ export default async ({ payload, userId }) => {
 			return accum
 		}, 0, prop('assignees', projectToAcceptEmail))
 
-		const titleDareLink = `http://${ourUrl}/view-project`
-
-
 		const emailDataForCreator = {
 			title: dareAcceptedCreatorTitle,
 			dareTitle: prop('title', projectToAccept),
-			dareTitleLink: titleDareLink,
+			dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
 			recipients: [emailCreator],
 			streamers: arrayToStringParser(streamerList),
 			goal: amountRequested,
@@ -169,9 +167,9 @@ export default async ({ payload, userId }) => {
 				const emailDataForPledger = {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
+					dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
 					recipients: [plederEmail],
 					streamers: arrayToStringParser(streamerList),
-					dareTitleLink: titleDareLink,
 					goal: sumAmountRequested,
 					expiryTime: prop('created', projectToAccept),
 				}
@@ -189,7 +187,7 @@ export default async ({ payload, userId }) => {
 				const emailDataForFavourite = {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
-					dareTitleLink: titleDareLink,
+					dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
 					recipients: [favouriteEmail],
 					streamers: arrayToStringParser(streamerList),
 					goal: amountRequested,
@@ -205,7 +203,7 @@ export default async ({ payload, userId }) => {
 		const emailDataForStreamer = {
 			title: dareAcceptedStreamerTitle,
 			dareTitle: prop('title', projectToAccept),
-			dareTitleLink: titleDareLink,
+			dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
 			recipients: [emailStreamer],
 			streamer: prop('displayName', head(userTokens)),
 			goal: amountRequested,
