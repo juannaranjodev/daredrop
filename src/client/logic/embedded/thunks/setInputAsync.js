@@ -45,7 +45,7 @@ export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, va
 			default:
 				return acc
 		}
-	}, { currentPage: 1 }, Object.keys(fieldsValue))
+	}, { currentPage: 1, filter: undefined, sortType: undefined }, Object.keys(fieldsValue))
 
 	dispatch(addSortFilterParams(moduleId, requestPayload))
 	dispatch(clearProjectArray(moduleId))
