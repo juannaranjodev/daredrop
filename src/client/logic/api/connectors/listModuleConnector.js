@@ -5,6 +5,7 @@ import listTypeSelector from 'root/src/client/logic/list/selectors/listTypeSelec
 import listTitleSelector from 'root/src/client/logic/list/selectors/listTitleSelector'
 import listSubtitleSelector from 'root/src/client/logic/list/selectors/listSubtitleSelector'
 import listControlsSelector from 'root/src/client/logic/list/selectors/listControlsSelector'
+import visibleLoadingBlockSelector from 'root/src/client/logic/list/selectors/visibleLoadingBlockSelector'
 
 import deletePaymentMethod from 'root/src/client/logic/list/thunks/deletePaymentMethod'
 import setDefaultPaymentMethod from 'root/src/client/logic/list/thunks/setDefaultPaymentMethod'
@@ -22,6 +23,7 @@ export default reduxConnector(
 		['listControls', listControlsSelector],
 		['currentPage', currentPageSelector],
 		['hasMore', hasMoreSelector],
+		['visibleLoadingBlock', visibleLoadingBlockSelector],
 	],
 	[
 		['deletePaymentMethod', deletePaymentMethod],

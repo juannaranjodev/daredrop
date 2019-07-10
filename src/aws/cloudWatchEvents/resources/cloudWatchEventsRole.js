@@ -1,7 +1,6 @@
 import ref from 'root/src/aws/util/ref'
 import join from 'root/src/aws/util/join'
 import { CLOUDWATCH_EVENTS_ROLE } from 'root/src/aws/cloudWatchEvents/resourceIds'
-import { LAMBDA_ACCESS_SECRET } from 'root/src/aws/secrets/resourceIds'
 
 export default {
 	[CLOUDWATCH_EVENTS_ROLE]: {
@@ -46,13 +45,6 @@ export default {
 									ref('AWS::AccountId'),
 									'*:*',
 								]),
-							},
-							{
-								Sid: 'AccessToSecretsManager',
-								Effect: 'Allow',
-								Action: 'secretsmanager:GetSecretValue',
-								// edit this
-								Resource: ref(LAMBDA_ACCESS_SECRET),
 							},
 						],
 					},

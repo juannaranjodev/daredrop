@@ -1,5 +1,6 @@
 import apiLambda from 'root/src/aws/api/resources/apiLambda'
 import apiLambdaLongTask from 'root/src/aws/api/resources/apiLambdaLongTask'
+import apiLambdaCloudwatch from 'root/src/aws/api/resources/apiLambdaCloudwatch'
 import apiLambdaExecutionRole from 'root/src/aws/api/resources/apiLambdaExecutionRole'
 import apiDynamoDbTable from 'root/src/aws/api/resources/apiDynamoDbTable'
 import performanceTestDynamoDbTable from 'root/src/aws/api/resources/performanceTestDynamoDbTable'
@@ -26,6 +27,7 @@ export const apiResources = {
 	...apiLambdaExecutionRole,
 	...apiDynamoDbTable,
 	...apiLambdaLongTask,
+	...apiLambdaCloudwatch,
 	...(isDevEnv ? devResources : {}),
 }
 

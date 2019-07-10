@@ -4,11 +4,11 @@ import { prop, reduce, propOr, filter, not, propEq, toString, contains, equals }
 import changeEmbeddedFieldData from 'root/src/client/logic/embedded/actions/changeEmbeddedFieldData'
 import allFieldsValuesSelector from 'root/src/client/logic/embedded/selectors/allFieldsValuesSelector'
 import apiRequest from 'root/src/client/logic/api/thunks/apiRequest'
-import clearProjectArray from 'root/src/client/logic/header/actions/clearProjectArray'
 import addSortFilterParams from 'root/src/client/logic/header/actions/addSortFilterParams'
 import setFirstPage from 'root/src/client/logic/list/actions/setFirstPage'
 import myDataSelector from 'root/src/client/logic/embedded/selectors/myDataSelector'
 import filterConstants from 'root/src/shared/constants/filterConstants'
+import setLoadingBlock from 'root/src/client/logic/list/actions/setLoadingBlock'
 
 export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, value, endpointId) => async (dispatch, getState) => {
 	dispatch(setFirstPage())
@@ -46,10 +46,10 @@ export const setInputHof = changeEmbeddedFieldDataFn => (moduleId, fieldPath, va
 				return acc
 		}
 	}, { currentPage: 1, filter: undefined, sortType: undefined }, Object.keys(fieldsValue))
-
 	dispatch(addSortFilterParams(moduleId, requestPayload))
-	dispatch(clearProjectArray(moduleId))
-	dispatch(apiRequest(endpointId, requestPayload))
+	dispatch(setLoadingBlock(true))
+	dispatch(apiRequest(endpointId, requestPayload, true))
+		.then(() => dispatch(setLoadingBlock(false)))
 }
 
 export default setInputHof(
