@@ -7,3 +7,4 @@ export const IDENTITY_POOL_ROLE_ATTACHMENT = `${resourcePrefix}IdentityPoolRoleA
 export const USER_POOL_CLIENT = `${resourcePrefix}UserPoolClient`
 export const USER_POOL = `${resourcePrefix}UserPool`
 export const ADMIN_USER_POOL_GROUP = `${resourcePrefix}AdminUserPoolGroup`
+export const LAMBDA_TRIGGER_INVOKE_PERMISSION = `${resourcePrefix}LambdaTriggerInvokePermission`
