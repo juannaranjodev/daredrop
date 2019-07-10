@@ -5,7 +5,7 @@ import getAtt from 'root/src/aws/util/getAtt'
 import domainName from 'root/src/aws/util/domainName'
 
 import {
-	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET,
+	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET, AUTHENTICATION_LAYER_FUNCTION,
 } from 'root/src/aws/staticHosting/resourceIds'
 
 export default {
@@ -30,6 +30,10 @@ export default {
 						Cookies: {
 							Forward: 'none',
 						},
+					},
+					LambdaFunctionAssociations: {
+						EventType: 'viewer-request',
+						LambdaFunctionARN: getAtt(AUTHENTICATION_LAYER_FUNCTION, 'Arn'),
 					},
 				},
 				Origins: [

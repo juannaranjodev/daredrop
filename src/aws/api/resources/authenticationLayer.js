@@ -1,18 +1,17 @@
 import fnBuildPath from 'root/src/aws/util/fnBuildPath'
 import getAtt from 'root/src/aws/util/getAtt'
 
-import { API_LAMBDA_FUNCTION, API_LAMBDA_EXECUTION_ROLE } from 'root/src/aws/api/resourceIds'
-import { DependsOn, Environment } from 'root/src/aws/api/resources/common/apiLambdaCommon'
+import { AUTHENTICATION_LAYER_FUNCTION, AUTHENTICATION_LAYER_FUNCTION_ROLE } from 'root/src/aws/api/resourceIds'
+import { Environment } from 'root/src/aws/api/resources/common/apiLambdaCommon'
 
 export default {
-	[API_LAMBDA_FUNCTION]: {
+	[AUTHENTICATION_LAYER_FUNCTION]: {
 		Type: 'AWS::Lambda::Function',
-		DependsOn,
 		Properties: {
 			Code: fnBuildPath('authenticationLayer'),
 			Environment,
 			// FunctionName: String,
-			Role: getAtt(API_LAMBDA_EXECUTION_ROLE, 'Arn'),
+			Role: getAtt(AUTHENTICATION_LAYER_FUNCTION_ROLE, 'Arn'),
 			// Handler: 'index.default',
 			MemorySize: 1024,
 			Runtime: 'nodejs8.10',
