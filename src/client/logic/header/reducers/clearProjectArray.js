@@ -1,4 +1,4 @@
-import { startsWith, reduce, filter } from 'ramda'
+import { startsWith, reduce, filter, anyPass } from 'ramda'
 import { CLEAR_PROJECT_ARRAY } from 'root/src/client/logic/header/actionsIds'
 import { apiStoreLenses } from 'root/src/client/logic/api/lenses'
 
@@ -9,7 +9,8 @@ export const clearProject = (state) => {
 	const listKeys = Object.keys(list)
 
 	const activeProjectsFilter = startsWith('GET_ACTIVE_PROJECTS')
-	const listKeysToDissoc = filter(activeProjectsFilter, listKeys)
+	const myProjectsFilter = startsWith('GET_MY_PROJECTS')
+	const listKeysToDissoc = filter(anyPass([activeProjectsFilter, myProjectsFilter]), listKeys)
 
 	const listsDissoc = reduce((acc, item) => dissocPathListsChild(item, acc),
 		state, listKeysToDissoc)

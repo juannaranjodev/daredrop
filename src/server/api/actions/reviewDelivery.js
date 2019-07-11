@@ -8,26 +8,31 @@ import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectR
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
 import capturePaymentsWrite from 'root/src/server/api/actionUtil/capturePaymentsWrite'
 import captureProjectPledges from 'root/src/server/api/actionUtil/captureProjectPledges'
-import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
-import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
+// emails
 import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
-import setupCronJob from 'root/src/server/api/actionUtil/setupCronJob'
-// db stuff
-import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
-import { generalError, payloadSchemaError } from 'root/src/server/api/errors'
-import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import videoApprovedEmail from 'root/src/server/email/templates/videoApproved'
 import videoRejectedEmail from 'root/src/server/email/templates/videoRejected'
 import { videoApprovedTitle, videoRejectedTitle } from 'root/src/server/email/util/emailTitles'
+// db stuff
+import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { projectApprovedKey, projectDeliveredKey, projectDeliveryPendingKey, projectToCaptureKey, streamerAcceptedKey, streamerDeliveryApprovedKey } from 'root/src/shared/descriptions/apiLenses'
+import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
+// descriptions
 import { PAYOUT_ASSIGNEES, REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
-import getTimestamp from 'root/src/shared/util/getTimestamp'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
+import { generalError, payloadSchemaError } from 'root/src/server/api/errors'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
+import {
+	projectApprovedKey, projectDeliveredKey, projectDeliveryInitKey,
+	projectDeliveryPendingKey, projectToCaptureKey, streamerAcceptedKey, streamerDeliveryApprovedKey,
+} from 'root/src/shared/descriptions/apiLenses'
 // rest
+import setupCronJob from 'root/src/server/api/actionUtil/setupCronJob'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
 const { viewProjectId, viewAudit, viewMessage } = payloadLenses
@@ -44,19 +49,18 @@ export default async ({ payload }) => {
 
 	const projectSerialized = projectSerializer([...projectToApproveDdb, ...assigneesDdb], true)
 	const projectAcceptedAssignees = filter(propEq('accepted', streamerAcceptedKey), prop('assignees', projectSerialized))
-
 	const assigneesToWrite = ternary(equals(audit, projectDeliveredKey), map(assignee => ({
 		PutRequest: {
 			Item: {
 				...assigneeDynamoObj({
 					...assignee,
 					accepted: streamerDeliveryApprovedKey,
-					deliveryVideo: projectDeliveredKey,
 				},
 				projectId),
 			},
 		},
 	}), projectAcceptedAssignees), [])
+
 	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
 	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
 	const projectDataToWrite = [
@@ -87,7 +91,15 @@ export default async ({ payload }) => {
 						[SORT_KEY]: await generateUniqueSortKey(prop('id', projectSerialized), `${projectToCaptureKey}`, 1, 10),
 					},
 				},
-			}], []),
+			}], [{
+				PutRequest: {
+					Item: {
+						...recordToUpdate,
+						status: projectDeliveryInitKey,
+						deliveries: prop('deliveries', projectSerialized),
+					},
+				},
+			}]),
 		...archiveProjectRecord(recordToArchive),
 	]
 
@@ -96,16 +108,16 @@ export default async ({ payload }) => {
 			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],
 		},
 	}
-
+	await documentClient.batchWrite(writeParams).promise()
 	try {
 		const streamerEmails = await Promise.all(
 			map(streamer => getUserEmailByTwitchID(prop('platformId', streamer)),
 				projectAcceptedAssignees),
 		)
+
 		const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
 		const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
 
-		await documentClient.batchWrite(writeParams).promise()
 		map((streamerEmail) => {
 			const emailData = {
 				title: emailTitle,

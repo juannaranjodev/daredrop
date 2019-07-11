@@ -8,13 +8,10 @@ import createNewDareActive from 'root/src/client/logic/header/selectors/createNe
 import linkLabelSelector from 'root/src/client/logic/header/selectors/linkLabelSelector'
 import linkRouteIdSelector from 'root/src/client/logic/header/selectors/linkRouteIdSelector'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
-import gameFilterValueSelector from 'root/src/client/logic/header/selectors/gameFilterValueSelector'
-import streamerFilterValueSelector from 'root/src/client/logic/header/selectors/streamerFilterValueSelector'
-import sortProject from 'root/src/client/logic/header/thunks/sortProject'
 import sortValueSelector from 'root/src/client/logic/header/selectors/sortValueSelector'
 import isMyProjectsSelector from 'root/src/client/logic/header/selectors/isMyProjectsSelector'
-import bannerImageSubTextSelector from '../selectors/bannerImageSubTextSelector'
 import embeddedContentSelector from 'root/src/client/logic/header/selectors/embeddedContentSelector'
+import bannerImageSubTextSelector from '../selectors/bannerImageSubTextSelector'
 
 export default reduxConnector(
 	[
@@ -24,8 +21,6 @@ export default reduxConnector(
 		['bannerSubText', bannerSubTextSelector],
 		['textWithBg', textWithBg],
 		['createNewDareActive', createNewDareActive],
-		['gameFilterValue', gameFilterValueSelector],
-		['streamerFilterValue', streamerFilterValueSelector],
 		['linkLabel', linkLabelSelector],
 		['linkRouteId', linkRouteIdSelector],
 		['sortValue', sortValueSelector],
@@ -34,6 +29,5 @@ export default reduxConnector(
 	],
 	[
 		['pushRoute', pushRoute],
-		['sortProject', sortProject],
 	],
 )

@@ -11,6 +11,16 @@ import {
 	PERFORMANCE_TEST_DYNAMODB_DATA_TABLE_ARN, API_LAMBDA_CLOUDWATCH_FUNCTION_ARN,
 } from 'root/src/aws/api/outputIds'
 
+const isDevEnv = process.env.STAGE !== 'production'
+
+const devOutputs = {
+	[PERFORMANCE_TEST_DYNAMODB_DATA_TABLE_ARN]: {
+		Description: 'Api dynamodb table name for performance testing',
+		Value: getAtt(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, 'Arn'),
+	},
+}
+
+
 export default {
 	[API_FUNCTION_ARN]: {
 		Description: 'Api Lambd fn arn',
@@ -24,12 +34,9 @@ export default {
 		Description: 'Api lambda for long running tasks',
 		Value: getAtt(API_LAMBDA_LONG_TASK_FUNCTION, 'Arn'),
 	},
-	[PERFORMANCE_TEST_DYNAMODB_DATA_TABLE_ARN]: {
-		Description: 'Api dynamodb table name for performance testing',
-		Value: getAtt(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, 'Arn'),
-	},
 	[API_LAMBDA_CLOUDWATCH_FUNCTION_ARN]: {
 		Description: 'Lambda function for cron jobs invocation',
 		Value: getAtt(API_LAMBDA_CLOUDWATCH_FUNCTION, 'Arn'),
 	},
+	...(isDevEnv ? devOutputs : {}),
 }

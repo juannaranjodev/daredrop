@@ -7,16 +7,17 @@ import dynamoQueryShardedProjects from 'root/src/server/api/actionUtil/dynamoQue
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 import { sortByType } from 'root/src/server/api/actionUtil/sortUtil'
-
+import paginate from 'root/src/server/api/actionUtil/paginate'
 import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredProjectIds'
 
 const PageItemLength = 8
 
-export default async (status, defaultSortType, payload, isAdminEndpoint, noExpirationFilter, isDenormalized, noPagination) => {
+export default async (status, defaultSortType, payload, { isAdminEndpoint, noExpirationFilter, isDenormalized, noPagination } = {}) => {
 	const realPayload = payload.payload
 	const projectsDdb = await dynamoQueryShardedProjects(status, isDenormalized)
 	const serializedProjects = map(compose(dissoc('myPledge'), projectSerializer(__, isAdminEndpoint, isDenormalized)), projectsDdb)
-	// Filter expired projects
+
+	// default filters
 	const filterExpired = (dare) => {
 		const diff = moment().diff(dare.approved, 'days')
 		return diff <= daysToExpire
@@ -25,23 +26,18 @@ export default async (status, defaultSortType, payload, isAdminEndpoint, noExpir
 		serializedProjects,
 		filter(filterExpired, serializedProjects))
 
-	// Start Filter with filter items
+	// payload filters
 	const filteredProjectIds = await getFilteredProjectIds(prop('filter', realPayload))
 	const filterByIds = dare => contains({ id: dare.id }, filteredProjectIds)
-
 	if (filteredProjectIds != null) {
 		filteredProjects = filter(filterByIds, filteredProjects)
 	}
 
-	// End Filter with filter items
-
+	// sorting and pagination
 	const diffBySortType = prop(realPayload.sortType, sortByType)
 		? prop(realPayload.sortType, sortByType) : prop(defaultSortType, sortByType)
 	const sortedProjects = sort(diffBySortType, filteredProjects)
-	const allPage = sortedProjects.length % PageItemLength > 0
-		? Math.round(sortedProjects.length / PageItemLength) + 1
-		: Math.round(sortedProjects.length / PageItemLength)
-
+	const allPage = paginate(sortedProjects, PageItemLength)
 
 	let { currentPage } = realPayload
 	if (currentPage === undefined) {

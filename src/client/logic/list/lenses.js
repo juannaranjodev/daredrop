@@ -11,27 +11,30 @@ const listSchema = {
 				loadingBlockVisible: { type: 'boolean' },
 				currentPage: { type: 'integer' },
 				hasMore: { type: 'boolean' },
-				filterParams: {
-					type: 'array',
-					items: {
-						type: 'object',
-						properties: {
-							param: { type: 'string' },
-							value: { type: 'string' },
-						},
-					},
-				},
-				sortValue: {
+				[variableSchemaKey]: {
 					type: 'object',
 					properties: {
-						label: { type: 'string' },
-						id: { type: 'string' },
-						value: { type: 'string' },
+						filterParams: {
+							type: 'array',
+							items: {
+								type: 'object',
+								properties: {
+									param: { type: 'string' },
+									value: { type: 'string' },
+								},
+							},
+						},
+						sortValue: {
+							type: 'object',
+							properties: {
+								label: { type: 'string' },
+								id: { type: 'string' },
+								value: { type: 'string' },
+							},
+						},
+						sortType: { type: 'string' },
 					},
 				},
-				gameFilterValue: { type: 'string' },
-				streamerFilterValue: { type: 'string' },
-				sortType: { type: 'string' },
 			},
 		},
 	},
@@ -51,6 +54,7 @@ export const listModuleSchema = {
 				listControls: { type: 'array' },
 				listSubmits: { type: 'array' },
 				listRouteHandler: { type: 'function' },
+				sortFilterModule: { type: 'string' },
 			},
 		},
 	},

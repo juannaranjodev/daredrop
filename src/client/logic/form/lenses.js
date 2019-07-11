@@ -32,6 +32,12 @@ const formSchema = {
 								[variableSchemaKey]: { type: 'object' },
 							},
 						},
+						buttonErrors: {
+							type: 'object',
+							patternProperties: {
+								[variableSchemaKey]: { type: 'object' },
+							},
+						},
 						stepFormPage: {
 							type: 'object',
 							patternProperties: {

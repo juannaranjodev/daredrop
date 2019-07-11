@@ -56,7 +56,7 @@ export default {
 					endpointId: GET_ACTIVE_PROJECTS,
 				},
 				{
-					fieldId: 'assignee|twitch',
+					fieldId: 'assignee',
 					inputType: 'autoCompleteEmbedded',
 					optionsPromiseType: 'twitchChannels',
 					placeholder: 'Streamer',
