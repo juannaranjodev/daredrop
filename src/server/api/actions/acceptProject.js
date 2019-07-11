@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, isNil, uniq, concat } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, isNil, uniq, concat, hasPath, filter } from 'ramda'
 // keys
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { projectAcceptedKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
@@ -142,13 +142,16 @@ export default async ({ payload, userId }) => {
 			...assigneesDdbEmail,
 		])
 
-		console.log(projectHrefBuilder(prop('id', projectToAccept)))
-
-		const streamerList = map(streamer => prop('displayName', streamer), prop('assignees', projectToAcceptEmail))
-
+		const streamerList = map(
+			streamer => prop('displayName', streamer),
+			filter(
+				hasPath(['amountRequested']),
+				prop('assignees', projectToAcceptEmail),
+			),
+		)
 		const sumAmountRequested = reduce((accum, streamer) => {
-			if (!isNil(streamer.amountRequested)) {
-				return accum + streamer.amountRequested
+			if (hasPath(['amountRequested'], streamer)) {
+				return accum + prop('amountRequested', streamer)
 			}
 			return accum
 		}, 0, prop('assignees', projectToAcceptEmail))
