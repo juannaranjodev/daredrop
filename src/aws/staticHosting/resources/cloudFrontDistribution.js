@@ -3,10 +3,18 @@ import split from 'root/src/aws/util/split'
 import select from 'root/src/aws/util/select'
 import getAtt from 'root/src/aws/util/getAtt'
 import domainName from 'root/src/aws/util/domainName'
+import { reduce } from 'ramda'
+import {
+	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET,
+} from 'root/src/aws/staticHosting/resourceIds'
 
 import {
-	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET, AUTHENTICATION_LAYER_FUNCTION,
-} from 'root/src/aws/staticHosting/resourceIds'
+	AUTHENTICATION_LAYER_VERSION,
+} from 'root/src/aws/authenticationLayer/resourceIds'
+
+const getCacheBehaviors = (paths, behavior) => reduce(
+	(results, path) => [...results, { ...behavior, PathPattern: `*.${path}` }], [], paths,
+)
 
 export default {
 	[CLOUDFRONT_DISTRIBUTION]: {
@@ -33,9 +41,24 @@ export default {
 					},
 					LambdaFunctionAssociations: {
 						EventType: 'viewer-request',
-						LambdaFunctionARN: getAtt(AUTHENTICATION_LAYER_FUNCTION, 'Arn'),
+						LambdaFunctionARN: ref(AUTHENTICATION_LAYER_VERSION),
 					},
 				},
+				CacheBehaviors: getCacheBehaviors(['jpg', 'png', 'svg'],
+					{
+						AllowedMethods: ['HEAD', 'GET'],
+						CachedMethods: ['HEAD', 'GET'],
+						ForwardedValues: {
+							QueryString: true,
+							Cookies: {
+								Forward: 'none',
+							},
+						},
+						MinTTL: 0,
+						PathPattern: '*.jpg',
+						TargetOriginId: ref(STATIC_BUCKET),
+						ViewerProtocolPolicy: 'redirect-to-https',
+					}),
 				Origins: [
 					{
 						DomainName: select(2, split('/', getAtt(STATIC_BUCKET, 'WebsiteURL'))),
