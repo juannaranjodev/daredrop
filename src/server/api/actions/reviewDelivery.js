@@ -23,7 +23,7 @@ import {
 	streamerAcceptedKey, streamerDeliveryApprovedKey,
 	projectDeliveredKey, projectDeliveryPendingKey,
 	projectApprovedKey, projectToCaptureKey, projectDeliveryInitKey,
-} from 'root/src/server/api/lenses'
+} from 'root/src/shared/descriptions/apiLenses'
 // emails
 import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
@@ -32,7 +32,6 @@ import videoRejectedEmail from 'root/src/server/email/templates/videoRejected'
 import { videoApprovedTitle, videoRejectedTitle } from 'root/src/server/email/util/emailTitles'
 // db stuff
 import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
-import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
