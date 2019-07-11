@@ -11,7 +11,7 @@ export default ({ streamers, dareTitle, goal, expiryTime, dareTitleLink }) => {
                 </tr>
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
-                    <p style="font-weight:bold;font-size:40px;line-height:1;margin:0;">Dare Accepted</p>
+                    <p style="font-weight:bold;font-size:40px;line-height:1;margin:0;text-align:center">Dare Accepted</p>
                   </td>
                 </tr>
                 <tr>

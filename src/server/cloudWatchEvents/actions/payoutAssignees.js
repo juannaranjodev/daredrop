@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 // libs
-import { head, path, length, equals } from 'ramda'
+import { head, path, length, equals, prop, concat, forEach } from 'ramda'
 // db stuff
 import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
@@ -9,11 +9,18 @@ import deleteCronJob from 'root/src/server/api/actionUtil/deleteCronJob'
 import calculatePayouts from 'root/src/server/api/actionUtil/calculatePayouts'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import paypalBatchPayout from 'root/src/server/api/actionUtil/paypalBatchPayout'
+
 // descriptions
 import { PAYOUT_ASSIGNEES } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { dynamoItemsProp, payoutCompleteKey, payoutOutstandingKey, projectToPayoutKey } from 'root/src/server/api/lenses'
 import sendEmailToAssigneesWithoutPaypalEmail from 'root/src/server/api/actionUtil/sendEmailToAssigneesWithoutPaypalEmail'
+
+// email
+import sendEmail from 'root/src/server/email/actions/sendEmail'
+import youHaveBeenPaidTemplate from 'root/src/server/email/templates/youHaveBeenPaid'
+import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
+import { ourUrl } from 'root/src/shared/constants/mail'
 
 const payloadLenses = getPayloadLenses(PAYOUT_ASSIGNEES)
 const { viewProjectId } = payloadLenses
@@ -81,6 +88,23 @@ export default async ({ payload }) => {
 	await documentClient.batchWrite(saveParams).promise()
 	await deleteCronJob(PAYOUT_ASSIGNEES, projectId)
 	await sendEmailToAssigneesWithoutPaypalEmail(usersWithoutPaypalMail)
+
+	try {
+		const dareLink = `${ourUrl}/view-project${projectId}`
+		const dareTitle = prop('dareTitle', payoutsWithPaypalEmails)
+
+		forEach((user) => {
+			const email = getUserEmailByTwitchID(prop('platformId', user))
+			const emailData = {
+				dareTitle,
+				recipients: [email],
+				dareLink,
+				amountRequest: prop('payout', user),
+				payoutEmail: prop('email', user),
+			}
+			sendEmail(emailData, youHaveBeenPaidTemplate)
+		}, concat(usersWithPaypalMail, usersWithoutPaypalMail))
+	} catch (err) {}
 
 	return {
 		paypalPayout,
