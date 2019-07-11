@@ -25,7 +25,7 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import {
 	streamerAcceptedKey, streamerDeliveryApprovedKey,
 	projectDeliveredKey, projectDeliveryPendingKey,
-	projectApprovedKey, projectToCaptureKey,
+	projectApprovedKey, projectToCaptureKey, projectDeliveryInitKey,
 } from 'root/src/server/api/lenses'
 // emails
 import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
@@ -50,19 +50,18 @@ export default async ({ payload }) => {
 
 	const projectSerialized = projectSerializer([...projectToApproveDdb, ...assigneesDdb], true)
 	const projectAcceptedAssignees = filter(propEq('accepted', streamerAcceptedKey), prop('assignees', projectSerialized))
-
 	const assigneesToWrite = ternary(equals(audit, projectDeliveredKey), map(assignee => ({
 		PutRequest: {
 			Item: {
 				...assigneeDynamoObj({
 					...assignee,
 					accepted: streamerDeliveryApprovedKey,
-					deliveryVideo: projectDeliveredKey,
 				},
 				projectId),
 			},
 		},
 	}), projectAcceptedAssignees), [])
+
 	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
 	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
 	const projectDataToWrite = [
@@ -93,7 +92,15 @@ export default async ({ payload }) => {
 						[SORT_KEY]: await generateUniqueSortKey(prop('id', projectSerialized), `${projectToCaptureKey}`, 1, 10),
 					},
 				},
-			}], []),
+			}], [{
+				PutRequest: {
+					Item: {
+						...recordToUpdate,
+						status: projectDeliveryInitKey,
+						deliveries: prop('deliveries', projectSerialized),
+					},
+				},
+			}]),
 		...archiveProjectRecord(recordToArchive),
 	]
 
@@ -102,16 +109,16 @@ export default async ({ payload }) => {
 			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],
 		},
 	}
-
+	await documentClient.batchWrite(writeParams).promise()
 	try {
 		const streamerEmails = await Promise.all(
 			map(streamer => getUserEmailByTwitchID(prop('platformId', streamer)),
 				projectAcceptedAssignees),
 		)
+
 		const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
 		const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
 
-		await documentClient.batchWrite(writeParams).promise()
 		map((streamerEmail) => {
 			const emailData = {
 				title: emailTitle,

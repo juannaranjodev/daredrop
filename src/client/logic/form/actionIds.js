@@ -4,6 +4,8 @@ export const CLEAR_FORM = 'actionId/CLEAR_FORM'
 export const CLEAR_ALL_FORMS = 'actionId/CLEAR_ALL_FORMS'
 export const SET_FORM_ERRORS = 'actionId/SET_FORM_ERRORS'
 export const CLEAR_FORM_ERRORS = 'actionId/CLEAR_FORM_ERRORS'
+export const SET_BUTTON_ERRORS = 'actionId/SET_BUTTON_ERRORS'
+export const CLEAR_BUTTON_ERRORS = 'actionId/CLEAR_BUTTON_ERRORS'
 export const HANDLE_FORM = 'actionId/HANDLE_FORM'
 export const CHANGE_INPUT = 'actionId/CHANGE_INPUT'
 
