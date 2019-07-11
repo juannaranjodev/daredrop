@@ -3,21 +3,21 @@
 /* eslint-disable max-len */
 import { equals, head, unnest, not, length, gt, last, split, map, compose, omit, prop } from 'ramda'
 
-//keys
+// keys
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { REJECT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { streamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 
-//lenses
+// lenses
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 
-//query utils
+// query utils
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 
-//utils
+// utils
 import auditProject from 'root/src/server/api/actions/auditProject'
 import { generalError, authorizationError } from 'root/src/server/api/errors'
 import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
@@ -27,7 +27,7 @@ import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectB
 import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 
-//email
+// email
 import dareRejectedByStreamerMail from 'root/src/server/email/templates/dareRejectedByStreamer'
 import { dareRejectedByStreamerTitle } from 'root/src/server/email/util/emailTitles'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
@@ -119,7 +119,6 @@ export default async ({ payload, userId }) => {
 		const emailData = {
 			title: dareRejectedByStreamerTitle,
 			dareTitle: prop('title', projectToReject),
-			dareTitleLink: projectHrefBuilder(prop('id', projectToReject)),
 			recipients: [email],
 			streamer: prop('displayName', head(userTokens)),
 			textFromStreamersReject: message,

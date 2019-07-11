@@ -141,7 +141,7 @@ export default async ({ payload, userId }) => {
 		const emailData = {
 			title: videoSubmittedTitle,
 			dareTitle: prop('title', project),
-			dareTItleLink: projectHrefBuilder(prop('id', project)),
+			dareTitleLink: projectHrefBuilder(prop('id', project)),
 			recipients: [email],
 		}
 		sendEmail(emailData, videoSubmittedEmail)

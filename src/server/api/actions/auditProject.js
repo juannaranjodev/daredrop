@@ -2,16 +2,16 @@
 /* eslint-disable no-console */
 import { head, replace, equals, prop, compose, map, set, lensProp, omit } from 'ramda'
 
-//keys
+// keys
 import { AUDIT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { projectApprovedKey, projectRejectedKey } from 'root/src/server/api/lenses'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
-//lenses
+// lenses
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 
-//utils
+// utils
 import { generalError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
@@ -21,7 +21,7 @@ import projectSerializer from 'root/src/server/api/serializers/projectSerializer
 import projectStatusKeySelector from 'root/src/server/api/actionUtil/projectStatusKeySelector'
 import rejectProjectByStatus from 'root/src/server/api/actionUtil/rejectProjectByStatus'
 
-//email
+// email
 import dareApprovedMail from 'root/src/server/email/templates/dareApproved'
 import dareRejectedByToSMail from 'root/src/server/email/templates/dareRejected'
 import { dareApprovedTitle, dareRejectedByToSTitle } from 'root/src/server/email/util/emailTitles'
@@ -111,7 +111,7 @@ export default async ({ userId, payload }) => {
 			const emailData = {
 				title: dareApprovedTitle,
 				dareTitle: prop('title', newProject),
-				dareTItleLink: projectHrefBuilder(prop('id', newProject)),
+				dareTitleLink: projectHrefBuilder(prop('id', newProject)),
 				recipients: [email],
 				streamers: compose(map(prop('username')), prop('assignees'))(newProject),
 			}
@@ -121,7 +121,6 @@ export default async ({ userId, payload }) => {
 			const emailData = {
 				title: dareRejectedByToSTitle,
 				dareTitle: prop('title', newProject),
-				dareTItleLink: projectHrefBuilder(prop('id', newProject)),
 				recipients: [email],
 			}
 			sendEmail(emailData, dareRejectedByToSMail)

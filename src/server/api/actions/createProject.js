@@ -3,17 +3,17 @@
 import uuid from 'uuid/v1'
 import { map, omit, prop, join, add, assoc, append } from 'ramda'
 
-//keys
+// keys
 import { CREATE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { payloadSchemaError } from 'root/src/server/api/errors'
 import { projectPendingKey } from 'root/src/server/api/lenses'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
-//lenses
+// lenses
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 
-//utils
+// utils
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import moment from 'moment'
 import pledgeDynamoObj from 'root/src/server/api/actionUtil/pledgeDynamoObj'
@@ -24,12 +24,12 @@ import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthori
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
 
-//email
+// email
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import dareCreatedEmail from 'root/src/server/email/templates/dareCreated'
 import { dareCreatedTitle } from 'root/src/server/email/util/emailTitles'
 
-//other
+// other
 import assigneeSerializer from 'root/src/server/api/serializers/assigneeSerializer'
 import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
@@ -123,7 +123,7 @@ export default async ({ userId, payload }) => {
 		const email = await getUserEmail(userId)
 		const emailData = {
 			dareTitle: project.title,
-			dareTItleLink: projectHrefBuilder(prop('id', project)),
+			dareTitleLink: projectHrefBuilder(prop('id', project)),
 			recipients: [email],
 			title: dareCreatedTitle,
 		}

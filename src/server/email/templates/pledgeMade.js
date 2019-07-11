@@ -3,7 +3,7 @@ import { ourName } from 'root/src/shared/constants/mail'
 import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
 import expiryCalculator from 'root/src/server/email/util/expiryCalculator'
 
-export default ({ dareTitle, expiryTime, dareHref, dareTitleLink, streamers, notClaimedAlready }) => {
+export default ({ dareTitle, expiryTime, dareTitleLink, streamers, notClaimedAlready }) => {
 	const mailContent = `
               <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="80%" class="content">
                 <tbody>
