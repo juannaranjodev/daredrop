@@ -5,7 +5,6 @@ export default async (event, context, callback) => {
 	const { headers } = request
 	const user = 'daredropdev'
 	const pw = 'pubGI$#1!'
-	callback(null, event)
 	const authString = `Basic ${user}:${pw}`.toString('base64')
 	if (or(
 		not(hasPath(['authorization'], headers)),
