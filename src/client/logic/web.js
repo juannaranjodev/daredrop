@@ -24,6 +24,8 @@ import stepFormPrevPage from 'root/src/client/logic/form/reducers/stepFormPrevPa
 import partialFormDbSaveSuccess from 'root/src/client/logic/form/reducers/partialFormDbSaveSuccess'
 import clearPartialFormKeys from 'root/src/client/logic/form/reducers/clearPartialFormKeys'
 import clearAllForms from 'root/src/client/logic/form/reducers/clearAllForms'
+import setButtonErrors from 'root/src/client/logic/form/reducers/setButtonErrors'
+import clearButtonErrors from 'root/src/client/logic/form/reducers/clearButtonErrors'
 
 // api
 import apiListRequestError from 'root/src/client/logic/api/reducers/apiListRequestError'
@@ -91,6 +93,8 @@ const store = createStore(
 		...clearForm,
 		...clearAllForms,
 		...setFormErrors,
+		...setButtonErrors,
+		...clearButtonErrors,
 		...submitForm,
 		...submitFormComplete,
 		...addSubForm,
