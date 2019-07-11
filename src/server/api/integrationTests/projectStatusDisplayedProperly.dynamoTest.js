@@ -5,7 +5,7 @@ import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import {
 	projectApprovedKey, projectDeliveredKey,
 	projectDeliveryRejectedKey, projectPendingKey,
-	projectAcceptedKey,
+	projectAcceptedKey, projectDeliveryInitKey, projectDeliveryPendingKey,
 } from 'root/src/server/api/lenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
@@ -75,6 +75,10 @@ describe('statuses are displayed properly on cards or on detail page', async () 
 			userId: mockUserId,
 			payload: deliveryPayload,
 		})
+		let activeProjects = await getActiveProjects({ payload: { currentPage: 1 } })
+		let activeProject = await getProject({ payload: { projectId: project.id } })
+		expect(activeProjects.items[0].status).toEqual(projectDeliveryInitKey)
+		expect(activeProject.status).toEqual(projectDeliveryInitKey)
 
 		const { deliverySortKey } = deliveryInit
 
@@ -88,11 +92,11 @@ describe('statuses are displayed properly on cards or on detail page', async () 
 			payload: deliveryFinishPayload,
 		})
 
-		const activeProjects = await getActiveProjects({ payload: { currentPage: 1 } })
-		const activeProject = await getProject({ payload: { projectId: project.id } })
+		activeProjects = await getActiveProjects({ payload: { currentPage: 1 } })
+		activeProject = await getProject({ payload: { projectId: project.id } })
 
-		expect(activeProjects.items[0].status).toEqual(projectAcceptedKey)
-		expect(activeProject.status).toEqual(projectAcceptedKey)
+		expect(activeProjects.items[0].status).toEqual(projectDeliveryPendingKey)
+		expect(activeProject.status).toEqual(projectDeliveryPendingKey)
 	})
 	test('Correctly displays rejected deliveries (again no change)', async () => {
 		await reviewDelivery({ payload: { projectId: project.id, audit: projectDeliveryRejectedKey, message: 'asdsad' } })
@@ -100,8 +104,8 @@ describe('statuses are displayed properly on cards or on detail page', async () 
 		const activeProjects = await getActiveProjects({ payload: { currentPage: 1 } })
 		const activeProject = await getProject({ payload: { projectId: project.id } })
 
-		expect(activeProjects.items[0].status).toEqual(projectAcceptedKey)
-		expect(activeProject.status).toEqual(projectAcceptedKey)
+		expect(activeProjects.items[0].status).toEqual(projectDeliveryInitKey)
+		expect(activeProject.status).toEqual(projectDeliveryInitKey)
 	})
 	test('Correctly displays approved deliveries', async () => {
 		const deliveryPayload = deliveryDareMock(project.id)

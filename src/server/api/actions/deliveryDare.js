@@ -5,18 +5,24 @@ import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoInde
 import S3 from 'root/src/server/api/s3Client'
 import { videoBucket } from 'root/cfOutput'
 import googleOAuthClient, { youtube } from 'root/src/server/api/googleClient'
-import { dynamoItemsProp, projectApprovedKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
+import { dynamoItemsProp, projectApprovedKey, streamerAcceptedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
+
 import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
 import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
-import { map, prop, join } from 'ramda'
+import { map, prop, join, head } from 'ramda'
 import moment from 'moment'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
+import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
+import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
+import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
+import sendEmail from 'root/src/server/email/actions/sendEmail'
+
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
 const { viewDeliverySortKey, viewProjectId, viewTestName } = payloadLenses
 
-export default async ({ payload }) => {
+export default async ({ payload, userId }) => {
 	const deliverySortKey = viewDeliverySortKey(payload)
 	const projectId = viewProjectId(payload)
 	const deliveryQueryParams = {
@@ -30,27 +36,38 @@ export default async ({ payload }) => {
 
 	const deliveryProjectDdb = await documentClient.query(deliveryQueryParams).promise()
 	const [deliveryProject] = dynamoItemsProp(deliveryProjectDdb)
-
-	const s3UpdateParams = {
-		TableName: TABLE_NAME,
-		Key: {
-			[PARTITION_KEY]: deliveryProject[PARTITION_KEY],
-			[SORT_KEY]: deliveryProject[SORT_KEY],
-		},
-		UpdateExpression: 'SET s3Uploaded = :s3Uploaded',
-		ExpressionAttributeValues: {
-			':s3Uploaded': true,
-		},
-	}
-
-	await documentClient.update(s3UpdateParams).promise()
 	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId, projectApprovedKey)
 
 	const project = projectSerializer([
 		...projectDdb,
 		...assigneesDdb,
 	])
-
+	const s3DataWrite = {
+		PutRequest: {
+			Item: {
+				[PARTITION_KEY]: deliveryProject[PARTITION_KEY],
+				[SORT_KEY]: deliveryProject[SORT_KEY],
+				...deliveryProject,
+				s3Uploaded: true,
+			},
+		},
+	}
+	const projectDataToWrite = {
+		PutRequest: {
+			Item: {
+				[PARTITION_KEY]: prop('id', project),
+				[SORT_KEY]: head(projectDdb)[SORT_KEY],
+				...head(projectDdb),
+				status: projectDeliveryPendingKey,
+			},
+		},
+	}
+	const writeParams = {
+		RequestItems: {
+			[TABLE_NAME]: [s3DataWrite, projectDataToWrite],
+		},
+	}
+	await documentClient.batchWrite(writeParams).promise()
 	const acceptedAssignees = getAssigneesByStatus(project.assignees, streamerAcceptedKey)
 
 	const displayPlusNewline = input => `${prop('displayName', input)}: https://www.twitch.tv/${prop('displayName', input)}\n`
@@ -59,6 +76,17 @@ export default async ({ payload }) => {
 	const s3data = {
 		Bucket: videoBucket,
 		Key: process.env.STAGE === 'testing' ? viewTestName(payload) : deliveryProject.fileName,
+	}
+	try {
+		const email = await getUserEmail(userId)
+		const emailData = {
+			title: videoSubmittedTitle,
+			dareTitle: prop('title', project),
+			recipients: [email],
+		}
+		sendEmail(emailData, videoSubmittedEmail)
+	} catch (err) {
+		console.log('ses error')
 	}
 
 	try {
