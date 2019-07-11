@@ -1,3 +1,3 @@
 import { ourUrl } from 'root/src/shared/constants/mail'
 
-export default projectId => `http://${ourUrl}/view-project/${projectId}`
+export default projectId => `https://${ourUrl}/view-project/${projectId}`
