@@ -169,7 +169,7 @@ export default async ({ payload, userId }) => {
 				const emailDataForPledger = {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
-					recipients: [plederEmail],
+					recipients: [pledgerEmail],
 					streamers: arrayToStringParser(streamerList),
 					dareTitleLink: titleDareLink,
 					goal: sumAmountRequested,
