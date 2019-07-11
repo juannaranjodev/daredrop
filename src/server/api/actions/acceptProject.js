@@ -1,32 +1,41 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, slice, isNil } from 'ramda'
-
-import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, isNil, uniq, concat } from 'ramda'
+// keys
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
-import { generalError, authorizationError } from 'root/src/server/api/errors'
-import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
-import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
 import { projectAcceptedKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
-import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
-import getTimestamp from 'root/src/shared/util/getTimestamp'
-import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import randomNumber from 'root/src/shared/util/randomNumber'
-import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
-import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
+// lenses
+import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+
+// Query utils
+import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
+import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
+
+// utils
+import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
+import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
+import { generalError, authorizationError } from 'root/src/server/api/errors'
+import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
+import randomNumber from 'root/src/shared/util/randomNumber'
+import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
+import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
+
+// serializers
+import { dareAcceptedCreatorTitle, dareAcceptedStreamerTitle } from 'root/src/server/email/util/emailTitles'
 import dareAcceptedPledgerMail from 'root/src/server/email/templates/dareAcceptedPledger'
 import dareAcceptedStreamerMail from 'root/src/server/email/templates/dareAcceptedStreamer'
-import { dareAcceptedCreatorTitle, dareAcceptedStreamerTitle } from 'root/src/server/email/util/emailTitles'
-import sendEmail from 'root/src/server/email/actions/sendEmail'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
-import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
-import { ourUrl } from 'root/src/shared/constants/mail'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import sendEmail from 'root/src/server/email/actions/sendEmail'
 
-import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
+import getPledgersByProjectID from 'root/src/server/api/actionUtil/getPledgersByProjectID'
+import getFavoritesByProjectID from 'root/src/server/api/actionUtil/getFavoritesByProjectID'
 
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
@@ -36,7 +45,7 @@ export default async ({ payload, userId }) => {
 	const amountRequested = viewAmountRequested(payload)
 	const userTokens = await dynamoQueryOAuth(userId)
 
-	const [projectToAcceptDdb, assigneesDdb, projectPledgesDdb, projectFavouriteDdb] = await dynamoQueryProject(
+	const [projectToAcceptDdb, assigneesDdb] = await dynamoQueryProject(
 		null,
 		projectId,
 	)
@@ -133,8 +142,7 @@ export default async ({ payload, userId }) => {
 			...assigneesDdbEmail,
 		])
 
-		// Send email for Creator
-		const emailCreator = await getUserEmail((prop('creator', projectToAccept)))
+		console.log(projectHrefBuilder(prop('id', projectToAccept)))
 
 		const streamerList = map(streamer => prop('displayName', streamer), prop('assignees', projectToAcceptEmail))
 
@@ -145,67 +153,32 @@ export default async ({ payload, userId }) => {
 			return accum
 		}, 0, prop('assignees', projectToAcceptEmail))
 
-		const titleDareLink = `http://${ourUrl}/view-project`
+		const allPledgersAndFavorites = compose(uniq, concat)(
+			await getPledgersByProjectID(projectId), await getFavoritesByProjectID(projectId),
+		)
+		const allPledgersAndFavoritesEmails = await Promise.all(
+			map(uid => getUserEmail(uid),
+				allPledgersAndFavorites),
+		)
+		// Send email for pledgers & favorites
 
-
-		const emailDataForCreator = {
+		sendEmail({
 			title: dareAcceptedCreatorTitle,
 			dareTitle: prop('title', projectToAccept),
-			dareTitleLink: titleDareLink,
-			recipients: [emailCreator],
+			dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
+			recipients: allPledgersAndFavoritesEmails,
 			streamers: arrayToStringParser(streamerList),
-			goal: amountRequested,
+			goal: sumAmountRequested,
 			expiryTime: prop('created', projectToAccept),
-		}
-		sendEmail(emailDataForCreator, dareAcceptedPledgerMail)
-
-		// Send email for pledgers
-		const pledgerUserIds = reduce(
-			(result, pledgedProject) => [...result, prop('sk', pledgedProject)], [], projectPledgesDdb,
-		)
-		await Promise.all(
-			map(async (pledgerUserId) => {
-				const pledgerEmail = await getUserEmail(slice(7, Infinity, pledgerUserId))
-				const emailDataForPledger = {
-					title: dareAcceptedCreatorTitle,
-					dareTitle: prop('title', projectToAccept),
-					recipients: [pledgerEmail],
-					streamers: arrayToStringParser(streamerList),
-					dareTitleLink: titleDareLink,
-					goal: sumAmountRequested,
-					expiryTime: prop('created', projectToAccept),
-				}
-				sendEmail(emailDataForPledger, dareAcceptedPledgerMail)
-			}, pledgerUserIds),
-		)
-		// Send email for favourite
-
-		const favouriteUserIds = reduce(
-			(result, favouriteProject) => [...result, prop('sk', favouriteProject)], [], projectFavouriteDdb,
-		)
-		await Promise.all(
-			map(async (favouriteUserId) => {
-				const favouriteEmail = await getUserEmail(slice(10, Infinity, favouriteUserId))
-				const emailDataForFavourite = {
-					title: dareAcceptedCreatorTitle,
-					dareTitle: prop('title', projectToAccept),
-					dareTitleLink: titleDareLink,
-					recipients: [favouriteEmail],
-					streamers: arrayToStringParser(streamerList),
-					goal: amountRequested,
-					expiryTime: prop('created', projectToAccept),
-				}
-				sendEmail(emailDataForFavourite, dareAcceptedPledgerMail)
-			}, favouriteUserIds),
-		)
+		}, dareAcceptedPledgerMail)
 
 		// Send email for Streamer
-		const emailStreamer = await getUserEmail((prop('creator', userId)))
+		const emailStreamer = await getUserEmail(userId)
 
 		const emailDataForStreamer = {
 			title: dareAcceptedStreamerTitle,
 			dareTitle: prop('title', projectToAccept),
-			dareTitleLink: titleDareLink,
+			dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
 			recipients: [emailStreamer],
 			streamer: prop('displayName', head(userTokens)),
 			goal: amountRequested,
