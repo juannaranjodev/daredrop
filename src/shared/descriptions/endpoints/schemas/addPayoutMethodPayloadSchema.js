@@ -1,7 +1,7 @@
 export default {
 	type: 'object',
 	properties: {
-		email: { type: 'string' },
+		email: { type: 'string', format: 'Email' },
 		method: { type: 'string' },
 	},
 	additionalProperties: false,
