@@ -175,7 +175,7 @@ export default async ({ payload, userId }) => {
 					title: dareAcceptedCreatorTitle,
 					dareTitle: prop('title', projectToAccept),
 					dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
-					recipients: [plederEmail],
+					recipients: [pledgerEmail],
 					streamers: arrayToStringParser(streamerList),
 					goal: sumAmountRequested,
 					expiryTime: prop('created', projectToAccept),
