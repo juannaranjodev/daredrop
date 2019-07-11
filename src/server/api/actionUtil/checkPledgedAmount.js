@@ -11,7 +11,6 @@ import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailB
 
 
 export default async (projectId) => {
-
 	const [projectToCheckDdb, assigneesDdb] = await dynamoQueryProject(
 		null,
 		projectId,

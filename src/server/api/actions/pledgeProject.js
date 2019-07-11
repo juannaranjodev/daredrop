@@ -1,17 +1,17 @@
 import { head, add, prop, compose, map, not, length, assoc, equals, filter, propEq, omit, append } from 'ramda'
 
-//keys
+// keys
 import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/server/api/lenses'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { PLEDGE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
-//lenses
+// lenses
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 
 import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
-//utils
+// utils
 import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
@@ -21,7 +21,7 @@ import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthori
 import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
 import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
 
-//serializers
+// serializers
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import pledgeMadeMail from 'root/src/server/email/templates/pledgeMade'
 import { pledgeMadeTitle } from 'root/src/server/email/util/emailTitles'

@@ -123,7 +123,7 @@ export default async ({ userId, payload }) => {
 		const email = await getUserEmail(userId)
 		const emailData = {
 			dareTitle: project.title,
-			dareTitleLink: projectHrefBuilder(prop('id', project)),
+			dareTitleLink: projectHrefBuilder(projectId),
 			recipients: [email],
 			title: dareCreatedTitle,
 		}

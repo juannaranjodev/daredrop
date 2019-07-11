@@ -1,21 +1,21 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
 import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, slice, isNil } from 'ramda'
-//keys
+// keys
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { projectAcceptedKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
-//lenses
+// lenses
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 
-//Query utils
+// Query utils
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 
-//utils
+// utils
 import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
 import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
 import { generalError, authorizationError } from 'root/src/server/api/errors'
@@ -25,7 +25,7 @@ import randomNumber from 'root/src/shared/util/randomNumber'
 import setAssigneesStatus from 'root/src/server/api/actionUtil/setAssigneesStatus'
 import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 
-//serializers
+// serializers
 import { dareAcceptedCreatorTitle, dareAcceptedStreamerTitle } from 'root/src/server/email/util/emailTitles'
 import dareAcceptedPledgerMail from 'root/src/server/email/templates/dareAcceptedPledger'
 import dareAcceptedStreamerMail from 'root/src/server/email/templates/dareAcceptedStreamer'
@@ -138,6 +138,8 @@ export default async ({ payload, userId }) => {
 			...projectToAcceptDdbEmail,
 			...assigneesDdbEmail,
 		])
+
+		console.log(projectHrefBuilder(prop('id', projectToAccept)))
 
 		// Send email for Creator
 		const emailCreator = await getUserEmail((prop('creator', projectToAccept)))
