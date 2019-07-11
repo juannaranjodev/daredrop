@@ -1,7 +1,7 @@
 import { head, equals, prop, hasPath, or, not } from 'ramda'
 
-export default async (event, context, callback) => {
-	const { request } = prop('cf', head(prop('Records', event)))
+export default (event, context, callback) => {
+	const { request } = event.Records[0].cf
 	const { headers } = request
 	const user = 'daredropdev'
 	const pw = 'pubGI$#1!'
