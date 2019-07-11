@@ -218,9 +218,5 @@ export default async ({ payload, userId }) => {
 	}
 
 
-	return omit([PARTITION_KEY, SORT_KEY],
-		{
-			projectId: projectToAccept[PARTITION_KEY],
-			...projectToAccept,
-		})
+	return omit([PARTITION_KEY, SORT_KEY], projectToAccept)
 }

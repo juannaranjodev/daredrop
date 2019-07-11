@@ -1,5 +1,8 @@
 import { ascend, descend, prop, propEq, propOr } from 'ramda'
-import { SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST, SORT_BY_CREATED_ASC, SORT_BY_ACCEPTED } from 'root/src/shared/constants/sortTypesOfProject'
+import {
+	SORT_BY_BOUNTY, SORT_BY_TIME_LEFT, SORT_BY_NEWEST,
+	SORT_BY_CREATED_ASC, SORT_BY_ACCEPTED, SORT_BY_CREATED_DESC,
+} from 'root/src/shared/constants/sortTypesOfProject'
 import { projectAccepted } from 'root/src/shared/descriptions/endpoints/recordTypes'
 
 export const ascendingCreated = ascend(prop('created'))
@@ -35,4 +38,5 @@ export const sortByType = {
 	[SORT_BY_TIME_LEFT]: ascendingApproved,
 	[SORT_BY_NEWEST]: descendingApproved,
 	[SORT_BY_CREATED_ASC]: ascendingCreated,
+	[SORT_BY_CREATED_DESC]: descendingCreated,
 }

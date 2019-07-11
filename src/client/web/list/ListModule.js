@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
 import { map, head, last, length, gt, compose, __, not } from 'ramda'
 import React, { memo, useState } from 'react'
 import classNames from 'classnames'
@@ -26,86 +28,86 @@ import listModuleConnector from 'root/src/client/logic/api/connectors/listModule
 import { DeletePaymentModal } from './DeletePaymentModal'
 
 export const CardList = ({
-	list, currentPage, hasMore, classes, getNextPage, visibleLoadingBlock,
+	list, currentPage, hasMore, classes, getNextPage, visibleLoadingBlock, moduleId,
 }) => (
-	<div className="flex layout-row layout-align-center-start">
-		{visibleLoadingBlock && (
-			<div className={classes.loadingContainer}>
-				<div className={classes.loadingBlock}>
-					<div className={classes.loadingText}>Loading...</div>
-					<CircularProgress
-						size={24}
-						className={classes.loading}
-					/>,
+		<div className="flex layout-row layout-align-center-start">
+			{visibleLoadingBlock && (
+				<div className={classes.loadingContainer}>
+					<div className={classes.loadingBlock}>
+						<div className={classes.loadingText}>Loading...</div>
+						<CircularProgress
+							size={24}
+							className={classes.loading}
+						/>,
+     </div>
 				</div>
-			</div>
-		) }
-		<MaxWidthContainer>
-			<div className={classNames(classes.listModuleContainer, 'flex', 'layout-row', 'layout-align-center')}>
-				<InfiniteScroll
-					pageStart={0}
-					loadMore={() => getNextPage(currentPage, hasMore)}
-					hasMore={hasMore}
-				>
-					{ternary(
-						compose(gt(__, 0), length, head)(list),
-						(
-							<div
-								className={classNames(
-									classes.paddingOffset,
-									'layout-row layout-wrap',
-								)}
-							>
-								{map(recordId => (
-									<ProjectCard
-										key={recordId}
-										recordId={recordId}
-										filterList={list[1]}
-										acceptedList={list[2]}
-									/>
-								), head(list))}
+			)}
+			<MaxWidthContainer>
+				<div className={classNames(classes.listModuleContainer, 'flex', 'layout-row', 'layout-align-center')}>
+					<InfiniteScroll
+						pageStart={0}
+						loadMore={() => getNextPage(moduleId, currentPage, hasMore)}
+						hasMore={hasMore}
+					>
+						{ternary(
+							compose(gt(__, 0), length, head)(list),
+							(
+								<div
+									className={classNames(
+										classes.paddingOffset,
+										'layout-row layout-wrap',
+									)}
+								>
+									{map(recordId => (
+										<ProjectCard
+											key={recordId}
+											recordId={recordId}
+											filterList={list[1]}
+											acceptedList={list[2]}
+										/>
+									), head(list))}
 
-							</div>
-						),
-						(
-							<div
-								className={classNames(
-									classes.paddingOffset,
-									'layout-row layout-wrap',
-									classes.nothingHeight,
-								)}
-							>
-								<div className={classes.nothingTextContainer}>
-								No Dares match your criteria, want to
-									<span>{' '} </span>
-									<Link routeId={CREATE_PROJECT_ROUTE_ID}>
-										<span className={classes.createNewLink}>make one</span>
-									</Link>
-								?
 								</div>
-							</div>
-						),
-					)}
-				</InfiniteScroll>
-				<div className={classes.goTopContainer} onClick={scrollTopHandler}>
-					<div>
-						<div className={classes.iconContainer}>
-							<SvgIcon>
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-									<path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
-									<path d="M0 0h24v24H0z" fill="none" />
-								</svg>
-							</SvgIcon>
-						</div>
+							),
+							(
+								<div
+									className={classNames(
+										classes.paddingOffset,
+										'layout-row layout-wrap',
+										classes.nothingHeight,
+									)}
+								>
+									<div className={classes.nothingTextContainer}>
+										No Dares match your criteria, want to
+									<span>{' '} </span>
+										<Link routeId={CREATE_PROJECT_ROUTE_ID}>
+											<span className={classes.createNewLink}>make one</span>
+										</Link>
+										?
+         </div>
+								</div>
+							),
+						)}
+					</InfiniteScroll>
+					<div className={classes.goTopContainer} onClick={scrollTopHandler}>
 						<div>
+							<div className={classes.iconContainer}>
+								<SvgIcon>
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+										<path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+										<path d="M0 0h24v24H0z" fill="none" />
+									</svg>
+								</SvgIcon>
+							</div>
+							<div>
 								Go to Top
+       </div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</MaxWidthContainer>
-	</div>
-)
+			</MaxWidthContainer>
+		</div>
+	)
 
 const UniversalList = ({
 	list, classes, listTitle, listSubtitle, listControls, deletePaymentMethod, setDefaultPaymentMethod,
@@ -156,7 +158,7 @@ const UniversalList = ({
 						</div>
 					</LinkButton>
 				),
-				listControls)}
+					listControls)}
 			</div>
 		</List>
 	)

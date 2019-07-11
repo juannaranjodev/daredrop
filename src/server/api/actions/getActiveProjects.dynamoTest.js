@@ -58,7 +58,7 @@ describe('getActiveProjects', () => {
 
 		const event0 = {
 			endpointId: GET_ACTIVE_PROJECTS,
-			payload: { currentPage: 1, filter: [{ param: 'game', value: '138585' }, { param: 'assignee|twitch', value: '19571641' }] },
+			payload: { currentPage: 1, filter: [{ param: 'game', value: '138585' }, { param: 'assignee', value: 'twitch|19571641' }] },
 			// authentication: mockUserId,
 		}
 		const res0 = await apiFn(event0, contextMock)
@@ -66,7 +66,7 @@ describe('getActiveProjects', () => {
 		expect(res0.body.items.length).toEqual(8)
 		const event1 = {
 			endpointId: GET_ACTIVE_PROJECTS,
-			payload: { currentPage: 1, filter: [{ param: 'game', value: '1385851' }, { param: 'assignee|twitch', value: '19571641' }] },
+			payload: { currentPage: 1, filter: [{ param: 'game', value: '1385851' }, { param: 'assignee', value: 'twitch|19571641' }] },
 			// authentication: mockUserId,
 		}
 		const res1 = await apiFn(event1, contextMock)

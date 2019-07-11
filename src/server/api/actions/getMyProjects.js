@@ -1,19 +1,24 @@
-import { uniq, prop, sort, filter, map, startsWith, anyPass, equals	 } from 'ramda'
+import { uniq, prop, sort, filter, map, startsWith, anyPass, equals, contains } from 'ramda'
 
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { dynamoItemsProp, projectDeliveredKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
 import {
 	GSI1_INDEX_NAME, GSI1_PARTITION_KEY,
 } from 'root/src/shared/constants/apiDynamoIndexes'
-import { descendingApproved } from 'root/src/server/api/actionUtil/sortUtil'
+import { sortByType } from 'root/src/server/api/actionUtil/sortUtil'
 import moment from 'moment'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import getActiveAssignees from 'root/src/server/api/actionUtil/getActiveAssignees'
 import dynamoGetTokenIdFromUserId from 'root/src/server/api/actionUtil/dynamoGetTokenIdFromUserId'
+import { SORT_BY_CREATED_DESC } from 'root/src/shared/constants/sortTypesOfProject'
+import paginate from 'root/src/server/api/actionUtil/paginate'
 
-const PageItemLedngth = 8
+import getFilteredProjectIds from 'root/src/server/api/actionUtil/getFilteredProjectIds'
+
+const PageItemLength = 8
+
 
 export default async ({ userId, payload }) => {
 	const pledgedProjectsDdb = await documentClient.query({
@@ -67,28 +72,34 @@ export default async ({ userId, payload }) => {
 
 	const dontFilterDelivered = dare => startsWith(prop('status', dare), projectDeliveredKey)
 
-	// eslint-disable-next-line max-len
-	const filteredProjects = filter(anyPass([filterExpired, dontFilterDelivered]), myProjectsSerialized)
+	// default endpoint filters
+	let filteredProjects = filter(anyPass([filterExpired, dontFilterDelivered]), myProjectsSerialized)
 
-	const sortedProjects = sort(descendingApproved, filteredProjects)
+	// payload filters
+	const filteredProjectIds = await getFilteredProjectIds(prop('filter', payload))
+	if (filteredProjectIds != null) {
+		const filterByIds = dare => contains({ id: dare.id }, filteredProjectIds)
+		filteredProjects = filter(filterByIds, filteredProjects)
+	}
 
-	const allPage = sortedProjects.length % PageItemLedngth > 0
-		? Math.round(sortedProjects.length / PageItemLedngth) + 1
-		: Math.round(sortedProjects.length / PageItemLedngth)
+	// sorting and pagination
+	const diffBySortType = prop(SORT_BY_CREATED_DESC, sortByType)
+	const sortedProjects = sort(diffBySortType, filteredProjects)
+	const allPage = paginate(sortedProjects, PageItemLength)
 
 	let { currentPage } = payload
 	if (currentPage === undefined) {
 		currentPage = 1
 	}
 	const projects = sortedProjects.slice(
-		(currentPage - 1) * PageItemLedngth,
-		currentPage * PageItemLedngth,
+		(currentPage - 1) * PageItemLength,
+		currentPage * PageItemLength,
 	)
 
 	return {
 		allPage,
 		currentPage: payload.currentPage,
-		interval: PageItemLedngth,
+		interval: PageItemLength,
 		items: projects,
 	}
 }
