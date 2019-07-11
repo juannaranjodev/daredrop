@@ -3,7 +3,7 @@ import authenticationLayerExecutionRole from 'root/src/aws/authenticationLayer/r
 import authenticationLayerRequestHandler from 'root/src/aws/authenticationLayer/resources/authenticationLayerRequestHandler'
 import authenticationLayerVersion from 'root/src/aws/authenticationLayer/resources/authenticationLayerVersion'
 
-export const lambdaEdgeResources = {
+export default {
 	// lambdas
 	...authenticationLayerExecutionRole,
 	...authenticationLayerRequestHandler,

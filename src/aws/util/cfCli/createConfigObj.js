@@ -21,7 +21,6 @@ export default ({
 	const s3Client = new S3(awsCreds)
 	const projectRoot = findRoot(process.cwd())
 	const srcCloudFormationTemplate = badTemplateImport
-
 	const lambdaResourceEntries = getLambdaResourceEntries({
 		cloudFormationTemplate: srcCloudFormationTemplate,
 		timeStamp,
