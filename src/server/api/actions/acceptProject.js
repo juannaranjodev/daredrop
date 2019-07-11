@@ -8,7 +8,7 @@ import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoInde
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 // lenses
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 // Query utils
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'

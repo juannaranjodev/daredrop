@@ -9,7 +9,7 @@ import { projectApprovedKey, projectRejectedKey } from 'root/src/shared/descript
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 // lenses
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 // utils
 import { generalError } from 'root/src/server/api/errors'

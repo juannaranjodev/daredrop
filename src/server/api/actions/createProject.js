@@ -11,7 +11,7 @@ import { projectPendingKey } from 'root/src/shared/descriptions/apiLenses'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 // lenses
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 // utils
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
