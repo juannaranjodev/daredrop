@@ -8,8 +8,22 @@ import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectR
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
 import capturePaymentsWrite from 'root/src/server/api/actionUtil/capturePaymentsWrite'
 import captureProjectPledges from 'root/src/server/api/actionUtil/captureProjectPledges'
+import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import getTimestamp from 'root/src/shared/util/getTimestamp'
+import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import setupCronJob from 'root/src/server/api/actionUtil/setupCronJob'
+// descriptions
+import { REVIEW_DELIVERY, PAYOUT_ASSIGNEES } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import {
+	streamerAcceptedKey, streamerDeliveryApprovedKey,
+	projectDeliveredKey, projectDeliveryPendingKey,
+	projectApprovedKey, projectToCaptureKey, projectDeliveryInitKey,
+} from 'root/src/server/api/lenses'
 // emails
 import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
@@ -122,6 +136,7 @@ export default async ({ payload }) => {
 			const emailData = {
 				title: emailTitle,
 				dareTitle: prop('title', projectSerialized),
+				dareTitleLink: projectHrefBuilder(prop('id', projectSerialized)),
 				message,
 				recipients: [streamerEmail],
 				expiryTime: prop('created', projectSerialized),
