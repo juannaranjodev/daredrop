@@ -19,7 +19,6 @@ const devOutputs = {
 	},
 }
 
-
 export default {
 	[API_FUNCTION_ARN]: {
 		Description: 'Api Lambd fn arn',

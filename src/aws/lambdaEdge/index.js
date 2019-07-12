@@ -16,7 +16,8 @@ const prodResources = {
 }
 
 export const lambdaEdgeResources = {
-	// leaving role in common resources as it will be the same for dev and for prod
+	// leaving role in common resources as it will be the same for
+	// dev and for prod(authentication layer will also come here)
 	...lambdaEdgeExecutionRole,
 	...(isProdEnv ? prodResources : {}),
 }
