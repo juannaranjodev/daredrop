@@ -3,6 +3,7 @@ import split from 'root/src/aws/util/split'
 import select from 'root/src/aws/util/select'
 import getAtt from 'root/src/aws/util/getAtt'
 import domainName from 'root/src/aws/util/domainName'
+import { isProdEnv } from 'root/src/aws/util/envSelect'
 
 import {
 	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET,
@@ -15,8 +16,11 @@ export default {
 	[CLOUDFRONT_DISTRIBUTION]: {
 		Type: 'AWS::CloudFront::Distribution',
 		DependsOn: [
-			STATIC_BUCKET, LAMBDA_EDGE_VIEWER_VERSION,
-			LAMBDA_EDGE_ORIGIN_VERSION,
+			STATIC_BUCKET,
+			...(isProdEnv ? [
+				LAMBDA_EDGE_VIEWER_VERSION,
+				LAMBDA_EDGE_ORIGIN_VERSION,
+			] : []),
 		],
 		Properties: {
 			DistributionConfig: {
@@ -37,16 +41,18 @@ export default {
 							Forward: 'none',
 						},
 					},
-					LambdaFunctionAssociations: [
-						{
-							EventType: 'origin-request',
-							LambdaFunctionARN: ref(LAMBDA_EDGE_ORIGIN_VERSION),
-						},
-						{
-							EventType: 'viewer-request',
-							LambdaFunctionARN: ref(LAMBDA_EDGE_VIEWER_VERSION),
-						},
-					],
+					...(isProdEnv ? {
+						LambdaFunctionAssociations: [
+							{
+								EventType: 'origin-request',
+								LambdaFunctionARN: ref(LAMBDA_EDGE_ORIGIN_VERSION),
+							},
+							{
+								EventType: 'viewer-request',
+								LambdaFunctionARN: ref(LAMBDA_EDGE_VIEWER_VERSION),
+							},
+						],
+					} : {}),
 				},
 				Origins: [
 					{

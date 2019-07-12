@@ -4,13 +4,19 @@ import lambdaEdgeOriginRequestHandler from 'root/src/aws/lambdaEdge/resources/la
 import lambdaEdgeViewerRequestHandler from 'root/src/aws/lambdaEdge/resources/lambdaEdgeViewerRequestHandler'
 import lambdaEdgeOriginVersion from 'root/src/aws/lambdaEdge/resources/lambdaEdgeOriginVersion'
 import lambdaEdgeViewerVersion from 'root/src/aws/lambdaEdge/resources/lambdaEdgeViewerVersion'
+import { isProdEnv } from 'root/src/aws/util/envSelect'
 
-export const lambdaEdgeResources = {
+const prodResources = {
 	// lambdas
-	...lambdaEdgeExecutionRole,
 	...lambdaEdgeOriginRequestHandler,
 	...lambdaEdgeViewerRequestHandler,
 	// versions
 	...lambdaEdgeOriginVersion,
 	...lambdaEdgeViewerVersion,
+}
+
+export const lambdaEdgeResources = {
+	// leaving role in common resources as it will be the same for dev and for prod
+	...lambdaEdgeExecutionRole,
+	...(isProdEnv ? prodResources : {}),
 }

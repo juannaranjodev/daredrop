@@ -1,4 +1,5 @@
 import getAtt from 'root/src/aws/util/getAtt'
+import { isDevEnv } from 'root/src/aws/util/envSelect'
 
 import {
 	API_LAMBDA_FUNCTION, API_LAMBDA_LONG_TASK_FUNCTION,
@@ -10,8 +11,6 @@ import {
 	API_FUNCTION_ARN, API_LONG_TASK_FUNCTION_ARN, API_DYNAMO_TABLE_NAME,
 	PERFORMANCE_TEST_DYNAMODB_DATA_TABLE_ARN, API_LAMBDA_CLOUDWATCH_FUNCTION_ARN,
 } from 'root/src/aws/api/outputIds'
-
-const isDevEnv = process.env.STAGE !== 'production'
 
 const devOutputs = {
 	[PERFORMANCE_TEST_DYNAMODB_DATA_TABLE_ARN]: {
