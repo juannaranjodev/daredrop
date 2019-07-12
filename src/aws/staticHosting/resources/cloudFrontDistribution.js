@@ -2,8 +2,9 @@ import ref from 'root/src/aws/util/ref'
 import split from 'root/src/aws/util/split'
 import select from 'root/src/aws/util/select'
 import getAtt from 'root/src/aws/util/getAtt'
+import getCacheBehaviors from 'root/src/aws/util/getCacheBehaviors'
+import isDevValue from 'root/src/aws/util/isDevValue'
 import domainName from 'root/src/aws/util/domainName'
-import { reduce } from 'ramda'
 import {
 	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET,
 } from 'root/src/aws/staticHosting/resourceIds'
@@ -12,14 +13,10 @@ import {
 	AUTHENTICATION_LAYER_VERSION,
 } from 'root/src/aws/authenticationLayer/resourceIds'
 
-const getCacheBehaviors = (paths, behavior) => reduce(
-	(results, path) => [...results, { ...behavior, PathPattern: `*.${path}` }], [], paths,
-)
-
 export default {
 	[CLOUDFRONT_DISTRIBUTION]: {
 		Type: 'AWS::CloudFront::Distribution',
-		DependsOn: [STATIC_BUCKET],
+		DependsOn: [STATIC_BUCKET, isDevValue(AUTHENTICATION_LAYER_VERSION)],
 		Properties: {
 			DistributionConfig: {
 				Aliases: [
@@ -39,26 +36,30 @@ export default {
 							Forward: 'none',
 						},
 					},
-					LambdaFunctionAssociations: {
-						EventType: 'viewer-request',
-						LambdaFunctionARN: ref(AUTHENTICATION_LAYER_VERSION),
-					},
+					LambdaFunctionAssociations: [
+						isDevValue({
+							EventType: 'viewer-request',
+							LambdaFunctionARN: ref(AUTHENTICATION_LAYER_VERSION),
+						}),
+					],
 				},
-				CacheBehaviors: getCacheBehaviors(['jpg', 'png', 'svg'],
-					{
-						AllowedMethods: ['HEAD', 'GET'],
-						CachedMethods: ['HEAD', 'GET'],
-						ForwardedValues: {
-							QueryString: true,
-							Cookies: {
-								Forward: 'none',
+				...isDevValue({
+					CacheBehaviors: getCacheBehaviors(['jpg', 'png', 'svg'],
+						{
+							AllowedMethods: ['HEAD', 'GET'],
+							CachedMethods: ['HEAD', 'GET'],
+							ForwardedValues: {
+								QueryString: true,
+								Cookies: {
+									Forward: 'none',
+								},
 							},
-						},
-						MinTTL: 0,
-						PathPattern: '*.jpg',
-						TargetOriginId: ref(STATIC_BUCKET),
-						ViewerProtocolPolicy: 'redirect-to-https',
-					}),
+							MinTTL: 0,
+							PathPattern: '*.jpg',
+							TargetOriginId: ref(STATIC_BUCKET),
+							ViewerProtocolPolicy: 'redirect-to-https',
+						}),
+				}),
 				Origins: [
 					{
 						DomainName: select(2, split('/', getAtt(STATIC_BUCKET, 'WebsiteURL'))),
