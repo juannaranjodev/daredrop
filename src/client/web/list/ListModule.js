@@ -27,7 +27,7 @@ import listModuleConnector from 'root/src/client/logic/api/connectors/listModule
 
 import { DeletePaymentModal } from './DeletePaymentModal'
 
-export const CardList = ({
+const CardList = ({
 	list, currentPage, hasMore, classes, getNextPage, visibleLoadingBlock, moduleId,
 }) => (
 		<div className="flex layout-row layout-align-center-start">
@@ -109,7 +109,7 @@ export const CardList = ({
 		</div>
 	)
 
-const UniversalList = ({
+const UniversalList = memo(({
 	list, classes, listTitle, listSubtitle, listControls, deletePaymentMethod, setDefaultPaymentMethod,
 }) => {
 	const [modalOpen, setModalOpen] = useState(false)
@@ -162,14 +162,14 @@ const UniversalList = ({
 			</div>
 		</List>
 	)
-}
+})
 
 export const ListModuleUnconnected = memo((props) => {
 	switch (props.listType) {
 		case 'card':
-			return CardList(props)
+			return <CardList {...props} />
 		case 'list':
-			return UniversalList(props)
+			return <UniversalList {...props} />
 		default:
 			return (
 				<List>

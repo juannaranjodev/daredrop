@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { map } from 'ramda'
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles'
 import Terms from 'root/src/client/web/base/StaticLayout'
 import styles from './style'
 import Anchors from './Anchors'
 import pageContent from './pageContent'
 
-const PrivacyPolicy = ({ classes }) => (
+const PrivacyPolicy = memo(({ classes }) => (
 	<Terms>
 		<Anchors classes={classes} />
 		<React.Fragment>
@@ -18,6 +18,6 @@ const PrivacyPolicy = ({ classes }) => (
 			), pageContent(classes))}
 		</React.Fragment>
 	</Terms>
-)
+))
 
 export default withStyles(styles)(PrivacyPolicy)

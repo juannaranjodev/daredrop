@@ -3,7 +3,7 @@ import { map, path, prop, head } from 'ramda'
 import { generalError } from 'root/src/server/api/errors'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 
 export default async (payoutObj, payoutsArr) => new Promise(async (resolve, reject) => {
 	const ppClientAuthorized = await paypalClient()

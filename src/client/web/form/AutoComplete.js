@@ -1,6 +1,6 @@
 import { identity } from 'ramda'
 import React, { memo } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import Typography from '@material-ui/core/Typography'
 import NoSsr from '@material-ui/core/NoSsr'
 import TextField from '@material-ui/core/TextField'
@@ -193,29 +193,29 @@ export const AutoCompleteUnconnected = memo(({
 	fieldError, fieldHasError, arrayFieldMaxItems, loadOptionsPromise,
 	fieldPlaceholder,
 }) => (
-	<NoSsr>
-		<AsyncSelect
-			loadOptions={loadOptionsPromise}
-			textFieldProps={{
-				label: fieldLabel,
-				error: fieldHasError,
-				helperText: fieldError,
-				InputLabelProps: {
-					shrink: true,
-				},
-			}}
-			placeholder={fieldPlaceholder}
-			components={autoCompleteCmponents}
-			value={multiFieldValue}
-			onChange={autoCompleteSetInputHandler(
-				moduleKey, fieldPath, arrayFieldMaxItems, setInput,
-			)}
-			isMulti
-			cacheOptions
-			getOptionLabel={identity}
-			getValue={identity}
-		/>
-	</NoSsr>
-))
+		<NoSsr>
+			<AsyncSelect
+				loadOptions={loadOptionsPromise}
+				textFieldProps={{
+					label: fieldLabel,
+					error: fieldHasError,
+					helperText: fieldError,
+					InputLabelProps: {
+						shrink: true,
+					},
+				}}
+				placeholder={fieldPlaceholder}
+				components={autoCompleteCmponents}
+				value={multiFieldValue}
+				onChange={autoCompleteSetInputHandler(
+					moduleKey, fieldPath, arrayFieldMaxItems, setInput,
+				)}
+				isMulti
+				cacheOptions
+				getOptionLabel={identity}
+				getValue={identity}
+			/>
+		</NoSsr>
+	))
 
 export default autoCompleteConnector(AutoCompleteUnconnected)

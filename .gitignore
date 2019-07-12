@@ -7,3 +7,4 @@ dist
 secrets.js
 .idea/
 AWSCredentials.txt
+webpackCompressedFilenames.js

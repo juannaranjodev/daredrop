@@ -1,8 +1,9 @@
-import { map } from 'ramda'
+import { map, contains } from 'ramda'
 import UploadStream from 's3-stream-upload'
 import fs from 'fs'
 import { lookup } from 'mime-types'
-
+import setContentEncoding from 'root/src/aws/util/cfCli/setContentEncoding'
+import webpackCompressedFilenames from 'root/src/server/edge/origin/webpackCompressedFilenames'
 
 const uploadFileHof = (s3Client, bucket) => (
 	localPath, fileName,
@@ -17,6 +18,12 @@ const uploadFileHof = (s3Client, bucket) => (
 						Key: fileName,
 						// not 100% sure contentType works with s3-stream-upload
 						ContentType: lookup(fileName),
+						CacheControl: 'max-age=31104000',
+						...(contains(fileName, webpackCompressedFilenames)
+							? {
+								ContentEncoding: setContentEncoding(fileName),
+							} : {}
+						),
 					},
 				),
 			).on('error', (err) => {

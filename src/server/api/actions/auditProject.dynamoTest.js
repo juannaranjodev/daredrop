@@ -10,7 +10,7 @@ import {
 	projectApprovedKey,
 	projectPendingKey,
 	projectRejectedKey,
-} from 'root/src/server/api/lenses'
+} from 'root/src/shared/descriptions/apiLenses'
 
 describe('auditProject', () => {
 	test('successfully approves a project', async () => {

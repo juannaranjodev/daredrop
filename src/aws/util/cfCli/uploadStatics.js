@@ -1,23 +1,10 @@
-import webpack from 'webpack'
 import { concat, map, find, propEq, prop, last, split } from 'ramda'
 import fs from 'fs'
 
 import s3Upload from 'root/src/aws/util/cfCli/s3Upload'
 import { STATIC_BUCKET } from 'root/src/aws/staticHosting/resourceIds'
 import listAllStackResources from 'root/src/aws/util/cfCli/listAllStackResources'
-import webConfig from 'root/webpack.config'
 
-export const buildStatics = () => new Promise((resolve, reject) => (
-	webpack(
-		webConfig,
-		(err, stats) => {
-			if (err || stats.hasErrors()) {
-				reject(err)
-			}
-			resolve()
-		},
-	)
-))
 
 export const getHostingBucket = (
 	cloudFormationClient, stackName,
@@ -55,10 +42,8 @@ export const uploadStatics = (
 
 export default ({
 	cloudFormationClient, stackName, projectRoot, s3Client,
-}) => buildStatics().then(
-	() => getHostingBucket(cloudFormationClient, stackName).then(
-		hostingBucket => uploadStatics(
-			s3Client, projectRoot, hostingBucket,
-		),
+}) => getHostingBucket(cloudFormationClient, stackName).then(
+	hostingBucket => uploadStatics(
+		s3Client, projectRoot, hostingBucket,
 	),
 )

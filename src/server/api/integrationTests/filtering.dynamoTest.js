@@ -2,11 +2,16 @@ import mockdate from 'mockdate'
 import moment from 'moment'
 import { assoc, map, omit, range } from 'ramda'
 import { apiFn } from 'root/src/server/api'
+import { REVIEW_DELIVERY, GET_MY_PROJECTS } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
+import createProject from 'root/src/server/api/actions/createProject'
+
+import { mockUserId } from 'root/src/server/api/mocks/contextMock'
+import { projectApprovedKey, projectDeliveredKey, projectDeliveryRejectedKey } from 'root/src/shared/descriptions/apiLenses'
+import auditProject from 'root/src/server/api/actions/auditProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 import auditFavorites from 'root/src/server/api/actions/auditFavorites'
-import auditProject from 'root/src/server/api/actions/auditProject'
-import createProject from 'root/src/server/api/actions/createProject'
 import deliveryDare from 'root/src/server/api/actions/deliveryDare'
 import deliveryDareInit from 'root/src/server/api/actions/deliveryDareInit'
 import getActiveProjects from 'root/src/server/api/actions/getActiveProjects'
@@ -14,12 +19,8 @@ import getMyProjects from 'root/src/server/api/actions/getMyProjects'
 import getPendingDeliveries from 'root/src/server/api/actions/getPendingDeliveries'
 import pledgeProject from 'root/src/server/api/actions/pledgeProject'
 import reviewDelivery from 'root/src/server/api/actions/reviewDelivery'
-import { projectApprovedKey, projectDeliveredKey } from 'root/src/server/api/lenses'
-import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import createPledgeProjectPayload from 'root/src/server/api/mocks/createPledgeProjectPayload'
-import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
-import { GET_MY_PROJECTS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
 describe('filtering tests', async () => {
 	let project
@@ -150,7 +151,7 @@ describe('filtering tests', async () => {
 			},
 			authentication: mockUserId,
 		}
-		const res = await apiFn(event, contextMock)
+		const res = await apiFn(event)
 		expect(res.body.items.length).toEqual(3)
 	})
 
@@ -209,7 +210,7 @@ describe('filtering tests', async () => {
 			},
 			authentication: mockUserId,
 		}
-		const res = await apiFn(event, contextMock)
+		const res = await apiFn(event)
 		expect(res.body.items.length).toEqual(1)
 	})
 
@@ -232,7 +233,7 @@ describe('filtering tests', async () => {
 			},
 			authentication: mockUserId,
 		}
-		const res = await apiFn(event, contextMock)
+		const res = await apiFn(event)
 		expect(res.body.items.length).toEqual(2)
 	})
 
@@ -274,7 +275,7 @@ describe('filtering tests', async () => {
 			authentication: mockUserId,
 		}
 
-		const res = await apiFn(event, contextMock)
+		const res = await apiFn(event)
 		expect(res.body.items.length).toEqual(6)
 	})
 })

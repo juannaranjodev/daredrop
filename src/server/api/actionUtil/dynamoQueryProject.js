@@ -1,6 +1,6 @@
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { dynamoItemsProp, projectToPayoutKey } from 'root/src/server/api/lenses'
+import { dynamoItemsProp, projectToPayoutKey } from 'root/src/shared/descriptions/apiLenses'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 
 export default async (userId, projectId, projectStatus) => {

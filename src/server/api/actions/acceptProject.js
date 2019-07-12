@@ -3,12 +3,12 @@
 import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, isNil, uniq, concat, hasPath, filter } from 'ramda'
 // keys
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { projectAcceptedKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
+import { projectAcceptedKey, streamerAcceptedKey } from 'root/src/shared/descriptions/apiLenses'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 // lenses
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 // Query utils
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'

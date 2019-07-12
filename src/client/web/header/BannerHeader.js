@@ -99,49 +99,49 @@ export const BannerHeaderUnconnected = memo(({
 	textWithBg, bannerSubText, linkLabel, linkRouteId,
 	classes, createNewDareActive, embeddedContent,
 }) => (
-		<div className={classNames(classes.bottomMargin, 'layout-column')}>
-			{orNull(bannerImage,
-				(
+	<div className={classNames(classes.bottomMargin, 'layout-column')}>
+		{orNull(bannerImage,
+			(
+				<div
+					className={classNames(classes.banner, 'layout-row')}
+				>
 					<div
-						className={classNames(classes.banner, 'layout-row')}
-					>
-						<div
-							className={classNames(classes.bannerBg, 'flex')}
-							style={{ backgroundImage: `url(${bannerImage})` }}
-						/>
-						<div className={classes.overlay} />
-						<div className={classes.textOverlay}>
-							<div className={classNames({ [classes.textBox]: textWithBg })}>
-								<Title>{bannerImageText}</Title>
-								<SubTitle>{bannerImageSubText}</SubTitle>
-							</div>
+						className={classNames(classes.bannerBg, 'flex')}
+						style={{ backgroundImage: `url(${bannerImage})` }}
+					/>
+					<div className={classes.overlay} />
+					<div className={classes.textOverlay}>
+						<div className={classNames({ [classes.textBox]: textWithBg })}>
+							<Title>{bannerImageText}</Title>
+							<SubTitle>{bannerImageSubText}</SubTitle>
 						</div>
 					</div>
-				))
-			}
-			<div className="layout-row layout-align-center">
-				<MaxWidthContainer>
-					<div className={classNames('flex layout-column', classes.embedModuleContainer)}>
-						<div className="layout-row layout-align-center">
-							<Header>{bannerSubText}</Header>
-						</div>
-						<div className={classes.embeddedModuleAndLinkContainer}>
-							{orNull(
-								createNewDareActive,
-								<div className={classes.createLinkContainer}>
-									<Link routeId={linkRouteId}>
-										<span className={classes.newDare}>{linkLabel}</span>
-									</Link>
-								</div>,
-							)}
-							{orNull(embeddedContent,
-								<EmbeddedModule {...embeddedContent} />)}
-						</div>
+				</div>
+			))
+		}
+		<div className="layout-row layout-align-center">
+			<MaxWidthContainer>
+				<div className={classNames('flex layout-column', classes.embedModuleContainer)}>
+					<div className="layout-row layout-align-center">
+						<Header>{bannerSubText}</Header>
 					</div>
-				</MaxWidthContainer>
-			</div>
+					<div className={classes.embeddedModuleAndLinkContainer}>
+						{orNull(
+							createNewDareActive,
+							<div className={classes.createLinkContainer}>
+								<Link routeId={linkRouteId}>
+									<span className={classes.newDare}>{linkLabel}</span>
+								</Link>
+							</div>,
+						)}
+						{orNull(embeddedContent,
+							<EmbeddedModule {...embeddedContent} />)}
+					</div>
+				</div>
+			</MaxWidthContainer>
 		</div>
-	))
+	</div>
+))
 
 export default withModuleContext(
 	bannerHeaderConnector(BannerHeaderUnconnected, styles),

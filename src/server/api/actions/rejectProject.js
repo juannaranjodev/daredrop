@@ -6,11 +6,11 @@ import { equals, head, unnest, not, length, gt, last, split, map, compose, omit,
 // keys
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { REJECT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { streamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/server/api/lenses'
+import { streamerRejectedKey, projectAllStreamersRejectedKey } from 'root/src/shared/descriptions/apiLenses'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 
 // lenses
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 // query utils
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'

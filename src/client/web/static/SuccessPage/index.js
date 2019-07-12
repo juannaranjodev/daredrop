@@ -1,10 +1,8 @@
-
-
-import React from 'react'
+import React, { memo } from 'react'
 
 import Link from 'root/src/client/web/base/Link'
 
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import classNames from 'classnames'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 
@@ -13,7 +11,7 @@ import SocialIconSet from 'root/src/client/web/static/reusable/socialIconSet'
 import styles from './style'
 
 
-const SuccessPage = ({ classes, pageContent, sharedUrl }) => (
+const SuccessPage = memo(({ classes, pageContent, sharedUrl }) => (
 	<div className="flex layout-column layout-align-space-between">
 		<section className={classes.section}>
 			<div className={classes.content}>
@@ -38,6 +36,6 @@ const SuccessPage = ({ classes, pageContent, sharedUrl }) => (
 			</div>
 		</div>
 	</div>
+))
 
-)
 export default withStyles(styles)(SuccessPage)

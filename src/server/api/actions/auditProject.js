@@ -5,11 +5,11 @@ import { head, replace, equals, prop, compose, map, set, lensProp, omit } from '
 // keys
 import { AUDIT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { projectApprovedKey, projectRejectedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey, projectRejectedKey } from 'root/src/shared/descriptions/apiLenses'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 // lenses
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 // utils
 import { generalError } from 'root/src/server/api/errors'

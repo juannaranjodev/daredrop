@@ -7,7 +7,7 @@ import {
 } from 'root/src/shared/descriptions/routes/routeIds'
 
 import myprojects from 'root/src/client/assets/my-projects.jpg'
-import { projectDeliveredKey } from 'root/src/server/api/lenses'
+import { projectDeliveredKey } from 'root/src/shared/descriptions/apiLenses'
 import { myTwitchId, myUserId } from 'root/src/shared/constants/filterConstants'
 
 export default {
