@@ -1,4 +1,4 @@
-import { prop, pick, path } from 'ramda'
+import { prop, pick, path, assoc } from 'ramda'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 
 import validateSchema from 'root/src/shared/util/validateSchema'
@@ -12,7 +12,7 @@ import {
 } from 'root/src/server/api/getEndpointDesc'
 import serverEndpoints from 'root/src/server/api/actions'
 import authorizeRequest from 'root/src/server/api/authorizeRequest'
-import triggerActions from 'root/src/server/email/actions'
+import triggerActions from 'root/src/server/api/triggerActions'
 
 const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 	if (schema) {
@@ -34,15 +34,14 @@ const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 export const apiHof = (
 	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
-) => async (event) => {
+) => async (event, context, callback) => {
 	const { endpointId, payload, authentication, triggerSource } = event
 	try {
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (triggerSource) {
 			const triggerAction = path([triggerSource], getTriggerActionsObj)
-			const { request } = event
-			await triggerAction(request)
-			return event
+			callback(...triggerAction(event))
+			return
 		}
 		if (!endpointExists) {
 			throw notFoundError(endpointId)
@@ -81,6 +80,7 @@ export const apiFn = apiHof(
 
 // can't return promise?
 export default (event, context, callback) => {
+	callback(new Error('Email address has to be lowercase'), event)
 	apiFn(event, context, callback).then((res) => {
 		callback(null, res)
 	})

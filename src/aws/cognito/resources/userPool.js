@@ -20,6 +20,7 @@ export default {
 			UserPoolName: USER_POOL,
 			LambdaConfig: {
 				PostConfirmation: getAtt(API_LAMBDA_FUNCTION, 'Arn'),
+				PreSignUp: getAtt(API_LAMBDA_FUNCTION, 'Arn'),
 			},
 		},
 	},

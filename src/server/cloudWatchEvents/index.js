@@ -10,7 +10,6 @@ import {
 	getPayloadSchema, getResultSchema, testEndpointExists,
 } from 'root/src/server/api/getEndpointDesc'
 import cloudWatchJobs from 'root/src/server/cloudWatchEvents/actions'
-import triggerActions from 'root/src/server/email/actions'
 
 const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 	if (schema) {
@@ -31,7 +30,7 @@ const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 
 export const apiHof = (
 	cloudWatchJobsObj, getPayloadSchemaFn, getResultSchemaFn,
-	getTriggerActionsObj, testEndpointExistsFn,
+	testEndpointExistsFn,
 ) => async (event) => {
 	const { endpointId, payload } = event
 	try {
@@ -66,7 +65,7 @@ export const apiHof = (
 
 export const apiFn = apiHof(
 	cloudWatchJobs, getPayloadSchema, getResultSchema,
-	triggerActions, testEndpointExists,
+	testEndpointExists,
 )
 
 // can't return promise?
