@@ -156,6 +156,8 @@ export default async ({ payload, userId }) => {
 			return accum
 		}, 0, prop('assignees', projectToAcceptEmail))
 
+		// Send email for pledgers & favorites
+
 		const allPledgersAndFavorites = compose(uniq, concat)(
 			await getPledgersByProjectID(projectId), await getFavoritesByProjectID(projectId),
 		)
@@ -163,8 +165,6 @@ export default async ({ payload, userId }) => {
 			map(uid => getUserEmail(uid),
 				allPledgersAndFavorites),
 		)
-		// Send email for pledgers & favorites
-
 		sendEmail({
 			title: dareAcceptedCreatorTitle,
 			dareTitle: prop('title', projectToAccept),
