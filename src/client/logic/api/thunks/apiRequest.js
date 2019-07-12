@@ -33,14 +33,18 @@ import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import endpointMappings from 'root/src/client/logic/api/util/endpointMappings'
 import determineToken from 'root/src/client/logic/api/util/determineToken'
 import checkTokenExpire from 'root/src/client/logic/api/util/checkTokenExpire'
+import clearProjectArray from 'root/src/client/logic/header/actions/clearProjectArray'
 import { TWITCH_OAUTH_FAILURE_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 
-export const fetchList = async (dispatch, state, endpointId, payload, getState) => {
+export const fetchList = async (dispatch, state, endpointId, payload, getState, clearBefore) => {
 	const recordType = recordTypeSelector(endpointId)
 	const listStoreKey = createListStoreKey(endpointId, payload)
 	dispatch(initApiListRequest(listStoreKey))
 	const lambdaRes = await invokeApiLambda(endpointId, payload, state)
 	const { statusCode, body, statusError, generalError } = lambdaRes
+	if (clearBefore) {
+		dispatch(clearProjectArray())
+	}
 	if (equals(statusCode, 200)) {
 		dispatch(apiListRequestSuccess(listStoreKey, recordType, body))
 		if (payload.currentPage >= body.allPage) {
@@ -134,14 +138,14 @@ const endpointTypeFunctionMap = {
 	userData: fetchUserData,
 }
 
-export default (endpointId, payload) => async (dispatch, getState) => {
+export default (endpointId, payload, clearBefore) => async (dispatch, getState) => {
 	if (!isNil(endpointId)) {
 		try {
 			const state = getState()
 			const endpointType = endpointTypeSelector(endpointId)
 			await checkTokenExpire(state, dispatch)
 			return endpointTypeFunctionMap[endpointType](
-				dispatch, state, endpointId, payload, getState,
+				dispatch, state, endpointId, payload, getState, clearBefore,
 			)
 		} catch (e) {
 			console.warn(e)

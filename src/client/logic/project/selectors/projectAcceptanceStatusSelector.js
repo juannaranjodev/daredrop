@@ -1,14 +1,21 @@
-import { filter, length, map, prop, intersection, gt, propEq, head, hasPath } from 'ramda'
+import { filter, length, map, prop, intersection, gt, propEq, head, equals } from 'ramda'
 import objectToArray from 'root/src/client/logic/api/util/objectToArray'
 
 import projectAssigneesSelector from 'root/src/client/logic/project/selectors/projectAssigneesSelector'
 import getUserDataSelector from 'root/src/client/logic/api/selectors/getUserDataSelector'
-import { notConnected, connectedNotClaimed, accepted, notEligible, videoPendingAproved } from 'root/src/shared/constants/projectAcceptanceStatuses'
+import statusSelector from 'root/src/client/logic/project/selectors/statusSelector'
+import {
+	notConnected, connectedNotClaimed,
+	accepted, notEligible,
+	videoPending,
+	videoApproved,
+} from 'root/src/shared/constants/projectAcceptanceStatuses'
 import {
 	streamerPendingKey,
 	streamerAcceptedKey,
 	streamerRejectedKey,
-	streamerDeliveredKey,
+	projectDeliveredKey,
+	projectDeliveryPendingKey,
 } from 'root/src/server/api/lenses'
 
 export default (state, props) => {
@@ -18,8 +25,7 @@ export default (state, props) => {
 	const assigneesDisplayNames = map(prop('displayName'), assignees)
 	const assigneeNames = intersection(userDataDisplayNames, assigneesDisplayNames)
 	const isAssignee = gt(length(assigneeNames), 0)
-	const deliveryVideos = filter(hasPath(['deliveryVideo']), assignees)
-
+	const projectStatus = statusSelector(state, props)
 	if (!isAssignee) {
 		return notConnected
 	}
@@ -27,19 +33,18 @@ export default (state, props) => {
 
 	const assignee = head(filteredAssignee)
 	const acceptanceStatus = prop('accepted', assignee)
-	if (
-		gt(length(deliveryVideos), 0)
-		&& acceptanceStatus === streamerAcceptedKey
-	) {
-		return videoPendingAproved
+	if (equals(projectStatus, projectDeliveredKey)) {
+		return videoApproved
 	}
-
 	switch (acceptanceStatus) {
 		case (streamerPendingKey):
 			return connectedNotClaimed
-		case (streamerRejectedKey || streamerDeliveredKey):
+		case (streamerRejectedKey):
 			return notEligible
 		case (streamerAcceptedKey):
+			if (equals(projectStatus, projectDeliveryPendingKey)) {
+				return videoPending
+			}
 			return accepted
 		default:
 			return notEligible

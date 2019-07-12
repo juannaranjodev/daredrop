@@ -25,6 +25,8 @@ import stepFormPrevPage from 'root/src/client/logic/form/reducers/stepFormPrevPa
 import partialFormDbSaveSuccess from 'root/src/client/logic/form/reducers/partialFormDbSaveSuccess'
 import clearPartialFormKeys from 'root/src/client/logic/form/reducers/clearPartialFormKeys'
 import clearAllForms from 'root/src/client/logic/form/reducers/clearAllForms'
+import setButtonErrors from 'root/src/client/logic/form/reducers/setButtonErrors'
+import clearButtonErrors from 'root/src/client/logic/form/reducers/clearButtonErrors'
 
 // api
 import apiListRequestError from 'root/src/client/logic/api/reducers/apiListRequestError'
@@ -54,6 +56,7 @@ import addPayoutMethodOnSuccess from 'root/src/client/logic/payoutMethod/reducer
 import setFirstPage from 'root/src/client/logic/list/reducers/setFirstPage'
 import currentPage from 'root/src/client/logic/list/reducers/currentPage'
 import hasMore from 'root/src/client/logic/list/reducers/hasMore'
+import setVisibleLoadingBlock from 'root/src/client/logic/list/reducers/setVisibleLoadingBlock'
 
 // headers
 import addSortFilterParams from 'root/src/client/logic/header/reducers/addSortFilterParams'
@@ -91,6 +94,8 @@ const store = createStore(
 		...clearForm,
 		...clearAllForms,
 		...setFormErrors,
+		...setButtonErrors,
+		...clearButtonErrors,
 		...submitForm,
 		...submitFormError,
 		...submitFormComplete,
@@ -136,6 +141,7 @@ const store = createStore(
 		...clearListProcessing,
 		...setSortValue,
 		...changeEmbeddedFieldData,
+		...setVisibleLoadingBlock,
 	}, // reducer object
 	// [], // sagas
 	[

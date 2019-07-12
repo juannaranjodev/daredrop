@@ -8,8 +8,7 @@ const { viewListPayload } = generalApiModuleDescriptionLenses
 
 export const moduleEndpointIdSelectorHof = moduleDescriptionsObj => (
 	state, { moduleId },
-) => (
-	viewListPayload(moduleId, moduleDescriptionsObj)
-)
+) => viewListPayload(moduleId, moduleDescriptionsObj)
+
 
 export default moduleEndpointIdSelectorHof(moduleDescriptions)

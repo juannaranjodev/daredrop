@@ -2,14 +2,16 @@ import { toString, prop } from 'ramda'
 import customValidateForm from 'root/src/client/logic/form/util/customValidateForm'
 import setFormErrors from 'root/src/client/logic/form/actions/setFormErrors'
 import submitFormError from 'root/src/client/logic/form/actions/submitFormError'
+import clearButtonErrors from 'root/src/client/logic/form/actions/clearButtonErrors'
 import submitForm from 'root/src/client/logic/form/actions/submitForm'
 
 // eslint-disable-next-line max-len
 export default (data, actions, { moduleId, formSchema, formData, moduleKey }) => async (dispatch) => {
 	try {
-		dispatch(submitForm(moduleKey))
 		// clear form
 		dispatch(submitFormError(moduleKey, '', {}))
+		dispatch(submitForm(moduleKey))
+		dispatch(clearButtonErrors(moduleKey))
 		await customValidateForm(moduleId, formSchema, formData)
 		return actions.order.create({
 			purchase_units: [{
@@ -23,6 +25,6 @@ export default (data, actions, { moduleId, formSchema, formData, moduleKey }) =>
 			},
 		})
 	} catch (err) {
-		return dispatch(setFormErrors(moduleKey, err))
+		return dispatch(setButtonErrors(moduleKey, err))
 	}
 }

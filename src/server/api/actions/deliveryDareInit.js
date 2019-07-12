@@ -1,8 +1,7 @@
-import { head, not, gt, length, map, filter, propEq, prop, compose, split, last, unnest } from 'ramda'
+import { head, not, gt, length, map, filter, propEq, prop, compose, split, last, unnest, omit } from 'ramda'
 import { extension, lookup } from 'mime-types'
 import uuid from 'uuid/v4'
 import s3 from 'root/src/server/api/s3Client'
-
 
 // configurate
 import { videoBucket } from 'root/cfOutput'
@@ -15,34 +14,32 @@ import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import { DELIVERY_DARE_INIT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { projectDeliveryPendingKey } from 'root/src/server/api/lenses'
+import { projectDeliveryPendingKey, projectDeliveryInitKey } from 'root/src/server/api/lenses'
 
 // utils
-import getTimestamp from 'root/src/shared/util/getTimestamp'
-import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 import { authorizationError, actionForbiddenError } from 'root/src/server/api/errors'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
-import setDeliveryStatus from 'root/src/server/api/actionUtil/setDeliveryStatus'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
+import userTokensInProjectSelector from 'root/src/server/api/actionUtil/userTokensInProjectSelector'
 
 // query utils
-import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
-import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
+import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryProjectDeliveries from 'root/src/server/api/actionUtil/dynamoQueryProjectDeliveries'
 
 // serializers
-import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
-import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
+import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
+import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE_INIT)
 
 const { viewVideoURL, viewTimeStamp, viewVideoName, viewProjectId } = payloadLenses
 
-const verification = async (projectId, userId) => {
+const verification = async (projectId) => {
 	const projectDeliveries = await dynamoQueryProjectDeliveries(projectId)
 	const approvedProjectDeliveries = await dynamoQueryProjectDeliveries(projectId, true)
 	const filterUploaded = filter(propEq('s3Uploaded', true))
@@ -58,37 +55,14 @@ const verification = async (projectId, userId) => {
 		if (gt(length(uploadedProjectDeliveries), 0)) {
 			throw actionForbiddenError('This project have already dare submitted')
 		}
-		const filterByUploader = filter(propEq('uploader', userId))
-		const userDeliveries = filterByUploader(projectDeliveries)
-		deliverySortKey = prop('sk', head(userDeliveries))
+		deliverySortKey = prop('sk', head(projectDeliveries))
 	}
 
 	return deliverySortKey
 }
 
 
-const updateAssignessInformation = async (userTokensInProject, projectId, project, projectDdb) => {
-	const userTokensStr = map(compose(last, split('-')), userTokensInProject)
-
-	const userAssigneeArrNested = await Promise.all(map(
-		token => dynamoQueryProjectAssignee(projectId, token),
-		userTokensStr,
-	))
-
-	const userAssigneeArr = unnest(unnest(userAssigneeArrNested))
-
-	const assigneesToWrite = map(assignee => ({
-		PutRequest: {
-			Item:
-			{
-				[PARTITION_KEY]: assignee[PARTITION_KEY],
-				[SORT_KEY]: assignee[SORT_KEY],
-				...assignee,
-				deliveryVideo: projectDeliveryPendingKey,
-				modified: getTimestamp(),
-			},
-		},
-	}), userAssigneeArr)
+const updateProject = async (project, projectDdb) => {
 	const updateProjectParam = {
 		RequestItems: {
 			[TABLE_NAME]: [
@@ -97,17 +71,14 @@ const updateAssignessInformation = async (userTokensInProject, projectId, projec
 						Item: {
 							[PARTITION_KEY]: prop('id', project),
 							[SORT_KEY]: head(projectDdb)[SORT_KEY],
-							status: project.status,
-							...setDeliveryStatus(project, projectDeliveryPendingKey, userTokensStr),
+							...omit(['id'], project),
+							status: projectDeliveryInitKey,
 						},
 					},
 				},
-				...assigneesToWrite,
 			],
 		},
 	}
-
-
 	await documentClient.batchWrite(updateProjectParam).promise()
 }
 
@@ -118,7 +89,7 @@ export default async ({ payload, userId }) => {
 	const projectId = viewProjectId(payload)
 	const timeStamp = viewTimeStamp(payload)
 
-	let deliverySortKey = await verification(projectId, userId)
+	let deliverySortKey = await verification(projectId)
 
 	const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, projectId)
 
@@ -133,8 +104,7 @@ export default async ({ payload, userId }) => {
 		throw authorizationError('Assignee is not listed on this dare')
 	}
 
-	updateAssignessInformation(userTokensInProject, projectId, project, projectDdb)
-
+	updateProject(project, projectDdb)
 	// action
 	const fileName = `${uuid()}.${extension(lookup(videoName))}`
 
@@ -171,6 +141,7 @@ export default async ({ payload, userId }) => {
 		const emailData = {
 			title: videoSubmittedTitle,
 			dareTitle: prop('title', project),
+			dareTitleLink: projectHrefBuilder(prop('id', project)),
 			recipients: [email],
 		}
 		sendEmail(emailData, videoSubmittedEmail)

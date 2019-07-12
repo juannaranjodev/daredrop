@@ -41,9 +41,9 @@ export const submitFormHof = (
 		return Promise.resolve()
 	}
 	const correctedSubmitIndex = nullSubmitIndex ? 0 : submitIndex
-	dispatch(submitFormFn(moduleKey, submitIndex))
 	// clear form error
 	dispatch(submitFormErrorFn(moduleKey, submitIndex, {}))
+	dispatch(submitFormFn(moduleKey, submitIndex))
 	const state = getState()
 	return validateFormFn(moduleKey, state, submitIndex).then((formData) => {
 		const submitAction = path([correctedSubmitIndex, 'action'], submits)
