@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { map } from 'ramda'
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles'
 import Terms from 'root/src/client/web/base/StaticLayout'
 import styles from './style'
 import pageContent from './pageContent'
 
-const CookiePolicy = ({ classes }) => (
+const CookiePolicy = memo(({ classes }) => (
 	<Terms>
 		{map(
 			({ title, text }) => (
@@ -17,6 +17,6 @@ const CookiePolicy = ({ classes }) => (
 			pageContent(classes),
 		)}
 	</Terms>
-)
+))
 
 export default withStyles(styles)(CookiePolicy)

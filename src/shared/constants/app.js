@@ -6,6 +6,12 @@ module.exports = (env) => {
 				PAYPAL_CLIENT_ID: 'AZ7ruOMika_xOrNIVglKQcPUodUhuoe5ig4BDmZmVeZnWlm8dPCVenyrY7IZfyrT0ezOSDV_EtVwOPIe',
 				STRIPE_CLIENT_ID: 'pk_test_n61RH0G5Bfrw44jw27N6AYdH00uRjHDTMw',
 			}
+		case ('staging'):
+			return {
+				TWITCH_CLIENT_ID: 'ts0c9c61bm0jm3nkdg36xh19ui8vk7',
+				PAYPAL_CLIENT_ID: 'AZ7ruOMika_xOrNIVglKQcPUodUhuoe5ig4BDmZmVeZnWlm8dPCVenyrY7IZfyrT0ezOSDV_EtVwOPIe',
+				STRIPE_CLIENT_ID: 'pk_test_n61RH0G5Bfrw44jw27N6AYdH00uRjHDTMw',
+			}
 		case ('production'):
 			return {
 				TWITCH_CLIENT_ID: 'ruosppbybmeq0au48f4hzhzs0jfmej',

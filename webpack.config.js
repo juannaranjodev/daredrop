@@ -1,18 +1,26 @@
-const { map } = require('ramda')
+const { map, filter, contains, replace } = require('ramda')
 const path = require('path')
+const fs = require('fs')
+const { promisify } = require('util')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
-const CircularDependencyPlugin = require('circular-dependency-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-
+const BrotliGzipPlugin = require('brotli-gzip-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const EndWebpackPlugin = require('end-webpack-plugin')
 const appConstants = require('./src/shared/constants/app')
 const colorConstants = require('./src/shared/constants/color')
 const logoConstant = require('./src/shared/constants/logo')
 
-// const env = slsConstants.env || 'dev'
-const env = process.env.STAGE || 'development'
-const isProd = env === 'production'
+const stage = process.env.STAGE
+// production is webpack production build with production variables
+// staging is webpack production build with development variables
+// development is webpack development build with development variables
+const mode = (stage === 'staging' || stage === 'production') ? 'production' : 'development'
+const env = stage || 'development'
+
+const isProd = mode === 'production'
+
 const envVars = Object.assign(
 	{ __sha__: process.env.CIRCLE_SHA1 || 'dev' },
 	colorConstants,
@@ -25,7 +33,7 @@ if (module.hot) {
 }
 
 module.exports = {
-	mode: env,
+	mode,
 	devtool: isProd ? false : 'source-map',
 	entry: [
 		'babel-polyfill',
@@ -69,32 +77,75 @@ module.exports = {
 		new HtmlWebpackPlugin(Object.assign({
 			template: path.resolve(__dirname, 'src/client/web/app.html'),
 			hash: isProd,
-			// inject: 'body',
-			// minify: {
-			// 	collapseWhitespace: true,
-			// 	removeRedundantAttributes: true,
-			// 	useShortDoctype: true,
-			// },
 		}, envVars)),
+		// COPY STATICS
 		new webpack.DefinePlugin(
 			map(JSON.stringify, envVars),
 		),
-		// new CircularDependencyPlugin({
-		// 	// exclude detection of files based on a RegExp
-		// 	exclude: /node_modules/,
-		// 	// add errors to webpack instead of warnings
-		// 	failOnError: true,
-		// 	// set the current working directory for displaying module paths
-		// 	cwd: process.cwd(),
-		// }),
 		new CopyWebpackPlugin([
 			{
 				from: path.resolve(__dirname, './src/client/web/static/staticJs/'),
 				to: '',
 			},
 		]),
+		...(isProd ? [
+			// CONSOLE LOGS REMOVE
+			new UglifyJsPlugin({
+				uglifyOptions: {
+					compress: {
+						global_defs: {
+							'@alert': 'console.log',
+						},
+						drop_console: true,
+					},
+				},
+			}),
+			// COMPRESSION THINGS
+			new BrotliGzipPlugin({
+				asset: '[fileWithoutExt].br.[ext][query]',
+				algorithm: 'brotli',
+				test: /\.(js|css|html|svg)$/,
+				threshold: 10240,
+				minRatio: 0.8,
+			}),
+			new BrotliGzipPlugin({
+				asset: '[fileWithoutExt].[ext][query]',
+				algorithm: 'gzip',
+				test: /\.(js|css|html|svg)$/,
+				threshold: 10240,
+				minRatio: 0.8,
+			}),
+		] : []),
+		// WRITING COMPRESSED FILENAMES TO FILE (LEAVING THIS IN DEV ENV
+		// JUST NOT TO CRASH BECAUSE OF BLANK webpackCompressedFilenames.js)
+		new EndWebpackPlugin(async () => {
+			const readdir = promisify(fs.readdir)
+			const writeFile = promisify(fs.writeFile)
+			const files = await readdir(path.resolve(__dirname, 'dist/build-web-client'))
+			const nameContainsBr = contains('.br.')
+			const brFiles = filter(nameContainsBr, files)
+			const gzipFiles = map(replace('.br', ''), brFiles)
+			const compressedFilenames = [...brFiles, ...gzipFiles]
+			await writeFile(
+				path.resolve(__dirname, 'src/server/edge/origin/webpackCompressedFilenames.js'),
+				`export default ${JSON.stringify(compressedFilenames)}`,
+			)
+		}),
 	],
 	optimization: {
-		minimizer: [new TerserPlugin()],
+		minimizer: [new UglifyJsPlugin({
+			sourceMap: true,
+		})],
+		...(isProd ? {
+			splitChunks: {
+				cacheGroups: {
+					commons: {
+						test: /[\\/]node_modules[\\/]/,
+						name: 'vendors',
+						chunks: 'all',
+					},
+				},
+			},
+		} : {}),
 	},
 }

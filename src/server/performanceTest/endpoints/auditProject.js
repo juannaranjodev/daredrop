@@ -1,5 +1,5 @@
 import { AUDIT_PROJECT } from 'root/src/server/performanceTest/endpoints/endpointIds'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 
 import { apiFunctionArn } from 'root/cfOutput'
 

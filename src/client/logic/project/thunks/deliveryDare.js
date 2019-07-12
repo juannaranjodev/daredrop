@@ -3,11 +3,10 @@ import { DELIVER_DARE_SUCCESS_ROUTE_ID } from 'root/src/shared/descriptions/rout
 import currentRouteParamsRecordId from 'root/src/client/logic/route/selectors/currentRouteParamsRecordId'
 import { DELIVERY_DARE } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import ajax from 'root/src/shared/util/ajax'
-import { lookup } from 'mime-types'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 
 export default (
-	{ videoAttach: { file, name } },
+	{ videoAttach: { file } },
 	{ body: { url, deliverySortKey } },
 ) => async (dispatch, getState) => {
 	const state = getState()
@@ -17,7 +16,7 @@ export default (
 		method: 'PUT',
 		file,
 		headers: {
-			'Content-Type': lookup(name),
+			'Content-Type': 'video',
 		},
 	}
 	await ajax(uploadParams, dispatch, state)

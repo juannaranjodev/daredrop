@@ -7,13 +7,13 @@ import performanceTestDynamoDbTable from 'root/src/aws/api/resources/performance
 import performanceTestDataTable from 'root/src/aws/api/resources/performanceTestDataTable'
 import performanceTestLambda from 'root/src/aws/api/resources/performanceTestLambda'
 import performanceTestLambdaExecutionRole from 'root/src/aws/api/resources/performanceTestLambdaExecutionRole'
+import { isDevEnv } from 'root/src/aws/util/envSelect'
 
 import outputs from 'root/src/aws/api/outputs'
 import {
 	authPolicies, unauthPolicies,
 } from 'root/src/aws/api/cognitoPolicies'
 
-const isDevEnv = process.env.STAGE !== 'production'
 
 const devResources = {
 	...performanceTestDynamoDbTable,

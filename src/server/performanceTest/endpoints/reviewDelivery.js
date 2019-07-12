@@ -1,5 +1,5 @@
 import { REVIEW_DELIVERY } from 'root/src/server/performanceTest/endpoints/endpointIds'
-import { projectDeliveredKey } from 'root/src/server/api/lenses'
+import { projectDeliveredKey } from 'root/src/shared/descriptions/apiLenses'
 
 import { apiLongTaskFunctionArn } from 'root/cfOutput'
 

@@ -11,7 +11,7 @@ import createProject from 'root/src/server/api/actions/createProject'
 import contextMock, { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import auditFavorites from 'root/src/server/api/actions/auditFavorites'
 import auditProject from 'root/src/server/api/actions/auditProject'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 
 describe('getListOfFavorites', () => {
 	test('Successfully get list of favorites', async () => {

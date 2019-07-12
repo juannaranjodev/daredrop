@@ -9,7 +9,7 @@ import {
 import ajvErrors from 'root/src/shared/util/ajvErrors'
 import {
 	getPayloadSchema, getResultSchema, testEndpointExists, getIsLongRunningTask, getIsInvokedInternal,
-} from 'root/src/server/api/getEndpointDesc'
+} from 'root/src/shared/descriptions/getEndpointDesc'
 import serverEndpoints from 'root/src/server/api/actions'
 import authorizeRequest from 'root/src/server/api/authorizeRequest'
 import triggerActions from 'root/src/server/email/actions'

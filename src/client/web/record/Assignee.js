@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 import SubHeader from 'root/src/client/web/typography/SubHeader'
 import { primaryColor } from 'root/src/client/web/commonStyles'
-import { streamerAcceptedKey } from 'root/src/server/api/lenses'
+import { streamerAcceptedKey } from 'root/src/shared/descriptions/apiLenses'
 
 const styles = {
 	image: {
@@ -12,14 +12,14 @@ const styles = {
 		height: 100,
 		'@media screen and (max-width: 425px)': {
 			width: 80,
-			height: 80
-		}
+			height: 80,
+		},
 	},
 	linkStyle: {
 		textDecoration: 'none',
 		flexBasis: 1,
 		flexGrow: 1,
-		width: '50%'
+		width: '50%',
 	},
 	linkText: {
 		color: 'black',
@@ -30,17 +30,17 @@ const styles = {
 		},
 		'@media screen and (max-width: 425px)': {
 			width: 80,
-		}
+		},
 	},
 	fontStyle: {
-	    overflow: 'hidden',
-	    textOverflow: 'ellipsis',
-	    '@media screen and (max-width: 425px)': {
-	    	fontSize: 17
-	    }
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		'@media screen and (max-width: 425px)': {
+			fontSize: 17,
+		},
 	},
 	imageContainer: {
-		position: 'relative'
+		position: 'relative',
 	},
 	marksContainer: {
 		position: 'absolute',
@@ -62,7 +62,7 @@ const styles = {
 		zIndex: 201,
 	},
 	wrapper: {
-		maxWidth: 200
+		maxWidth: 200,
 	},
 	ellipse: {
 		overflow: 'hidden',
@@ -72,8 +72,8 @@ const styles = {
 		'-webkit-line-clamp': 3,
 		lineHeight: '20px',
 		maxHeight: 60,
-		wordBreak: 'break-all'
-	}
+		wordBreak: 'break-all',
+	},
 }
 
 const Assignee = memo(({ displayName, image, username, classes, accepted }) => (
@@ -83,21 +83,23 @@ const Assignee = memo(({ displayName, image, username, classes, accepted }) => (
 		target="_blank"
 		className={classNames('flex-190', classes.linkStyle)}
 	>
-		<div className={classNames("flex layout-row layout-align-start-center", classes.wrapper)}>
+		<div className={classNames('flex layout-row layout-align-start-center', classes.wrapper)}>
 			<div className={classNames('', classes.imageContainer)}>
-				{equals(accepted, streamerAcceptedKey) && 
-					<div className={classes.marksContainer}>
-						<div className={classes.acceptedMark}>
-							Dare Accepted
+				{equals(accepted, streamerAcceptedKey)
+					&& (
+						<div className={classes.marksContainer}>
+							<div className={classes.acceptedMark}>
+								Dare Accepted
+							</div>
 						</div>
-					</div>
+					)
 				}
 				<img
 					src={image}
 					alt={username}
 					className={classes.image}
 				/>
-			</div>			
+			</div>
 			<div className={classNames('', classes.linkText)}>
 				<SubHeader additionalClass={classNames(classes.fontStyle, classes.ellipse)}>{displayName}</SubHeader>
 			</div>
