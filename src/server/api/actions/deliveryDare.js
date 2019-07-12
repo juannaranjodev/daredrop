@@ -18,6 +18,7 @@ import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
 import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
 const { viewDeliverySortKey, viewProjectId, viewTestName } = payloadLenses
