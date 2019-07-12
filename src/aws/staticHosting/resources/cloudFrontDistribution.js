@@ -16,7 +16,7 @@ import {
 export default {
 	[CLOUDFRONT_DISTRIBUTION]: {
 		Type: 'AWS::CloudFront::Distribution',
-		DependsOn: [STATIC_BUCKET, isDevValue(AUTHENTICATION_LAYER_VERSION)],
+		DependsOn: [STATIC_BUCKET, ...isDevValue([AUTHENTICATION_LAYER_VERSION])],
 		Properties: {
 			DistributionConfig: {
 				Aliases: [
@@ -37,10 +37,10 @@ export default {
 						},
 					},
 					LambdaFunctionAssociations: [
-						isDevValue({
+						...isDevValue([{
 							EventType: 'viewer-request',
 							LambdaFunctionARN: ref(AUTHENTICATION_LAYER_VERSION),
-						}),
+						}]),
 					],
 				},
 				...isDevValue({
