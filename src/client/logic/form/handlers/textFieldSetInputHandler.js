@@ -16,7 +16,7 @@ export default (moduleKey, fieldPath, action, fieldType) => async (e) => {
 		if (value > 999999) value = 999999
 	}
 	if (fieldType === email) {
-		// value = toLower(value)
+		value = toLower(value)
 	}
 	action(moduleKey, fieldPath, value)
 }

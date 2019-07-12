@@ -40,7 +40,8 @@ export const apiHof = (
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (triggerSource) {
 			const triggerAction = path([triggerSource], getTriggerActionsObj)
-			callback(...triggerAction(event))
+			const triggerRes = await triggerAction(event)
+			callback(...triggerRes)
 			return
 		}
 		if (!endpointExists) {
@@ -80,7 +81,6 @@ export const apiFn = apiHof(
 
 // can't return promise?
 export default (event, context, callback) => {
-	callback(new Error('Email address has to be lowercase'), event)
 	apiFn(event, context, callback).then((res) => {
 		callback(null, res)
 	})
