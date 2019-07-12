@@ -1,5 +1,6 @@
 import { SES } from 'aws-sdk'
 import { ourEmail } from 'root/src/shared/constants/mail'
+import { sesConfigurationSetEventBasedEmailsArn } from 'root/cfOutput'
 
 const ses = new SES()
 
@@ -21,7 +22,7 @@ export default (emailData, emailTemplate) => new Promise(async (resolve, reject)
 			},
 		},
 		Source: ourEmail,
-		ConfigurationSetName: 'Dare_Drop_Event_Based_Emails',
+		ConfigurationSetName: sesConfigurationSetEventBasedEmailsArn,
 		Tags: [
 			{
 				Name: 'message_type',
