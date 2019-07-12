@@ -45,13 +45,14 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 			projectId,
 			paymentInfo,
 		}
-		// const successPage = successPageSelector(moduleId, submitIndex)
+		const successPage = successPageSelector(moduleId, submitIndex)
 		const endpointId = endpointIdSelector(moduleId, submitIndex)
 
-		return dispatch(apiRequest(endpointId, apiPayload))
+		dispatch(apiRequest(endpointId, apiPayload))
 			.then(() => {
 				dispatch(clearForm(moduleKey))
 				dispatch(submitFormComplete(moduleKey))
+				dispatch(pushRoute(successPage, { recordId: projectId }))
 			})
 			.catch(err => dispatch(setButtonErrors(moduleKey, { PAYPAL_BUTTON: 'PayPal payment failed, please try again' })))
 	}).catch((err) => {

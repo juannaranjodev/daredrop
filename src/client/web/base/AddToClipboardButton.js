@@ -8,7 +8,6 @@ class AddToClipboard extends Component {
 	}
 
 	addToClipboard = () => {
-		console.log('e')
 		const { url } = this.props
 		copy(url)
 	}

@@ -113,6 +113,8 @@ export const submitFormHof = (
 				)
 			}
 
+			console.log(successPromises)
+
 			Promise.all(successPromises).then(() => {
 				dispatch(clearFormFn(moduleKey))
 				dispatch(submitFormCompleteFn(moduleKey))
