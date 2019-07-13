@@ -1,6 +1,16 @@
-/* eslint-disable import/no-dynamic-require */
-const stage = process.env.STAGE || 'dev'
-const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1)
-const outputs = require(`./config/cfOutput-${capitalize(stage)}`)
+let outputs
+
+// #if !process.env.STAGE
+outputs = require('./config/cfOutput-Dev')
+// #endif
+// #if process.env.STAGE === 'production'
+outputs = require('./config/cfOutput-Production')
+// #endif
+// #if process.env.STAGE === 'testing'
+outputs = require('./config/cfOutput-Testing')
+// #endif
+// #if process.env.STAGE === 'staging'
+outputs = require('./config/cfOutput-Staging')
+// #endif
 
 export default outputs

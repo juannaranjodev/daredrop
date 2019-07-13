@@ -1,6 +1,6 @@
 import { S3, CloudFormation } from 'aws-sdk'
 import { name as packageName, awsAdminProfile } from 'root/appConfig.json'
-import { camelCase, kebabCase } from 'root/src/shared/util/stringCase'
+import { camelCase, kebabCase, capitalize } from 'root/src/shared/util/stringCase'
 import awsConf from 'aws-config'
 import findRoot from 'find-root'
 
@@ -52,6 +52,6 @@ export default ({
 		projectRoot,
 		buildDir,
 		buildPath: `${projectRoot}/${buildDir}`,
-		outputPath: `config/cfOutput-${camelCase(stage)}.js`,
+		outputPath: `config/cfOutput-${capitalize(stage)}.js`,
 	}
 }
