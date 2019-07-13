@@ -4,6 +4,7 @@ import fs from 'fs'
 import { lookup } from 'mime-types'
 import setContentEncoding from 'root/src/aws/util/cfCli/setContentEncoding'
 import webpackCompressedFilenames from 'root/src/server/edge/origin/webpackCompressedFilenames'
+import { isProdEnv } from 'root/src/aws/util/envSelect'
 
 const uploadFileHof = (s3Client, bucket) => (
 	localPath, fileName,
@@ -19,7 +20,7 @@ const uploadFileHof = (s3Client, bucket) => (
 						// not 100% sure contentType works with s3-stream-upload
 						ContentType: lookup(fileName),
 						CacheControl: 'max-age=31104000',
-						...(contains(fileName, webpackCompressedFilenames)
+						...((isProdEnv && contains(fileName, webpackCompressedFilenames))
 							? {
 								ContentEncoding: setContentEncoding(fileName),
 							} : {}
