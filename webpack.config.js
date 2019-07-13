@@ -17,7 +17,7 @@ const stage = process.env.STAGE
 // staging is webpack production build with development variables
 // development is webpack development build with development variables
 const mode = (stage === 'staging' || stage === 'production') ? 'production' : 'development'
-const env = stage || 'development'
+const env = stage || 'dev'
 
 const isProd = mode === 'production'
 

@@ -15,7 +15,7 @@ export const DependsOn = [
 export const Environment = {
 	Variables: {
 		API_DYNAMO_DB_TABLE: ref(API_DYNAMO_DB_TABLE),
-		STAGE: process.env.STAGE || 'development',
+		STAGE: process.env.STAGE || 'dev',
 		RECORD_SET: ref(RECORD_SET),
 		PERFORMANCE_TEST_DYNAMODB_TABLE: process.env.STAGE !== 'production' ? ref(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE) : undefined,
 	},

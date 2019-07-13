@@ -52,6 +52,6 @@ export default ({
 		projectRoot,
 		buildDir,
 		buildPath: `${projectRoot}/${buildDir}`,
-		outputPath: 'cfOutput.js',
+		outputPath: `config/cfOutput-${camelCase(stage)}.js`,
 	}
 }

@@ -1,6 +1,8 @@
 import { SES } from 'aws-sdk'
 import { ourEmail } from 'root/src/shared/constants/mail'
-import { sesConfigurationSetEventBasedEmailsArn } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
+
+const { sesConfigurationSetEventBasedEmailsArn } = outputs
 
 const ses = new SES()
 
