@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { join, map, prop } from 'ramda'
-import { videoBucket } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
 import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
 import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
 import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
@@ -13,6 +13,7 @@ import { DELIVERY_DARE } from 'root/src/shared/descriptions/endpoints/endpointId
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
 const { viewTestName } = payloadLenses
+const { videoBucket } = outputs
 
 export default async (project, deliveryProject, payload) => {
 	const acceptedAssignees = getAssigneesByStatus(project.assignees, streamerAcceptedKey)
