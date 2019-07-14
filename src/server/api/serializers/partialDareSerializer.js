@@ -1,6 +1,6 @@
 import { SAVE_PARTIAL_DARE_FORM } from 'root/src/shared/descriptions/endpoints/endpointIds'
 
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 const payloadLenses = getPayloadLenses(SAVE_PARTIAL_DARE_FORM)
 const {

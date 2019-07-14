@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 import classNames from 'classnames'
 

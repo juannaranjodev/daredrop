@@ -1,7 +1,7 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourName } from 'root/src/shared/constants/mail'
 
-export default ({ streamer, dareTitle, textFromStreamersReject }) => {
+export default ({ streamer, dareTitle, dareTitleLink, textFromStreamersReject }) => {
 	const mailContent = `
             <!-- mail content -->
             <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="80%" class="content">
@@ -20,7 +20,7 @@ export default ({ streamer, dareTitle, textFromStreamersReject }) => {
 
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">${streamer} won’t do ${dareTitle} because:</p>
+                    <p style="margin:0;padding:0;">${streamer} won’t do <a href="${dareTitleLink}">${dareTitle}</a> because:</p>
                     <p style="margin:0;padding:0;"><br><pre style="font-weight:bold;font-size:26px;line-height:1.23;" >${textFromStreamersReject}</pre></p>
                   </td>
                 </tr>

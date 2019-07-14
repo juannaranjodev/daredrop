@@ -1,6 +1,6 @@
 import { reduce, assoc } from 'ramda'
 import { connect } from 'react-redux'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 export default (selectors = [], actions = []) => (component, styles) => {
 	const styledComponent = styles ? withStyles(styles)(component) : component

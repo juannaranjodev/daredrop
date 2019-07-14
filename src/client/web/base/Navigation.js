@@ -13,7 +13,7 @@ import NavigationLinks from 'root/src/client/web/base/NavigationLinks'
 import DareDropLogo from 'root/src/client/assets/DareDropLogo.svg'
 import Link from 'root/src/client/web/base/Link'
 
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 const styles = {
 	root: {

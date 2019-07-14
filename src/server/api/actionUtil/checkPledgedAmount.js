@@ -11,7 +11,6 @@ import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailB
 
 
 export default async (projectId) => {
-
 	const [projectToCheckDdb, assigneesDdb] = await dynamoQueryProject(
 		null,
 		projectId,
@@ -37,7 +36,7 @@ export default async (projectId) => {
 					recipients: [streamerEmail],
 					dareDescription: prop('description', projectToCheck),
 					bountyAmount: prop('pledgeAmount', projectToCheck),
-					dareHref: projectHrefBuilder(prop('id', projectToCheck)),
+					dareTitleLink: projectHrefBuilder(prop('id', projectToCheck)),
 					goal: prop('amountRequested', assignee),
 					expiryTime: prop('created', projectToCheck),
 				}

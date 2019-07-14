@@ -4,7 +4,7 @@ import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUnique
 import getUserMailFromAssigneeObj from 'root/src/server/api/actionUtil/getUserMailFromAssigneeObj'
 import paypalBatchPayout from 'root/src/server/api/actionUtil/paypalBatchPayout'
 import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
-import { payoutCompleteKey, payoutOutstandingKey } from 'root/src/server/api/lenses'
+import { payoutCompleteKey, payoutOutstandingKey } from 'root/src/shared/descriptions/apiLenses'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { emailRe } from 'root/src/shared/util/regexes'
 import sendEmailToAssigneesWithoutPaypalEmail from 'root/src/server/api/actionUtil/sendEmailToAssigneesWithoutPaypalEmail'

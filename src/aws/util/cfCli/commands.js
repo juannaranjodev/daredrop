@@ -17,6 +17,7 @@ import getStackProgress from 'root/src/aws/util/cfCli/getStackProgress'
 import saveStackOutputs from 'root/src/aws/util/cfCli/saveStackOutputs'
 
 import uploadStatics from 'root/src/aws/util/cfCli/uploadStatics'
+import buildStatics from 'root/src/aws/util/cfCli/buildStatics'
 
 const afterCreateOrUpdate = [
 	{
@@ -31,6 +32,7 @@ const bundleLambda = [
 ]
 
 const createUpdateCommon = [
+	{ title: 'Building statics', fn: buildStatics },
 	{ title: 'Bundling lambda functions', fn: webpackLambda },
 	{ title: 'Updating and saving template', fn: saveCfTemplate },
 	{ title: 'Uploading files to s3', fn: templateLambdaUpload },

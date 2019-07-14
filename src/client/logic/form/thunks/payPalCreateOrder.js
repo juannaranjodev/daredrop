@@ -1,12 +1,15 @@
 import { toString, prop } from 'ramda'
 import customValidateForm from 'root/src/client/logic/form/util/customValidateForm'
-import setButtonErrors from 'root/src/client/logic/form/actions/setButtonErrors'
+import setFormErrors from 'root/src/client/logic/form/actions/setFormErrors'
+import submitFormError from 'root/src/client/logic/form/actions/submitFormError'
 import clearButtonErrors from 'root/src/client/logic/form/actions/clearButtonErrors'
 import submitForm from 'root/src/client/logic/form/actions/submitForm'
 
 // eslint-disable-next-line max-len
 export default (data, actions, { moduleId, formSchema, formData, moduleKey }) => async (dispatch) => {
 	try {
+		// clear form
+		dispatch(submitFormError(moduleKey, '', {}))
 		dispatch(submitForm(moduleKey))
 		dispatch(clearButtonErrors(moduleKey))
 		await customValidateForm(moduleId, formSchema, formData)

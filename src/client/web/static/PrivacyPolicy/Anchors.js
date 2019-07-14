@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { memo } from 'react'
 import ANCHORS from 'root/src/shared/constants/anchors'
 
-const Anchors = ({ classes }) => (
+const Anchors = memo(({ classes }) => (
 	<div className={classes.listWrapper}>
 		<ul className={classes.listOfLinks}>
 			<li>
@@ -34,17 +34,17 @@ const Anchors = ({ classes }) => (
 				</li>
 				<li>
 					<a href={`#${ANCHORS.SHARED_WITH_TRUSTED}`}>
-            Information that’s shared with trusted third-party services
+						Information that’s shared with trusted third-party services
 					</a>
 				</li>
 				<li>
 					<a href={`#${ANCHORS.SHARED_WITH_CREATORS}`}>
-            Information that’s shared with creators and collaborators
+						Information that’s shared with creators and collaborators
 					</a>
 				</li>
 				<li>
 					<a href={`#${ANCHORS.SHARED_WITH_DARE_DROP}`}>
-            Information that’s shared to protect Dare Drop and comply with the law
+						Information that’s shared to protect Dare Drop and comply with the law
 					</a>
 				</li>
 				<li>
@@ -78,6 +78,6 @@ const Anchors = ({ classes }) => (
 			</li>
 		</ul>
 	</div>
-)
+))
 
 export default Anchors

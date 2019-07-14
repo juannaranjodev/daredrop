@@ -1,8 +1,10 @@
 /* eslint-disable no-shadow */
 import generateCrontab from 'root/src/shared/util/generateCrontab'
 import { CloudWatchEvents } from 'aws-sdk'
-import { apiCloudwatchFunctionArn, cloudWatchEventsIamRole } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
 import { equals, prop, head, split, join, tail, compose } from 'ramda'
+
+const { apiCloudwatchFunctionArn, cloudWatchEventsIamRole } = outputs
 
 export default (eventInput, cronTime, identifier) => new Promise((resolve, reject) => {
 	const ruleId = compose(join('-'), tail, split('-'))(eventInput.payload[identifier])

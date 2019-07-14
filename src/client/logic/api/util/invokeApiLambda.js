@@ -1,8 +1,10 @@
-import invokeLambda from 'root/src/shared/util/invokeLambda'
+import invokeLambda from 'root/src/client/util/invokeLambda'
 import jwtTokenSelector from 'root/src/client/logic/auth/selectors/jwtTokenSelector'
-import { apiFunctionArn, apiLongTaskFunctionArn } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
 import isLongRunningTaskSelector from 'root/src/client/logic/api/selectors/isLongRunningTaskSelector'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
+
+const { apiFunctionArn, apiLongTaskFunctionArn } = outputs
 
 export default (endpointId, payload, state) => {
 	const jwtToken = jwtTokenSelector(state)

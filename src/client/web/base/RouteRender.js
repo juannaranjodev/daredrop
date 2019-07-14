@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import classNames from 'classnames'
 
 import { ternary } from 'root/src/shared/util/ramdaPlus'
@@ -26,7 +26,7 @@ const styles = {
 	},
 }
 
-export const RenderModules = ({ moduleTypes, routeId }) => (
+export const RenderModules = memo(({ moduleTypes, routeId }) => (
 	moduleTypes.map(([moduleId, moduleType, moduleIndex]) => {
 		const moduleProps = {
 			key: moduleId,
@@ -103,9 +103,9 @@ export const RenderModules = ({ moduleTypes, routeId }) => (
 				)
 		}
 	})
-)
+))
 
-export const RouteRender = ({
+export const RouteRender = memo(({
 	currentRouteModuleTypes, noRoute, currentRouteId, classes,
 }) => ternary(
 	noRoute,
@@ -125,6 +125,6 @@ export const RouteRender = ({
 		</div>
 		<Footer />
 	</div>,
-)
+))
 
 export default routeRenderConnector(RouteRender, styles)

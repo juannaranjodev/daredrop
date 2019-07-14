@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react'
 
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
 import classNames from 'classnames'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 import {
 	expDate,
@@ -75,7 +75,7 @@ const styles = {
 	},
 }
 
-const UniversalFormTextField = ({
+const UniversalFormTextField = memo(({
 	moduleKey, fieldId, fieldPath, setInput, fieldValue, fieldLabel, fieldError, fieldHasError,
 	fieldType, fieldPlaceholder, classes, wasSubmitted }) => {
 	const [previousValue, setPreviousValue] = useState('')
@@ -117,44 +117,44 @@ const UniversalFormTextField = ({
 			}
 		</div>
 	)
-}
+})
 
-const StyledTextField = ({
+const StyledTextField = memo(({
 	moduleKey, fieldId, fieldPath, setInput, fieldValue, fieldLabel, fieldError, fieldHasError,
 	fieldType, fieldMultiline, fieldPlaceholder, classes, fieldMax, fieldMultilineRows,
 }) => (
-	<div>
-		<TextField
-			fullWidth
-			id={fieldId}
-			label={fieldLabel}
-			type={fieldType}
-			multiline={fieldMultiline}
-			rows={fieldMultilineRows || '1'}
-			variant="outlined"
-			value={fieldValue}
-			error={fieldHasError}
-			helperText={fieldError}
-			placeholder={fieldPlaceholder}
-			onChange={textFieldSetInputHandler(
-				moduleKey, fieldPath, setInput, fieldType,
+		<div>
+			<TextField
+				fullWidth
+				id={fieldId}
+				label={fieldLabel}
+				type={fieldType}
+				multiline={fieldMultiline}
+				rows={fieldMultilineRows || '1'}
+				variant="outlined"
+				value={fieldValue}
+				error={fieldHasError}
+				helperText={fieldError}
+				placeholder={fieldPlaceholder}
+				onChange={textFieldSetInputHandler(
+					moduleKey, fieldPath, setInput, fieldType,
+				)}
+			/>
+			{orNull(
+				fieldMax,
+				<div className={classes.fieldMax}>
+					<MinMaxLength>{`${fieldValue.length}/${fieldMax}`}</MinMaxLength>
+				</div>,
 			)}
-		/>
-		{orNull(
-			fieldMax,
-			<div className={classes.fieldMax}>
-				<MinMaxLength>{`${fieldValue.length}/${fieldMax}`}</MinMaxLength>
-			</div>,
-		)}
-	</div>
-)
+		</div>
+	))
 
 export const InputField = memo((props) => {
 	switch (props.formType) {
 		case universalForm:
-			return UniversalFormTextField(props)
+			return <UniversalFormTextField {...props} />
 		default:
-			return StyledTextField(props)
+			return <StyledTextField {...props} />
 	}
 })
 

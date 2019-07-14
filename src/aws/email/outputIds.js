@@ -1,0 +1,1 @@
+export const SES_CONFIGURATION_SET_EVENT_BASED_EMAILS_ARN = 'sesConfigurationSetEventBasedEmailsArn'

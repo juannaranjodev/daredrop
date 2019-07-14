@@ -1,27 +1,33 @@
 import { head, add, prop, compose, map, not, length, assoc, equals, filter, propEq, omit, append } from 'ramda'
 
+// keys
+import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/shared/descriptions/apiLenses'
+import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+import { PLEDGE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
-import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+// lenses
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
-import sendEmail from 'root/src/server/email/actions/sendEmail'
+import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
+
+// utils
+import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
+import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
+import pledgeDynamoObj from 'root/src/server/api/actionUtil/pledgeDynamoObj'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
+import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthorizePayment'
+import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
+import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
+
+// serializers
+import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import pledgeMadeMail from 'root/src/server/email/templates/pledgeMade'
 import { pledgeMadeTitle } from 'root/src/server/email/util/emailTitles'
-import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
-
-import { PLEDGE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
-import pledgeDynamoObj from 'root/src/server/api/actionUtil/pledgeDynamoObj'
-import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
+import sendEmail from 'root/src/server/email/actions/sendEmail'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import validateStripeSourceId from 'root/src/server/api/actionUtil/validateStripeSourceId'
-import stripeAuthorizePayment from 'root/src/server/api/actionUtil/stripeAuthorizePayment'
-import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/server/api/lenses'
-import { payloadSchemaError, generalError } from 'root/src/server/api/errors'
-import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePaypalAuthorize'
-import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
-import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
+
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
 const { viewPledgeAmount, viewPaymentInfo } = payloadLenses
@@ -121,7 +127,7 @@ export default async ({ userId, payload }) => {
 			dareTitle: prop('title', newProject),
 			recipients: [email],
 			notClaimedAlready: equals(0, length(filter(propEq('accepted', streamerAcceptedKey), prop('assignees', newProject)))),
-			dareHref: projectHrefBuilder(prop('id', newProject)),
+			dareTitleLink: projectHrefBuilder(prop('id', newProject)),
 			streamers: compose(map(prop('username')), prop('assignees'))(newProject),
 			expiryTime: prop('approved', projectToPledge),
 		}

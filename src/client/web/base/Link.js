@@ -50,6 +50,7 @@ export const BaseLink = memo(({
 			[classes.navMenuStyle]: navMenuStyle,
 			'flex layout-column layout-align-center': navMenuStyle,
 		})}
+		rel="noreferrer"
 		href={linkHref}
 		target={linkTarget}
 		onClick={linkHandler(routeId, routeParams, pushRoute)}
