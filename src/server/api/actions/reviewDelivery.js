@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
 // libs
+import { and, prop, propEq, map, filter, equals, not, startsWith, omit, uniq, concat, compose, reduce } from 'ramda'
 import moment from 'moment'
-import { and, equals, filter, map, not, omit, prop, propEq, startsWith } from 'ramda'
 // utils
 import archiveProjectRecord from 'root/src/server/api/actionUtil/archiveProjectRecord'
 import assigneeDynamoObj from 'root/src/server/api/actionUtil/assigneeDynamoObj'
@@ -16,8 +16,9 @@ import projectSerializer from 'root/src/server/api/serializers/projectSerializer
 import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import videoApprovedEmail from 'root/src/server/email/templates/videoApproved'
+import videoDeliveredEmail from 'root/src/server/email/templates/videoDelivered'
 import videoRejectedEmail from 'root/src/server/email/templates/videoRejected'
-import { videoApprovedTitle, videoRejectedTitle } from 'root/src/server/email/util/emailTitles'
+import { videoRejectedTitle, videoApprovedTitle, videoDeliveredTitle } from 'root/src/server/email/util/emailTitles'
 // db stuff
 import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
@@ -33,6 +34,9 @@ import {
 	projectDeliveryPendingKey, projectToCaptureKey, streamerAcceptedKey, streamerDeliveryApprovedKey,
 } from 'root/src/shared/descriptions/apiLenses'
 // rest
+import getPledgersByProjectID from 'root/src/server/api/actionUtil/getPledgersByProjectID'
+import getFavoritesByProjectID from 'root/src/server/api/actionUtil/getFavoritesByProjectID'
+import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail';
 import setupCronJob from 'root/src/server/api/actionUtil/setupCronJob'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
@@ -119,17 +123,34 @@ export default async ({ payload }) => {
 		const emailTitle = equals(audit, projectDeliveredKey) ? videoApprovedTitle : videoRejectedTitle
 		const emailTemplate = equals(audit, projectDeliveredKey) ? videoApprovedEmail : videoRejectedEmail
 
-		map((streamerEmail) => {
-			const emailData = {
-				title: emailTitle,
+		// Send email for streamers
+		sendEmail({
+			title: emailTitle,
+			dareTitle: prop('title', projectSerialized),
+			message,
+			dareTitleLink: projectHrefBuilder(prop('id', projectSerialized)),
+			recipients: streamerEmails,
+			expiryTime: prop('created', projectSerialized),
+		}, emailTemplate)
+
+		// Send email for pledgers & favorites
+		if (equals(audit, projectDeliveredKey)) {
+			const allPledgersAndFavorites = compose(uniq, concat)(
+				await getPledgersByProjectID(projectId), await getFavoritesByProjectID(projectId),
+			)
+			const allPledgersAndFavoritesEmails = await Promise.all(
+				map(userId => getUserEmail(userId),
+					allPledgersAndFavorites),
+			)
+			sendEmail({
+				title: videoDeliveredTitle,
 				dareTitle: prop('title', projectSerialized),
 				dareTitleLink: projectHrefBuilder(prop('id', projectSerialized)),
 				message,
-				recipients: [streamerEmail],
+				recipients: allPledgersAndFavoritesEmails,
 				expiryTime: prop('created', projectSerialized),
-			}
-			sendEmail(emailData, emailTemplate)
-		}, streamerEmails)
+			}, videoDeliveredEmail)
+		}
 	} catch (err) {
 		console.log('ses error')
 	}

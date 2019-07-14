@@ -1,4 +1,4 @@
-import { head, not, gt, length, map, filter, propEq, prop, compose, split, last, unnest, omit } from 'ramda'
+import { head, not, gt, length, filter, propEq, prop, omit } from 'ramda'
 import { extension, lookup } from 'mime-types'
 import uuid from 'uuid/v4'
 import s3 from 'root/src/server/api/s3Client'
@@ -28,12 +28,7 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import dynamoQueryProjectDeliveries from 'root/src/server/api/actionUtil/dynamoQueryProjectDeliveries'
 
 // serializers
-import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import sendEmail from 'root/src/server/email/actions/sendEmail'
-import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
-import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
 
 const { videoBucket } = outputs
 const payloadLenses = getPayloadLenses(DELIVERY_DARE_INIT)
@@ -137,17 +132,5 @@ export default async ({ payload, userId }) => {
 	}
 	await documentClient.put(deliveryParams).promise()
 
-	try {
-		const email = await getUserEmail(userId)
-		const emailData = {
-			title: videoSubmittedTitle,
-			dareTitle: prop('title', project),
-			dareTitleLink: projectHrefBuilder(prop('id', project)),
-			recipients: [email],
-		}
-		sendEmail(emailData, videoSubmittedEmail)
-	} catch (err) {
-		console.log('ses error')
-	}
 	return { projectId, url, deliverySortKey }
 }

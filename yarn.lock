@@ -8481,6 +8481,11 @@ webpack-cli@^3.0.8:
     v8-compile-cache "^2.0.2"
     yargs "^12.0.5"
 
+webpack-conditional-loader@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/webpack-conditional-loader/-/webpack-conditional-loader-1.0.12.tgz#3e1d6f182aefac6d914c99acd0f861eddddfb728"
+  integrity sha512-sUJBnZoehjB8GysGY5G+ftU4WPkfDz+j0iYAV6xdNNpnzBVqIS6UKcu7HgZqay/+5voaU++c7QgfbxqqjDCSuA==
+
 webpack-dev-middleware@^3.5.1:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-3.6.2.tgz#f37a27ad7c09cd7dc67cd97655413abaa1f55942"
