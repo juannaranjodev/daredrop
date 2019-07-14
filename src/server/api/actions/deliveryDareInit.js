@@ -4,7 +4,7 @@ import uuid from 'uuid/v4'
 import s3 from 'root/src/server/api/s3Client'
 
 // configurate
-import { videoBucket } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
 import { s3BaseURL } from 'root/src/shared/constants/s3Constants'
 
 // lenses
@@ -30,6 +30,7 @@ import dynamoQueryProjectDeliveries from 'root/src/server/api/actionUtil/dynamoQ
 // serializers
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 
+const { videoBucket } = outputs
 const payloadLenses = getPayloadLenses(DELIVERY_DARE_INIT)
 
 const { viewVideoURL, viewTimeStamp, viewVideoName, viewProjectId } = payloadLenses

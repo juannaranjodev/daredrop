@@ -9,22 +9,26 @@
     }
   },
   "scripts": {
+    "makeFilenamesFile": "touch ./src/server/edge/origin/webpackCompressedFilenames.js",
+    "removeDistFolder": "rm -rf ./dist",
+    "deployPrepare": "yarn makeFilenamesFile && yarn removeDistFolder",
+    "configPrepare": "mkdir -p config && touch ./config/cfOutput-Dev.js && touch ./config/cfOutput-Production.js && touch ./config/cfOutput-Testing.js && touch ./config/cfOutput-Staging.js",
     "test": "./node_modules/.bin/jest",
     "start": "./node_modules/.bin/webpack-dev-server --progress --colors --hot --content-base build --inline --config webpack.config.js --port 8585",
     "buildTemplate": "./node_modules/.bin/babel-node ./src/aws/util/buildTemplate --presets=env,stage-0 --plugins=package-name-import > cfTemplate.json",
-    "deploy": "touch ./src/server/edge/origin/webpackCompressedFilenames.js && ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli deploy",
-    "update": "touch ./src/server/edge/origin/webpackCompressedFilenames.js && ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli update",
+    "deploy": "yarn deployPrepare && ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli deploy",
+    "update": "yarn deployPrepare && ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli update",
     "delete": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli remove",
     "outputs": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli outputs",
     "createDdb": "docker run --name dynamodb -p 9000:8000 amazon/dynamodb-local",
     "startDdb": "docker start dynamodb",
-    "build": "STAGE=staging webpack --config webpack.config.js -p",
+    "build": "yarn removeDistFolder && STAGE=staging webpack --config webpack.config.js -p",
     "bundleLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda",
     "genAWSCreds": "./node_modules/.bin/babel-node --presets=env ./customScripts/generateAWSCredentials.js",
     "runLambda": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task --env-file ./AWSCredentials.txt awslambda-node dareMeDevApiLambdaFunction.default",
     "lmb": "./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli bundleLambda && docker run -v $PWD/.cloudFormation/:/var/task lmb dareMeXDevApiLambdaFunction.default",
-    "deployProduction": "touch ./src/server/edge/origin/webpackCompressedFilenames.js && STAGE=production ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli deploy -s production",
-    "updateProduction": "touch ./src/server/edge/origin/webpackCompressedFilenames.js && STAGE=production ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli update -s production"
+    "deployProduction": "yarn deployPrepare && STAGE=production ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli deploy -s production",
+    "updateProduction": "yarn deployPrepare && STAGE=production ./node_modules/.bin/babel-node --presets=env,stage-0 ./src/aws/util/cfCli update -s production"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
@@ -116,6 +120,7 @@
     "uuid": "^3.3.2",
     "webpack": "^4.12.2",
     "webpack-cli": "^3.0.8",
+    "webpack-conditional-loader": "^1.0.12",
     "webpack-dev-server": "^3.1.4",
     "zip-webpack-plugin": "^3.0.0"
   },

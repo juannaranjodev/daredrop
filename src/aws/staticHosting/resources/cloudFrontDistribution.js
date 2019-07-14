@@ -2,6 +2,8 @@ import ref from 'root/src/aws/util/ref'
 import split from 'root/src/aws/util/split'
 import select from 'root/src/aws/util/select'
 import getAtt from 'root/src/aws/util/getAtt'
+import getCacheBehaviors from 'root/src/aws/util/getCacheBehaviors'
+import isDevValue from 'root/src/aws/util/isDevValue'
 import domainName from 'root/src/aws/util/domainName'
 import { isProdEnv } from 'root/src/aws/util/envSelect'
 
@@ -12,9 +14,14 @@ import {
 	LAMBDA_EDGE_VIEWER_VERSION, LAMBDA_EDGE_ORIGIN_VERSION,
 } from 'root/src/aws/lambdaEdge/resourceIds'
 
+import {
+	AUTHENTICATION_LAYER_VERSION,
+} from 'root/src/aws/authenticationLayer/resourceIds'
+
 export default {
 	[CLOUDFRONT_DISTRIBUTION]: {
 		Type: 'AWS::CloudFront::Distribution',
+		DependsOn: [STATIC_BUCKET, ...isDevValue([AUTHENTICATION_LAYER_VERSION])],
 		DependsOn: [
 			STATIC_BUCKET,
 			...(isProdEnv ? [
@@ -41,6 +48,12 @@ export default {
 							Forward: 'none',
 						},
 					},
+					LambdaFunctionAssociations: [
+						...isDevValue([{
+							EventType: 'viewer-request',
+							LambdaFunctionARN: ref(AUTHENTICATION_LAYER_VERSION),
+						}]),
+					],
 					...(isProdEnv ? {
 						LambdaFunctionAssociations: [
 							{
@@ -54,6 +67,23 @@ export default {
 						],
 					} : {}),
 				},
+				...isDevValue({
+					CacheBehaviors: getCacheBehaviors(['jpg', 'png', 'svg'],
+						{
+							AllowedMethods: ['HEAD', 'GET'],
+							CachedMethods: ['HEAD', 'GET'],
+							ForwardedValues: {
+								QueryString: true,
+								Cookies: {
+									Forward: 'none',
+								},
+							},
+							MinTTL: 0,
+							PathPattern: '*.jpg',
+							TargetOriginId: ref(STATIC_BUCKET),
+							ViewerProtocolPolicy: 'redirect-to-https',
+						}),
+				}),
 				Origins: [
 					{
 						DomainName: select(2, split('/', getAtt(STATIC_BUCKET, 'WebsiteURL'))),
