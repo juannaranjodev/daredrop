@@ -1,7 +1,9 @@
 import { REVIEW_DELIVERY } from 'root/src/server/performanceTest/endpoints/endpointIds'
 import { projectDeliveredKey } from 'root/src/shared/descriptions/apiLenses'
 
-import { apiLongTaskFunctionArn } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
+
+const { apiLongTaskFunctionArn } = outputs
 
 export default {
 	actionEvent: {

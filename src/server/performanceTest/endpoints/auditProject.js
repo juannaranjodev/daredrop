@@ -1,7 +1,9 @@
 import { AUDIT_PROJECT } from 'root/src/server/performanceTest/endpoints/endpointIds'
 import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 
-import { apiFunctionArn } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
+
+const { apiFunctionArn } = outputs
 
 export default {
 	actionEvent: {

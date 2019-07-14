@@ -4,7 +4,7 @@ import uuid from 'uuid/v4'
 import s3 from 'root/src/server/api/s3Client'
 
 // configurate
-import { videoBucket } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
 import { s3BaseURL } from 'root/src/shared/constants/s3Constants'
 
 // lenses
@@ -35,6 +35,7 @@ import sendEmail from 'root/src/server/email/actions/sendEmail'
 import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
 import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
 
+const { videoBucket } = outputs
 const payloadLenses = getPayloadLenses(DELIVERY_DARE_INIT)
 
 const { viewVideoURL, viewTimeStamp, viewVideoName, viewProjectId } = payloadLenses

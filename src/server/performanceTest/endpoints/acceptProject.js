@@ -1,6 +1,8 @@
 import { ACCEPT_PROJECT } from 'root/src/server/performanceTest/endpoints/endpointIds'
 
-import { apiFunctionArn } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
+
+const { apiFunctionArn } = outputs
 
 export default {
 	actionEvent: {

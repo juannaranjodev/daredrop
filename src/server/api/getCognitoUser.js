@@ -3,9 +3,10 @@ import jwt from 'jsonwebtoken'
 import jwkToPem from 'jwk-to-pem'
 
 import nodeAjax from 'root/src/shared/util/nodeAjax'
-import { userPoolId } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
 import { region } from 'root/src/shared/constants/aws'
 
+const { userPoolId } = outputs
 const issuer = `https://cognito-idp.${region}.amazonaws.com/${userPoolId}`
 
 const convertKeysToPems = (userPoolKeys) => {
