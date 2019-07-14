@@ -5,7 +5,7 @@ import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByS
 import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
 import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
 import googleOAuthClient, { youtube } from 'root/src/server/api/googleClient'
-import { streamerAcceptedKey } from 'root/src/server/api/lenses'
+import { streamerAcceptedKey } from 'root/src/shared/descriptions/apiLenses'
 import S3 from 'root/src/server/api/s3Client'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
