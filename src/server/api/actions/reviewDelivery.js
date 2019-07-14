@@ -128,6 +128,7 @@ export default async ({ payload }) => {
 			title: emailTitle,
 			dareTitle: prop('title', projectSerialized),
 			message,
+			dareTitleLink: projectHrefBuilder(prop('id', projectSerialized)),
 			recipients: streamerEmails,
 			expiryTime: prop('created', projectSerialized),
 		}, emailTemplate)

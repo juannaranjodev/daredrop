@@ -30,7 +30,7 @@ export default ({ dareTitleLink, dareTitle, expiryTime, dareDescription }) => {
 
                 <tr>
                   <td style="margin:0; padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">Remember to put a link to your Dare (<a href="http://${dareTitleLink}" style="text-decoration:none;color:#1976d2;">http://${dareTitleLink}</a>) in your stream description & tell your stream about it. </p>
+                    <p style="margin:0;padding:0;">Remember to put a link to your Dare (<a href="${dareTitleLink}" style="text-decoration:none;color:#1976d2;">${dareTitleLink}</a>) in your stream description & tell your stream about it. </p>
                   </td>
                 </tr>
 
