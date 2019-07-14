@@ -49,6 +49,8 @@ export default async ({ payload, userId }) => {
 		null,
 		projectId,
 	)
+	await checkPledgedAmount(projectId)
+
 	const projectToAccept = projectSerializer([
 		...projectToAcceptDdb,
 		...assigneesDdb,
