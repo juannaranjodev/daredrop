@@ -3,10 +3,9 @@ import createProject from 'root/src/server/api/actions/createProject'
 
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import {
-	projectApprovedKey, projectDeliveredKey,
-	projectDeliveryRejectedKey, projectPendingKey,
+	projectApprovedKey, projectDeliveredKey, projectDeliveryRejectedKey, projectPendingKey,
 	projectAcceptedKey, projectDeliveryInitKey, projectDeliveryPendingKey,
-} from 'root/src/server/api/lenses'
+} from 'root/src/shared/descriptions/apiLenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'

@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import styled from 'root/src/client/web/base/StaticLayout/style'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import Link from 'root/src/client/web/base/Link'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 

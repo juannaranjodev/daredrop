@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 
 import classNames from 'classnames'
 
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import {
 	lightGrey, fontFamily,
 } from 'root/src/client/web/commonStyles'

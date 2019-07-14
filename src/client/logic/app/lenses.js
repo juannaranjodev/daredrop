@@ -21,6 +21,9 @@ const appSchema = {
 											type: 'array',
 											items: { type: 'string' },
 										},
+										'cognito:username': {
+											type: 'string',
+										},
 									},
 								},
 							},

@@ -1,5 +1,5 @@
 import { map } from 'ramda'
-import { dynamoItemsProp } from 'root/src/server/api/lenses'
+import { dynamoItemsProp } from 'root/src/shared/descriptions/apiLenses'
 
 export default ({ dynamoResults, serializer, next }) => ({
 	next,

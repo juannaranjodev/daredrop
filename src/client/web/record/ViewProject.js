@@ -396,14 +396,13 @@ export const ViewProjectModule = memo(({
 									</div>,
 								)
 							}
-							{ClaimButton({
-								projectAcceptanceStatus,
-								projectId,
-								assignees,
-								pushRoute,
-								isAuthenticated,
-							})}
-
+							<ClaimButton
+								projectAcceptanceStatus={projectAcceptanceStatus}
+								projectId={projectId}
+								assignees={assignees}
+								pushRoute={pushRoute}
+								isAuthenticated={isAuthenticated}
+							/>
 							<div className={classes.sidebarItem}>
 								<LoadingButton
 									buttonType="noBackgroundButton"

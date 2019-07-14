@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { memo } from 'react'
 
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 import Settings from 'root/src/client/web/base/StaticLayout'
 
@@ -10,7 +10,7 @@ import content from './pageContent'
 
 const { lead, buttons } = content
 
-const AccountSettings = ({ classes }) => (
+const AccountSettings = memo(({ classes }) => (
 	<Settings>
 		<section className={classes.section}>
 			<h3 className={classes.sectionTitle}>{lead}</h3>
@@ -21,5 +21,5 @@ const AccountSettings = ({ classes }) => (
 			</div>
 		</section>
 	</Settings>
-)
+))
 export default withStyles(styles)(AccountSettings)

@@ -5,9 +5,14 @@ import getAtt from 'root/src/aws/util/getAtt'
 import getCacheBehaviors from 'root/src/aws/util/getCacheBehaviors'
 import isDevValue from 'root/src/aws/util/isDevValue'
 import domainName from 'root/src/aws/util/domainName'
+import { isProdEnv } from 'root/src/aws/util/envSelect'
+
 import {
 	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET,
 } from 'root/src/aws/staticHosting/resourceIds'
+import {
+	LAMBDA_EDGE_VIEWER_VERSION, LAMBDA_EDGE_ORIGIN_VERSION,
+} from 'root/src/aws/lambdaEdge/resourceIds'
 
 import {
 	AUTHENTICATION_LAYER_VERSION,
@@ -17,6 +22,13 @@ export default {
 	[CLOUDFRONT_DISTRIBUTION]: {
 		Type: 'AWS::CloudFront::Distribution',
 		DependsOn: [STATIC_BUCKET, ...isDevValue([AUTHENTICATION_LAYER_VERSION])],
+		DependsOn: [
+			STATIC_BUCKET,
+			...(isProdEnv ? [
+				LAMBDA_EDGE_VIEWER_VERSION,
+				LAMBDA_EDGE_ORIGIN_VERSION,
+			] : []),
+		],
 		Properties: {
 			DistributionConfig: {
 				Aliases: [
@@ -42,6 +54,18 @@ export default {
 							LambdaFunctionARN: ref(AUTHENTICATION_LAYER_VERSION),
 						}]),
 					],
+					...(isProdEnv ? {
+						LambdaFunctionAssociations: [
+							{
+								EventType: 'origin-request',
+								LambdaFunctionARN: ref(LAMBDA_EDGE_ORIGIN_VERSION),
+							},
+							{
+								EventType: 'viewer-request',
+								LambdaFunctionARN: ref(LAMBDA_EDGE_VIEWER_VERSION),
+							},
+						],
+					} : {}),
 				},
 				...isDevValue({
 					CacheBehaviors: getCacheBehaviors(['jpg', 'png', 'svg'],
@@ -84,6 +108,7 @@ export default {
 					SslSupportMethod: 'sni-only',
 					AcmCertificateArn: ref(SSL),
 				},
+				HttpVersion: 'http2',
 			},
 		},
 	},

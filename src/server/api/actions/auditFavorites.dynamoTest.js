@@ -4,7 +4,7 @@ import { AUDIT_FAVORITES } from 'root/src/shared/descriptions/endpoints/endpoint
 
 import createProject from 'root/src/server/api/actions/createProject'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { internet } from 'faker'
 import { addIndex, map, range } from 'ramda'

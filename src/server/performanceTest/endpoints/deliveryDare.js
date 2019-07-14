@@ -1,6 +1,8 @@
 import { DELIVERY_DARE } from 'root/src/server/performanceTest/endpoints/endpointIds'
 
-import { apiLongTaskFunctionArn } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
+
+const { apiLongTaskFunctionArn } = outputs
 
 export default {
 	actionEvent: {

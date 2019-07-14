@@ -1,5 +1,6 @@
 import Ajv from 'ajv'
 import ajvErrors from 'ajv-errors'
+import { emailRe } from 'root/src/shared/util/regexes'
 
 const ajv = new Ajv({
 	allErrors: true,
@@ -8,7 +9,10 @@ const ajv = new Ajv({
 	errorDataPath: 'property',
 })
 
+ajv.addFormat('Email', emailRe)
+
 ajvErrors(ajv)
+
 
 export default (schemaId, schema, data) => new Promise((resolve) => {
 	let validate = ajv.getSchema(schemaId)

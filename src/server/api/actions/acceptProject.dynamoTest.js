@@ -5,7 +5,7 @@ import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload
 import createProject from 'root/src/server/api/actions/createProject'
 
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
-import { projectApprovedKey, projectAcceptedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey, projectAcceptedKey } from 'root/src/shared/descriptions/apiLenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
 import rejectProject from 'root/src/server/api/actions/rejectProject'

@@ -1,7 +1,7 @@
 import {
 	getDataHof,
 } from 'root/src/server/api/serializers/assigneeSerializer'
-import { streamerPendingKey } from 'root/src/server/api/lenses'
+import { streamerPendingKey } from 'root/src/shared/descriptions/apiLenses'
 
 const getUserDataMock = jest.fn()
 
