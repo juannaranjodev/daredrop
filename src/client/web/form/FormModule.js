@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { memo, useState } from 'react'
 import { identical, isNil } from 'ramda'
 
@@ -74,15 +75,16 @@ const styles = {
 	},
 	errorText: {
 		color: 'red',
-		margin: '1em 0'
-	}
+		margin: '1em 0',
+	},
 }
 
 export const FormModuleUnconnected = memo(({
 	formFieldTypes, formTitle, formSubmits, moduleId, moduleKey, submitForm,
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
 	classes, subTitle, formType, backButton, formHandlers, handleAction, customSubmits,
-	customSubmitsData, payPalCreateOrder, payPalOnApprove, uploadProgress, payPalOnError, customPayPalAction, formSubmitError
+	customSubmitsData, payPalCreateOrder, payPalOnApprove, uploadProgress,
+	payPalOnError, customPayPalAction, formSubmitError,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
@@ -160,14 +162,14 @@ export const FormModuleUnconnected = memo(({
 					)}
 					>	{orNull(
 							formSubmitError,
-							<div
-								className={classNames(
-									classes.errorText,
-									'layout-row layout-align-center',
-								)}
-							>
-								{formSubmitError}
-							</div>
+						<div
+							className={classNames(
+								classes.errorText,
+								'layout-row layout-align-center',
+							)}
+						>
+							{formSubmitError}
+						</div>,
 						)}
 						<Submits
 							moduleKey={moduleKey}

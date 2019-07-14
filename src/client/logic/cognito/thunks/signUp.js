@@ -1,9 +1,19 @@
+import { test } from 'ramda'
 import userPool from 'root/src/client/logic/cognito/util/userPool'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
 import { VERIFY_ACCOUNT_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
+import { emailRe } from 'root/src/shared/util/regexes'
 
 export default ({ email, password }) => dispatch => new Promise(
 	(resolve, reject) => {
+		console.log(test(emailRe, email))
+
+		if (1) {
+			const fieldError = {
+				email: 'Please input correct email address.',
+			}
+			reject(fieldError)
+		}
 		userPool.signUp(
 			email, password, [], null, (cognitoError, result) => {
 				if (cognitoError) {
