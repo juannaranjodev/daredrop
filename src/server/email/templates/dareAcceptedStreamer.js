@@ -2,7 +2,7 @@ import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourName } from 'root/src/shared/constants/mail'
 import expiryCalculator from 'root/src/server/email/util/expiryCalculator'
 
-export default ({ dareTitleLink, dareTitle, expiryTime, dareHref, dareDescription }) => {
+export default ({ dareTitleLink, dareTitle, expiryTime, dareDescription }) => {
 	const mailContent = `
             <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="80%" class="content">
               <tbody>
@@ -30,7 +30,7 @@ export default ({ dareTitleLink, dareTitle, expiryTime, dareHref, dareDescriptio
 
                 <tr>
                   <td style="margin:0; padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">Remember to put a link to your Dare (<a href="http://${dareHref}" style="text-decoration:none;color:#1976d2;">http://${dareHref}</a>) in your stream description & tell your stream about it. </p>
+                    <p style="margin:0;padding:0;">Remember to put a link to your Dare (<a href="http://${dareTitleLink}" style="text-decoration:none;color:#1976d2;">http://${dareTitleLink}</a>) in your stream description & tell your stream about it. </p>
                   </td>
                 </tr>
 

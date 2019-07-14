@@ -34,7 +34,6 @@ export default async (projectId) => {
 		streamer => prop('displayName', streamer),
 		acceptedAssignees,
 	)
-
 	if (gt(prop('pledgeAmount', projectToCheck), allAcceptedAmount)) {
 		// Send golMet email for streamer
 		await Promise.all(
@@ -66,7 +65,7 @@ export default async (projectId) => {
 			dareTitle: prop('title', projectToCheck),
 			dareTitleLink: projectHrefBuilder(prop('id', projectToCheck)),
 			recipients: allPledgersAndFavoritesEmails,
-			streamers: arrayToStringParser(streamerList),
+			streamerList,
 			goal: allAcceptedAmount,
 			expiryTime: prop('created', streamerList),
 		}, golMetPledgerEmail)

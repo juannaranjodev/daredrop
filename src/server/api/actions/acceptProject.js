@@ -49,8 +49,6 @@ export default async ({ payload, userId }) => {
 		null,
 		projectId,
 	)
-	await checkPledgedAmount(projectId)
-
 	const projectToAccept = projectSerializer([
 		...projectToAcceptDdb,
 		...assigneesDdb,
@@ -172,7 +170,7 @@ export default async ({ payload, userId }) => {
 			dareTitle: prop('title', projectToAccept),
 			dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
 			recipients: allPledgersAndFavoritesEmails,
-			streamers: arrayToStringParser(streamerList),
+			streamerList,
 			goal: sumAmountRequested,
 			expiryTime: prop('created', projectToAccept),
 		}, dareAcceptedPledgerMail)
@@ -188,6 +186,7 @@ export default async ({ payload, userId }) => {
 			streamer: prop('displayName', head(userTokens)),
 			goal: amountRequested,
 			expiryTime: prop('created', projectToAccept),
+			dareDescription: prop('description', projectToAccept),
 		}
 		sendEmail(emailDataForStreamer, dareAcceptedStreamerMail)
 		await checkPledgedAmount(projectId)
