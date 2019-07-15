@@ -1,13 +1,13 @@
 import { head, add, prop, compose, map, not, length, assoc, equals, filter, propEq, omit, append } from 'ramda'
 
 // keys
-import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/server/api/lenses'
+import { dynamoItemsProp, streamerAcceptedKey } from 'root/src/shared/descriptions/apiLenses'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { PLEDGE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 // lenses
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 

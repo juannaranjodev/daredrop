@@ -9,7 +9,7 @@ import Body from 'root/src/client/web/typography/Body'
 import { doveGray } from 'root/src/client/web/commonStyles'
 import SubTitle from 'root/src/client/web/typography/SubTitle'
 
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 const styles = {
 	space: {
@@ -47,28 +47,28 @@ const Fields = memo(
 		formType,
 		subTextLabel,
 	}) => (
-		<div className={classNames(classes.space, { [classes.inline]: (formType === 'universalForm') })}>
-			{orNull(
-				labelFieldText,
-				<div className={classes.labelFieldText}>
-					<TitleFormText>{labelFieldText}</TitleFormText>
-				</div>,
-			)}
-			{orNull(
-				subTextLabel,
-				<div className={classes.subTextLabel}>
-					<SubTitle>{subTextLabel}</SubTitle>
-				</div>,
-			)}
-			{children}
-			{orNull(
-				subFieldText,
-				<div className={classes.subFieldText}>
-					<TertiaryBody>{subFieldText}</TertiaryBody>
-				</div>,
-			)}
-		</div>
-	),
+			<div className={classNames(classes.space, { [classes.inline]: (formType === 'universalForm') })}>
+				{orNull(
+					labelFieldText,
+					<div className={classes.labelFieldText}>
+						<TitleFormText>{labelFieldText}</TitleFormText>
+					</div>,
+				)}
+				{orNull(
+					subTextLabel,
+					<div className={classes.subTextLabel}>
+						<SubTitle>{subTextLabel}</SubTitle>
+					</div>,
+				)}
+				{children}
+				{orNull(
+					subFieldText,
+					<div className={classes.subFieldText}>
+						<TertiaryBody>{subFieldText}</TertiaryBody>
+					</div>,
+				)}
+			</div>
+		),
 )
 
 export default withStyles(styles)(Fields)

@@ -1,8 +1,8 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-shadow */
-import { intersection, prop, map, reduce, equals, length, addIndex, join, assoc, __ } from 'ramda'
+import { intersection, prop, map, reduce, equals, length, addIndex, join, assoc } from 'ramda'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
-import { streamerRejectedKey, dynamoItemsProp } from 'root/src/server/api/lenses'
+import { streamerRejectedKey, dynamoItemsProp } from 'root/src/shared/descriptions/apiLenses'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import dynamoQueryShardedItems from 'root/src/server/api/actionUtil/dynamoQueryShardedItems'
 

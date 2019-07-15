@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { primaryColor, primaryColorBorder } from 'root/src/client/web/commonStyles'
 
 const style = {
@@ -24,12 +24,12 @@ const style = {
 	},
 }
 
-const Button = ({ classes, title, subtitle, onClick }) => (
+const Button = memo(({ classes, title, subtitle, onClick }) => (
 	<button type="button" onClick={onClick} className={classes.button}>
 		<div className={classes.title}>{title}</div>
 		<div className={classes.subTitle}>{subtitle}</div>
 	</button>
-)
+))
 
 Button.propTypes = {
 	title: PropTypes.string,
@@ -40,7 +40,7 @@ Button.propTypes = {
 Button.defaultProps = {
 	title: 'Button',
 	subtitle: 'subtitle',
-	onClick: () => {},
+	onClick: () => { },
 }
 
 export default withStyles(style)(Button)

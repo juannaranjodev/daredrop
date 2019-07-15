@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/styles'
+import makeStyles from '@material-ui/styles/makeStyles'
 
 
 const primaryColor = '#303f9f'

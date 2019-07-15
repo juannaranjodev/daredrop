@@ -1,9 +1,10 @@
+/* eslint-disable indent */
 /* eslint-disable max-len */
 import { add, assoc, filter, map, prop, propEq, reduce, test } from 'ramda'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
 import getUserMailFromAssigneeObj from 'root/src/server/api/actionUtil/getUserMailFromAssigneeObj'
-import { projectApprovedKey, streamerDeliveryApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey, streamerDeliveryApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { emailRe } from 'root/src/shared/util/regexes'
 

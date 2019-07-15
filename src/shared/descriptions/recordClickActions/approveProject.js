@@ -1,4 +1,4 @@
-import { projectApprovedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 
 import {
 	APPROVE_PROJECT,

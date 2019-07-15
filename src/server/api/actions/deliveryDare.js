@@ -1,12 +1,11 @@
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import { DELIVERY_DARE } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import S3 from 'root/src/server/api/s3Client'
-import { videoBucket } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
 import googleOAuthClient, { youtube } from 'root/src/server/api/googleClient'
-import { dynamoItemsProp, projectApprovedKey, streamerAcceptedKey, projectDeliveryPendingKey } from 'root/src/server/api/lenses'
-
+import { dynamoItemsProp, projectApprovedKey, streamerAcceptedKey, projectDeliveryPendingKey } from 'root/src/shared/descriptions/apiLenses'
 import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
 import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
 import { map, prop, join, head } from 'ramda'
@@ -20,6 +19,7 @@ import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 
+const { videoBucket } = outputs
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
 const { viewDeliverySortKey, viewProjectId, viewTestName } = payloadLenses
 
