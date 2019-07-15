@@ -12,7 +12,6 @@ import golMetPledgerEmail from 'root/src/server/email/templates/goalMet'
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import getPledgersByProjectID from 'root/src/server/api/actionUtil/getPledgersByProjectID'
 import getFavoritesByProjectID from 'root/src/server/api/actionUtil/getFavoritesByProjectID'
-import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
 
 export default async (projectId) => {
 	const [projectToCheckDdb, assigneesDdb] = await dynamoQueryProject(

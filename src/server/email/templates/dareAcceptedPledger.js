@@ -21,7 +21,7 @@ export default ({ streamerList, dareTitle, goal, expiryTime, dareTitleLink }) =>
 
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">${arrayToStringParser(streamerList)} has accepted your Dare to <a href="${dareTitleLink}">${dareTitle}</a>!</p>
+                    <p style="margin:0;padding:0;">${arrayToStringParser(streamerList, 'has')} accepted your Dare to <a href="${dareTitleLink}">${dareTitle}</a>!</p>
                   </td>
                 </tr>
 
