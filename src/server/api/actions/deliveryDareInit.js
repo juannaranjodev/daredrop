@@ -131,6 +131,5 @@ export default async ({ payload, userId }) => {
 		Item: dareDeliveryObject,
 	}
 	await documentClient.put(deliveryParams).promise()
-
 	return { projectId, url, deliverySortKey }
 }

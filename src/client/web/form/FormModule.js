@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { memo, useState } from 'react'
 import { identical, isNil } from 'ramda'
 

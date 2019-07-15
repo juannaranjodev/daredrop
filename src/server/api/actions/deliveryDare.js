@@ -87,8 +87,8 @@ export default async ({ payload, userId }) => {
 			recipients: [email],
 		}
 		sendEmail(emailData, videoSubmittedEmail)
+	// eslint-disable-next-line no-empty
 	} catch (err) {
-		console.log('ses error')
 	}
 
 	try {
