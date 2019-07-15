@@ -75,8 +75,8 @@ const styles = {
 	},
 	errorText: {
 		color: 'red',
-		margin: '1em 0'
-	}
+		margin: '1em 0',
+	},
 	loadingContainer: {
 		width: '100%',
 		height: '100%',
@@ -116,7 +116,7 @@ export const FormModuleUnconnected = memo(({
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
 	classes, subTitle, formType, backButton, formHandlers, handleAction, customSubmits,
 	customSubmitsData, payPalCreateOrder, payPalOnApprove, uploadProgress, payPalOnError,
-	customPayPalAction, visibleLoadingBlock, formSubmitError
+	customPayPalAction, visibleLoadingBlock, formSubmitError,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
@@ -205,14 +205,14 @@ export const FormModuleUnconnected = memo(({
 					)}
 					>	{orNull(
 							formSubmitError,
-							<div
+						<div
 								className={classNames(
 									classes.errorText,
 									'layout-row layout-align-center',
 								)}
 							>
 								{formSubmitError}
-							</div>
+							</div>,
 						)}
 						<Submits
 							moduleKey={moduleKey}

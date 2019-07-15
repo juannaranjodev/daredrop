@@ -31,7 +31,11 @@ Install node and yarn
 
 `yarn install`
 
-Add a file with the contents below called `cfOutput.js` to the root directory
+After use comand
+
+`yarn configPrepare`
+
+For developers in file `root/config/cfOutput-Dev.js` add this code
 
 ```
 export const apiDynamoTableName = 'arn:aws:dynamodb:us-east-1:685756249129:table/dareMeDev-dareMeDevApiDynamoDbTable-5OTTQPZG5KJV'
