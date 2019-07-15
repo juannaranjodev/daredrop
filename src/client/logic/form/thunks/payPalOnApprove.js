@@ -14,10 +14,12 @@ import clearPartialFormKeys from 'root/src/client/logic/form/actions/clearPartia
 import invokeApiLambda from 'root/src/client/logic/api/util/invokeApiLambda'
 import { CLEAR_PARTIAL_FORM_KEYS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { PAYPAL_BUTTON } from 'root/src/client/logic/form/buttonNames'
+import setLoadingBlock from 'root/src/client/logic/list/actions/setLoadingBlock'
 
 const { viewFormChild } = formStoreLenses
 
 export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) => async (dispatch, getState) => {
+	dispatch(setLoadingBlock(true))
 	actions.order.authorize().then(async ({ purchase_units }) => {
 		const state = getState()
 		const partialFormEntries = viewFormChild(`db-${moduleKey}`, state)
@@ -50,6 +52,7 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 
 		dispatch(apiRequest(endpointId, apiPayload))
 			.then(() => {
+				dispatch(setLoadingBlock(false))
 				dispatch(clearForm(moduleKey))
 				dispatch(submitFormComplete(moduleKey))
 				dispatch(pushRoute(successPage, { recordId: projectId }))
