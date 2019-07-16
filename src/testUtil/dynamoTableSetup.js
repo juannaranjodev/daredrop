@@ -75,7 +75,9 @@ jest.mock('root/src/server/api/twitchApi', () => {
 jest.mock('root/src/server/api/s3Client', () => ({
 	getSignedUrl: jest.fn(() => ('https://s3.aws.amazon.com/somepresignedUrl')),
 	getObject: jest.fn(() => ({
-		createReadStream: jest.fn(() => ('someReadStream')),
+		createReadStream: jest.fn(() => ({
+			on: jest.fn(() => ({})),
+		})),
 	})),
 }))
 
@@ -128,7 +130,7 @@ jest.mock('root/src/server/api/paypalClient', () => {
 						},
 					})),
 			},
-		}))
+		})),
 	}
 })
 

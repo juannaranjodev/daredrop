@@ -25,5 +25,5 @@ export default async () => {
 		}
 	}, deliveriesWithoutVideo))
 
-	return Promise.all(map(async ({ project, delivery }) => streamVideoS3toYT(project, delivery), projects))
+	return map(async ({ project, delivery }) => streamVideoS3toYT(project, delivery), projects)
 }
