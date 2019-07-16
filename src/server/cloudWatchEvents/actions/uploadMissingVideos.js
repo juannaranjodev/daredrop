@@ -1,4 +1,4 @@
-import { filter, propEq, map } from 'ramda'
+import { filter, propEq, map, allPass } from 'ramda'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryShardedItems from 'root/src/server/api/actionUtil/dynamoQueryShardedItems'
 import { projectApprovedKey, projectDeliveredKey, projectDeliveryPendingKey } from 'root/src/shared/descriptions/apiLenses'
@@ -11,7 +11,8 @@ export default async () => {
 	const deliveries = [...deliveredProjects, ...deliveryPendingProjects]
 
 	const youTubeURLundefinedFilter = propEq('youTubeURL', undefined)
-	const deliveriesWithoutVideo = filter(youTubeURLundefinedFilter, deliveries)
+	const s3UploadedFilter = propEq('s3Uploaded', true)
+	const deliveriesWithoutVideo = filter(allPass([youTubeURLundefinedFilter, s3UploadedFilter]), deliveries)
 
 	const projects = await Promise.all(map(async (delivery) => {
 		const [projectDdb, assigneesDdb] = await dynamoQueryProject(null, delivery.pk, projectApprovedKey)
