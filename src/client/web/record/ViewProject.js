@@ -2,7 +2,7 @@ import { map, addIndex, isNil, propOr, prop, replace } from 'ramda'
 import React, { memo, useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
-
+import { ourUrl } from 'root/src/shared/constants/mail'
 import {
 	gtXsMediaQuery, gtSmMediaQuery, smMediaQuery,
 } from 'root/src/client/web/commonStyles'
@@ -22,6 +22,7 @@ import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionB
 import { APPROVE_PROJECT, REJECT_PROJECT, REJECT_ACTIVE_PROJECT } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 
 import { VIEW_PROJECT_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
+import ShareMenu from 'root/src/client/web/base/ShareMenu'
 
 // import goToDeliveryDareFormHandler from 'root/src/client/logic/project/handlers/goToDeliveryDareFormHandler'
 import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
@@ -267,7 +268,12 @@ export const ViewProjectModule = memo(({
 									title={projectTitle}
 								/>
 							</div>,
-							<img alt="Game" src={gameImage} className={classes.image} />)}
+							<div style={{ position: 'relative' }}>
+								<div style={{ position: 'absolute', right: 10, top: 10 }}>
+									<ShareMenu secodStyle url={`http://${ourUrl}/${projectId}`} />
+								</div>
+								<img alt="Game" src={gameImage} className={classes.image} />
+							</div>)}
 						<div className={classNames(
 							'flex-100', 'flex-order-1', 'flex-order-gt-sm-3', 'flex-gt-sm-100',
 							classes.descriptionContainer,

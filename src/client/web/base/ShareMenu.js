@@ -6,6 +6,7 @@ import ShareIcon from '@material-ui/icons/Share'
 import clipboard from 'root/src/client/assets/icons/clipboard.png'
 import withStyles from '@material-ui/core/styles/withStyles'
 import AddToClipboardButton from 'root/src/client/web/base/AddToClipboardButton'
+import classNames from 'classnames'
 
 import {
 	TwitterShareButton, FacebookShareButton, RedditShareButton, VKShareButton,
@@ -62,15 +63,21 @@ const styles = {
 			color: '#ddd',
 		},
 	},
+	primaryBackground: {
+		backgroundColor: 'rgba(132,10,125, 0.4)',
+		'&:hover': {
+			backgroundColor: 'rgba(132,10,125, 0.7)',
+		},
+	},
 }
 
-export default withStyles(styles)(memo(({ classes, url, onClose, onOpen }) => {
+export default withStyles(styles)(memo(({ classes, url, onClose, onOpen, secodStyle }) => {
 	const [anchorEl, setAnchorEl] = React.useState(null)
 	const open = Boolean(anchorEl)
 
-	const handleClick = (event) => { onOpen(); return setAnchorEl(event.currentTarget) }
+	const handleClick = (event) => { if (onOpen) { onOpen() } return setAnchorEl(event.currentTarget) }
 
-	const handleClose = () => { onClose(); return setAnchorEl(null) }
+	const handleClose = () => { if (onClose) { onClose() } return setAnchorEl(null) }
 
 	return (
 		<div>
@@ -78,7 +85,7 @@ export default withStyles(styles)(memo(({ classes, url, onClose, onOpen }) => {
 				aria-label="More"
 				aria-haspopup="true"
 				onClick={handleClick}
-				className={classes.iconColor}
+				className={classNames(classes.iconColor, secodStyle && classes.primaryBackground)}
 			>
 				<ShareIcon />
 			</IconButton>
