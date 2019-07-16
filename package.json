@@ -9,7 +9,7 @@
     }
   },
   "scripts": {
-    "makeFilenamesFile": "touch ./src/server/edge/origin/webpackCompressedFilenames.js",
+    "makeFilenamesFile": "touch ./src/server/edge/origin/webpackCompressedFilenames.js && echo export default [] > ./src/server/edge/origin/webpackCompressedFilenames.js",
     "removeDistFolder": "rm -rf ./dist",
     "deployPrepare": "yarn makeFilenamesFile && yarn removeDistFolder",
     "configPrepare": "mkdir -p config && touch ./config/cfOutput-Dev.js && touch ./config/cfOutput-Production.js && touch ./config/cfOutput-Testing.js && touch ./config/cfOutput-Staging.js",
