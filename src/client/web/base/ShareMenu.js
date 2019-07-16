@@ -45,7 +45,7 @@ const ShareMenuItems = memo(({ url }) => [
 			</div>
 		</VKShareButton>
 	</MenuItem>,
-	<MenuItem key="clipboard">
+	<MenuItem key="clipboard" style={{ overflow: 'visible' }}>
 		<AddToClipboardButton url={url}>
 			<div className="layout-row layout-align-start-center">
 				<img src={clipboard} width="32px" alt="add_to_clipboard" />{'\u00A0'}

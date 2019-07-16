@@ -16,6 +16,7 @@ import BannerFooter from 'root/src/client/web/footer/BannerFooter'
 import BannerHeader from 'root/src/client/web/header/BannerHeader'
 import UserDataModule from 'root/src/client/web/userData/UserDataModule'
 import ModalModule from 'root/src/client/web/modal/ModalModule'
+import SuccessMessage from 'root/src/client/web/base/SuccessMessage'
 
 import { ModuleContextProvider } from 'root/src/client/util/withModuleContext'
 
@@ -117,6 +118,7 @@ export const RouteRender = memo(({
 		)}
 	>
 		<Navigation />
+		<SuccessMessage />
 		<div className="flex layout-column layout-align-start-stretch">
 			<RenderModules
 				moduleTypes={currentRouteModuleTypes}

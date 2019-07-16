@@ -1,24 +1,17 @@
-import React, { Component } from 'react'
-import copy from 'copy-to-clipboard'
+import React, { memo } from 'react'
+import addToClipBoardButtonConnector from 'root/src/client/logic/app/connectors/addToClipBoardButtonConnector'
 
-class AddToClipboard extends Component {
-	constructor(props) {
-		super(props)
-		this.text = React.createRef()
+const style = {}
+
+const AddToClipboard = memo(({ url, addToClipboard, children }) => {
+	const onClickHendler = (e) => {
+		addToClipboard(url, e)
 	}
+	return (
+		<div>
+			<div onClick={onClickHendler}>{children}</div>
+		</div>
+	)
+})
 
-	addToClipboard = () => {
-		const { url } = this.props
-		copy(url)
-	}
-
-	render() {
-		return (
-			<div>
-				<div onClick={this.addToClipboard}>{this.props.children}</div>
-			</div>
-		)
-	}
-}
-
-export default AddToClipboard
+export default addToClipBoardButtonConnector(AddToClipboard, style)
