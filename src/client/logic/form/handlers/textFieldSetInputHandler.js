@@ -1,7 +1,7 @@
 import { toLower } from 'ramda'
 
 const number = 'number'
-const email = 'email'
+const registerEmail = 'registerEmail'
 
 export default (moduleKey, fieldPath, action, fieldType) => async (e) => {
 	e.preventDefault()
@@ -15,7 +15,7 @@ export default (moduleKey, fieldPath, action, fieldType) => async (e) => {
 		value = parseInt(value, 10)
 		if (value > 999999) value = 999999
 	}
-	if (fieldType === email) {
+	if (fieldType === registerEmail) {
 		value = toLower(value)
 	}
 	action(moduleKey, fieldPath, value)

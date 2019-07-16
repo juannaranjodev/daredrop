@@ -23,7 +23,7 @@ export default {
 			{
 				fieldId: 'email',
 				label: 'Email',
-				inputType: 'email',
+				inputType: 'registerEmail',
 			},
 			{
 				fieldId: 'password',
