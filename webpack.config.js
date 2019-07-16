@@ -77,7 +77,7 @@ module.exports = {
 				use: {
 					loader: 'webpack-conditional-loader',
 				},
-			}
+			},
 		],
 	},
 	plugins: [
@@ -108,6 +108,19 @@ module.exports = {
 				},
 			}),
 			// COMPRESSION THINGS
+			new EndWebpackPlugin(async () => {
+				const readdir = promisify(fs.readdir)
+				const writeFile = promisify(fs.writeFile)
+				const files = await readdir(path.resolve(__dirname, 'dist/build-web-client'))
+				const nameContainsBr = contains('.br.')
+				const brFiles = filter(nameContainsBr, files)
+				const gzipFiles = map(replace('.br', ''), brFiles)
+				const compressedFilenames = [...brFiles, ...gzipFiles]
+				await writeFile(
+					path.resolve(__dirname, 'src/server/edge/origin/webpackCompressedFilenames.js'),
+					`export default ${JSON.stringify(compressedFilenames)}`,
+				)
+			}),
 			new BrotliGzipPlugin({
 				asset: '[fileWithoutExt].br.[ext][query]',
 				algorithm: 'brotli',
@@ -123,21 +136,6 @@ module.exports = {
 				minRatio: 0.8,
 			}),
 		] : []),
-		// WRITING COMPRESSED FILENAMES TO FILE (LEAVING THIS IN DEV ENV
-		// JUST NOT TO CRASH BECAUSE OF BLANK webpackCompressedFilenames.js)
-		new EndWebpackPlugin(async () => {
-			const readdir = promisify(fs.readdir)
-			const writeFile = promisify(fs.writeFile)
-			const files = await readdir(path.resolve(__dirname, 'dist/build-web-client'))
-			const nameContainsBr = contains('.br.')
-			const brFiles = filter(nameContainsBr, files)
-			const gzipFiles = map(replace('.br', ''), brFiles)
-			const compressedFilenames = [...brFiles, ...gzipFiles]
-			await writeFile(
-				path.resolve(__dirname, 'src/server/edge/origin/webpackCompressedFilenames.js'),
-				`export default ${JSON.stringify(compressedFilenames)}`,
-			)
-		}),
 	],
 	optimization: {
 		minimizer: [new UglifyJsPlugin({
