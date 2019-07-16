@@ -16,8 +16,8 @@ const formSchema = {
 						formError: {
 							type: 'object',
 							properties: {
-								formSubmitError: { type: 'string' }
-							}
+								formSubmitError: { type: 'string' },
+							},
 						},
 						formData: {
 							type: 'object',
@@ -95,7 +95,7 @@ const formModuleCommon = {
 				inputType: {
 					type: 'string',
 					enum: [
-						'text', 'password', 'email', 'number',
+						'text', 'password', 'email', 'registerEmail', 'number',
 						'subForm',
 					],
 				},
