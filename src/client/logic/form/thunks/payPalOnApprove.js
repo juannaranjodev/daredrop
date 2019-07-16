@@ -14,11 +14,13 @@ import clearPartialFormKeys from 'root/src/client/logic/form/actions/clearPartia
 import invokeApiLambda from 'root/src/client/logic/api/util/invokeApiLambda'
 import { CLEAR_PARTIAL_FORM_KEYS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { PAYPAL_BUTTON } from 'root/src/client/logic/form/buttonNames'
+import setLoadingBlock from 'root/src/client/logic/list/actions/setLoadingBlock'
 
 const { viewFormChild } = formStoreLenses
 
 export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) => async (dispatch, getState) => {
-	actions.order.authorize().then(async ({ purchaseUnits }) => {
+	dispatch(setLoadingBlock(true))
+	actions.order.authorize().then(async ({ purchase_units }) => {
 		const state = getState()
 		const partialFormEntries = viewFormChild(`db-${moduleKey}`, state)
 		if (partialFormEntries) {
@@ -34,8 +36,7 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 		}
 
 		const projectId = currentRouteParamsRecordId(state)
-		const paymentAuthorization = path([0, 'payments', 'authorizations', 0], purchaseUnits)
-
+		const paymentAuthorization = path([0, 'payments', 'authorizations', 0], purchase_units)
 		const paymentInfo = {
 			paymentId: prop('id', paymentAuthorization),
 			paymentType: paypalAuthorize,
@@ -51,9 +52,10 @@ export default (data, actions, { moduleId, formData, moduleKey, submitIndex }) =
 
 		dispatch(apiRequest(endpointId, apiPayload))
 			.then(() => {
+				dispatch(setLoadingBlock(false))
 				dispatch(clearForm(moduleKey))
 				dispatch(submitFormComplete(moduleKey))
-				return dispatch(pushRoute(successPage))
+				dispatch(pushRoute(successPage, { recordId: projectId }))
 			})
 			.catch(err => dispatch(setButtonErrors(moduleKey, { PAYPAL_BUTTON: 'PayPal payment failed, please try again' })))
 	}).catch((err) => {

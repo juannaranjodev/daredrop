@@ -14,6 +14,7 @@ const Button = memo(({ classes, routeId, href, children, routeParams, pushRoute 
 			href={href}
 		>
 			<button
+				type="button"
 				className={classes.button}
 			>
 				Connect Twitch

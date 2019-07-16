@@ -1,5 +1,7 @@
 import { CognitoIdentityServiceProvider } from 'aws-sdk'
-import { userPoolId } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
+
+const { userPoolId } = outputs
 
 export default async (email) => {
 	const provider = new CognitoIdentityServiceProvider()

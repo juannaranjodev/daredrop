@@ -8,7 +8,7 @@ import {
 import ajvErrors from 'root/src/shared/util/ajvErrors'
 import {
 	getPayloadSchema, getResultSchema, testEndpointExists,
-} from 'root/src/server/api/getEndpointDesc'
+} from 'root/src/shared/descriptions/getEndpointDesc'
 import cloudWatchJobs from 'root/src/server/cloudWatchEvents/actions'
 
 const validateOrNah = (schemaType, endpointId, schema) => (payload) => {

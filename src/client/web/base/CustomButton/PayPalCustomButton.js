@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { primaryColor, blackColorBorder } from 'root/src/client/web/commonStyles'
@@ -26,7 +26,7 @@ const style = {
 	},
 }
 
-const Button = ({ classes, onClick, title, customSubmitsData }) => (
+const Button = memo(({ classes, onClick, title, customSubmitsData }) => (
 	<ButtonBase
 		className={classes.button}
 		onClick={() => onClick(customSubmitsData)}
@@ -36,7 +36,7 @@ const Button = ({ classes, onClick, title, customSubmitsData }) => (
 			<img className={classes.img} src={PayPalImage} alt={title} />
 		</div>
 	</ButtonBase>
-)
+))
 
 Button.propTypes = {
 	title: PropTypes.string,
@@ -45,7 +45,7 @@ Button.propTypes = {
 
 Button.defaultProps = {
 	title: 'Click me to Payout',
-	onClick: () => {},
+	onClick: () => { },
 }
 
 export default withStyles(style)(Button)

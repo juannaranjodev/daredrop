@@ -1,7 +1,9 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/button-has-type */
 import React, { memo } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
+import { faTimesCircle } from 'fortawesome-light/fontawesome-light'
 
 import withModuleContext from 'root/src/client/util/withModuleContext'
 import RejectDareModal from 'root/src/client/web/modal/RejectDareModal'
@@ -30,6 +32,7 @@ export const ModalModuleUnconnected = memo(({
 		>
 			<div className={classes.closeContainer}>
 				<button
+					type="button"
 					onClick={() => displayModal(moduleId, false)}
 					className={classes.close}
 				>
@@ -38,14 +41,14 @@ export const ModalModuleUnconnected = memo(({
 			</div>
 			<div className={classes.contentContainer}>
 				<div className={classes.container}>
-		<div className={classes.content}>
+					<div className={classes.content}>
 						<div className={classes.title}>{modalTitle}</div>
 						<div className={classes.text}>
 							{modalText}
 							{renderModal(modalType, { displayModal, moduleId, ...props })}
 						</div>
 					</div>
- </div>
+				</div>
 			</div>
 		</div>
 	</div>

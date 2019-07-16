@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, slice, isNil } from 'ramda'
+import { prop, unnest, equals, not, length, gt, last, split, omit, map, compose, head, reduce, isNil, uniq, concat, hasPath, filter } from 'ramda'
 // keys
 import { ACCEPT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { projectAcceptedKey, streamerAcceptedKey } from 'root/src/server/api/lenses'
+import { projectAcceptedKey, streamerAcceptedKey } from 'root/src/shared/descriptions/apiLenses'
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 // lenses
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 // Query utils
 import dynamoQueryOAuth from 'root/src/server/api/actionUtil/dynamoQueryOAuth'
@@ -34,6 +34,9 @@ import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilde
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 
+import getPledgersByProjectID from 'root/src/server/api/actionUtil/getPledgersByProjectID'
+import getFavoritesByProjectID from 'root/src/server/api/actionUtil/getFavoritesByProjectID'
+
 const payloadLenses = getPayloadLenses(ACCEPT_PROJECT)
 const { viewProjectId, viewAmountRequested } = payloadLenses
 
@@ -42,7 +45,7 @@ export default async ({ payload, userId }) => {
 	const amountRequested = viewAmountRequested(payload)
 	const userTokens = await dynamoQueryOAuth(userId)
 
-	const [projectToAcceptDdb, assigneesDdb, projectPledgesDdb, projectFavouriteDdb] = await dynamoQueryProject(
+	const [projectToAcceptDdb, assigneesDdb] = await dynamoQueryProject(
 		null,
 		projectId,
 	)
@@ -139,73 +142,41 @@ export default async ({ payload, userId }) => {
 			...assigneesDdbEmail,
 		])
 
-		console.log(projectHrefBuilder(prop('id', projectToAccept)))
-
-		// Send email for Creator
-		const emailCreator = await getUserEmail((prop('creator', projectToAccept)))
-
-		const streamerList = map(streamer => prop('displayName', streamer), prop('assignees', projectToAcceptEmail))
-
+		const streamerList = map(
+			streamer => prop('displayName', streamer),
+			filter(
+				hasPath(['amountRequested']),
+				prop('assignees', projectToAcceptEmail),
+			),
+		)
 		const sumAmountRequested = reduce((accum, streamer) => {
-			if (!isNil(streamer.amountRequested)) {
-				return accum + streamer.amountRequested
+			if (hasPath(['amountRequested'], streamer)) {
+				return accum + prop('amountRequested', streamer)
 			}
 			return accum
 		}, 0, prop('assignees', projectToAcceptEmail))
 
-		const emailDataForCreator = {
+		// Send email for pledgers & favorites
+
+		const allPledgersAndFavorites = compose(uniq, concat)(
+			await getPledgersByProjectID(projectId), await getFavoritesByProjectID(projectId),
+		)
+		const allPledgersAndFavoritesEmails = await Promise.all(
+			map(uid => getUserEmail(uid),
+				allPledgersAndFavorites),
+		)
+		sendEmail({
 			title: dareAcceptedCreatorTitle,
 			dareTitle: prop('title', projectToAccept),
 			dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
-			recipients: [emailCreator],
-			streamers: arrayToStringParser(streamerList),
-			goal: amountRequested,
+			recipients: allPledgersAndFavoritesEmails,
+			streamerList,
+			goal: sumAmountRequested,
 			expiryTime: prop('created', projectToAccept),
-		}
-		sendEmail(emailDataForCreator, dareAcceptedPledgerMail)
-
-		// Send email for pledgers
-		const pledgerUserIds = reduce(
-			(result, pledgedProject) => [...result, prop('sk', pledgedProject)], [], projectPledgesDdb,
-		)
-		await Promise.all(
-			map(async (pledgerUserId) => {
-				const pledgerEmail = await getUserEmail(slice(7, Infinity, pledgerUserId))
-				const emailDataForPledger = {
-					title: dareAcceptedCreatorTitle,
-					dareTitle: prop('title', projectToAccept),
-					dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
-					recipients: [pledgerEmail],
-					streamers: arrayToStringParser(streamerList),
-					goal: sumAmountRequested,
-					expiryTime: prop('created', projectToAccept),
-				}
-				sendEmail(emailDataForPledger, dareAcceptedPledgerMail)
-			}, pledgerUserIds),
-		)
-		// Send email for favourite
-
-		const favouriteUserIds = reduce(
-			(result, favouriteProject) => [...result, prop('sk', favouriteProject)], [], projectFavouriteDdb,
-		)
-		await Promise.all(
-			map(async (favouriteUserId) => {
-				const favouriteEmail = await getUserEmail(slice(10, Infinity, favouriteUserId))
-				const emailDataForFavourite = {
-					title: dareAcceptedCreatorTitle,
-					dareTitle: prop('title', projectToAccept),
-					dareTitleLink: projectHrefBuilder(prop('id', projectToAccept)),
-					recipients: [favouriteEmail],
-					streamers: arrayToStringParser(streamerList),
-					goal: amountRequested,
-					expiryTime: prop('created', projectToAccept),
-				}
-				sendEmail(emailDataForFavourite, dareAcceptedPledgerMail)
-			}, favouriteUserIds),
-		)
+		}, dareAcceptedPledgerMail)
 
 		// Send email for Streamer
-		const emailStreamer = await getUserEmail((prop('creator', userId)))
+		const emailStreamer = await getUserEmail(userId)
 
 		const emailDataForStreamer = {
 			title: dareAcceptedStreamerTitle,
@@ -215,6 +186,7 @@ export default async ({ payload, userId }) => {
 			streamer: prop('displayName', head(userTokens)),
 			goal: amountRequested,
 			expiryTime: prop('created', projectToAccept),
+			dareDescription: prop('description', projectToAccept),
 		}
 		sendEmail(emailDataForStreamer, dareAcceptedStreamerMail)
 		await checkPledgedAmount(projectId)

@@ -1,4 +1,4 @@
-import { projectDeliveryRejectedKey } from 'root/src/server/api/lenses'
+import { projectDeliveryRejectedKey } from 'root/src/shared/descriptions/apiLenses'
 
 import { REJECT_DELIVERY } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 import { REVIEW_DELIVERY } from 'root/src/shared/descriptions/endpoints/endpointIds'

@@ -1,6 +1,8 @@
 import { CognitoIdentityServiceProvider } from 'aws-sdk'
-import { userPoolId } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
 import { split, join, tail, filter, propEq, compose, prop, head } from 'ramda'
+
+const { userPoolId } = outputs
 
 export default async (userId) => {
 	const provider = new CognitoIdentityServiceProvider()

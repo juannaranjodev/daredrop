@@ -16,6 +16,7 @@ import clearFormErrors from 'root/src/client/logic/form/reducers/clearFormErrors
 import clearForm from 'root/src/client/logic/form/reducers/clearForm'
 import setFormErrors from 'root/src/client/logic/form/reducers/setFormErrors'
 import submitForm from 'root/src/client/logic/form/reducers/submitForm'
+import submitFormError from 'root/src/client/logic/form/reducers/submitFormError'
 import submitFormComplete from 'root/src/client/logic/form/reducers/submitFormComplete'
 import addSubForm from 'root/src/client/logic/form/reducers/addSubForm'
 import removeSubForm from 'root/src/client/logic/form/reducers/removeSubForm'
@@ -96,6 +97,7 @@ const store = createStore(
 		...setButtonErrors,
 		...clearButtonErrors,
 		...submitForm,
+		...submitFormError,
 		...submitFormComplete,
 		...addSubForm,
 		...removeSubForm,

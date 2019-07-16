@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import React, { Fragment, memo } from 'react'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 import { primaryColor } from 'root/src/client/web/commonStyles'
 
@@ -25,13 +25,13 @@ const styles = {
 }
 
 
-const ProgressBar = ({ classes, uploadProgress }) => (orNull(uploadProgress, (
+const ProgressBar = memo(({ classes, uploadProgress }) => (orNull(uploadProgress, (
 	<Fragment>
 		<div className={classes.root}>
 			<div className={classes.inside} style={{ width: `${(uploadProgress.currentProgress / uploadProgress.targetProgress) * 100}%` }} />
 		</div>
 		<span className={classes.text}>Video Uploading Please Wait....</span>
 	</Fragment>
-)))
+))))
 
 export default withStyles(styles)(ProgressBar)

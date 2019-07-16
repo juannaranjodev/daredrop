@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { styledPledgeButton } from './style'
 
-const Button = ({ title, backgroundColor, color, classes }) => (
+const Button = memo(({ title, backgroundColor, color, classes }) => (
 	<button className={classes.button} type="button" style={{ backgroundColor, color }}>{title}</button>
-)
+))
 
 Button.propTypes = {
 	title: PropTypes.string.isRequired,

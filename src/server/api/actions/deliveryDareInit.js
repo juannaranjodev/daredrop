@@ -1,20 +1,20 @@
-import { head, not, gt, length, map, filter, propEq, prop, compose, split, last, unnest, omit } from 'ramda'
+import { head, not, gt, length, filter, propEq, prop, omit } from 'ramda'
 import { extension, lookup } from 'mime-types'
 import uuid from 'uuid/v4'
 import s3 from 'root/src/server/api/s3Client'
 
 // configurate
-import { videoBucket } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
 import { s3BaseURL } from 'root/src/shared/constants/s3Constants'
 
 // lenses
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
 // keys
 import { DELIVERY_DARE_INIT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import { projectDeliveryPendingKey, projectDeliveryInitKey } from 'root/src/server/api/lenses'
+import { projectDeliveryPendingKey, projectDeliveryInitKey } from 'root/src/shared/descriptions/apiLenses'
 
 // utils
 import { authorizationError, actionForbiddenError } from 'root/src/server/api/errors'
@@ -28,13 +28,9 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import dynamoQueryProjectDeliveries from 'root/src/server/api/actionUtil/dynamoQueryProjectDeliveries'
 
 // serializers
-import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-import sendEmail from 'root/src/server/email/actions/sendEmail'
-import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
-import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
 
+const { videoBucket } = outputs
 const payloadLenses = getPayloadLenses(DELIVERY_DARE_INIT)
 
 const { viewVideoURL, viewTimeStamp, viewVideoName, viewProjectId } = payloadLenses
@@ -135,18 +131,5 @@ export default async ({ payload, userId }) => {
 		Item: dareDeliveryObject,
 	}
 	await documentClient.put(deliveryParams).promise()
-
-	try {
-		const email = await getUserEmail(userId)
-		const emailData = {
-			title: videoSubmittedTitle,
-			dareTitle: prop('title', project),
-			dareTitleLink: projectHrefBuilder(prop('id', project)),
-			recipients: [email],
-		}
-		sendEmail(emailData, videoSubmittedEmail)
-	} catch (err) {
-		console.log('ses error')
-	}
 	return { projectId, url, deliverySortKey }
 }

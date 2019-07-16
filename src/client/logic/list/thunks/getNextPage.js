@@ -24,6 +24,7 @@ export default (moduleId, currentPage, hasMore) => async (dispatch, getState) =>
 			default:
 				return
 		}
+		[realEndpoint] = endpointId
 
 		const sortFilterModule = sortFilterModuleSelector(moduleId)
 

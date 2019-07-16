@@ -1,5 +1,6 @@
 export const SUBMIT_FORM = 'actionId/SUBMIT_FORM'
 export const SUBMIT_FORM_COMPLETE = 'actionId/SUBMIT_FORM_COMPLETE'
+export const SUBMIT_FORM_ERROR = 'actionId/SUBMIT_FORM_ERROR'
 export const CLEAR_FORM = 'actionId/CLEAR_FORM'
 export const CLEAR_ALL_FORMS = 'actionId/CLEAR_ALL_FORMS'
 export const SET_FORM_ERRORS = 'actionId/SET_FORM_ERRORS'

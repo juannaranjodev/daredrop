@@ -3,9 +3,11 @@ import authenticateUser from 'root/src/server/performanceTest/authenticateUser'
 import endpointsChain from 'root/src/server/performanceTest/endpointsChain'
 import uuid from 'uuid/v4'
 import { documentClient } from 'root/src/server/api/dynamoClient'
-import { apiLongTaskFunctionArn, apiFunctionArn } from 'root/cfOutput'
+import outputs from 'root/cfOutput'
 import getLambdaConfigurations from 'root/src/server/performanceTest/getLambdaConfigurations'
 import setLambdaStage from 'root/src/server/performanceTest/setLambdaStage'
+
+const { apiLongTaskFunctionArn, apiFunctionArn } = outputs
 
 const integration = async (event, authentication) => {
 	const timerStart = new Date().getTime()
@@ -72,13 +74,13 @@ export default async (event, context, callback) => {
 	try {
 		await setLambdaStage(configurations, 'testing')
 		return ops[event.operation](event).then(async (res) => {
-			await setLambdaStage(configurations, 'development')
+			await setLambdaStage(configurations, 'dev')
 			return res
 		}).catch(async (err) => {
-			await setLambdaStage(configurations, 'development')
+			await setLambdaStage(configurations, 'dev')
 			return callback(err)
 		})
 	} catch (err) {
-		await setLambdaStage(configurations, 'development')
+		await setLambdaStage(configurations, 'dev')
 	}
 }

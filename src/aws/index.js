@@ -7,6 +7,7 @@ import { emailResources, emailOutputs } from 'root/src/aws/email'
 import {
 	apiResources, apiOutputs, apiAuthPolicies, apiUnauthPolicies,
 } from 'root/src/aws/api'
+import { lambdaEdgeResources } from 'root/src/aws/lambdaEdge'
 
 const appendedCognitoResources = addCognitoPolicies(
 	cognitoResources,
@@ -23,6 +24,7 @@ export default {
 		...appendedCognitoResources,
 		...apiResources,
 		...staticHostingResources,
+		...lambdaEdgeResources,
 		...cloudWatchEventsResources,
 		...emailResources,
 	},

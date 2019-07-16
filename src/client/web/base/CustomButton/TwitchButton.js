@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTwitch } from '@fortawesome/free-brands-svg-icons'
+import { faTwitch } from 'fortawesome-light/fontawesome-light'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 import { styledTwitchButton } from './style'
 
-const Button = ({ title, subtitle, classes, withIcon, href, onClick }) => (
+const Button = memo(({ title, subtitle, classes, withIcon, href, onClick }) => (
 	<a className={classes.link} href={href}>
 		<button onClick={() => onClick()} type="button" className={classes.button}>
 			{orNull(withIcon,
@@ -17,7 +17,7 @@ const Button = ({ title, subtitle, classes, withIcon, href, onClick }) => (
 			</div>
 		</button>
 	</a>
-)
+))
 
 Button.propTypes = {
 	title: PropTypes.string.isRequired,

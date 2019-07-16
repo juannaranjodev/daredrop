@@ -1,5 +1,5 @@
-import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import React, { memo } from 'react'
+import withStyles from '@material-ui/core/styles/withStyles'
 import classNames from 'classnames'
 import Link from 'root/src/client/web/base/Link'
 import {
@@ -15,15 +15,15 @@ import SmileIcon from 'root/src/client/assets/smile-regular.svg'
 import { daysToExpire } from 'root/src/shared/constants/timeConstants'
 import styles from './style'
 
-const Backer = ({ classes }) => (
+const Backer = memo(({ classes }) => (
 	<div className={classNames('flex', 'layout-row', 'layout-wrap', 'layout-xs-column', 'layout-sm-column', 'layout-md-column', classes.cardWrapper)}>
 		<Card title="Dare" icon={BullhornIcon}>
 			<p>
 				Dare your favorite streamer to do something awesome.
 			</p> <p>If it follows
           our <Link routeId={RULES_OF_USE_ROUTE_ID}>Rules of Use</Link>, we'll make it active
-		on our marketplace so other people can increase the Bounty!
-        </p>
+on our marketplace so other people can increase the Bounty!
+			</p>
 		</Card>
 		<Card title="Pledge" icon={PledgeIcon}>
 			<p>
@@ -31,7 +31,7 @@ const Backer = ({ classes }) => (
 				the Bounty. Pledge and spread the word so you can hit that Bounty
 				goal!
 			</p><p> Nobody pays until the streamer delivers video proof.
-			</p>
+       </p>
 		</Card>
 		<Card title="Watch" icon={WatchIcon}>
 			<p>
@@ -39,7 +39,7 @@ const Backer = ({ classes }) => (
 				proof to Dare Drop.
 			</p><p> We’ll verify the proof, then you pay your pledge
 		  and watch your Dare delivered!
-			</p>
+       </p>
 		</Card>
 		<Card title="Expire" icon={ClockIcon}>
 			<p>
@@ -47,7 +47,7 @@ const Backer = ({ classes }) => (
 			</p><p>You
 		  won’t have to pay and the streamer won’t be able to gather the
 		  Bounty.
-			</p>
+       </p>
 		</Card>
 		<Card title="Get Started" icon={SmileIcon}>
 			<p>
@@ -61,6 +61,6 @@ const Backer = ({ classes }) => (
 			</span>
 		</Card>
 	</div>
-)
+))
 
 export default withStyles(styles)(Backer)
