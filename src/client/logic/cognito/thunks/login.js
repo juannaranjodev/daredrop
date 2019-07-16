@@ -1,3 +1,5 @@
+import { toLower } from 'ramda'
+
 import CognitoUser from 'amazon-cognito-identity-js/lib/CognitoUser'
 import AuthenticationDetails from 'amazon-cognito-identity-js/lib/AuthenticationDetails'
 
@@ -20,12 +22,13 @@ const AuthenticateUserError = reject => (error) => {
 
 export default ({ email, password }) => dispatch => new Promise(
 	(resolve, reject) => {
+		const correctedEmail = toLower(email)
 		const authenticationDetails = new AuthenticationDetails({
-			Username: email,
+			Username: correctedEmail,
 			Password: password,
 		})
 		const cognitoUser = new CognitoUser({
-			Username: email,
+			Username: correctedEmail,
 			Pool: userPool,
 		})
 		cognitoUser.authenticateUser(authenticationDetails, {

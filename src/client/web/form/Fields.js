@@ -44,6 +44,7 @@ const Fields = memo(({
 	switch (inputType) {
 		case 'text':
 		case 'email':
+		case 'registerEmail':
 		case 'password':
 		case 'number':
 			return (
