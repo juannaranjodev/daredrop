@@ -1,5 +1,5 @@
 import { replace, compose, contains, slice } from 'ramda'
-import webpackCompressedFilenames from 'root/src/server/edge/origin/webpackCompressedFilenames'
+import webpackCompressedFilenames from 'root/webpackCompressedFilenames'
 
 const gzipPath = uri => uri
 const brPath = (uri) => {

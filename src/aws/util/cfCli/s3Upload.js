@@ -3,13 +3,14 @@ import UploadStream from 's3-stream-upload'
 import fs from 'fs'
 import { lookup } from 'mime-types'
 import setContentEncoding from 'root/src/aws/util/cfCli/setContentEncoding'
-import webpackCompressedFilenames from 'root/src/server/edge/origin/webpackCompressedFilenames'
 import { isProdEnv } from 'root/src/aws/util/envSelect'
 
-const uploadFileHof = (s3Client, bucket) => (
+const uploadFileHof = (s3Client, bucket) => async (
 	localPath, fileName,
-) => (
-	new Promise(
+) => {
+	let webpackCompressedFilenames = await import('../../../../webpackCompressedFilenames')
+	webpackCompressedFilenames = webpackCompressedFilenames.default
+	return new Promise(
 		(resolve, reject) => {
 			fs.createReadStream(localPath).pipe(
 				UploadStream(
@@ -34,7 +35,7 @@ const uploadFileHof = (s3Client, bucket) => (
 			})
 		},
 	)
-)
+}
 
 export default (s3Client, bucket, fileArr) => {
 	const uploadFile = uploadFileHof(s3Client, bucket)

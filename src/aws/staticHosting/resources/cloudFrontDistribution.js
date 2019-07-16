@@ -3,9 +3,8 @@ import split from 'root/src/aws/util/split'
 import select from 'root/src/aws/util/select'
 import getAtt from 'root/src/aws/util/getAtt'
 import getCacheBehaviors from 'root/src/aws/util/getCacheBehaviors'
-import isDevValue from 'root/src/aws/util/isDevValue'
 import domainName from 'root/src/aws/util/domainName'
-import { isProdEnv } from 'root/src/aws/util/envSelect'
+import { isProdEnv, isDevEnv } from 'root/src/aws/util/envSelect'
 
 import {
 	CLOUDFRONT_DISTRIBUTION, SSL, STATIC_BUCKET,
@@ -21,12 +20,14 @@ import {
 export default {
 	[CLOUDFRONT_DISTRIBUTION]: {
 		Type: 'AWS::CloudFront::Distribution',
-		DependsOn: [STATIC_BUCKET, ...isDevValue([AUTHENTICATION_LAYER_VERSION])],
 		DependsOn: [
 			STATIC_BUCKET,
 			...(isProdEnv ? [
 				LAMBDA_EDGE_VIEWER_VERSION,
 				LAMBDA_EDGE_ORIGIN_VERSION,
+			] : []),
+			...(isDevEnv ? [
+				AUTHENTICATION_LAYER_VERSION,
 			] : []),
 		],
 		Properties: {
@@ -48,12 +49,6 @@ export default {
 							Forward: 'none',
 						},
 					},
-					LambdaFunctionAssociations: [
-						...isDevValue([{
-							EventType: 'viewer-request',
-							LambdaFunctionARN: ref(AUTHENTICATION_LAYER_VERSION),
-						}]),
-					],
 					...(isProdEnv ? {
 						LambdaFunctionAssociations: [
 							{
@@ -66,8 +61,16 @@ export default {
 							},
 						],
 					} : {}),
+					...(isDevEnv ? {
+						LambdaFunctionAssociations: [
+							{
+								EventType: 'viewer-request',
+								LambdaFunctionARN: ref(AUTHENTICATION_LAYER_VERSION),
+							},
+						],
+					} : {}),
 				},
-				...isDevValue({
+				...(isDevEnv ? {
 					CacheBehaviors: getCacheBehaviors(['jpg', 'png', 'svg'],
 						{
 							AllowedMethods: ['HEAD', 'GET'],
@@ -83,7 +86,7 @@ export default {
 							TargetOriginId: ref(STATIC_BUCKET),
 							ViewerProtocolPolicy: 'redirect-to-https',
 						}),
-				}),
+				} : {}),
 				Origins: [
 					{
 						DomainName: select(2, split('/', getAtt(STATIC_BUCKET, 'WebsiteURL'))),

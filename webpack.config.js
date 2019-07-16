@@ -117,7 +117,7 @@ module.exports = {
 				const gzipFiles = map(replace('.br', ''), brFiles)
 				const compressedFilenames = [...brFiles, ...gzipFiles]
 				await writeFile(
-					path.resolve(__dirname, 'src/server/edge/origin/webpackCompressedFilenames.js'),
+					path.resolve(__dirname, 'webpackCompressedFilenames.js'),
 					`export default ${JSON.stringify(compressedFilenames)}`,
 				)
 			}),
