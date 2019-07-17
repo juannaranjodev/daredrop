@@ -8,6 +8,8 @@ export default (array, verb) => {
 	switch (verb) {
 		case 'is':
 			return (length(array) > 1) ? `${ret} are` : `${ret} is`
+		case 'has':
+			return (length(array) > 1) ? `${ret} have` : `${ret} has`
 		default:
 			return ret
 	}

@@ -16,7 +16,6 @@ import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProjec
 import dynamoQueryProjectAssignee from 'root/src/server/api/actionUtil/dynamoQueryProjectAssignee'
 
 // utils
-import arrayToStringParser from 'root/src/server/api/serializers/arrayToStringParser'
 import checkPledgedAmount from 'root/src/server/api/actionUtil/checkPledgedAmount'
 import { generalError, authorizationError } from 'root/src/server/api/errors'
 import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
