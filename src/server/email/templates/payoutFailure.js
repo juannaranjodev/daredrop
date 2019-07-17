@@ -25,7 +25,7 @@ export default () => {
 
                   <tr>
                     <td style="margin:0;padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">Please add your PayPal email <a href="http://${paypalEmailUrl}">HERE</a> so we know where to send your money.</p>
+                      <p style="margin:0;padding:0;">Please add your PayPal email <a href="https://${paypalEmailUrl}">HERE</a> so we know where to send your money.</p>
                     </td>
                   </tr>
 
