@@ -20,7 +20,7 @@ export default ({ dareTitle, dareTitleLink }) => {
 
                 <tr>
                   <td style="margin:0;padding:0;" width="100%">
-                    <p style="margin:0;padding:0;">We’re reviewing your Dare <a href="${dareTitleLink}">${dareTitle}</a> to make sure it jives with our <a href="http://${rulesOfUseUrl}" style="text-decoration:none;color:#1976d2;">Rules of Use</a>. Then it’ll go live on our marketplace. This usually happens within 24 hours.</p>
+                    <p style="margin:0;padding:0;">We’re reviewing your Dare <a href="${dareTitleLink}">${dareTitle}</a> to make sure it jives with our <a href="https://${rulesOfUseUrl}" style="text-decoration:none;color:#1976d2;">Rules of Use</a>. Then it’ll go live on our marketplace. This usually happens within 24 hours.</p>
                   </td>
                 </tr>
 

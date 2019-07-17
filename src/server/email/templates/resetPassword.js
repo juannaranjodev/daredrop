@@ -29,7 +29,7 @@ export default ({ resetPassrdLink }) => {
 
                   <tr>
                     <td align="center" style="margin:0;padding:0;">
-                      <a href="http://${resetPassrdLink}" style="display:inline-block;font-family:'Source Sans Pro',sans-serif;font-weight:700;font-size:18px;line-height:1.39;padding:11px 0;background:#800080;text-align:center;width:360px;color:#ffffff;text-decoration:none;border-radius:4px;" >Reset</a>
+                      <a href="https://${resetPassrdLink}" style="display:inline-block;font-family:'Source Sans Pro',sans-serif;font-weight:700;font-size:18px;line-height:1.39;padding:11px 0;background:#800080;text-align:center;width:360px;color:#ffffff;text-decoration:none;border-radius:4px;" >Reset</a>
                     </td>
                   </tr>
 
