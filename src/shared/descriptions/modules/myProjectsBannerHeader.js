@@ -6,7 +6,7 @@ import {
 	CREATE_PROJECT_ROUTE_ID,
 } from 'root/src/shared/descriptions/routes/routeIds'
 
-import myprojects from 'root/src/client/assets/my-projects.jpg'
+import myprojects from 'root/src/client/assets/my-projects1.jpg'
 import { projectDeliveredKey } from 'root/src/shared/descriptions/apiLenses'
 import { myTwitchId, myUserId } from 'root/src/shared/constants/filterConstants'
 
