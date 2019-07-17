@@ -65,7 +65,7 @@ module.exports = {
 				},
 			},
 			{
-				test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|css|ico)$/,
+				test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|css|ico|webmanifest|xml)$/,
 				loader: 'file-loader',
 				options: {
 					name: '[name].[ext]',
