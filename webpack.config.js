@@ -41,7 +41,7 @@ module.exports = {
 	],
 	output: {
 		path: path.resolve(__dirname, 'dist/build-web-client'),
-		filename: 'bundle.js',
+		filename: '[name].[chunkhash].js',
 		publicPath: '/',
 	},
 	devServer: {
@@ -83,7 +83,6 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin(Object.assign({
 			template: path.resolve(__dirname, 'src/client/web/app.html'),
-			hash: isProd,
 		}, envVars)),
 		// COPY STATICS
 		new webpack.DefinePlugin(
