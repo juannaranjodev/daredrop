@@ -3,7 +3,7 @@ import { twitchScopes } from 'root/src/shared/constants/twitch'
 
 const twitchUrl = () => {
 	const responseType = 'token'
-	const redirectUri = `https://${window.location.host}/twitch-oauth`
+	const redirectUri = `http://${window.location.host}/twitch-oauth`
 	const scopes = buildTwitchScopes(twitchScopes)
 	const grantType = 'refresh_token'
 	let clientId
