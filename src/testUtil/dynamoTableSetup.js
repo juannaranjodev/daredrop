@@ -11,6 +11,7 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 	const { DynamoDB } = require('aws-sdk')
 	/* eslint-enable */
 	const tableName = `TEST_TABLE_${uuid()}`
+	const archivalTableName = `TEST_TABLE_${uuid()}`
 	const mockConfig = {
 		endpoint: 'http://localhost:9000',
 		accessKeyId: 'dynamo',
@@ -19,6 +20,7 @@ jest.mock('root/src/server/api/dynamoClient', () => {
 	}
 	return {
 		TABLE_NAME: tableName,
+		ARCHIVAL_TABLE_NAME: archivalTableName,
 		dynamoDb: new DynamoDB(mockConfig),
 		documentClient: new DynamoDB.DocumentClient(mockConfig),
 	}
@@ -128,7 +130,7 @@ jest.mock('root/src/server/api/paypalClient', () => {
 						},
 					})),
 			},
-		}))
+		})),
 	}
 })
 
@@ -158,11 +160,12 @@ const tableParams = tableName => merge(
 )
 
 const {
-	TABLE_NAME, dynamoDb,
+	TABLE_NAME, dynamoDb, ARCHIVAL_TABLE_NAME,
 } = require('root/src/server/api/dynamoClient')
 
 beforeAll(async () => {
 	await dynamoDb.createTable(tableParams(TABLE_NAME)).promise()
+	await dynamoDb.createTable(tableParams(ARCHIVAL_TABLE_NAME)).promise()
 })
 
 const getTables = () => dynamoDb.listTables({}).promise().then(
@@ -183,6 +186,7 @@ afterAll(async () => {
 	// const tablesGone = await getTables()
 	// console.info(tablesGone)
 	await dynamoDb.deleteTable({ TableName: TABLE_NAME }).promise()
+	await dynamoDb.deleteTable({ TableName: ARCHIVAL_TABLE_NAME }).promise()
 })
 
 jest.setTimeout(500000)

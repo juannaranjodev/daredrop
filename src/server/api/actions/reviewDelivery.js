@@ -20,7 +20,7 @@ import videoDeliveredEmail from 'root/src/server/email/templates/videoDelivered'
 import videoRejectedEmail from 'root/src/server/email/templates/videoRejected'
 import { videoRejectedTitle, videoApprovedTitle, videoDeliveredTitle } from 'root/src/server/email/util/emailTitles'
 // db stuff
-import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
+import { documentClient, TABLE_NAME, ARCHIVAL_TABLE_NAME } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import dynamoQueryProjectToCapture from 'root/src/server/api/actionUtil/dynamoQueryProjectToCapture'
@@ -36,7 +36,7 @@ import {
 // rest
 import getPledgersByProjectID from 'root/src/server/api/actionUtil/getPledgersByProjectID'
 import getFavoritesByProjectID from 'root/src/server/api/actionUtil/getFavoritesByProjectID'
-import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail';
+import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import setupCronJob from 'root/src/server/api/actionUtil/setupCronJob'
 
 const payloadLenses = getPayloadLenses(REVIEW_DELIVERY)
@@ -61,13 +61,16 @@ export default async ({ payload }) => {
 					...assignee,
 					accepted: streamerDeliveryApprovedKey,
 				},
-				projectId),
+					projectId),
 			},
 		},
 	}), projectAcceptedAssignees), [])
 
 	const [recordToArchive] = filter(project => startsWith(`project|${projectDeliveryPendingKey}`, prop('sk', project)), projectToApproveDdb)
 	const [recordToUpdate] = filter(project => startsWith(`project|${projectApprovedKey}`, prop('sk', project)), projectToApproveDdb)
+
+	const projectToArchive = archiveProjectRecord(recordToArchive)
+
 	const projectDataToWrite = [
 		...ternary(equals(audit, projectDeliveredKey),
 			[{
@@ -105,12 +108,13 @@ export default async ({ payload }) => {
 					},
 				},
 			}]),
-		...archiveProjectRecord(recordToArchive),
+		prop('table', projectToArchive),
 	]
 
 	const writeParams = {
 		RequestItems: {
 			[TABLE_NAME]: [...assigneesToWrite, ...projectDataToWrite],
+			[ARCHIVAL_TABLE_NAME]: [prop('archivalTable', projectToArchive)],
 		},
 	}
 	await documentClient.batchWrite(writeParams).promise()

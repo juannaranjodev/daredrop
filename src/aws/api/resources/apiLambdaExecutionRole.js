@@ -4,7 +4,7 @@ import ref from 'root/src/aws/util/ref'
 
 import {
 	API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE,
-	PERFORMANCE_TEST_DYNAMODB_DATA_TABLE,
+	PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, API_DYNAMO_DB_ARCHIVAL_TABLE,
 } from 'root/src/aws/api/resourceIds'
 
 import { CLOUDWATCH_EVENTS_ROLE } from 'root/src/aws/cloudWatchEvents/resourceIds'
@@ -13,7 +13,7 @@ export default {
 	[API_LAMBDA_EXECUTION_ROLE]: {
 		Type: 'AWS::IAM::Role',
 		DependsOn: [
-			API_DYNAMO_DB_TABLE, CLOUDWATCH_EVENTS_ROLE,
+			API_DYNAMO_DB_TABLE, CLOUDWATCH_EVENTS_ROLE, API_DYNAMO_DB_ARCHIVAL_TABLE,
 			...(process.env.STAGE !== 'production' ? [PERFORMANCE_TEST_DYNAMODB_DATA_TABLE] : []),
 		],
 		Properties: {
@@ -101,13 +101,8 @@ export default {
 								],
 								// For ARN/index/x_index
 								Resource: [
-									join(
-										'',
-										[
-											getAtt(API_DYNAMO_DB_TABLE, 'Arn'),
-											'*',
-										],
-									),
+									join('', [getAtt(API_DYNAMO_DB_TABLE, 'Arn'), '*']),
+									join('', [getAtt(API_DYNAMO_DB_ARCHIVAL_TABLE, 'Arn'), '*']),
 									...(process.env.STAGE !== 'production' ? [join(
 										'',
 										[
