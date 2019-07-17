@@ -6,9 +6,4 @@ import { getResponseLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 const responseLenses = getResponseLenses(GET_PROJECT)
 const { viewPledgeAmount } = responseLenses
 
-export default (state, props) => {
-	const pledgeAmount = viewPledgeAmount(
-		getRecordSelector(state, props),
-	)
-	return `$${pledgeAmount}`
-}
+export default (state, props) => viewPledgeAmount(getRecordSelector(state, props))
