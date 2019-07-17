@@ -1,4 +1,4 @@
-import { prop } from 'ramda'
+import { prop, omit } from 'ramda'
 
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
 import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
@@ -12,6 +12,7 @@ export default async ({ userId, payload }) => {
 	const [project, assignees, myPledge, myFavorites] = await dynamoQueryProject(
 		userId, projectId,
 	)
+
 	const respons = {
 		userId,
 		...projectSerializer([
@@ -25,7 +26,7 @@ export default async ({ userId, payload }) => {
 	const diff = moment().diff(respons.created, 'days')
 	const nowHours = moment(respons.created).day()
 	if (!(diff > daysToExpire && Number(nowHours) > 17 && respons.status === projectApprovedKey)) {
-		return respons
+		return userId ? respons : omit(['myFavorites', 'myPledge'], respons)
 	}
 	return {
 		status: 410,
