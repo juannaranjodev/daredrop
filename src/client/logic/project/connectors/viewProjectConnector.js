@@ -26,6 +26,7 @@ import isOneOfAssignesSelector from 'root/src/client/logic/project/selectors/isO
 import projectAcceptanceStatusSelector from 'root/src/client/logic/project/selectors/projectAcceptanceStatusSelector'
 import recordClickActionErrorSelector from 'root/src/client/logic/project/selectors/recordClickActionErrorSelector'
 import goalProgressSelector from 'root/src/client/logic/project/selectors/goalProgressSelector'
+import goalAmountSelector from 'root/src/client/logic/project/selectors/goalAmountSelector'
 import isAuthenticatedSelector from 'root/src/client/logic/auth/selectors/isAuthenticated'
 
 import auditFavorites from 'root/src/client/logic/project/thunks/auditFavorites'
@@ -61,6 +62,7 @@ export default reduxConnector(
 		['isOneOfAssignees', isOneOfAssignesSelector],
 		['projectAcceptanceStatus', projectAcceptanceStatusSelector],
 		['recordClickActionError', recordClickActionErrorSelector],
+		['goalAmount', goalAmountSelector],
 	],
 	[
 		['auditFavorites', auditFavorites],

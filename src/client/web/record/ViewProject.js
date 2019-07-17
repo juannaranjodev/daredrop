@@ -225,7 +225,7 @@ export const ViewProjectModule = memo(({
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
 	userData = {}, approvedVideoUrl, isOneOfAssignees, projectAcceptanceStatus,
-	goalProgress, projectDeliveries,
+	goalProgress, projectDeliveries, goalAmount,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -319,7 +319,7 @@ export const ViewProjectModule = memo(({
 							<div className={classNames('flex', 'layout-row', 'layout-wrap')}>
 								<div className={classNames('flex-40', 'flex-gt-sm-100', classes.sidebarItem, classes.totalPledge)}>
 									<SubHeader>Total Pledged</SubHeader>
-									<div className={classNames(classes.text)}>{pledgeAmount}</div>
+									<div className={classNames(classes.text)}>${pledgeAmount} {orNull(goalAmount, <span>of ${goalAmount}</span>)}</div>
 								</div>
 								<div className={classNames('flex-30', 'flex-gt-sm-100', classes.sidebarItem)}>
 									<SubHeader>Pledgers</SubHeader>
