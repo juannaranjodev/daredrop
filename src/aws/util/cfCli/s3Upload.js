@@ -20,7 +20,7 @@ const uploadFileHof = (s3Client, bucket) => async (
 						Key: fileName,
 						// not 100% sure contentType works with s3-stream-upload
 						ContentType: lookup(fileName),
-						CacheControl: 'max-age=31104000',
+						CacheControl: lookup(fileName) !== 'text/html' ? 'max-age=31104000' : 'no-cache',
 						...((isProdEnv && contains(fileName, webpackCompressedFilenames))
 							? {
 								ContentEncoding: setContentEncoding(fileName),

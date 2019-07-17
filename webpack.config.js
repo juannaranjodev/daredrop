@@ -41,7 +41,7 @@ module.exports = {
 	],
 	output: {
 		path: path.resolve(__dirname, 'dist/build-web-client'),
-		filename: 'bundle.js',
+		filename: '[name].[chunkhash].js',
 		publicPath: '/',
 	},
 	devServer: {
@@ -65,7 +65,15 @@ module.exports = {
 				},
 			},
 			{
-				test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|css)$/,
+				test: /(\.(png|jpg|jpeg|gif|svg)$)/,
+				loader: 'file-loader',
+				exclude: /favicon\.png/,
+				options: {
+					name: '[name].[contenthash].[ext]',
+				},
+			},
+			{
+				test: /(\.(woff|woff2|ttf|eot|css))|(favicon\.png)$/,
 				loader: 'file-loader',
 				options: {
 					name: '[name].[ext]',
@@ -83,7 +91,6 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin(Object.assign({
 			template: path.resolve(__dirname, 'src/client/web/app.html'),
-			hash: isProd,
 		}, envVars)),
 		// COPY STATICS
 		new webpack.DefinePlugin(
