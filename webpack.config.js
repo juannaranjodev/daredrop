@@ -90,6 +90,7 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin(Object.assign({
+			title: 'Dare Drop',
 			template: path.resolve(__dirname, 'src/client/web/app.html'),
 		}, envVars)),
 		// COPY STATICS
