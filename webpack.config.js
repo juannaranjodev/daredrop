@@ -41,7 +41,7 @@ module.exports = {
 	],
 	output: {
 		path: path.resolve(__dirname, 'dist/build-web-client'),
-		filename: '[name].[chunkhash].js',
+		filename: isProd ? '[name].[chunkhash].js' : '[name].[hash].js',
 		publicPath: '/',
 	},
 	devServer: {
