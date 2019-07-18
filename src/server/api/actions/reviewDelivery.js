@@ -31,7 +31,7 @@ import { generalError, payloadSchemaError } from 'root/src/server/api/errors'
 import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import {
 	projectApprovedKey, projectDeliveredKey, projectDeliveryInitKey,
-	projectDeliveryPendingKey, projectToCaptureKey, streamerAcceptedKey, streamerDeliveryApprovedKey,
+	projectDeliveryPendingKey, projectToCaptureKey, streamerAcceptedKey,
 } from 'root/src/shared/descriptions/apiLenses'
 // rest
 import getPledgersByProjectID from 'root/src/server/api/actionUtil/getPledgersByProjectID'
@@ -57,11 +57,7 @@ export default async ({ payload }) => {
 	const assigneesToWrite = ternary(equals(audit, projectDeliveredKey), map(assignee => ({
 		PutRequest: {
 			Item: {
-				...assigneeDynamoObj({
-					...assignee,
-					accepted: streamerDeliveryApprovedKey,
-				},
-					projectId),
+				...assigneeDynamoObj(assignee, projectId),
 			},
 		},
 	}), projectAcceptedAssignees), [])
