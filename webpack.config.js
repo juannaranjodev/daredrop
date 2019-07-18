@@ -65,15 +65,15 @@ module.exports = {
 				},
 			},
 			{
-				test: /(\.(png|jpg|jpeg|gif|svg)$)/,
+				test: /\.(png|jpg|jpeg|gif|svg)$/,
 				loader: 'file-loader',
-				exclude: /favicon\.png/,
+				exclude: /((favicon-.*|android-chrome-.*|apple-touch-icon|mstile-.*)\.png|safari-pinned-tab.svg)/,
 				options: {
 					name: '[name].[contenthash].[ext]',
 				},
 			},
 			{
-				test: /(\.(woff|woff2|ttf|eot|css))|(favicon\.png)$/,
+				test: /(\.(woff|woff2|ttf|eot|css|ico|webmanifest|xml)$|((favicon-.*|android-chrome-.*|apple-touch-icon|mstile-.*)\.png|safari-pinned-tab.svg))/,
 				loader: 'file-loader',
 				options: {
 					name: '[name].[ext]',
