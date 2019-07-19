@@ -32,7 +32,6 @@ import dareRejectSuccess from 'root/src/shared/descriptions/modules/dareRejectSu
 import dareAcceptSuccess from 'root/src/shared/descriptions/modules/dareAcceptSuccess'
 import bannerFooterDareAccepted from 'root/src/shared/descriptions/modules/bannerFooterDareAccepted'
 import bannerFooterDareRejectConfirmation from 'root/src/shared/descriptions/modules/bannerFooterDareRejectConfirmation'
-import bannerFooterDareSuccessCreate from 'root/src/shared/descriptions/modules/bannerFooterDareSuccessCreate'
 import twitchOAuth from 'root/src/shared/descriptions/modules/twitchOAuth'
 import twitchOAuthFailure from 'root/src/shared/descriptions/modules/twitchOAuthFailure'
 import changePasswordAuth from 'root/src/shared/descriptions/modules/changePasswordAuth'
