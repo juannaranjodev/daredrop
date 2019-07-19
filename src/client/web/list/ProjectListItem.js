@@ -18,7 +18,7 @@ export const ListItemUnconnected = memo(({
 		<Avatar>
 			<ImageIcon />
 		</Avatar>
-		<ListItemText primary={projectTitle} secondary={pledgeAmount} />
+		<ListItemText primary={projectTitle} secondary={`$${pledgeAmount}`} />
 	</MuiListItem>
 ))
 

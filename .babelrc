@@ -1,4 +1,10 @@
 {
-	"presets": ["env", "stage-0"],
-	"plugins": ["package-name-import"]
+	"presets": [
+		"env",
+		"stage-0"
+	],
+	"plugins": [
+		"package-name-import",
+		"dynamic-import-node"
+	]
 }

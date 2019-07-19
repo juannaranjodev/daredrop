@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import classNames from 'classnames'
 
 import { ternary } from 'root/src/shared/util/ramdaPlus'
@@ -16,6 +16,7 @@ import BannerFooter from 'root/src/client/web/footer/BannerFooter'
 import BannerHeader from 'root/src/client/web/header/BannerHeader'
 import UserDataModule from 'root/src/client/web/userData/UserDataModule'
 import ModalModule from 'root/src/client/web/modal/ModalModule'
+import SuccessMessage from 'root/src/client/web/base/SuccessMessage'
 
 import { ModuleContextProvider } from 'root/src/client/util/withModuleContext'
 
@@ -26,7 +27,7 @@ const styles = {
 	},
 }
 
-export const RenderModules = ({ moduleTypes, routeId }) => (
+export const RenderModules = memo(({ moduleTypes, routeId }) => (
 	moduleTypes.map(([moduleId, moduleType, moduleIndex]) => {
 		const moduleProps = {
 			key: moduleId,
@@ -103,9 +104,9 @@ export const RenderModules = ({ moduleTypes, routeId }) => (
 				)
 		}
 	})
-)
+))
 
-export const RouteRender = ({
+export const RouteRender = memo(({
 	currentRouteModuleTypes, noRoute, currentRouteId, classes,
 }) => ternary(
 	noRoute,
@@ -117,6 +118,7 @@ export const RouteRender = ({
 		)}
 	>
 		<Navigation />
+		<SuccessMessage />
 		<div className="flex layout-column layout-align-start-stretch">
 			<RenderModules
 				moduleTypes={currentRouteModuleTypes}
@@ -125,6 +127,6 @@ export const RouteRender = ({
 		</div>
 		<Footer />
 	</div>,
-)
+))
 
 export default routeRenderConnector(RouteRender, styles)

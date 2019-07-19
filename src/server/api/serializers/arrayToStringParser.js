@@ -1,7 +1,16 @@
 import { join, length, equals, lte, slice, last } from 'ramda'
 
-export default (array) => {
-	if (lte(length(array), 1)) return join('', array)
-	if (equals(length(array), 2)) return join(' and ', array)
-	return `${join(', ', slice(0, -1, array))}, and ${last(array)}`
+export default (array, verb) => {
+	let ret = ''
+	if (lte(length(array), 1)) ret = join('', array)
+	else if (equals(length(array), 2)) ret = join(' and ', array)
+	else ret = `${join(', ', slice(0, -1, array))}, and ${last(array)}`
+	switch (verb) {
+		case 'is':
+			return (length(array) > 1) ? `${ret} are` : `${ret} is`
+		case 'has':
+			return (length(array) > 1) ? `${ret} have` : `${ret} has`
+		default:
+			return ret
+	}
 }

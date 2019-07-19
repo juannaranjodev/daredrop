@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, memo } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { DARE_REJECT_SUCCESS_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 import { equals } from 'ramda'
@@ -6,7 +6,7 @@ import { equals } from 'ramda'
 import Button from 'root/src/client/web/base/Button'
 import styles from './styles'
 
-const RejectDareModal = ({ classes, props }) => {
+const RejectDareModal = memo(({ classes, props }) => {
 	const [rejectDescription, setRejectDescription] = useState('')
 	const [error, setError] = useState('')
 	const { rejectProject, pushRoute, displayModal, moduleId } = props
@@ -37,7 +37,7 @@ const RejectDareModal = ({ classes, props }) => {
 			</Button>
 		</Fragment>
 	)
-}
+})
 
 
 export default withStyles(styles)(RejectDareModal)

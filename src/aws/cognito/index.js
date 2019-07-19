@@ -5,6 +5,7 @@ import identityPoolRoleAttachment from 'root/src/aws/cognito/resources/identityP
 import userPool from 'root/src/aws/cognito/resources/userPool'
 import userPoolClient from 'root/src/aws/cognito/resources/userPoolClient'
 import adminUserPoolGroup from 'root/src/aws/cognito/resources/adminUserPoolGroup'
+import lambdaTriggerInvokePermission from 'root/src/aws/cognito/resources/lambdaTriggerInvokePermission'
 
 import outputs from 'root/src/aws/cognito/outputs'
 
@@ -16,6 +17,7 @@ export const cognitoResources = {
 	...userPool,
 	...userPoolClient,
 	...adminUserPoolGroup,
+	...lambdaTriggerInvokePermission,
 }
 
 export const cognitoOutputs = outputs

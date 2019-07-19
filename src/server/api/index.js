@@ -1,4 +1,4 @@
-import { prop, pick, path } from 'ramda'
+import { prop, pick, path, assoc } from 'ramda'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 
 import validateSchema from 'root/src/shared/util/validateSchema'
@@ -9,10 +9,10 @@ import {
 import ajvErrors from 'root/src/shared/util/ajvErrors'
 import {
 	getPayloadSchema, getResultSchema, testEndpointExists, getIsLongRunningTask, getIsInvokedInternal,
-} from 'root/src/server/api/getEndpointDesc'
+} from 'root/src/shared/descriptions/getEndpointDesc'
 import serverEndpoints from 'root/src/server/api/actions'
 import authorizeRequest from 'root/src/server/api/authorizeRequest'
-import triggerActions from 'root/src/server/email/actions'
+import triggerActions from 'root/src/server/api/triggerActions'
 
 const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 	if (schema) {
@@ -34,15 +34,15 @@ const validateOrNah = (schemaType, endpointId, schema) => (payload) => {
 export const apiHof = (
 	serverEndpointsObj, getPayloadSchemaFn, getResultSchemaFn, getTriggerActionsObj,
 	authorizeRequestFn, testEndpointExistsFn, isLongRunningTask,
-) => async (event) => {
+) => async (event, context, callback) => {
 	const { endpointId, payload, authentication, triggerSource } = event
 	try {
 		const endpointExists = testEndpointExistsFn(endpointId)
 		if (triggerSource) {
 			const triggerAction = path([triggerSource], getTriggerActionsObj)
-			const { request } = event
-			await triggerAction(request)
-			return event
+			const triggerRes = await triggerAction(event)
+			callback(...triggerRes)
+			return
 		}
 		if (!endpointExists) {
 			throw notFoundError(endpointId)

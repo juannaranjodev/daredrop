@@ -4,7 +4,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ShareIcon from '@material-ui/icons/Share'
 import clipboard from 'root/src/client/assets/icons/clipboard.png'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import AddToClipboardButton from 'root/src/client/web/base/AddToClipboardButton'
 
 import {
@@ -12,7 +12,7 @@ import {
 	TwitterIcon, FacebookIcon, RedditIcon, VKIcon,
 } from 'react-share'
 
-const ShareMenuItems = ({ url }) => [
+const ShareMenuItems = memo(({ url }) => [
 	<MenuItem key="twitter">
 		<TwitterShareButton url={url}>
 			<div className="layout-row layout-align-start-center">
@@ -45,7 +45,7 @@ const ShareMenuItems = ({ url }) => [
 			</div>
 		</VKShareButton>
 	</MenuItem>,
-	<MenuItem key="clipboard">
+	<MenuItem key="clipboard" style={{ overflow: 'visible' }}>
 		<AddToClipboardButton url={url}>
 			<div className="layout-row layout-align-start-center">
 				<img src={clipboard} width="32px" alt="add_to_clipboard" />{'\u00A0'}
@@ -53,7 +53,7 @@ const ShareMenuItems = ({ url }) => [
 			</div>
 		</AddToClipboardButton>
 	</MenuItem>,
-]
+])
 
 const styles = {
 	iconColor: {

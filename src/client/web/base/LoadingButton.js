@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { orNull } from 'root/src/shared/util/ramdaPlus'
 
 import Button from 'root/src/client/web/base/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 const buttonProgressStyles = {
 	buttonProgress: {
@@ -33,7 +33,7 @@ const wrapperStyles = {
 }
 
 export default withStyles(wrapperStyles)(
-	({
+	memo(({
 		children, onClick, classes, loading, formType, buttonType,
 	}) => (
 		<div className="flex layout-row layout-align-center">
@@ -49,5 +49,5 @@ export default withStyles(wrapperStyles)(
 				<RenderLoading loading={loading} />
 			</div>
 		</div>
-	),
+	)),
 )

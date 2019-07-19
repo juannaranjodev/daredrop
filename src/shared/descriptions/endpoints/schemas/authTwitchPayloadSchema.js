@@ -1,6 +1,6 @@
 // import {
 // 	projectApprovedKey, projectRejectedKey,
-// } from 'root/src/server/api/lenses'
+// } from 'root/src/shared/descriptions/apiLenses'
 
 export default {
 	type: 'object',

@@ -1,7 +1,7 @@
 import mailBody from 'root/src/server/email/templates/bodyTemplate/mailBody'
 import { ourName, marketplaceUrl } from 'root/src/shared/constants/mail'
 
-export default ({ dareTitle }) => {
+export default ({ dareTitle, dareTitleLink }) => {
 	const mailContent = `
               <table border="0" cellpadding="0" cellspacing="0" style="margin-top:0;margin-bottom:0;margin-left:auto;margin-right:auto;padding:0;color:#354052;font-family:Roboto,sans-serif;font-size:26px;line-height:1.25;" width="80%" class="content">
                 <tbody>
@@ -29,7 +29,7 @@ export default ({ dareTitle }) => {
                   
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">${dareTitle} has been delivered.</p>
+                      <p style="margin:0;padding:0;"><a href="${dareTitleLink}">${dareTitle}</a> has been delivered.</p>
                     </td>
                   </tr>
                   
@@ -39,18 +39,7 @@ export default ({ dareTitle }) => {
 
                   <tr>
                     <td style="margin:0; padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">Check it out:</p>
-                      <p style="margin:0;padding:0;">{CARD IMAGE WITH LINK}</p>
-                    </td>
-                  </tr>
-                  
-                  <tr>
-                    <td height="50" style="margin:0;padding:0;" width="100%"></td>
-                  </tr>
-
-                  <tr>
-                    <td style="margin:0; padding:0;" width="100%">
-                      <p style="margin:0;padding:0;">What’s the next thing you want to see? Dare another streamer or <a href="http://${marketplaceUrl}" style="text-decoration:none;color:#1976d2;">checkout our marketplace</a> to support more great content. We dare you.</p>
+                      <p style="margin:0;padding:0;">What’s the next thing you want to see? Dare another streamer or <a href="https://${marketplaceUrl}" style="text-decoration:none;color:#1976d2;">checkout our marketplace</a> to support more great content. We dare you.</p>
                     </td>
                   </tr>
                   

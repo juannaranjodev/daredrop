@@ -12,8 +12,8 @@ import paypalBatchPayout from 'root/src/server/api/actionUtil/paypalBatchPayout'
 
 // descriptions
 import { PAYOUT_ASSIGNEES } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getPayloadLenses } from 'root/src/server/api/getEndpointDesc'
-import { dynamoItemsProp, payoutCompleteKey, payoutOutstandingKey, projectToPayoutKey } from 'root/src/server/api/lenses'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
+import { dynamoItemsProp, payoutCompleteKey, payoutOutstandingKey, projectToPayoutKey } from 'root/src/shared/descriptions/apiLenses'
 import sendEmailToAssigneesWithoutPaypalEmail from 'root/src/server/api/actionUtil/sendEmailToAssigneesWithoutPaypalEmail'
 
 // email

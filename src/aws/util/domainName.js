@@ -6,7 +6,3 @@ export const hostedZoneId = process.env.STAGE === 'production' ? 'Z10DS6P5G65S82
 
 export default process.env.STAGE === 'production' ? apexDomain : `${stage.toLowerCase()}.${apexDomain}`
 
-// i leave those for my own convenience of use -Dominik Piekarski
-// export const apexDomain = 'lambdatestt.co.uk'
-// export const hostedZoneId = 'Z32WQEXUK1N4LN'
-// export default apexDomain

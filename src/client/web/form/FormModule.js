@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { memo, useState } from 'react'
 import { identical, isNil } from 'ramda'
 
@@ -15,6 +16,7 @@ import TertiaryBody from 'root/src/client/web/typography/TertiaryBody'
 import FormTitle from 'root/src/client/web/typography/FormTitle'
 import formModuleConnector from 'root/src/client/logic/form/connectors/formModuleConnector'
 import Handlers from 'root/src/client/web/form/Handlers'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import PayoutField from 'root/src/client/web/form/PayoutField'
 
@@ -72,17 +74,65 @@ const styles = {
 	formTitle: {
 		fontSize: 32,
 	},
+	errorText: {
+		color: 'red',
+		margin: '1em 0',
+	},
+	loadingContainer: {
+		width: '100%',
+		height: '100%',
+		position: 'absolute',
+		backgroundColor: 'black',
+		opacity: 0.85,
+		zIndex: 1000,
+		display: 'flex',
+		justifyContent: 'center',
+		flexDirection: 'column',
+	},
+	loadingText: {
+		bottom: '23%',
+		position: 'relative',
+		fontFamily: 'Roboto',
+		fontSize: 14,
+		fontWeight: 'bold',
+		fontStyle: 'normal',
+		fontStretch: 'normal',
+		lineHeight: 1.36,
+		letterSpacing: 'normal',
+		textAlign: 'center',
+		color: '#ffffff',
+	},
+	loading: {
+		bottom: '22%',
+		left: '49.2%',
+		position: 'relative',
+	},
+	loadingBlock: {
+		marginTop: 25,
+	},
 }
 
 export const FormModuleUnconnected = memo(({
 	formFieldTypes, formTitle, formSubmits, moduleId, moduleKey, submitForm,
 	preSubmitText, postSubmitText, preSubmitCaption, postSubmitCaption,
 	classes, subTitle, formType, backButton, formHandlers, handleAction, customSubmits,
-	customSubmitsData, payPalCreateOrder, payPalOnApprove, uploadProgress, payPalOnError, customPayPalAction,
+	customSubmitsData, payPalCreateOrder, payPalOnApprove, uploadProgress, payPalOnError,
+	customPayPalAction, visibleLoadingBlock, formSubmitError,
 }) => {
 	const [wasSubmitted, setWasSubmitted] = useState(false)
 	return (
 		<div className="inline-flex layout-row layout-align-center">
+			{visibleLoadingBlock && (
+				<div className={classes.loadingContainer}>
+					<div className={classes.loadingBlock}>
+						<div className={classes.loadingText}>Loading...</div>
+						<CircularProgress
+							size={24}
+							className={classes.loading}
+						/>,
+					</div>
+				</div>
+			) }
 			<div className={classes.formContainer}>
 				{orNull(
 					formTitle,
@@ -154,7 +204,17 @@ export const FormModuleUnconnected = memo(({
 						classes.space, classes.submits,
 						{ [classes.noMarginBottom]: (formType === universalForm) },
 					)}
-					>
+					>	{orNull(
+							formSubmitError,
+						<div
+								className={classNames(
+									classes.errorText,
+									'layout-row layout-align-center',
+								)}
+							>
+								{formSubmitError}
+							</div>,
+						)}
 						<Submits
 							moduleKey={moduleKey}
 							formSubmits={formSubmits}

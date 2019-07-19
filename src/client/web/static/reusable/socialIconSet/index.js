@@ -1,14 +1,8 @@
 import React, { memo } from 'react'
 
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-	faFacebookF,
-	faTwitter,
-	faYoutube,
-	faInstagram,
-	faVk,
-} from '@fortawesome/free-brands-svg-icons'
+import { faFacebookF, faTwitter, faVk } from 'fortawesome-light/fontawesome-light'
 import clipboard from 'root/src/client/assets/icons/clipboard.png'
 import AddToClipboardButton from 'root/src/client/web/base/AddToClipboardButton'
 

@@ -2,9 +2,9 @@ import { filter, prop, not, equals } from 'ramda'
 import getRecordSelector from 'root/src/client/logic/api/selectors/getRecordSelector'
 
 import { GET_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { getResponseLenses } from 'root/src/server/api/getEndpointDesc'
+import { getResponseLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
-import { projectStreamerRejectedKey } from 'root/src/server/api/lenses'
+import { projectStreamerRejectedKey } from 'root/src/shared/descriptions/apiLenses'
 
 const responseLenses = getResponseLenses(GET_PROJECT)
 const { pathOrAssignees } = responseLenses

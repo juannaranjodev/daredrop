@@ -1,6 +1,6 @@
 import { equals, isNil } from 'ramda'
 
-import { projectApprovedKey, projectRejectedKey } from 'root/src/server/api/lenses'
+import { projectApprovedKey, projectRejectedKey } from 'root/src/shared/descriptions/apiLenses'
 import statusSelector from 'root/src/client/logic/project/selectors/statusSelector'
 import myPledgeSelector from 'root/src/client/logic/project/selectors/myPledgeSelector'
 

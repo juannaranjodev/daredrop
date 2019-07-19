@@ -2,6 +2,7 @@ import reduxConnector from 'root/src/shared/util/reduxConnector'
 
 import formFieldTypes from 'root/src/client/logic/form/selectors/formFieldTypes'
 import formSubmits from 'root/src/client/logic/form/selectors/formSubmits'
+import formSubmitError from 'root/src/client/logic/form/selectors/formSubmitError'
 import customSubmitsSelector from 'root/src/client/logic/form/selectors/customSubmitsSelector'
 import customSubmitsDataSelector from 'root/src/client/logic/form/selectors/customSubmitsDataSelector'
 import formTitle from 'root/src/client/logic/form/selectors/formTitle'
@@ -15,6 +16,7 @@ import backButton from 'root/src/client/logic/form/selectors/backButton'
 import currentRouterParamsRecordId from 'root/src/client/logic/route/selectors/currentRouteParamsRecordId'
 import formHandlers from 'root/src/client/logic/form/selectors/formHandlers'
 import uploadProgressSelector from 'root/src/client/logic/project/selectors/uploadProgressSelector'
+import visibleLoadingBlockSelector from 'root/src/client/logic/list/selectors/visibleLoadingBlockSelector'
 
 import submitForm from 'root/src/client/logic/form/thunks/submitForm'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
@@ -41,6 +43,8 @@ export default reduxConnector(
 		['customSubmits', customSubmitsSelector],
 		['customSubmitsData', customSubmitsDataSelector],
 		['uploadProgress', uploadProgressSelector],
+		['formSubmitError', formSubmitError],
+		['visibleLoadingBlock', visibleLoadingBlockSelector],
 	],
 	[
 		['submitForm', submitForm],

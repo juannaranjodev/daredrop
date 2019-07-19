@@ -16,6 +16,7 @@ import clearFormErrors from 'root/src/client/logic/form/reducers/clearFormErrors
 import clearForm from 'root/src/client/logic/form/reducers/clearForm'
 import setFormErrors from 'root/src/client/logic/form/reducers/setFormErrors'
 import submitForm from 'root/src/client/logic/form/reducers/submitForm'
+import submitFormError from 'root/src/client/logic/form/reducers/submitFormError'
 import submitFormComplete from 'root/src/client/logic/form/reducers/submitFormComplete'
 import addSubForm from 'root/src/client/logic/form/reducers/addSubForm'
 import removeSubForm from 'root/src/client/logic/form/reducers/removeSubForm'
@@ -69,6 +70,7 @@ import apiExternalRequestSuccess from 'root/src/client/logic/api/reducers/apiExt
 import apiExternalRequestError from 'root/src/client/logic/api/reducers/apiExternalRequestError'
 
 import apiFetchUserDataSuccess from 'root/src/client/logic/api/reducers/apiFetchUserDataSuccess'
+import setVisibleSuccessMessage from 'root/src/client/logic/app/reducers/setVisibleSuccessMessage'
 
 // listeners
 import popStateListener from 'root/src/client/logic/route/listeners/popStateListener'
@@ -96,6 +98,7 @@ const store = createStore(
 		...setButtonErrors,
 		...clearButtonErrors,
 		...submitForm,
+		...submitFormError,
 		...submitFormComplete,
 		...addSubForm,
 		...removeSubForm,
@@ -140,6 +143,7 @@ const store = createStore(
 		...setSortValue,
 		...changeEmbeddedFieldData,
 		...setVisibleLoadingBlock,
+		...setVisibleSuccessMessage,
 	}, // reducer object
 	// [], // sagas
 	[

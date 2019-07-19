@@ -66,7 +66,7 @@ const runModuleMounts = runModuleMountsHof(
 	mockRouteDescriptions, mockModuleMountActions, mockModuleTypeAction,
 )
 
-const mockDispatch = () => {}
+const mockDispatch = () => { }
 
 describe('runModuleMounts', () => {
 	test('Correct actions run, other actions dont', async () => {

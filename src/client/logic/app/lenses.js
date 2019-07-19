@@ -21,6 +21,9 @@ const appSchema = {
 											type: 'array',
 											items: { type: 'string' },
 										},
+										'cognito:username': {
+											type: 'string',
+										},
 									},
 								},
 							},
@@ -55,6 +58,20 @@ const appSchema = {
 				},
 				timeoutId: {
 					type: 'number',
+				},
+				successMessage: {
+					type: 'object',
+					properties: {
+						show: { type: 'boolean' },
+						position: {
+							type: 'object',
+							properties: {
+								x: { type: 'integer' },
+								y: { type: 'integer' },
+							},
+						},
+						text: { type: 'string' },
+					},
 				},
 			},
 		},

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import { fontFamily } from 'root/src/client/web/commonStyles'
 
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@material-ui/core/styles/withStyles'
 
 const styles = {
 	fontStyle: {

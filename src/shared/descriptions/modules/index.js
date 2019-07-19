@@ -30,9 +30,6 @@ import accountSettingsBannerHeader from 'root/src/shared/descriptions/modules/ac
 import dareCreateSuccess from 'root/src/shared/descriptions/modules/dareCreateSuccess'
 import dareRejectSuccess from 'root/src/shared/descriptions/modules/dareRejectSuccess'
 import dareAcceptSuccess from 'root/src/shared/descriptions/modules/dareAcceptSuccess'
-import bannerFooterDareAccepted from 'root/src/shared/descriptions/modules/bannerFooterDareAccepted'
-import bannerFooterDareRejectConfirmation from 'root/src/shared/descriptions/modules/bannerFooterDareRejectConfirmation'
-import bannerFooterDareSuccessCreate from 'root/src/shared/descriptions/modules/bannerFooterDareSuccessCreate'
 import twitchOAuth from 'root/src/shared/descriptions/modules/twitchOAuth'
 import twitchOAuthFailure from 'root/src/shared/descriptions/modules/twitchOAuthFailure'
 import changePasswordAuth from 'root/src/shared/descriptions/modules/changePasswordAuth'
@@ -40,7 +37,6 @@ import changePasswordForm from 'root/src/shared/descriptions/modules/changePassw
 import changePasswordSuccess from 'root/src/shared/descriptions/modules/changePasswordSuccess'
 import managePaymentForm from 'root/src/shared/descriptions/modules/managePaymentForm'
 import managePaymentList from 'root/src/shared/descriptions/modules/managePaymentList'
-import steperHeaderModule from 'root/src/shared/descriptions/modules/steperHeaderModule'
 import titleHeaderMarketplace from 'root/src/shared/descriptions/modules/titleHeaderMarketplace'
 import claimProject from 'root/src/shared/descriptions/modules/claimProject'
 import claimProjectForm from 'root/src/shared/descriptions/modules/claimProjectForm'
@@ -83,9 +79,6 @@ const allModules = {
 	...dareCreateSuccess,
 	...dareAcceptSuccess,
 	...dareRejectSuccess,
-	...bannerFooterDareAccepted,
-	...bannerFooterDareRejectConfirmation,
-	...bannerFooterDareSuccessCreate,
 	...accountSettings,
 	...accountSettingsBannerHeader,
 	...twitchOAuth,
@@ -95,7 +88,6 @@ const allModules = {
 	...changePasswordSuccess,
 	...managePaymentForm,
 	...managePaymentList,
-	...steperHeaderModule,
 	...titleHeaderMarketplace,
 	...claimProject,
 	...claimProjectForm,
