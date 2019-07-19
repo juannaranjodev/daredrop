@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
 import uuid from 'uuid/v1'
-import { map, omit, prop, join, add, assoc, append } from 'ramda'
+import { map, omit, prop, join, add, assoc, append, compose } from 'ramda'
 
 // keys
 import { CREATE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -128,10 +128,11 @@ export default async ({ userId, payload }) => {
 		const email = await getUserEmail(userId)
 		const emailData = autoApproveFlag
 			? {
+				title: dareApprovedTitle,
 				dareTitle: project.title,
 				dareTitleLink: projectHrefBuilder(projectId),
 				recipients: [email],
-				title: dareApprovedTitle,
+				streamers: compose(map(prop('username')), prop('assignees'))(serializedProject),
 			}
 			: {
 				dareTitle: project.title,
