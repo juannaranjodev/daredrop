@@ -43,6 +43,7 @@ import getAcceptedProjects from 'root/src/shared/descriptions/endpoints/getAccep
 import captureProjectPayments from 'root/src/shared/descriptions/endpoints/captureProjectPayments'
 import payoutAssignees from 'root/src/shared/descriptions/endpoints/payoutAssignees'
 import payOutstandingPayouts from 'root/src/shared/descriptions/endpoints/payOutstandingPayouts'
+import uploadMissingVideos from 'root/src/shared/descriptions/endpoints/uploadMissingVideos'
 
 const allEndpoints = {
 	...createProject,
@@ -79,6 +80,7 @@ const allEndpoints = {
 	...captureProjectPayments,
 	...payoutAssignees,
 	...payOutstandingPayouts,
+	...uploadMissingVideos,
 }
 
 export default map(

@@ -17,11 +17,12 @@ import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
 import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
 import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
+import streamVideoS3toYT from 'root/src/server/api/actionUtil/streamVideoS3toYT'
 import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
 
 const { videoBucket } = outputs
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
-const { viewDeliverySortKey, viewProjectId, viewTestName } = payloadLenses
+const { viewDeliverySortKey, viewProjectId } = payloadLenses
 
 export default async ({ payload, userId }) => {
 	const deliverySortKey = viewDeliverySortKey(payload)
@@ -69,15 +70,7 @@ export default async ({ payload, userId }) => {
 		},
 	}
 	await documentClient.batchWrite(writeParams).promise()
-	const acceptedAssignees = getAssigneesByStatus(project.assignees, streamerAcceptedKey)
 
-	const displayPlusNewline = input => `${prop('displayName', input)}: https://www.twitch.tv/${prop('displayName', input)}\n`
-	const ytDescription = `${join('', map(displayPlusNewline, acceptedAssignees))}${project.description}`
-
-	const s3data = {
-		Bucket: videoBucket,
-		Key: process.env.STAGE === 'testing' ? viewTestName(payload) : deliveryProject.fileName,
-	}
 	try {
 		const email = await getUserEmail(userId)
 		const emailData = {
@@ -92,41 +85,7 @@ export default async ({ payload, userId }) => {
 	}
 
 	try {
-		const fileStream = S3.getObject(s3data).createReadStream()
-		const youtubeUpload = await youtube.videos.insert(
-			{
-				auth: await googleOAuthClient(),
-				part: 'id,snippet,status',
-				notifySubscribers: false,
-				requestBody: {
-					snippet: {
-						title: project.title,
-						description: ytDescription,
-					},
-					status: {
-						privacyStatus: 'private',
-						publishAt: moment().add(2, 'days').format('YYYY-MM-DDThh:mm:ss.sZ'),
-					},
-				},
-				media: {
-					body: fileStream,
-				},
-			},
-		)
-
-		const ytUpdateParams = {
-			TableName: TABLE_NAME,
-			Key: {
-				[PARTITION_KEY]: deliveryProject[PARTITION_KEY],
-				[SORT_KEY]: deliveryProject[SORT_KEY],
-			},
-			UpdateExpression: 'SET youTubeURL = :youTubeURL',
-			ExpressionAttributeValues: {
-				':youTubeURL': youtubeBaseUrl + youtubeUpload.data.id,
-			},
-		}
-
-		await documentClient.update(ytUpdateParams).promise()
+		const youtubeUpload = await streamVideoS3toYT(project, deliveryProject, payload)
 
 		return { projectId, youtubeUpload }
 	} catch ({ message }) {

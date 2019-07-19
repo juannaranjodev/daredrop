@@ -17,6 +17,7 @@ export default async (itemSk) => {
 			range(1, 11),
 		),
 	)
+
 	const combinedItems = reduce(
 		(result, itemDdb) => [...result, ...dynamoItemsProp(itemDdb)],
 		[],
