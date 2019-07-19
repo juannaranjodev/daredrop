@@ -18,6 +18,7 @@ import saveStackOutputs from 'root/src/aws/util/cfCli/saveStackOutputs'
 
 import uploadStatics from 'root/src/aws/util/cfCli/uploadStatics'
 import buildStatics from 'root/src/aws/util/cfCli/buildStatics'
+import invalidateCloudfrontDistribution from 'root/src/aws/util/cfCli/invalidateCloudfrontDistribution'
 
 const afterCreateOrUpdate = [
 	{
@@ -26,6 +27,7 @@ const afterCreateOrUpdate = [
 	},
 	{ title: 'Saving stack output', fn: saveStackOutputs },
 	{ title: 'Uploading statics', fn: uploadStatics },
+	{ title: 'Creating CloudFront distribution invalidation', fn: invalidateCloudfrontDistribution },
 ]
 const bundleLambda = [
 	{ title: 'Bundling lambda functions', fn: webpackLambda },
