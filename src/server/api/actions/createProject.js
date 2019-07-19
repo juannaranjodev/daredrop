@@ -75,6 +75,9 @@ export default async ({ userId, payload }) => {
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: `project|${autoApproveFlag ? projectApprovedKey : projectPendingKey}|${randomNumber(1, 10)}`,
 		created,
+		...(autoApproveFlag ? {
+			approved: created,
+		} : {}),
 		...projectCommon,
 		pledgers: 1,
 		favoritesAmount: 0,
@@ -150,5 +153,8 @@ export default async ({ userId, payload }) => {
 		favoritesAmount: 0,
 		creator: userId,
 		created,
+		...(autoApproveFlag ? {
+			approved: created,
+		} : {}),
 	}
 }

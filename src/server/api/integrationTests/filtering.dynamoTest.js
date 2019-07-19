@@ -85,7 +85,7 @@ describe('filtering tests', async () => {
 		const projectsOnMarketplace = await getActiveProjects({ payload: {} })
 		const pendingDeliveries = await getPendingDeliveries({ payload: {} })
 
-		expect(projectsOnMarketplace.items.length).toEqual(autoApproveFlag ? 1 : 0)
+		expect(projectsOnMarketplace.items.length).toEqual(0)
 		expect(pendingDeliveries.items.length).toEqual(1)
 	})
 	test('expired but approved deliveries are shown on my-projects, but not approved are not', async () => {
@@ -122,9 +122,9 @@ describe('filtering tests', async () => {
 		const projectsOnMarketplace = await getActiveProjects({ payload: {} })
 		const pendingDeliveries = await getPendingDeliveries({ payload: {} })
 		const myProjects = await getMyProjects({ userId: 'user-differentuserid', payload: { currentPage: 1 } })
-		expect(projectsOnMarketplace.items.length).toEqual(autoApproveFlag ? 2 : 0)
+		expect(projectsOnMarketplace.items.length).toEqual(0)
 		expect(pendingDeliveries.items.length).toEqual(0)
-		expect(myProjects.items.length).toEqual(autoApproveFlag ? 2 : 1)
+		expect(myProjects.items.length).toEqual(1)
 		mockdate.reset()
 	})
 
