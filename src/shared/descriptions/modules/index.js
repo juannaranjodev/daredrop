@@ -30,8 +30,6 @@ import accountSettingsBannerHeader from 'root/src/shared/descriptions/modules/ac
 import dareCreateSuccess from 'root/src/shared/descriptions/modules/dareCreateSuccess'
 import dareRejectSuccess from 'root/src/shared/descriptions/modules/dareRejectSuccess'
 import dareAcceptSuccess from 'root/src/shared/descriptions/modules/dareAcceptSuccess'
-import bannerFooterDareAccepted from 'root/src/shared/descriptions/modules/bannerFooterDareAccepted'
-import bannerFooterDareRejectConfirmation from 'root/src/shared/descriptions/modules/bannerFooterDareRejectConfirmation'
 import twitchOAuth from 'root/src/shared/descriptions/modules/twitchOAuth'
 import twitchOAuthFailure from 'root/src/shared/descriptions/modules/twitchOAuthFailure'
 import changePasswordAuth from 'root/src/shared/descriptions/modules/changePasswordAuth'
@@ -82,9 +80,6 @@ const allModules = {
 	...dareCreateSuccess,
 	...dareAcceptSuccess,
 	...dareRejectSuccess,
-	...bannerFooterDareAccepted,
-	...bannerFooterDareRejectConfirmation,
-	...bannerFooterDareSuccessCreate,
 	...accountSettings,
 	...accountSettingsBannerHeader,
 	...twitchOAuth,
