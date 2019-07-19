@@ -21,6 +21,7 @@ import pledgeProject from 'root/src/server/api/actions/pledgeProject'
 import reviewDelivery from 'root/src/server/api/actions/reviewDelivery'
 import createPledgeProjectPayload from 'root/src/server/api/mocks/createPledgeProjectPayload'
 import deliveryDareMock from 'root/src/server/api/mocks/deliveryDare'
+import { autoApproveFlag } from 'root/src/shared/constants/flags'
 
 describe('filtering tests', async () => {
 	let project

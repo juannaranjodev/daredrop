@@ -17,6 +17,7 @@ import getPendingProjects from 'root/src/server/api/actions/getPendingProjects'
 import getActiveProjects from 'root/src/server/api/actions/getActiveProjects'
 import getProject from 'root/src/server/api/actions/getProject'
 import reviewDelivery from 'root/src/server/api/actions/reviewDelivery'
+import { autoApproveFlag } from 'root/src/shared/constants/flags'
 
 describe('statuses are displayed properly on cards or on detail page', async () => {
 	let project
@@ -29,8 +30,10 @@ describe('statuses are displayed properly on cards or on detail page', async () 
 		const pendingProjects = await getPendingProjects({ payload: {} })
 		const pendingProject = await getProject({ payload: { projectId: project.id } })
 
-		expect(pendingProjects.items[0].status).toEqual(projectPendingKey)
-		expect(pendingProject.status).toEqual(projectPendingKey)
+		if (!autoApproveFlag) {
+			expect(pendingProjects.items[0].status).toEqual(projectPendingKey)
+			expect(pendingProject.status).toEqual(projectPendingKey)
+		}
 	})
 	test('Correctly displays approved projects', async () => {
 		await auditProject({ payload: { projectId: project.id, audit: projectApprovedKey } })

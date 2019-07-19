@@ -11,40 +11,44 @@ import {
 	projectPendingKey,
 	projectRejectedKey,
 } from 'root/src/shared/descriptions/apiLenses'
+import { autoApproveFlag } from 'root/src/shared/constants/flags'
 
 describe('auditProject', () => {
-	test('successfully approves a project', async () => {
-		const newProject = await createProject({
-			userId: mockUserId,
-			payload: createProjectPayload(),
-		})
-		expect(newProject.status).toEqual(projectPendingKey)
-		const event = {
-			endpointId: AUDIT_PROJECT,
-			payload: {
-				projectId: newProject.id,
-				audit: projectApprovedKey,
-			},
-		}
-		const res = await apiFn(event)
-		res.body.userId = mockUserId
+	if (!autoApproveFlag) {
+		test('successfully approves a project', async () => {
+			const newProject = await createProject({
+				userId: mockUserId,
+				payload: createProjectPayload(),
+			})
+			expect(newProject.status).toEqual(projectPendingKey)
+			const event = {
+				endpointId: AUDIT_PROJECT,
+				payload: {
+					projectId: newProject.id,
+					audit: projectApprovedKey,
+				},
+			}
+			const res = await apiFn(event)
+			res.body.userId = mockUserId
 
-		expect(res).toEqual({
-			statusCode: 200,
-			body: {
-				...newProject,
-				status: projectApprovedKey,
-				approved: res.body.approved,
-			},
+			expect(res).toEqual({
+				statusCode: 200,
+				body: {
+					...newProject,
+					status: projectApprovedKey,
+					approved: res.body.approved,
+				},
+			})
 		})
-	})
+	}
 	test('successfully rejects a project', async () => {
 		const newProject = await createProject({
 			userId: mockUserId,
 			payload: createProjectPayload(),
 		})
-		expect(newProject.status).toEqual(projectPendingKey)
-
+		if (!autoApproveFlag) {
+			expect(newProject.status).toEqual(projectPendingKey)
+		}
 		const event = {
 			endpointId: AUDIT_PROJECT,
 			payload: {

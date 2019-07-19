@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
 import uuid from 'uuid/v1'
-import { map, omit, prop, join, add, assoc, append } from 'ramda'
+import { map, omit, prop, join, add, assoc, append, compose } from 'ramda'
 
 // keys
 import { CREATE_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { payloadSchemaError } from 'root/src/server/api/errors'
-import { projectPendingKey } from 'root/src/shared/descriptions/apiLenses'
+import { projectPendingKey, projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
 
 // lenses
@@ -27,12 +27,14 @@ import validatePaypalAuthorize from 'root/src/server/api/actionUtil/validatePayp
 // email
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import dareCreatedEmail from 'root/src/server/email/templates/dareCreated'
-import { dareCreatedTitle } from 'root/src/server/email/util/emailTitles'
+import dareApprovedEmail from 'root/src/server/email/templates/dareApproved'
+import { dareCreatedTitle, dareApprovedTitle } from 'root/src/server/email/util/emailTitles'
 
 // other
 import assigneeSerializer from 'root/src/server/api/serializers/assigneeSerializer'
 import { stripeCard, paypalAuthorize } from 'root/src/shared/constants/paymentTypes'
 
+import { autoApproveFlag } from 'root/src/shared/constants/flags'
 
 const payloadLenses = getPayloadLenses(CREATE_PROJECT)
 const {
@@ -71,8 +73,11 @@ export default async ({ userId, payload }) => {
 
 	const project = {
 		[PARTITION_KEY]: projectId,
-		[SORT_KEY]: `project|${projectPendingKey}|${randomNumber(1, 10)}`,
+		[SORT_KEY]: `project|${autoApproveFlag ? projectApprovedKey : projectPendingKey}|${randomNumber(1, 10)}`,
 		created,
+		...(autoApproveFlag ? {
+			approved: created,
+		} : {}),
 		...projectCommon,
 		pledgers: 1,
 		favoritesAmount: 0,
@@ -121,13 +126,21 @@ export default async ({ userId, payload }) => {
 
 	try {
 		const email = await getUserEmail(userId)
-		const emailData = {
-			dareTitle: project.title,
-			dareTitleLink: projectHrefBuilder(projectId),
-			recipients: [email],
-			title: dareCreatedTitle,
-		}
-		sendEmail(emailData, dareCreatedEmail)
+		const emailData = autoApproveFlag
+			? {
+				title: dareApprovedTitle,
+				dareTitle: project.title,
+				dareTitleLink: projectHrefBuilder(projectId),
+				recipients: [email],
+				streamers: compose(map(prop('username')), prop('assignees'))(serializedProject),
+			}
+			: {
+				dareTitle: project.title,
+				dareTitleLink: projectHrefBuilder(projectId),
+				recipients: [email],
+				title: dareCreatedTitle,
+			}
+		sendEmail(emailData, autoApproveFlag ? dareApprovedEmail : dareCreatedEmail)
 	} catch (err) {
 		console.log('ses error')
 	}
@@ -135,11 +148,14 @@ export default async ({ userId, payload }) => {
 	return {
 		id: projectId,
 		userId,
-		status: projectPendingKey,
+		status: autoApproveFlag ? projectApprovedKey : projectPendingKey,
 		...projectCommon,
 		pledgers: 1,
 		favoritesAmount: 0,
 		creator: userId,
 		created,
+		...(autoApproveFlag ? {
+			approved: created,
+		} : {}),
 	}
 }

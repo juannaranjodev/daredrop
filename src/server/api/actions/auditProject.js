@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
-import { head, replace, equals, prop, compose, map, set, lensProp, omit } from 'ramda'
+import { head, replace, equals, prop, compose, map, set, lensProp, omit, and } from 'ramda'
 
 // keys
 import { AUDIT_PROJECT } from 'root/src/shared/descriptions/endpoints/endpointIds'
@@ -27,6 +27,8 @@ import dareRejectedByToSMail from 'root/src/server/email/templates/dareRejected'
 import { dareApprovedTitle, dareRejectedByToSTitle } from 'root/src/server/email/util/emailTitles'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 
+import { autoApproveFlag } from 'root/src/shared/constants/flags'
+
 const payloadLenses = getPayloadLenses(AUDIT_PROJECT)
 const { viewAudit } = payloadLenses
 
@@ -37,7 +39,6 @@ export default async ({ userId, payload }) => {
 	] = await dynamoQueryProject(
 		userId, projectId,
 	)
-
 
 	const [project, assignees, myPledge, myFavorites] = await dynamoQueryProject(
 		userId, projectId,
@@ -56,6 +57,19 @@ export default async ({ userId, payload }) => {
 	}
 
 	let auditedProject = projectToPledge
+
+	// auto approve flag
+	if (and(equals(viewAudit(payload), projectApprovedKey), autoApproveFlag)) {
+		const newProject = projectSerializer([
+			omit(['assignees'], auditedProject),
+			...assigneesDdb,
+			...omit(['myPledge'], myPledgeDdb),
+		])
+		return {
+			...newProject,
+			status: viewAudit(payload),
+		}
+	}
 
 	// if current audit action is 'approve', create or update approved date of project. (key: 'approved')
 	if (equals(viewAudit(payload), projectApprovedKey)) {
