@@ -58,7 +58,7 @@ export default {
 										'arn:aws:ses',
 										ref('AWS::Region'),
 										ref('AWS::AccountId'),
-										'*:*',
+										'*',
 									],
 								),
 							},
