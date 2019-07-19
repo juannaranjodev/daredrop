@@ -46,6 +46,21 @@ export default {
 									'*:*',
 								]),
 							},
+							{
+								Effect: 'Allow',
+								Action: [
+									'ses:SendEmail',
+								],
+								Resource: join(
+									':',
+									[
+										'arn:aws:ses',
+										ref('AWS::Region'),
+										ref('AWS::AccountId'),
+										'*:*',
+									],
+								),
+							},
 						],
 					},
 				},
