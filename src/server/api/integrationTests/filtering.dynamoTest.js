@@ -2,12 +2,12 @@ import mockdate from 'mockdate'
 import moment from 'moment'
 import { assoc, map, omit, range } from 'ramda'
 import { apiFn } from 'root/src/server/api'
-import { REVIEW_DELIVERY, GET_MY_PROJECTS } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { GET_MY_PROJECTS } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import createProject from 'root/src/server/api/actions/createProject'
 
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
-import { projectApprovedKey, projectDeliveredKey, projectDeliveryRejectedKey } from 'root/src/shared/descriptions/apiLenses'
+import { projectApprovedKey, projectDeliveredKey } from 'root/src/shared/descriptions/apiLenses'
 import auditProject from 'root/src/server/api/actions/auditProject'
 import acceptProject from 'root/src/server/api/actions/acceptProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
@@ -153,7 +153,7 @@ describe('filtering tests', async () => {
 			authentication: mockUserId,
 		}
 		const res = await apiFn(event)
-		expect(res.body.items.length).toEqual(3)
+		expect(res.body.items.length).toEqual(4)
 	})
 
 	test('gets only delivered dares', async () => {
@@ -212,7 +212,7 @@ describe('filtering tests', async () => {
 			authentication: mockUserId,
 		}
 		const res = await apiFn(event)
-		expect(res.body.items.length).toEqual(1)
+		expect(res.body.items.length).toEqual(2)
 	})
 
 	test('gets only my favorites', async () => {
