@@ -5,7 +5,7 @@ export default recordToArchive => ({
 	archivalTable: {
 		PutRequest: {
 			Item: {
-				recordToArchive,
+				...recordToArchive,
 				archived: getTimestamp(),
 			},
 		},

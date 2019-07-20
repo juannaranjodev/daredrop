@@ -8,6 +8,7 @@ import { projectApprovedKey } from 'root/src/shared/descriptions/apiLenses'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
 import { internet } from 'faker'
 import dynamoQueryProjectPledges from 'root/src/server/api/actionUtil/dynamoQueryProjectPledges'
+import expectOmitDate from 'root/src/testUtil/expectOmitDate'
 
 describe('pledgeProject', () => {
 	const projectPayload = createProjectPayload()
@@ -33,7 +34,7 @@ describe('pledgeProject', () => {
 			authentication: mockUserId,
 		}
 		const res = await apiFn(event)
-		expect(res).toEqual({
+		expectOmitDate(res, {
 			statusCode: 200,
 			body: {
 				...newProject,
@@ -77,13 +78,13 @@ describe('pledgeProject', () => {
 
 	test('project pledges are displayed properly', async () => {
 		const pledges = await dynamoQueryProjectPledges(newProject.id)
-		expect(pledges[1].paymentInfo[0]).toEqual({
+		expectOmitDate(pledges[1].paymentInfo[0], {
 			paymentAmount: 2,
 			paymentId: 'chargeId',
 			paymentType: 'stripeCard',
 			captured: 0,
 		})
-		expect(pledges[1].paymentInfo[1]).toEqual({
+		expectOmitDate(pledges[1].paymentInfo[1], {
 			paymentAmount: 2,
 			paymentId: 'paypalAuthorization',
 			paymentType: 'paypalAuthorize',
