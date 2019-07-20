@@ -10,6 +10,7 @@ import S3 from 'root/src/server/api/s3Client'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
 import { DELIVERY_DARE } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
 const { viewTestName } = payloadLenses
@@ -56,9 +57,10 @@ export default async (project, deliveryProject, payload) => {
 				[PARTITION_KEY]: deliveryProject[PARTITION_KEY],
 				[SORT_KEY]: deliveryProject[SORT_KEY],
 			},
-			UpdateExpression: 'SET youTubeURL = :youTubeURL',
+			UpdateExpression: 'SET youTubeURL = :youTubeURL, modified = :modified',
 			ExpressionAttributeValues: {
 				':youTubeURL': youtubeBaseUrl + youtubeUpload.data.id,
+				':modified': getTimestamp(),
 			},
 		}
 		await documentClient.update(ytUpdateParams).promise()

@@ -1,9 +1,13 @@
 import { SORT_KEY, PARTITION_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 export default recordToArchive => ({
 	archivalTable: {
 		PutRequest: {
-			Item: recordToArchive,
+			Item: {
+				...recordToArchive,
+				archived: getTimestamp(),
+			},
 		},
 	},
 	table: {
