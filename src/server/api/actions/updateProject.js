@@ -56,7 +56,7 @@ export default async ({ userId, payload }) => {
 		ExpressionAttributeValues: {
 			':new_description': description,
 			':new_title': title,
-			':modified': getTimestamp,
+			':modified': getTimestamp(),
 		},
 	}
 

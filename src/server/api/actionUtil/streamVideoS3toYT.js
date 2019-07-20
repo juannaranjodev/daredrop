@@ -57,7 +57,7 @@ export default async (project, deliveryProject, payload) => {
 				[PARTITION_KEY]: deliveryProject[PARTITION_KEY],
 				[SORT_KEY]: deliveryProject[SORT_KEY],
 			},
-			UpdateExpression: 'SET youTubeURL = :youTubeURL, modidfied = :modified',
+			UpdateExpression: 'SET youTubeURL = :youTubeURL, modified = :modified',
 			ExpressionAttributeValues: {
 				':youTubeURL': youtubeBaseUrl + youtubeUpload.data.id,
 				':modified': getTimestamp(),

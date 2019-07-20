@@ -6,7 +6,7 @@ export default recordToArchive => ({
 		PutRequest: {
 			Item: {
 				recordToArchive,
-				modified: getTimestamp(),
+				archived: getTimestamp(),
 			},
 		},
 	},
@@ -15,7 +15,6 @@ export default recordToArchive => ({
 			Key: {
 				[SORT_KEY]: recordToArchive[SORT_KEY],
 				[PARTITION_KEY]: recordToArchive[PARTITION_KEY],
-				archived: getTimestamp(),
 			},
 		},
 	},

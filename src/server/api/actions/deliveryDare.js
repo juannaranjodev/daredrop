@@ -1,26 +1,18 @@
-import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
-import { DELIVERY_DARE } from 'root/src/shared/descriptions/endpoints/endpointIds'
-import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
-import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
-import S3 from 'root/src/server/api/s3Client'
-import outputs from 'root/cfOutput'
-import googleOAuthClient, { youtube } from 'root/src/server/api/googleClient'
-import { dynamoItemsProp, projectApprovedKey, streamerAcceptedKey, projectDeliveryPendingKey } from 'root/src/shared/descriptions/apiLenses'
-import { youtubeBaseUrl } from 'root/src/shared/constants/youTube'
-import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
-import { map, prop, join, head } from 'ramda'
-import moment from 'moment'
+import { head, prop } from 'ramda'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
-import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-
 import getUserEmail from 'root/src/server/api/actionUtil/getUserEmail'
-import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
-import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
-import sendEmail from 'root/src/server/email/actions/sendEmail'
-import streamVideoS3toYT from 'root/src/server/api/actionUtil/streamVideoS3toYT'
 import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
+import streamVideoS3toYT from 'root/src/server/api/actionUtil/streamVideoS3toYT'
+import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
+import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import sendEmail from 'root/src/server/email/actions/sendEmail'
+import videoSubmittedEmail from 'root/src/server/email/templates/videoSubmitted'
+import { videoSubmittedTitle } from 'root/src/server/email/util/emailTitles'
+import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
+import { dynamoItemsProp, projectApprovedKey, projectDeliveryPendingKey } from 'root/src/shared/descriptions/apiLenses'
+import { DELIVERY_DARE } from 'root/src/shared/descriptions/endpoints/endpointIds'
+import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 
-const { videoBucket } = outputs
 const payloadLenses = getPayloadLenses(DELIVERY_DARE)
 const { viewDeliverySortKey, viewProjectId } = payloadLenses
 
@@ -69,6 +61,7 @@ export default async ({ payload, userId }) => {
 			[TABLE_NAME]: [s3DataWrite, projectDataToWrite],
 		},
 	}
+
 	await documentClient.batchWrite(writeParams).promise()
 
 	try {
@@ -80,7 +73,7 @@ export default async ({ payload, userId }) => {
 			recipients: [email],
 		}
 		sendEmail(emailData, videoSubmittedEmail)
-	// eslint-disable-next-line no-empty
+		// eslint-disable-next-line no-empty
 	} catch (err) {
 	}
 
