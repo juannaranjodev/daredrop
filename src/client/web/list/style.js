@@ -187,6 +187,7 @@ export const projectCardStyle = {
 		height: '100%',
 		margin: [[0, 0, -12, 0]],
 		display: 'flex',
+		zIndex: 300,
 		flexDirection: 'column',
 		justifyContent: 'flex-end',
 	},

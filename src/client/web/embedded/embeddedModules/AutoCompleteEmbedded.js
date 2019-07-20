@@ -15,7 +15,6 @@ const styles = {
 	autoSelect: {
 		width: 152,
 		height: 29,
-		marginLeft: 25,
 		marginBottom: 12,
 		boxShadow: '0 0 26px 0 rgba(0, 0, 0, 0.16)',
 	},
