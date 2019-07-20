@@ -31,7 +31,7 @@ import { generalError, payloadSchemaError } from 'root/src/server/api/errors'
 import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import {
 	projectApprovedKey, projectDeliveredKey, projectDeliveryPendingKey,
-	projectToCaptureKey, streamerAcceptedKey,
+	projectToCaptureKey, streamerAcceptedKey, projectAcceptedKey,
 } from 'root/src/shared/descriptions/apiLenses'
 // rest
 import getPledgersByProjectID from 'root/src/server/api/actionUtil/getPledgersByProjectID'
@@ -95,7 +95,15 @@ export default async ({ payload }) => {
 						[SORT_KEY]: await generateUniqueSortKey(prop('id', projectSerialized), `${projectToCaptureKey}`, 1, 10),
 					},
 				},
-			}], []),
+			}],
+			[{
+				PutRequest: {
+					Item: {
+						...recordToUpdate,
+						status: projectAcceptedKey,
+					},
+				},
+			}]),
 		prop('table', projectToArchive),
 	]
 
