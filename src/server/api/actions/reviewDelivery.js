@@ -61,7 +61,7 @@ export default async ({ payload }) => {
 					...assignee,
 					accepted: streamerDeliveryApprovedKey,
 				},
-					projectId),
+				projectId),
 			},
 		},
 	}), projectAcceptedAssignees), [])
@@ -89,6 +89,7 @@ export default async ({ payload }) => {
 						...recordToUpdate,
 						status: projectDeliveredKey,
 						deliveries: prop('deliveries', projectSerialized),
+						modified: getTimestamp(),
 					},
 				},
 			},
@@ -97,6 +98,7 @@ export default async ({ payload }) => {
 					Item: {
 						[PARTITION_KEY]: recordToArchive[PARTITION_KEY],
 						[SORT_KEY]: await generateUniqueSortKey(prop('id', projectSerialized), `${projectToCaptureKey}`, 1, 10),
+						created: getTimestamp(),
 					},
 				},
 			}], [{
@@ -105,6 +107,7 @@ export default async ({ payload }) => {
 						...recordToUpdate,
 						status: projectDeliveryInitKey,
 						deliveries: prop('deliveries', projectSerialized),
+						modified: getTimestamp(),
 					},
 				},
 			}]),

@@ -27,7 +27,7 @@ import pledgeMadeMail from 'root/src/server/email/templates/pledgeMade'
 import { pledgeMadeTitle } from 'root/src/server/email/util/emailTitles'
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
-
+import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 const payloadLenses = getPayloadLenses(PLEDGE_PROJECT)
 const { viewPledgeAmount, viewPaymentInfo } = payloadLenses
@@ -85,7 +85,7 @@ export default async ({ userId, payload }) => {
 	}
 
 	const newMyPledge = assoc('paymentInfo', append(
-		assoc('captured', 0, omit(['orderID'], paymentInfo)),
+		assoc('created', getTimestamp(), assoc('captured', 0, omit(['orderID'], paymentInfo))),
 		prop('paymentInfo', myPledge),
 	), myPledge)
 	const updatedPledgeAmount = assoc('pledgeAmount', add(newPledgeAmount, prop('pledgeAmount', myPledge)), newMyPledge)

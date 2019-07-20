@@ -2,6 +2,9 @@ import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoInde
 
 import projectDenormalizeFields from 'root/src/server/api/actionUtil/projectDenormalizeFields'
 
+// @TODO here do something with this created, for now it's
+// indicator that this the user who have created this dare
+
 export default (
 	projectId, project, userId, description, stripeCardId, created = false, title,
 ) => {

@@ -4,6 +4,7 @@ import oAuthTokenSerializer from 'root/src/server/api/serializers/oAuthTokenSeri
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
 import { getUserByToken } from 'root/src/server/api/twitchApi'
 import { authorizationError } from 'root/src/server/api/errors'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 export default async ({ userId, payload }) => {
 	const { displayName, login, thumbnail, id, token, tokenId } = payload
@@ -21,6 +22,7 @@ export default async ({ userId, payload }) => {
 		thumbnail,
 		displayName,
 		token,
+		created: getTimestamp(),
 	}
 
 	const params = {
