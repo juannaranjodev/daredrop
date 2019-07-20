@@ -35,10 +35,10 @@ export default async ({ userId, payload }) => {
 
 	const newUpdate = updateDynamoObj(
 		projectId, project, userId,
-		description, paymentInfo, null, title,
+		description, paymentInfo, title,
 	)
 
-	// TODO: Check pledge amount
+	// @TODO: Check pledge amount
 	const updateParams = {
 		TableName: TABLE_NAME,
 		Item: newUpdate,

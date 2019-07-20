@@ -6,14 +6,13 @@ import projectDenormalizeFields from 'root/src/server/api/actionUtil/projectDeno
 // indicator that this the user who have created this dare
 
 export default (
-	projectId, project, userId, description, stripeCardId, created = false, title,
+	projectId, project, userId, description, stripeCardId, title,
 ) => {
 	const data = {
 		...projectDenormalizeFields(project),
 		[PARTITION_KEY]: projectId,
 		[SORT_KEY]: `description|${userId}`,
 		stripeCardId,
-		...(created ? { created: true } : {}),
 		description,
 		title,
 	}
