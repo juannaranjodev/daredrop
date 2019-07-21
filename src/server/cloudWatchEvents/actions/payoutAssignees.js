@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
 // libs
-import { head, path, length, equals, prop, concat, forEach } from 'ramda'
+import { head, path, length, equals, prop, concat, forEach, not } from 'ramda'
 // db stuff
 import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
@@ -91,7 +91,7 @@ export default async ({ payload }) => {
 	await deleteCronJob(PAYOUT_ASSIGNEES, projectId)
 
 	try {
-		if (equals(0, length(usersWithPaypalMail))) {
+		if (not(equals(0, length(usersWithoutPaypalMail)))) {
 			await sendEmailToAssigneesWithoutPaypalEmail(usersWithoutPaypalMail)
 		}
 	} catch (err) {
@@ -109,14 +109,14 @@ export default async ({ payload }) => {
 				recipients: [email],
 				dareLink,
 				amountRequest: prop('payout', user),
-				payoutEmail: prop('email', user),
+				paypalEmail: prop('email', user),
 				title: youHaveBeenPaidTitle,
 			}
 			await sendEmail(emailData, youHaveBeenPaidTemplate)
 		} catch (err) {
 			console.log(JSON.stringify(err, null, 2))
 		}
-	}, concat(usersWithPaypalMail, usersWithoutPaypalMail)))
+	}, usersWithPaypalMail))
 
 	return {
 		paypalPayout,
