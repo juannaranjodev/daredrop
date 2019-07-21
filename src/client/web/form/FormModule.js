@@ -27,6 +27,7 @@ import submitFormHandler from 'root/src/client/logic/form/handlers/submitFormHan
 import withModuleContext from 'root/src/client/util/withModuleContext'
 
 import classNames from 'classnames'
+import loadingBlockStyle from 'root/src/client/web/base/commonStyle/loadingBlockStyle'
 
 const styles = {
 	space: {
@@ -78,38 +79,7 @@ const styles = {
 		color: 'red',
 		margin: '1em 0',
 	},
-	loadingContainer: {
-		width: '100%',
-		height: '100%',
-		position: 'absolute',
-		backgroundColor: 'black',
-		opacity: 0.85,
-		zIndex: 1000,
-		display: 'flex',
-		justifyContent: 'center',
-		flexDirection: 'column',
-	},
-	loadingText: {
-		bottom: '23%',
-		position: 'relative',
-		fontFamily: 'Roboto',
-		fontSize: 14,
-		fontWeight: 'bold',
-		fontStyle: 'normal',
-		fontStretch: 'normal',
-		lineHeight: 1.36,
-		letterSpacing: 'normal',
-		textAlign: 'center',
-		color: '#ffffff',
-	},
-	loading: {
-		bottom: '22%',
-		left: '49.2%',
-		position: 'relative',
-	},
-	loadingBlock: {
-		marginTop: 25,
-	},
+	...loadingBlockStyle,
 }
 
 export const FormModuleUnconnected = memo(({
@@ -132,7 +102,7 @@ export const FormModuleUnconnected = memo(({
 						/>,
 					</div>
 				</div>
-			) }
+			)}
 			<div className={classes.formContainer}>
 				{orNull(
 					formTitle,
@@ -206,7 +176,7 @@ export const FormModuleUnconnected = memo(({
 					)}
 					>	{orNull(
 							formSubmitError,
-						<div
+							<div
 								className={classNames(
 									classes.errorText,
 									'layout-row layout-align-center',
