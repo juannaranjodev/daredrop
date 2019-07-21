@@ -1,7 +1,7 @@
 import {
 	ACCEPT_DARE_SUCCESS_MODULE_ID,
 } from 'root/src/shared/descriptions/modules/moduleIds'
-import bannerFooterImage from 'root/src/client/assets/Dare-accepted-3.jpg'
+import bannerFooterImage from 'root/src/client/assets/Dare-accepted.jpg'
 import { ACTIVE_PROJECTS_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
 
 export default {
