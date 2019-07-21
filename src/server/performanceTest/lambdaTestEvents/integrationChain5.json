@@ -4,6 +4,7 @@
   "password": ""
  },
  "iterations": 5,
+ "waitTime": 2000,
  "operation": "integrationMulti",
  "endpointId": [
   "GET_ACTIVE_PROJECTS",

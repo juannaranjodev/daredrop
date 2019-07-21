@@ -6,6 +6,7 @@ import { documentClient } from 'root/src/server/api/dynamoClient'
 import outputs from 'root/cfOutput'
 import getLambdaConfigurations from 'root/src/server/performanceTest/getLambdaConfigurations'
 import setLambdaStage from 'root/src/server/performanceTest/setLambdaStage'
+import wait from 'root/src/testUtil/wait'
 
 const { apiLongTaskFunctionArn, apiFunctionArn } = outputs
 
@@ -40,8 +41,11 @@ const integrationMulti = async (event) => {
 	const timerStart = new Date().getTime()
 	try {
 		const projects = await Promise.all(
-			map(async iteration => integration({ ...event, iteration }, authentication),
-				range(0, event.iterations)),
+			map(async (iteration) => {
+				await wait(iteration * event.waitTime)
+				return integration({ ...event, iteration }, authentication)
+			},
+			range(0, event.iterations)),
 		)
 		const sumDuration = reduce((acc, item) => acc + prop('duration', item), 0, projects)
 		const globDuration = new Date().getTime() - timerStart
