@@ -10,8 +10,8 @@ import auditProject from 'root/src/server/api/actions/auditProject'
 import rejectProject from 'root/src/server/api/actions/rejectProject'
 import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
 
-describe('getAcceptedProjects', () => {
-	test('Successfully get accepted projects', async () => {
+describe('rejectProject', () => {
+	test('Successfully rejects project', async () => {
 		const project = await createProject({
 			userId: 'user-differentuserid',
 			payload: createProjectPayload(),

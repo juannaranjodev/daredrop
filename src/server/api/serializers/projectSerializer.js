@@ -95,12 +95,15 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 				projectPart,
 			)
 
+			const status = prop('status', projectObj)
+				|| getStatus(result, propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart))
+
 			if (isDenormalized) {
 				return {
 					...result,
 					...projectObj,
 					id: pkProp(projectPart),
-					status: getStatus(result, propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart)),
+					status,
 					assignees: getActiveAssignees(prop('assignees', projectPart)),
 				}
 			}
@@ -108,7 +111,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 				...result,
 				...projectObj,
 				id: pkProp(projectPart),
-				status: getStatus(result, propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart)),
+				status,
 			}
 		}
 		return result

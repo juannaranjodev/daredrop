@@ -80,6 +80,10 @@ export default async ({ payload, userId }) => {
 		},
 	}), userAssigneeArr)
 
+	const activeAssigneesInProject = getActiveAssignees(assigneesDdb)
+
+	const allStreamersRejected = equals(length(activeAssigneesInProject) - length(userAssigneeArr), 0)
+
 	const rejectionParams = {
 		RequestItems: {
 			[TABLE_NAME]: [
@@ -89,6 +93,7 @@ export default async ({ payload, userId }) => {
 						Item: {
 							[PARTITION_KEY]: prop('id', projectToReject),
 							[SORT_KEY]: head(projectToRejectDdb)[SORT_KEY],
+							status: allStreamersRejected ? projectAllStreamersRejectedKey : prop('status', projectToReject),
 							...setAssigneesStatus(projectToReject, streamerRejectedKey, userTokensStr),
 						},
 					},
@@ -97,13 +102,12 @@ export default async ({ payload, userId }) => {
 		},
 	}
 
-	const activeAssigneesInProject = getActiveAssignees(assigneesDdb)
 
 	// here also for the future rejection of project needs to be separate action contained here (instead of auditProject) to handle transactWrite properly
 	await documentClient.batchWrite(rejectionParams).promise()
 	const email = await getUserEmail((prop('creator', projectToReject)))
 
-	if (equals(length(activeAssigneesInProject) - length(userAssigneeArr), 0)) {
+	if (allStreamersRejected) {
 		const payload = {
 			payload: {
 				projectId,
@@ -127,6 +131,7 @@ export default async ({ payload, userId }) => {
 	} catch (err) {
 		console.log('ses error')
 	}
+
 	return omit([PARTITION_KEY, SORT_KEY],
 		{
 			...projectToReject,
