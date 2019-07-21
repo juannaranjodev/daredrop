@@ -106,11 +106,11 @@ export default async ({ payload }) => {
 			const email = await getUserEmailByTwitchID(prop('platformId', user))
 			const emailData = {
 				dareTitle,
-				recipients: [email],
 				dareLink,
 				amountRequest: prop('payout', user),
 				paypalEmail: prop('email', user),
 				title: youHaveBeenPaidTitle,
+				recipients: [email],
 			}
 			await sendEmail(emailData, youHaveBeenPaidTemplate)
 		} catch (err) {
