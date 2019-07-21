@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
 // libs
 import { head, path, length, equals, prop, concat, forEach } from 'ramda'
@@ -20,7 +21,8 @@ import sendEmailToAssigneesWithoutPaypalEmail from 'root/src/server/api/actionUt
 import sendEmail from 'root/src/server/email/actions/sendEmail'
 import youHaveBeenPaidTemplate from 'root/src/server/email/templates/youHaveBeenPaid'
 import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
-import { ourUrl } from 'root/src/shared/constants/mail'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
+import { youHaveBeenPaidTitle } from 'root/src/server/email/util/emailTitles'
 
 const payloadLenses = getPayloadLenses(PAYOUT_ASSIGNEES)
 const { viewProjectId } = payloadLenses
@@ -87,24 +89,34 @@ export default async ({ payload }) => {
 
 	await documentClient.batchWrite(saveParams).promise()
 	await deleteCronJob(PAYOUT_ASSIGNEES, projectId)
-	await sendEmailToAssigneesWithoutPaypalEmail(usersWithoutPaypalMail)
 
 	try {
-		const dareLink = `${ourUrl}/view-project${projectId}`
-		const dareTitle = prop('dareTitle', payoutsWithPaypalEmails)
+		if (equals(0, length(usersWithPaypalMail))) {
+			await sendEmailToAssigneesWithoutPaypalEmail(usersWithoutPaypalMail)
+		}
+	} catch (err) {
+		console.log(JSON.stringify(err, null, 2))
+	}
 
-		forEach((user) => {
-			const email = getUserEmailByTwitchID(prop('platformId', user))
+	const dareLink = projectHrefBuilder(projectId)
+	const dareTitle = prop('dareTitle', payoutsWithPaypalEmails)
+
+	await Promise.all(forEach(async (user) => {
+		try {
+			const email = await getUserEmailByTwitchID(prop('platformId', user))
 			const emailData = {
 				dareTitle,
 				recipients: [email],
 				dareLink,
 				amountRequest: prop('payout', user),
 				payoutEmail: prop('email', user),
+				title: youHaveBeenPaidTitle,
 			}
-			sendEmail(emailData, youHaveBeenPaidTemplate)
-		}, concat(usersWithPaypalMail, usersWithoutPaypalMail))
-	} catch (err) {}
+			await sendEmail(emailData, youHaveBeenPaidTemplate)
+		} catch (err) {
+			console.log(JSON.stringify(err, null, 2))
+		}
+	}, concat(usersWithPaypalMail, usersWithoutPaypalMail)))
 
 	return {
 		paypalPayout,
