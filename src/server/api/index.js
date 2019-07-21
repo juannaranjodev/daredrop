@@ -66,6 +66,9 @@ export const apiHof = (
 
 		return { statusCode: 200, body: res }
 	} catch (error) {
+		console.log('err')
+		console.log(JSON.stringify(error, null, 2))
+		console.log(JSON.stringify(event, null, 2))
 		const errorMessage = error.message
 		return customError(error.statusCode || 500, {
 			...(errorMessage ? { generalErrors: errorMessage } : {}),

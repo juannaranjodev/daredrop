@@ -3,6 +3,7 @@ export default {
 	properties: {
 		projectId: { type: 'string' },
 		deliverySortKey: { type: 'string' },
+		testName: { type: 'string' },
 	},
 	required: ['projectId', 'deliverySortKey'],
 	additionalProperties: false,

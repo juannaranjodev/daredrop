@@ -16,10 +16,18 @@ export const getResponseLenses = endpointId => path(
 	clientEndpoints,
 )
 
-export const getPayloadSchema = endpointId => path(
-	[endpointId, 'payloadSchema'],
-	clientEndpoints,
-)
+export const getPayloadSchema = (endpointId) => {
+	if (process.env.STAGE === 'testing') {
+		return path(
+			[endpointId, 'testingPayloadSchema'],
+			clientEndpoints,
+		)
+	}
+	return path(
+		[endpointId, 'payloadSchema'],
+		clientEndpoints,
+	)
+}
 
 export const getResultSchema = endpointId => path(
 	[endpointId, 'resultSchema'],

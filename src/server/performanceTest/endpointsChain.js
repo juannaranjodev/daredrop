@@ -6,10 +6,12 @@ const lambda = new AWS.Lambda()
 
 export default (event, authentication) => reduce(async (prevEvent, endpointId) => {
 	const asyncEvent = await prevEvent
+
 	if (asyncEvent.error) {
 		return { error: asyncEvent.error }
 	}
 	const { payload } = asyncEvent
+
 	try {
 		const endpointDesc = prop(endpointId, endpoints)
 		let apiEvent = prop('actionEvent', endpointDesc)
@@ -29,7 +31,6 @@ export default (event, authentication) => reduce(async (prevEvent, endpointId) =
 			FunctionName: endpointDesc.functionArn,
 			Payload: JSON.stringify(apiEvent),
 		}
-
 		const lambdaRes = await lambda.invoke(lambdaParams).promise()
 		const payloadInfo = JSON.parse(lambdaRes.Payload)
 

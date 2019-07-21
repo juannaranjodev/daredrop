@@ -5,6 +5,7 @@ import ref from 'root/src/aws/util/ref'
 import {
 	API_LAMBDA_EXECUTION_ROLE, API_DYNAMO_DB_TABLE,
 	PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, API_DYNAMO_DB_ARCHIVAL_TABLE,
+	PERFORMANCE_TEST_ARCHIVAL_DYNAMODB_DATA_TABLE,
 } from 'root/src/aws/api/resourceIds'
 
 import { CLOUDWATCH_EVENTS_ROLE } from 'root/src/aws/cloudWatchEvents/resourceIds'
@@ -14,7 +15,10 @@ export default {
 		Type: 'AWS::IAM::Role',
 		DependsOn: [
 			API_DYNAMO_DB_TABLE, CLOUDWATCH_EVENTS_ROLE, API_DYNAMO_DB_ARCHIVAL_TABLE,
-			...(process.env.STAGE !== 'production' ? [PERFORMANCE_TEST_DYNAMODB_DATA_TABLE] : []),
+			...(process.env.STAGE !== 'production' ? [
+				PERFORMANCE_TEST_DYNAMODB_DATA_TABLE,
+				PERFORMANCE_TEST_ARCHIVAL_DYNAMODB_DATA_TABLE,
+			] : []),
 		],
 		Properties: {
 			AssumeRolePolicyDocument: {
@@ -103,13 +107,10 @@ export default {
 								Resource: [
 									join('', [getAtt(API_DYNAMO_DB_TABLE, 'Arn'), '*']),
 									join('', [getAtt(API_DYNAMO_DB_ARCHIVAL_TABLE, 'Arn'), '*']),
-									...(process.env.STAGE !== 'production' ? [join(
-										'',
-										[
-											getAtt(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, 'Arn'),
-											'*',
-										],
-									)] : []),
+									...(process.env.STAGE !== 'production' ? [
+										join('', [getAtt(PERFORMANCE_TEST_DYNAMODB_DATA_TABLE, 'Arn'), '*']),
+										join('', [getAtt(PERFORMANCE_TEST_ARCHIVAL_DYNAMODB_DATA_TABLE, 'Arn'), '*']),
+									] : []),
 								],
 							},
 							{
