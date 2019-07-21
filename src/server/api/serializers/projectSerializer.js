@@ -96,8 +96,7 @@ export default (projectArr, isAdminEndpoint, isDenormalized) => reduce(
 			)
 
 			const status = prop('status', projectObj)
-				? prop('status', projectObj)
-				: getStatus(result, propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart))
+				|| getStatus(result, propOr(prop(1, split('|', skProp(projectPart))), 'status', projectPart))
 
 			if (isDenormalized) {
 				return {
