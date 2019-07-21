@@ -1,7 +1,7 @@
 import { map, prop, omit, contains } from 'ramda'
 
 export default (project, assigneeStatus, userTokensStr, amountRequested) => ({
-	...omit(['status', 'id'], project),
+	...omit(['id'], project),
 	assignees: map((assignee) => {
 		const assigneeId = `${assignee.platform}|${assignee.platformId}`
 		if (contains(assigneeId, userTokensStr)) {
