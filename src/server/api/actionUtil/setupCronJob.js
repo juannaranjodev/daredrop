@@ -37,6 +37,7 @@ export default (eventInput, cronTime, identifier) => new Promise((resolve, rejec
 				},
 			],
 		}
+
 		cloudWatchEvents.putTargets(targetParams, (err, data) => {
 			if (err) {
 				reject(err)

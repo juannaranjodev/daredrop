@@ -8,6 +8,7 @@ import updateDynamoObj from 'root/src/server/api/actionUtil/updateDynamoObj'
 import { generalError } from 'root/src/server/api/errors'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import projectSerializer from 'root/src/server/api/serializers/projectSerializer'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 /**
  * Updates the project (dare) description
@@ -34,10 +35,10 @@ export default async ({ userId, payload }) => {
 
 	const newUpdate = updateDynamoObj(
 		projectId, project, userId,
-		description, paymentInfo, null, title,
+		description, paymentInfo, title,
 	)
 
-	// TODO: Check pledge amount
+	// @TODO: Check pledge amount
 	const updateParams = {
 		TableName: TABLE_NAME,
 		Item: newUpdate,
@@ -51,10 +52,11 @@ export default async ({ userId, payload }) => {
 			[PARTITION_KEY]: projectToUpdate[PARTITION_KEY],
 			[SORT_KEY]: projectToUpdate[SORT_KEY],
 		},
-		UpdateExpression: 'SET description = :new_description, title = :new_title',
+		UpdateExpression: 'SET description = :new_description, title = :new_title, modified = :modified',
 		ExpressionAttributeValues: {
 			':new_description': description,
 			':new_title': title,
+			':modified': getTimestamp(),
 		},
 	}
 

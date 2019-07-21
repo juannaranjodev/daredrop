@@ -2,6 +2,7 @@ import { reduce, assoc, propOr, prop, map, unnest, path, anyPass, gte, lt, filte
 import dynamoQueryProjectPledges from 'root/src/server/api/actionUtil/dynamoQueryProjectPledges'
 import capturePayments from 'root/src/server/api/actionUtil/capturePayments'
 import { TABLE_NAME, documentClient } from 'root/src/server/api/dynamoClient'
+import getTimestamp from 'root/src/shared/util/getTimestamp'
 
 export default async (projectId) => {
 	const projectPledges = await dynamoQueryProjectPledges(projectId)
@@ -9,7 +10,7 @@ export default async (projectId) => {
 		const payments = await capturePayments(prop('paymentInfo', pledge))
 		const paymentInfoDdb = {
 			TableName: TABLE_NAME,
-			Item: assoc('paymentInfo', payments, pledge),
+			Item: assoc('created', getTimestamp(), assoc('paymentInfo', payments, pledge)),
 		}
 		return paymentInfoDdb
 	}, projectPledges))

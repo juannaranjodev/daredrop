@@ -6,6 +6,8 @@ import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoInde
 
 import { generalError } from 'root/src/server/api/errors'
 import dynamoQueryPayoutMethod from 'root/src/server/api/actionUtil/dynamoQueryPayoutMethod'
+import getTimestamp from 'root/src//shared/util/getTimestamp'
+
 /**
  * Updates the payout email
  * @param userId
@@ -28,12 +30,14 @@ export default async ({ userId, payload }) => {
 			[PARTITION_KEY]: payout[PARTITION_KEY],
 			[SORT_KEY]: payout[SORT_KEY],
 		},
-		UpdateExpression: 'SET #email = :email',
+		UpdateExpression: 'SET #email = :email, #modified = :modified',
 		ExpressionAttributeValues: {
 			':email': email,
+			':modified': getTimestamp(),
 		},
 		ExpressionAttributeNames: {
 			'#email': 'email',
+			'#modified': 'modified',
 		},
 	}
 
