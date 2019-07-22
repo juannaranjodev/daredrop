@@ -5,7 +5,7 @@ import deliveryDareVideoSchema from 'root/src/shared/descriptions/formSchemas/de
 export default {
 	[DELIVERY_DARE_FORM_MODULE_ID]: {
 		moduleType: 'form',
-		title: 'Delivery Dare Video',
+		title: 'Deliver Dare Video',
 		schema: deliveryDareVideoSchema,
 		fields: [
 			{
@@ -22,6 +22,7 @@ export default {
 			{
 				fieldId: 'videoAttach',
 				inputType: 'attachmentInput',
+				subTextLabel: 'We host the video for your fans',
 				labelFieldText: [
 					{
 						text: 'Video Attachment',
@@ -32,7 +33,7 @@ export default {
 			{
 				fieldId: 'timeStamp',
 				inputType: 'timeStamp',
-				subTextLabel: 'The time in video that you begin to deliver on this dare',
+				subTextLabel: 'Time in the video when you begin to deliver on this dare',
 				labelFieldText: [
 					{
 						text: 'Time Dare Completion Begins',
