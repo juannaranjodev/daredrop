@@ -106,8 +106,8 @@ describe('statuses are displayed properly on cards or on detail page', async () 
 		const activeProjects = await getActiveProjects({ payload: { currentPage: 1 } })
 		const activeProject = await getProject({ payload: { projectId: project.id } })
 
-		expect(activeProjects.items[0].status).toEqual(projectDeliveryInitKey)
-		expect(activeProject.status).toEqual(projectDeliveryInitKey)
+		expect(activeProjects.items[0].status).toEqual(projectAcceptedKey)
+		expect(activeProject.status).toEqual(projectAcceptedKey)
 	})
 	test('Correctly displays approved deliveries', async () => {
 		const deliveryPayload = deliveryDareMock(project.id)

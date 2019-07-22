@@ -30,8 +30,8 @@ import { ternary } from 'root/src/shared/util/ramdaPlus'
 import { generalError, payloadSchemaError } from 'root/src/server/api/errors'
 import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import {
-	projectApprovedKey, projectDeliveredKey, projectDeliveryInitKey,
-	projectDeliveryPendingKey, projectToCaptureKey, streamerAcceptedKey,
+	projectApprovedKey, projectDeliveredKey, projectDeliveryPendingKey,
+	projectToCaptureKey, streamerAcceptedKey, projectAcceptedKey,
 } from 'root/src/shared/descriptions/apiLenses'
 // rest
 import getPledgersByProjectID from 'root/src/server/api/actionUtil/getPledgersByProjectID'
@@ -95,12 +95,12 @@ export default async ({ payload }) => {
 						created: getTimestamp(),
 					},
 				},
-			}], [{
+			}],
+			[{
 				PutRequest: {
 					Item: {
 						...recordToUpdate,
-						status: projectDeliveryInitKey,
-						deliveries: prop('deliveries', projectSerialized),
+						status: projectAcceptedKey,
 						modified: getTimestamp(),
 					},
 				},
