@@ -33,7 +33,7 @@ export default async (projectId) => {
 		streamer => prop('displayName', streamer),
 		acceptedAssignees,
 	)
-	if (gt(prop('pledgeAmount', projectToCheck), allAcceptedAmount)) {
+	if (allAcceptedAmount && gt(prop('pledgeAmount', projectToCheck), allAcceptedAmount)) {
 		// Send golMet email for streamer
 		await Promise.all(
 			map(async (assignee) => {
