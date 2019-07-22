@@ -2,7 +2,7 @@ import { map, addIndex, isNil, propOr, prop, replace } from 'ramda'
 import React, { memo, useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { orNull, ternary } from 'root/src/shared/util/ramdaPlus'
-
+import { ourUrl } from 'root/src/shared/constants/mail'
 import {
 	gtXsMediaQuery, gtSmMediaQuery, smMediaQuery,
 } from 'root/src/client/web/commonStyles'
@@ -22,6 +22,7 @@ import RecordClickActionButton from 'root/src/client/web/base/RecordClickActionB
 import { APPROVE_PROJECT, REJECT_PROJECT, REJECT_ACTIVE_PROJECT } from 'root/src/shared/descriptions/recordClickActions/recordClickActionIds'
 
 import { VIEW_PROJECT_ROUTE_ID } from 'root/src/shared/descriptions/routes/routeIds'
+import ShareMenu from 'root/src/client/web/base/ShareMenu'
 
 // import goToDeliveryDareFormHandler from 'root/src/client/logic/project/handlers/goToDeliveryDareFormHandler'
 import viewProjectConnector from 'root/src/client/logic/project/connectors/viewProjectConnector'
@@ -114,6 +115,7 @@ const styles = {
 		letterSpacing: 0.4,
 		textAlign: 'center',
 		color: '#000000',
+		position: 'relative',
 	},
 	description: {
 		width: '100%',
@@ -267,13 +269,20 @@ export const ViewProjectModule = memo(({
 									title={projectTitle}
 								/>
 							</div>,
-							<img alt="Game" src={gameImage} className={classes.image} />)}
+							<div>
+								<img alt="Game" src={gameImage} className={classes.image} />
+							</div>)}
 						<div className={classNames(
 							'flex-100', 'flex-order-1', 'flex-order-gt-sm-3', 'flex-gt-sm-100',
 							classes.descriptionContainer,
 						)}
 						>
-							<div className={classNames(classes.descriptionTitle)}>Description</div>
+							<div style={{ position: 'relative' }}>
+								<div className={classNames(classes.descriptionTitle)}>Description</div>
+								<div style={{ position: 'absolute', left: 107, top: -11 }}>
+									<ShareMenu secodStyle url={`https://${ourUrl}/view-project/${projectId}`} />
+								</div>
+							</div>
 							<div className={classNames('flex-100', 'layout-row')}>
 								<div className={classNames('flex-100')}>
 									{ternary(canEditProjectDetails,
