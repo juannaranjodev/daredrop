@@ -115,6 +115,7 @@ const styles = {
 		letterSpacing: 0.4,
 		textAlign: 'center',
 		color: '#000000',
+		position: 'relative',
 	},
 	description: {
 		width: '100%',
@@ -268,10 +269,7 @@ export const ViewProjectModule = memo(({
 									title={projectTitle}
 								/>
 							</div>,
-							<div style={{ position: 'relative' }}>
-								<div style={{ position: 'absolute', right: 10, top: 10 }}>
-									<ShareMenu secodStyle url={`http://${ourUrl}/${projectId}`} />
-								</div>
+							<div>
 								<img alt="Game" src={gameImage} className={classes.image} />
 							</div>)}
 						<div className={classNames(
@@ -279,7 +277,12 @@ export const ViewProjectModule = memo(({
 							classes.descriptionContainer,
 						)}
 						>
-							<div className={classNames(classes.descriptionTitle)}>Description</div>
+							<div style={{ position: 'relative' }}>
+								<div className={classNames(classes.descriptionTitle)}>Description</div>
+								<div style={{ position: 'absolute', left: 107, top: -11 }}>
+									<ShareMenu secodStyle url={`https://${ourUrl}/view-project/${projectId}`} />
+								</div>
+							</div>
 							<div className={classNames('flex-100', 'layout-row')}>
 								<div className={classNames('flex-100')}>
 									{ternary(canEditProjectDetails,

@@ -63,10 +63,10 @@ const styles = {
 			color: '#ddd',
 		},
 	},
-	primaryBackground: {
-		backgroundColor: 'rgba(132,10,125, 0.4)',
+	iconColorSecond: {
+		color: '#5a5a5a',
 		'&:hover': {
-			backgroundColor: 'rgba(132,10,125, 0.7)',
+			color: '#5a5a5a',
 		},
 	},
 }
@@ -85,7 +85,7 @@ export default withStyles(styles)(memo(({ classes, url, onClose, onOpen, secodSt
 				aria-label="More"
 				aria-haspopup="true"
 				onClick={handleClick}
-				className={classNames(classes.iconColor, secodStyle && classes.primaryBackground)}
+				className={classNames(classes.iconColor, secodStyle && classes.iconColorSecond)}
 			>
 				<ShareIcon />
 			</IconButton>
