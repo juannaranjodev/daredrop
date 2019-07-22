@@ -37,27 +37,6 @@ export default ({ dareTitle, dareTitleLink, message, expiryTime }) => {
               </tr>
 
               <tr>
-                <td style="margin:0;padding:0;" width="100%">
-                  <p style="margin:0;padding:0;">1) make a dare for a channel you can link to an account, move it through the process and submit a video for it.</p>
-                </td>
-              </tr>
-              <tr>
-                <td style="margin:0;padding:0;" width="100%">
-                  <p style="margin:0;padding:0;">2) go to <a href="https://dev.watt.tv/pending-videos" style="text-decoration:none;color:#1976d2;">https://dev.watt.tv/pending-videos</a> and reject the dare after adding a message that includes newlines.
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td style="margin:0;padding:0;" width="100%">
-                  <p style="margin:0;padding:0;">3) Notice that the copy of that message in the email you receive for it doesn't include the newlines, but should.</p>
-                </td>
-              </tr>
-
-              <tr>
-                <td height="50" style="margin:0;padding:0;" width="100%"></td>
-              </tr>
-
-              <tr>
                 <td style="margin:0; padding:0;" width="100%">
                   <p style="margin:0;padding:0;">The ${ourName} Team</p>
                 </td>
