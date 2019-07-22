@@ -14,7 +14,7 @@ export default async ({ userId, payload }) => {
 		userId, projectId,
 	)
 
-	let userRejectedDare
+	let userRejectedDare = false
 	if (userId) {
 		const userTokens = await dynamoQueryOAuth(userId)
 		const assigneeTokens = map(compose(replace(/token-/, 'assignee|'), prop('sk')), userTokens)

@@ -4,6 +4,7 @@ import objectToArray from 'root/src/client/logic/api/util/objectToArray'
 import projectAssigneesSelector from 'root/src/client/logic/project/selectors/projectAssigneesSelector'
 import getUserDataSelector from 'root/src/client/logic/api/selectors/getUserDataSelector'
 import statusSelector from 'root/src/client/logic/project/selectors/statusSelector'
+import userRejectedDareSelector from 'root/src/client/logic/project/selectors/userRejectedDareSelector'
 import {
 	notConnected, connectedNotClaimed,
 	accepted, notEligible,
@@ -27,25 +28,27 @@ export default (state, props) => {
 	const isAssignee = gt(length(assigneeNames), 0)
 	const projectStatus = statusSelector(state, props)
 	if (!isAssignee) {
-		return notConnected
+		return userRejectedDareSelector(state, props) ? streamerRejectedKey : notConnected
 	}
 	const filteredAssignee = map(assigneeName => head(filter(propEq('displayName', assigneeName), assignees)), assigneeNames)
 
 	const assignee = head(filteredAssignee)
+
 	const acceptanceStatus = prop('accepted', assignee)
+
 	if (equals(projectStatus, projectDeliveredKey)) {
 		return videoApproved
 	}
 	switch (acceptanceStatus) {
 		case (streamerPendingKey):
 			return connectedNotClaimed
-		case (streamerRejectedKey):
-			return notEligible
 		case (streamerAcceptedKey):
 			if (equals(projectStatus, projectDeliveryPendingKey)) {
 				return videoPending
 			}
 			return accepted
+		case (streamerRejectedKey):
+			return notEligible
 		default:
 			return notEligible
 	}
