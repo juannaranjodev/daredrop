@@ -6,6 +6,8 @@ import createProject from 'root/src/server/api/actions/createProject'
 import auditFavorites from 'root/src/server/api/actions/auditFavorites'
 import createProjectPayload from 'root/src/server/api/mocks/createProjectPayload'
 import { mockUserId } from 'root/src/server/api/mocks/contextMock'
+import addOAuthToken from 'root/src/server/api/actions/addOAuthToken'
+import rejectProject from 'root/src/server/api/actions/rejectProject'
 
 describe('getProject', () => {
 	let newProject
@@ -35,6 +37,7 @@ describe('getProject', () => {
 				myPledge: newProjectPayload.pledgeAmount,
 				favoritesAmount: 1,
 				myFavorites: 1,
+				userRejectedDare: false,
 			},
 		})
 	})
@@ -65,5 +68,35 @@ describe('getProject', () => {
 		const { created } = res.body
 		const diff = moment().diff(created, 'days')
 		expect(diff).toEqual(0)
+	})
+
+	test('returns rejected flag if user already rejected dare on this project', async () => {
+		const oAuthDetails = {
+			tokenId: 'twitch',
+			id: newProject.assignees[0].platformId,
+		}
+
+		await addOAuthToken({
+			payload: oAuthDetails,
+			userId: mockUserId,
+		})
+
+		const event = {
+			endpointId: GET_PROJECT,
+			payload: { projectId: newProject.id },
+			authentication: mockUserId,
+		}
+
+		await rejectProject({
+			userId: mockUserId,
+			payload: {
+				projectId: newProject.id,
+				amountRequested: 1000,
+			},
+		})
+
+		const res = await apiFn(event)
+
+		expect(res.body.userRejectedDare).toBe(true)
 	})
 })

@@ -15,20 +15,6 @@ export default {
 		myFavorites: { type: 'integer' },
 		approved: { type: 'string' },
 		created: { type: 'string' },
-		deliveries: {
-			type: 'array',
-			items: {
-				type: 'object',
-				properties: {
-					videoURL: { type: 'string' },
-					s3ObjectURL: { type: 'string' },
-					timeStamp: { type: 'string' },
-					youTubeURL: { type: 'string' },
-				},
-				required: ['videoURL', 's3ObjectURL', 'timeStamp'],
-				additionalProperties: true,
-			},
-		},
 		approvedVideoUrl: { type: 'string' },
 		pledgeAmount: { type: 'integer' },
 		status: {
@@ -45,7 +31,6 @@ export default {
 						enum: ['twitch', 'youtube'],
 					},
 					image: { type: 'string' },
-					amountRequested: { type: 'string' },
 					description: { type: 'string' },
 					platformId: { type: 'string' },
 					displayName: { type: 'string' },
@@ -82,6 +67,7 @@ export default {
 				additionalProperties: true,
 			},
 		},
+		userRejectedDare: { type: 'boolean' },
 	},
 	required: ['id', 'title', 'image', 'description', 'pledgeAmount', 'status', 'favoritesAmount'],
 	additionalProperties: false,
