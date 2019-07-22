@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
 // libs
-import { head, path, length, equals } from 'ramda'
+import { head, path, length, equals, prop, concat, forEach, not } from 'ramda'
 // db stuff
 import { documentClient, TABLE_NAME } from 'root/src/server/api/dynamoClient'
 import { PARTITION_KEY, SORT_KEY } from 'root/src/shared/constants/apiDynamoIndexes'
@@ -9,11 +10,19 @@ import deleteCronJob from 'root/src/server/api/actionUtil/deleteCronJob'
 import calculatePayouts from 'root/src/server/api/actionUtil/calculatePayouts'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import paypalBatchPayout from 'root/src/server/api/actionUtil/paypalBatchPayout'
+
 // descriptions
 import { PAYOUT_ASSIGNEES } from 'root/src/shared/descriptions/endpoints/endpointIds'
 import { getPayloadLenses } from 'root/src/shared/descriptions/getEndpointDesc'
 import { dynamoItemsProp, payoutCompleteKey, payoutOutstandingKey, projectToPayoutKey } from 'root/src/shared/descriptions/apiLenses'
 import sendEmailToAssigneesWithoutPaypalEmail from 'root/src/server/api/actionUtil/sendEmailToAssigneesWithoutPaypalEmail'
+
+// email
+import sendEmail from 'root/src/server/email/actions/sendEmail'
+import youHaveBeenPaidTemplate from 'root/src/server/email/templates/youHaveBeenPaid'
+import getUserEmailByTwitchID from 'root/src/server/api/actionUtil/getUserEmailByTwitchID'
+import projectHrefBuilder from 'root/src/server/api/actionUtil/projectHrefBuilder'
+import { youHaveBeenPaidTitle } from 'root/src/server/email/util/emailTitles'
 
 const payloadLenses = getPayloadLenses(PAYOUT_ASSIGNEES)
 const { viewProjectId } = payloadLenses
@@ -80,7 +89,34 @@ export default async ({ payload }) => {
 
 	await documentClient.batchWrite(saveParams).promise()
 	await deleteCronJob(PAYOUT_ASSIGNEES, projectId)
-	await sendEmailToAssigneesWithoutPaypalEmail(usersWithoutPaypalMail)
+
+	try {
+		if (not(equals(0, length(usersWithoutPaypalMail)))) {
+			await sendEmailToAssigneesWithoutPaypalEmail(usersWithoutPaypalMail)
+		}
+	} catch (err) {
+		console.log(JSON.stringify(err, null, 2))
+	}
+
+	const dareLink = projectHrefBuilder(projectId)
+	const dareTitle = prop('dareTitle', payoutsWithPaypalEmails)
+
+	await Promise.all(forEach(async (user) => {
+		try {
+			const email = await getUserEmailByTwitchID(prop('platformId', user))
+			const emailData = {
+				dareTitle,
+				dareLink,
+				amountRequest: prop('payout', user),
+				paypalEmail: prop('email', user),
+				title: youHaveBeenPaidTitle,
+				recipients: [email],
+			}
+			await sendEmail(emailData, youHaveBeenPaidTemplate)
+		} catch (err) {
+			console.log(JSON.stringify(err, null, 2))
+		}
+	}, usersWithPaypalMail))
 
 	return {
 		paypalPayout,

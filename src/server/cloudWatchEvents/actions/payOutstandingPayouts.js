@@ -1,4 +1,4 @@
-import { assoc, equals, filter, length, map, path, prop, propEq, reduce, test } from 'ramda'
+import { assoc, equals, filter, length, map, path, prop, propEq, reduce, test, not } from 'ramda'
 import dynamoQueryShardedItems from 'root/src/server/api/actionUtil/dynamoQueryShardedItems'
 import generateUniqueSortKey from 'root/src/server/api/actionUtil/generateUniqueSortKey'
 import getUserMailFromAssigneeObj from 'root/src/server/api/actionUtil/getUserMailFromAssigneeObj'
@@ -74,7 +74,14 @@ export default async () => {
 		}
 
 		await documentClient.batchWrite(saveParams).promise()
-		await sendEmailToAssigneesWithoutPaypalEmail(usersWithoutPaypalMail)
+
+		try {
+			if (not(equals(0, length(usersWithoutPaypalMail)))) {
+				await sendEmailToAssigneesWithoutPaypalEmail(usersWithoutPaypalMail)
+			}
+		} catch (err) {
+			console.log(JSON.stringify(err, null, 2))
+		}
 
 		return [...oldPayouts, paypalPayout]
 	}, Promise.resolve([]), payoutsOutstanding)

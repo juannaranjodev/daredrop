@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 /* eslint-disable max-len */
-import { add, assoc, filter, map, prop, propEq, reduce, test } from 'ramda'
+import { add, assoc, filter, map, prop, propEq, reduce, test, head } from 'ramda'
 import dynamoQueryProject from 'root/src/server/api/actionUtil/dynamoQueryProject'
 import getAssigneesByStatus from 'root/src/server/api/actionUtil/getAssigneesByStatus'
 import getUserMailFromAssigneeObj from 'root/src/server/api/actionUtil/getUserMailFromAssigneeObj'
@@ -48,7 +48,7 @@ export default async (projectId) => {
 
 	const payoutTotal = reduce((acc, item) => add(acc, prop('payout', item)), 0, payoutsWithPaypalEmails)
 	return {
-		dareTitle: prop('title', projectDdb),
+		dareTitle: prop('title', head(projectDdb)),
 		usersWithPaypalMail,
 		usersWithoutPaypalMail,
 		payoutTotal,
