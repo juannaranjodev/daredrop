@@ -24,6 +24,7 @@ describe('getUserData', () => {
 			body: {
 				...newProject,
 				myPledge: newProjectPayload.pledgeAmount,
+				userRejectedDare: false,
 			},
 		})
 	})
