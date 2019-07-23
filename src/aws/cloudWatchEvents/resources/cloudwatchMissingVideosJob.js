@@ -16,7 +16,6 @@ export default {
 		],
 		Properties: {
 			Description: 'CloudWatch rule for uploading missing youtube videos (10 AM GMT everyday)',
-			Name: 'asdasdas',
 			RoleArn: getAtt(CLOUDWATCH_EVENTS_ROLE, 'Arn'),
 			ScheduleExpression: 'cron(0 10 * * ? *)',
 			State: 'ENABLED',
