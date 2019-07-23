@@ -42,6 +42,13 @@ module.exports = {
 					name: '[name].[ext]',
 				},
 			},
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'webpack-conditional-loader',
+				},
+			},
 		],
 	},
 	plugins: [
