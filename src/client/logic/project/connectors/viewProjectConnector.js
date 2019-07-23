@@ -29,6 +29,7 @@ import goalProgressSelector from 'root/src/client/logic/project/selectors/goalPr
 import goalAmountSelector from 'root/src/client/logic/project/selectors/goalAmountSelector'
 import isAuthenticatedSelector from 'root/src/client/logic/auth/selectors/isAuthenticated'
 import userRejectedDareSelector from 'root/src/client/logic/project/selectors/userRejectedDareSelector'
+import projectShareUrlSelector from 'root/src/client/logic/project/selectors/projectShareUrlSelector'
 
 import auditFavorites from 'root/src/client/logic/project/thunks/auditFavorites'
 import pushRoute from 'root/src/client/logic/route/thunks/pushRoute'
@@ -65,6 +66,7 @@ export default reduxConnector(
 		['recordClickActionError', recordClickActionErrorSelector],
 		['goalAmount', goalAmountSelector],
 		['userRejectedDare', userRejectedDareSelector],
+		['projectShareUrl', projectShareUrlSelector],
 	],
 	[
 		['auditFavorites', auditFavorites],

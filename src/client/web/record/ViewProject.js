@@ -227,7 +227,7 @@ export const ViewProjectModule = memo(({
 	classes, isAuthenticated, canEditProjectDetails, updateProject,
 	myPledge, status, canRejectActiveProject, pledgers, created, daysToGo, favoritesProcessing,
 	userData = {}, approvedVideoUrl, isOneOfAssignees, projectAcceptanceStatus,
-	goalProgress, projectDeliveries, goalAmount,
+	goalProgress, projectDeliveries, goalAmount, projectShareUrl,
 }) => {
 	const [title, setTitle] = useState(projectTitle)
 	const [description, setDescription] = useState(projectDescription)
@@ -280,7 +280,7 @@ export const ViewProjectModule = memo(({
 							<div style={{ position: 'relative' }}>
 								<div className={classNames(classes.descriptionTitle)}>Description</div>
 								<div style={{ position: 'absolute', left: 107, top: -11 }}>
-									<ShareMenu secodStyle url={`https://${ourUrl}/view-project/${projectId}`} />
+									<ShareMenu secodStyle url={projectShareUrl} />
 								</div>
 							</div>
 							<div className={classNames('flex-100', 'layout-row')}>
