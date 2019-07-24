@@ -1,4 +1,4 @@
-import { prop, pick, path, assoc } from 'ramda'
+import { prop, pick, path, omit } from 'ramda'
 import { ternary } from 'root/src/shared/util/ramdaPlus'
 
 import validateSchema from 'root/src/shared/util/validateSchema'
@@ -67,7 +67,7 @@ export const apiHof = (
 		return { statusCode: 200, body: res }
 	} catch (error) {
 		console.error(JSON.stringify(error, null, 2))
-		console.error(JSON.stringify(event, null, 2))
+		console.error(JSON.stringify(omit(['authentication'], event), null, 2))
 		const errorMessage = error.message
 		return customError(error.statusCode || 500, {
 			...(errorMessage ? { generalErrors: errorMessage } : {}),
