@@ -24,8 +24,7 @@ const integration = async (event, authentication) => {
 			error,
 		}
 	} catch (err) {
-		console.log('integration')
-		throw new Error(err)
+		throw err
 	}
 }
 
@@ -63,7 +62,7 @@ const integrationMulti = async (event) => {
 		return `Success! Iterations: ${event.iterations}. Test duration: ${globDuration}. Sum of lambda invocations: ${sumDuration}`
 	} catch (err) {
 		console.log('multi')
-		throw new Error(err)
+		throw err
 	}
 }
 

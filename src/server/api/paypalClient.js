@@ -25,6 +25,6 @@ export default async () => {
 		})
 		return paypalRestSDK
 	} catch (err) {
-		throw new Error(err)
+		throw err
 	}
 }

@@ -16,7 +16,7 @@ export default async () => {
 		})
 		return oauth2Client
 	} catch (err) {
-		throw new Error(err)
+		throw err
 	}
 }
 

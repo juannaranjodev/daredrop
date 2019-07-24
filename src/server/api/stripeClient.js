@@ -12,6 +12,6 @@ export default async () => {
 		const stripe = Stripe(clientSecret)
 		return stripe
 	} catch (err) {
-		throw new Error(err)
+		throw err
 	}
 }
