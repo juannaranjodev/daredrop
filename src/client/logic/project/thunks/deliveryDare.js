@@ -25,5 +25,5 @@ export default (
 		deliverySortKey,
 	}
 	await dispatch(apiRequest(DELIVERY_DARE, apiPayload))
-	return dispatch(pushRoute(DELIVER_DARE_SUCCESS_ROUTE_ID))
+	return dispatch(pushRoute(DELIVER_DARE_SUCCESS_ROUTE_ID, { recordId: projectId }))
 }
