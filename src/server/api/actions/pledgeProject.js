@@ -48,22 +48,26 @@ export default async ({ userId, payload }) => {
 	const newPledgeAmount = viewPledgeAmount(payload)
 	let paymentInfo = viewPaymentInfo(payload)
 
-	if (paymentInfo.paymentType === stripeCard) {
-		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
-		if (!validationCardId) {
-			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
-		}
-		const stripeAuthorization = await stripeAuthorizePayment(newPledgeAmount, paymentInfo.paymentId, userId, projectId)
+	try {
+		if (paymentInfo.paymentType === stripeCard) {
+			const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
+			if (!validationCardId) {
+				throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+			}
+			const stripeAuthorization = await stripeAuthorizePayment(newPledgeAmount, paymentInfo.paymentId, userId, projectId)
 
-		if (!stripeAuthorization.authorized) {
-			throw payloadSchemaError(stripeAuthorization.error)
+			if (!stripeAuthorization.authorized) {
+				throw payloadSchemaError(stripeAuthorization.error)
+			}
+			paymentInfo = assoc('paymentId', prop('id', stripeAuthorization), paymentInfo)
+		} else if (paymentInfo.paymentType === paypalAuthorize) {
+			const validation = await validatePaypalAuthorize(paymentInfo.paymentId, newPledgeAmount)
+			if (!validation) {
+				throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
+			}
 		}
-		paymentInfo = assoc('paymentId', prop('id', stripeAuthorization), paymentInfo)
-	} else if (paymentInfo.paymentType === paypalAuthorize) {
-		const validation = await validatePaypalAuthorize(paymentInfo.paymentId, newPledgeAmount)
-		if (!validation) {
-			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
-		}
+	} catch (err) {
+		throw err
 	}
 
 	let myPledge = head(dynamoItemsProp(await documentClient.query({

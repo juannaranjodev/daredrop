@@ -4,16 +4,16 @@ import { path, equals, not, lt, gt } from 'ramda'
 
 export default (paymentId, pledgeAmount) => new Promise(async (resolve, reject) => {
 	const ppClientAuthorized = await paypalClient()
-	ppClientAuthorized.order.get(paymentId, (error, order) => {
+	ppClientAuthorized.order.get(paymentId, (error, order, ...rest) => {
 		if (error) {
-			reject(error)
+			return reject(error)
 		}
 		const { httpStatusCode } = order
 		if (
 			lt(httpStatusCode, 200) || gt(httpStatusCode, 300)
 			|| not(equals(parseFloat(path(['amount', 'total'], order)), pledgeAmount))
 		) {
-			reject(new Error('Invalid pledge amount'))
+			return reject(new Error('Invalid pledge amount'))
 		}
 		resolve(true)
 	})

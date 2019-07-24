@@ -54,21 +54,25 @@ export default async ({ userId, payload }) => {
 	const pledgeAmount = viewPledgeAmount(serializedProject)
 
 	// validations
-	if (paymentInfo.paymentType === stripeCard) {
-		const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
-		if (!validationCardId) {
-			throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+	try {
+		if (paymentInfo.paymentType === stripeCard) {
+			const validationCardId = await validateStripeSourceId(paymentInfo.paymentId)
+			if (!validationCardId) {
+				throw payloadSchemaError({ stripeCardId: 'Invalid source id' })
+			}
+			const stripeAuthorization = await stripeAuthorizePayment(pledgeAmount, paymentInfo.paymentId, userId, projectId)
+			if (!stripeAuthorization.authorized) {
+				throw payloadSchemaError(stripeAuthorization.error)
+			}
+			paymentInfo = assoc('paymentId', stripeAuthorization.id, paymentInfo)
+		} else if (paymentInfo.paymentType === paypalAuthorize) {
+			const validation = await validatePaypalAuthorize(paymentInfo.paymentId, pledgeAmount)
+			if (!validation) {
+				throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
+			}
 		}
-		const stripeAuthorization = await stripeAuthorizePayment(pledgeAmount, paymentInfo.paymentId, userId, projectId)
-		if (!stripeAuthorization.authorized) {
-			throw payloadSchemaError(stripeAuthorization.error)
-		}
-		paymentInfo = assoc('paymentId', stripeAuthorization.id, paymentInfo)
-	} else if (paymentInfo.paymentType === paypalAuthorize) {
-		const validation = await validatePaypalAuthorize(paymentInfo.paymentId, pledgeAmount)
-		if (!validation) {
-			throw payloadSchemaError({ paypalAuthorizationId: 'Invalid paypal authorization' })
-		}
+	} catch (err) {
+		throw err
 	}
 
 	const project = {
