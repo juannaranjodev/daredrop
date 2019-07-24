@@ -27,5 +27,5 @@ export default ({ email, password }) => new Promise(
 		})
 	},
 ).then(session => session).catch((err) => {
-	throw new Error(err)
+	throw err
 })

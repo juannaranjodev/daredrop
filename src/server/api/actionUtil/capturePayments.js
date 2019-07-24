@@ -23,7 +23,7 @@ export default paymentsArr => Promise.all(map(async (payment) => {
 				calculateFn = calculatePaypalPayment
 				break
 			default:
-				throw new Error({ message: 'Payment type not found' })
+				throw new Error('Payment type not found')
 		}
 		const authorization = await captureFn(paymentId, paymentAmount)
 		const transactionNet = await calculateFn(authorization)

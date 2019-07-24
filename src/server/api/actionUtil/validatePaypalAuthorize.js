@@ -6,7 +6,7 @@ export default (paymentId, pledgeAmount) => new Promise(async (resolve, reject) 
 	const ppClientAuthorized = await paypalClient()
 	ppClientAuthorized.order.get(paymentId, (error, order) => {
 		if (error) {
-			reject(new Error(error))
+			reject(error)
 		}
 		const { httpStatusCode } = order
 		if (
