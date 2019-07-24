@@ -122,7 +122,7 @@ export default {
 		],
 	},
 	[DELIVER_DARE_SUCCESS_ROUTE_ID]: {
-		url: '/deliver-success',
+		url: '/deliver-success/:recordId',
 		authentication: authValue,
 		modules: [
 			DELIVER_DARE_SUCCESS_MODULE_ID,
