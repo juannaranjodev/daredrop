@@ -86,7 +86,7 @@
     "json-schema-faker": "^0.5.0-rc16",
     "jsonwebtoken": "^8.4.0",
     "jwk-to-pem": "^2.0.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "mime-types": "^2.1.21",
     "mime-types-video": "^1.0.1",
     "mockdate": "^2.0.2",
