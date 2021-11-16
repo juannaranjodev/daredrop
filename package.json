@@ -41,7 +41,7 @@
     "amazon-cognito-identity-js": "^2.0.20",
     "amazon-cognito-identity-js-node": "^0.0.3",
     "aws-config": "^1.2.0",
-    "aws-sdk": "^2.476.0",
+    "aws-sdk": "^2.814.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.5",
