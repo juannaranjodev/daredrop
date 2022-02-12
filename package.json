@@ -36,7 +36,7 @@
     "@material-ui/core": "^3.8.1",
     "@material-ui/icons": "^3.0.1",
     "@material-ui/styles": "^3.0.0-alpha.6",
-    "ajv": "^6.5.1",
+    "ajv": "^6.12.3",
     "ajv-errors": "^1.0.0",
     "amazon-cognito-identity-js": "^2.0.20",
     "amazon-cognito-identity-js-node": "^0.0.3",
