@@ -98,7 +98,7 @@
     "path-to-regexp": "^2.2.1",
     "paypal-rest-sdk": "^1.8.1",
     "prop-types": "^15.6.2",
-    "qs": "^6.5.2",
+    "qs": "^6.5.3",
     "ramda": "^0.26.0",
     "react": "16.7.0-alpha.0",
     "react-critical-css": "^2.1.0",
